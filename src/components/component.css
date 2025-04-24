@@ -1,1 +1,6 @@
-@import './button/button.css'
+@import './button/button.css';
+@import './input/input.css';
+@import './inline_component/inline_component.css';
+@import './card/card.css';
+@import './password/password.css';
+@import './divider/divider.css';

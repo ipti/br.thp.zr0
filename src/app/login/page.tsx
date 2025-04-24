@@ -1,14 +1,13 @@
-import CardComponent from "@/components/card/card";
 import "../globals.css";
-import "./login.css";
 import FormLogin from "./components/form";
+import "./login.css";
 
 export default function Login() {
   return (
     <div className="container">
-      <CardComponent>
+      {/* <CardComponent> */}
         <FormLogin />
-      </CardComponent>
+      {/* </CardComponent> */}
     </div>
   );
 }

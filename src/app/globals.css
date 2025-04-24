@@ -1,18 +1,23 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --text-color: #495057;
+  --text-color-secondary: #6c757d;
+  --primary-color: #2E62AC;
+  --primary-color-text: #ffffff;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 html,
 body {
   max-width: 100vw;
+  height: 100%;
   overflow-x: hidden;
 }
 

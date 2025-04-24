@@ -1,4 +1,121 @@
 .p-button {
-    color: white;
-    background: red;
+    color: #ffffff;
+    background: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    border-radius: 3px;
+}
+
+.p-button:not(:disabled):hover {
+    background: #0d89ec;
+    color: #ffffff;
+    border-color: #0d89ec;
+}
+
+.p-button:not(:disabled):active {
+    background: #0b7ad1;
+    color: #ffffff;
+    border-color: #0b7ad1;
+}
+
+.p-button.p-button-outlined {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid;
+}
+
+.p-button.p-button-outlined:not(:disabled):hover {
+    background: rgba(33, 150, 243, 0.04);
+    color: var(--primary-color);
+    border: 1px solid;
+}
+
+.p-button.p-button-outlined:not(:disabled):active {
+    background: rgba(33, 150, 243, 0.16);
+    color: var(--primary-color);
+    border: 1px solid;
+}
+
+.p-button.p-button-outlined.p-button-plain {
+    color: #6c757d;
+    border-color: #6c757d;
+}
+
+.p-button.p-button-outlined.p-button-plain:not(:disabled):hover {
+    background: #e9ecef;
+    color: #6c757d;
+}
+
+.p-button.p-button-outlined.p-button-plain:not(:disabled):active {
+    background: #dee2e6;
+    color: #6c757d;
+}
+
+.p-button.p-button-text {
+    background-color: transparent;
+    color: var(--primary-color);
+    border-color: transparent;
+}
+
+.p-button.p-button-text:not(:disabled):hover {
+    background: rgba(33, 150, 243, 0.04);
+    color: var(--primary-color);
+    border-color: transparent;
+}
+
+.p-button.p-button-text:not(:disabled):active {
+    background: rgba(33, 150, 243, 0.16);
+    color: var(--primary-color);
+    border-color: transparent;
+}
+
+.p-button.p-button-text.p-button-plain {
+    color: #6c757d;
+}
+
+.p-button.p-button-text.p-button-plain:not(:disabled):hover {
+    background: #e9ecef;
+    color: #6c757d;
+}
+
+.p-button.p-button-text.p-button-plain:not(:disabled):active {
+    background: #dee2e6;
+    color: #6c757d;
+}
+
+.p-button:focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 0.2rem #a6d5fa;
+}
+
+.p-button .p-button-label {
+    transition-duration: 0.2s;
+}
+
+.p-button .p-button-icon-left {
+    margin-right: 0.5rem;
+}
+
+.p-button .p-button-icon-right {
+    margin-left: 0.5rem;
+}
+
+.p-button .p-button-icon-bottom {
+    margin-top: 0.5rem;
+}
+
+.p-button .p-button-icon-top {
+    margin-bottom: 0.5rem;
+}
+
+.p-button .p-badge {
+    margin-left: 0.5rem;
+    min-width: 1rem;
+    height: 1rem;
+    line-height: 1rem;
+    color: var(--primary-color);
+    background-color: #ffffff;
 }
