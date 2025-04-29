@@ -1,11 +1,9 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import TopBar from "@/components/topbar/topbar";
 
 export default function Home() {
   return (
     <div>
-      <TopBar />
       <div className={styles.page}>
         <main className={styles.main}>
           <Image

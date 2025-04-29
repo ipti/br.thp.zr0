@@ -1,17 +1,16 @@
 "use client";
 import { logout } from "@/service/localstorage";
+import { primeFlex } from "@/utils/prime_flex";
 import { Form, Formik } from "formik";
 import { Button } from "primereact/button";
+import { Card } from "primereact/card";
+import { Divider } from "primereact/divider";
 import { InputText } from "primereact/inputtext";
 import { Message } from "primereact/message";
-import { useEffect, useState } from "react";
-import { SignUpController } from "../service/controller";
-import { primeFlex } from "@/utils/prime_flex";
-import { Card } from "primereact/card";
-import { useNavigation } from "@/utils/navigation";
-import * as Yup from "yup";
 import { Password } from "primereact/password";
-import { Divider } from "primereact/divider";
+import { useEffect, useState } from "react";
+import * as Yup from "yup";
+import { SignUpController } from "../service/controller";
 
 export default function FormSignUp() {
   const prime = primeFlex();
@@ -38,6 +37,19 @@ export default function FormSignUp() {
       .required("Campo Obrigatório")
       .oneOf([Yup.ref("password")], "Senhas difirentes"),
   });
+
+  const footer = (
+    <>
+      <Divider />
+      <p className="mt-2">Sugestões {"\n"}</p>
+      <ul className="pl-2 ml-2 mt-0 line-height-3">
+        <li>Pelo menos uma letra minúscula</li>
+        <li>Pelo menos uma letra maiúscula</li>
+        <li>Pelo menos um número</li>
+        <li>No mínimo 8 caracteres</li>
+      </ul>
+    </>
+  );
 
   return (
     <div
@@ -66,11 +78,11 @@ export default function FormSignUp() {
           }}
         >
           {({ values, handleChange, errors, touched }) => {
-            console.log(errors);
             return (
-              <Form className="col-11 md:col-5">
-                <Card className="">
+              <Form className="col-11 md:col-4">
+                <div className={prime.flex + prime.row + prime.justify_center}>
                   <h1>Criar conta</h1>
+                </div>
                   <div className="p-2" />
                   <div>
                     <div className="mb-4">
@@ -80,10 +92,14 @@ export default function FormSignUp() {
                           name="name"
                           value={values.name}
                           onChange={handleChange}
-                          placeholder="Digite o seu email"
+                          placeholder="Digite o seu nome"
+                          invalid={!!(errors.name && touched.name)}
                         ></InputText>
                         {errors.name && touched.name ? (
-                          <div style={{ color: "red" }}>{errors.name}</div>
+                          <>
+                            <div className="p-1" />
+                            <div style={{ color: "red" }}>{errors.name}</div>
+                          </>
                         ) : null}
                       </div>
                     </div>
@@ -95,9 +111,13 @@ export default function FormSignUp() {
                           value={values.email}
                           onChange={handleChange}
                           placeholder="Digite sua senha"
+                          invalid={!!(errors.email && touched.email)}
                         ></InputText>
                         {errors.email && touched.email ? (
-                          <div style={{ color: "red" }}>{errors.email}</div>
+                          <>
+                            <div className="p-1" />
+                            <div style={{ color: "red" }}>{errors.email}</div>
+                          </>
                         ) : null}
                       </div>
                     </div>
@@ -109,10 +129,21 @@ export default function FormSignUp() {
                           value={values.password}
                           onChange={handleChange}
                           placeholder="Digite sua senha"
+                          invalid={!!(errors.password && touched.password)}
+                          footer={footer}
+                          weakLabel="Fraca"
+                          mediumLabel="Médio"
+                          strongLabel="Forte"
+                          promptLabel="Digite uma senha"
                           toggleMask
                         ></Password>
                         {errors.password && touched.password ? (
-                          <div style={{ color: "red" }}>{errors.password}</div>
+                          <>
+                            <div className="p-1" />
+                            <div style={{ color: "red" }}>
+                              {errors.password}
+                            </div>
+                          </>
                         ) : null}
                       </div>
                     </div>
@@ -125,14 +156,24 @@ export default function FormSignUp() {
                           onChange={handleChange}
                           placeholder="Confirme sua senha"
                           toggleMask
+                          promptLabel="Digite uma senha"
+                          invalid={
+                            !!(
+                              errors.confirmpassword && touched.confirmpassword
+                            )
+                          }
                         ></Password>
                         {errors.confirmpassword && touched.confirmpassword ? (
                           <div style={{ color: "red" }}>
-                            {errors.confirmpassword}
+                            <>
+                              <div className="p-1" />
+                              {errors.confirmpassword}
+                            </>
                           </div>
                         ) : null}
                       </div>
                     </div>
+                    <div className="p-2" />
                     <div className="">
                       <Button
                         style={{ width: "100%", justifyContent: "center" }}
@@ -144,12 +185,11 @@ export default function FormSignUp() {
                   <div className="p-2" />
                   <Divider />
                   <div className="p-2" />
-                  <div className={prime.flex + prime.row}>
+                  <div className={prime.flex + prime.row + "text-login" + prime.justify_center}>
                     <p>Você já tem uma conta? </p>
                     <div className="p-1" />
-                    <a href="/login">Fazer Login</a>
+                    <a href="/auth/login">Fazer Login</a>
                   </div>
-                </Card>
               </Form>
             );
           }}

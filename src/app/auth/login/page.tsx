@@ -1,4 +1,4 @@
-import "../globals.css";
+import "../../globals.css";
 import FormLogin from "./components/form";
 import "./login.css";
 

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import "primeflex/primeflex.css";
+import "primeicons/primeicons.css";
+import "../components/component.css";
 import "./globals.css";
-import 'primeflex/primeflex.css'
-import '../components/component.css'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-   
         {children}
       </body>
     </html>

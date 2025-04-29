@@ -14,8 +14,7 @@ export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
         LoginRequest(body).then(data => {
             setErros("")
             login(data.data.access_token);
-            history.history.back()
-
+            history.history.push("/")
         }).catch(erros => {
             console.log(erros.response.data.message)
             setErros(erros.response.data.message)
