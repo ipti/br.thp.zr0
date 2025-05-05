@@ -1,0 +1,17 @@
+.container {
+  height: 100%;
+  width: 100%;
+
+}
+
+
+.text-login {
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 18px;
+ }
+ 
+ 
+ .text-login a {
+   color: var(--primary-color);
+ }

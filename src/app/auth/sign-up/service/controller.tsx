@@ -11,7 +11,7 @@ export function SignUpController(setErros: Dispatch<SetStateAction<string>>) {
 
     function SignUpAction(body: SignUpTypes) {
         SignUpRequest(body).then(data => {
-            history.history.push("/login")
+            history.history.push("/auth/login")
             
         }).catch(erros => {
             console.log(erros.response.data.message)
