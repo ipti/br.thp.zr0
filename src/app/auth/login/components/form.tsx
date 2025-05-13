@@ -1,10 +1,8 @@
 "use client";
 import { logout } from "@/service/localstorage";
-import { useNavigation } from "@/utils/navigation";
 import { primeFlex } from "@/utils/prime_flex";
 import { Form, Formik } from "formik";
 import { Button } from "primereact/button";
-import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Message } from "primereact/message";
 import { Password } from "primereact/password";
@@ -15,7 +13,6 @@ import { LoginController } from "../service/controller";
 export default function FormLogin() {
   const prime = primeFlex();
   const [erros, setErros] = useState("");
-  const history = useNavigation();
 
   const controllerLogin = LoginController(setErros);
 

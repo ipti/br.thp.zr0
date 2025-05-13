@@ -1,0 +1,19 @@
+.container_slider {
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+}
+
+.item_slider {
+    border-radius: 16px;
+    cursor: pointer;
+    padding: 16px 8px;
+    margin: 8px;
+    &:hover{
+        background-color: rgba(0, 0, 0, 0.299);
+    }
+}
+
+.label {
+    font-weight: bold;
+    text-align: center;
+
+}

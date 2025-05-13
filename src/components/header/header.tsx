@@ -5,7 +5,7 @@ import { IconField } from "primereact/iconfield";
 import { InputIcon } from "primereact/inputicon";
 import { InputText } from "primereact/inputtext";
 
-export default function TopBar() {
+export default function Header() {
   const useNavigate = useRouter();
 
   return (
