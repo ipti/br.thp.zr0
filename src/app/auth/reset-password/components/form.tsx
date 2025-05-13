@@ -1,38 +1,35 @@
 "use client";
 import { ZButton } from "@/components/button/button";
-import ZInputText from "@/components/input/input";
+import ZMessage from "@/components/message/message";
+import ZPassword from "@/components/password/password";
 import { logout } from "@/service/localstorage";
 import { primeFlex } from "@/utils/prime_flex";
 import { Form, Formik } from "formik";
 import { Divider } from "primereact/divider";
-import { Message } from "primereact/message";
-import { Password } from "primereact/password";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
-import { SignUpController } from "../service/controller";
-import ZPassword from "@/components/password/password";
-import ZMessage from "@/components/message/message";
+import { ResetPasswordController } from "../service/controller";
+import { useSearchParams } from "next/navigation";
 
-export default function FormSignUp() {
+export default function FormResetPassword() {
   const prime = primeFlex();
   const [erros, setErros] = useState("");
 
+  const searchParams = useSearchParams()
+    const token = searchParams.get('token')
+
   //   const history = useNavigation();
 
-  const controllerLogin = SignUpController(setErros);
+  const controllerResetPassword = ResetPasswordController(setErros);
 
   useEffect(() => {
     logout();
   }, []);
 
   const schema = Yup.object().shape({
-    name: Yup.string()
-      .required("Campo Obrigatório")
-      .min(8, "Nome deve ter pelo menos 8 caracteres"),
     password: Yup.string()
       .required("Campo Obrigatório")
       .min(8, "Senha deve ter pelo menos 8 caracteres"),
-    email: Yup.string().required("Campo Obrigatório"),
     confirmpassword: Yup.string()
       .label("Confirmar senha")
       .required("Campo Obrigatório")
@@ -71,71 +68,33 @@ export default function FormSignUp() {
           }}
           validationSchema={schema}
           onSubmit={(values) => {
-            controllerLogin.SignUpAction({
-              name: values.name,
-              email: values.email,
+            controllerResetPassword.ResetPasswordAction({
               password: values.password,
-            });
+            }, token ?? "");
           }}
         >
           {({ values, handleChange, errors, touched }) => {
             return (
               <Form className="col-11 md:col-4">
                 <div className={prime.flex + prime.row + prime.justify_center}>
-                  <h1>Criar conta</h1>
+                  <h1>Resetar senha</h1>
                 </div>
                   <div className="p-2" />
                   <div>
                     <div className="mb-4">
                       <div className="flex flex-column ">
-                        <label className="mb-2">Nome</label>
-                        <ZInputText
-                          name="name"
-                          value={values.name}
-                          onChange={handleChange}
-                          placeholder="Digite o seu nome"
-                          invalid={!!(errors.name && touched.name)}
-                        ></ZInputText>
-                        {errors.name && touched.name ? (
-                          <>
-                            <div className="p-1" />
-                            <div style={{ color: "red" }}>{errors.name}</div>
-                          </>
-                        ) : null}
-                      </div>
-                    </div>
-                    <div className="mb-4">
-                      <div className="flex flex-column ">
-                        <label className="mb-2">Email</label>
-                        <ZInputText
-                          name="email"
-                          value={values.email}
-                          onChange={handleChange}
-                          placeholder="Digite sua senha"
-                          invalid={!!(errors.email && touched.email)}
-                        ></ZInputText>
-                        {errors.email && touched.email ? (
-                          <>
-                            <div className="p-1" />
-                            <div style={{ color: "red" }}>{errors.email}</div>
-                          </>
-                        ) : null}
-                      </div>
-                    </div>
-                    <div className="mb-4">
-                      <div className="flex flex-column ">
-                        <label className="mb-2">Senha</label>
+                        <label className="mb-2">Nova Senha</label>
                         <ZPassword
                           name="password"
                           value={values.password}
                           onChange={handleChange}
-                          placeholder="Digite sua senha"
+                          placeholder="Digite sua nova senha"
                           invalid={!!(errors.password && touched.password)}
                           footer={footer}
                           weakLabel="Fraca"
                           mediumLabel="Médio"
                           strongLabel="Forte"
-                          promptLabel="Digite uma senha"
+                          promptLabel="Digite uma nova senha"
                           toggleMask
                         ></ZPassword>
                         {errors.password && touched.password ? (
@@ -150,12 +109,12 @@ export default function FormSignUp() {
                     </div>
                     <div className="mb-4">
                       <div className="flex flex-column ">
-                        <label className="mb-2">Confirmar senha</label>
+                        <label className="mb-2">Confirmar sua nova senha</label>
                         <ZPassword
                           name="confirmpassword"
                           value={values.confirmpassword}
                           onChange={handleChange}
-                          placeholder="Confirme sua senha"
+                          placeholder="Confirme sua nova senha"
                           toggleMask
                           promptLabel="Digite uma senha"
                           invalid={
@@ -179,15 +138,9 @@ export default function FormSignUp() {
                       <ZButton
                         style={{ width: "100%", justifyContent: "center" }}
                       >
-                        Criar
+                        Salvar
                       </ZButton>
                     </div>
-                  </div>
-                  <div className="p-4" />
-                  <div className={prime.flex + prime.row + "text-login" + prime.justify_center}>
-                    <p>Você já tem uma conta? </p>
-                    <div className="p-1" />
-                    <a href="/auth/login">Fazer Login</a>
                   </div>
               </Form>
             );
