@@ -1,35 +1,49 @@
 "use client";
 
+import ZDropdown from "@/components/dropdown/dropdown";
 import ZInputText from "@/components/input/input";
 import TitlePage from "@/components/title_page/title_page";
 import { Form, Formik } from "formik";
 import { Button } from "primereact/button";
 import { CategoryList } from "../type";
-import { Dropdown } from "primereact/dropdown";
+import ZInputNumber from "@/components/input_number/input_number";
+import * as Yup from "yup";
+import { CreateProductController } from "../services/controller";
 
-export default function FormCreateProduct({category}: {category: CategoryList}) {
+export default function FormCreateProduct({
+  category,
+}: {
+  category: CategoryList;
+}) {
+  const controllerCreateProduct = CreateProductController();
 
-  console.log(category)
+  const schema = Yup.object().shape({
+    name: Yup.string()
+      .required("Campo Obrigatório")
+      .min(4, "Nome deve ter pelo menos 4 caracteres"),
+    price: Yup.number().required("Campo Obrigatório"),
+    category: Yup.number().required("Campo Obrigatório"),
+  });
   return (
     <div>
       <TitlePage title="Criar Produto" />
       <Formik
         initialValues={{
           name: "",
-          stock: "",
-          price: "",
-          category: ""
+          price: null,
+          category: null,
         }}
-        //   validationSchema={schema}
+        validationSchema={schema}
         onSubmit={(values) => {
-          // controllerLogin.SignUpAction({
-          //   name: values.name,
-          //   email: values.email,
-          //   password: values.password,
-          // });
+          controllerCreateProduct.CreateProductAction({
+            name: values.name,
+            price: values.price ?? 0,
+            idCategory: values.category ?? 0,
+            description: "Produto"
+          });
         }}
       >
-        {({ values, handleChange, errors, touched }) => {
+        {({ values, handleChange, errors, touched, setFieldValue }) => {
           return (
             <Form>
               <div className="p-2" />
@@ -41,7 +55,7 @@ export default function FormCreateProduct({category}: {category: CategoryList}) 
                       name="name"
                       value={values.name}
                       onChange={handleChange}
-                      placeholder="Digite o seu nome"
+                      placeholder="Digite o nome do produto"
                       invalid={!!(errors.name && touched.name)}
                     ></ZInputText>
                     {errors.name && touched.name ? (
@@ -55,13 +69,17 @@ export default function FormCreateProduct({category}: {category: CategoryList}) 
                 <div className="mb-4 col-12 md:col-6">
                   <div className="flex flex-column">
                     <label className="mb-2">Preço</label>
-                    <ZInputText
+                    <ZInputNumber
                       name="price"
                       value={values.price}
-                      onChange={handleChange}
-                      placeholder="Digite sua senha"
+                      inputId="currency-brazil"
+                      mode="currency"
+                      currency="BRL"
+                      locale="pt-BR"
+                      onChange={(e) => setFieldValue("price", e.value)}
+                      placeholder="Digite o preço"
                       invalid={!!(errors.price && touched.price)}
-                    ></ZInputText>
+                    ></ZInputNumber>
                     {errors.price && touched.price ? (
                       <>
                         <div className="p-1" />
@@ -72,35 +90,17 @@ export default function FormCreateProduct({category}: {category: CategoryList}) 
                 </div>
                 <div className="mb-4 col-12 md:col-6">
                   <div className="flex flex-column">
-                    <label className="mb-2">Estoque</label>
-                    <ZInputText
-                      name="stock"
-                      value={values.stock}
-                      onChange={handleChange}
-                      placeholder="Digite um stock"
-                      invalid={!!(errors.stock && touched.stock)}
-                    ></ZInputText>
-                    {errors.stock && touched.stock ? (
-                      <>
-                        <div className="p-1" />
-                        <div style={{ color: "red" }}>{errors.stock}</div>
-                      </>
-                    ) : null}
-                  </div>
-                </div>
-                <div className="mb-4 col-12 md:col-6">
-                  <div className="flex flex-column">
                     <label className="mb-2">Categoria</label>
-                    <Dropdown
+                    <ZDropdown
                       name="category"
                       value={values.category}
                       options={category}
                       onChange={handleChange}
-                      placeholder="Digite a localização"
+                      placeholder="Selecione a categoria"
                       optionValue="id"
                       optionLabel="name"
                       invalid={!!(errors.category && touched.category)}
-                    ></Dropdown>
+                    ></ZDropdown>
                     {errors.category && touched.category ? (
                       <>
                         <div className="p-1" />
@@ -112,9 +112,7 @@ export default function FormCreateProduct({category}: {category: CategoryList}) 
                 <div className="p-2" />
               </div>
               <div className="flex flex-row justify-content-end">
-                <Button className="col-12 md:col-4">
-                  Criar
-                </Button>
+                <Button className="col-12 md:col-4">Criar</Button>
               </div>
               <div className="p-2" />
             </Form>

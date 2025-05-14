@@ -13,12 +13,18 @@ export default function Seller({ children }: { children: React.ReactNode }) {
       {
         label: "Categorias",
         icon: <i className="pi pi-sitemap"></i>,
-        link: "/seller/transformation-workshop",
+        link: "/seller/category",
       },
       {
         label: "Produtos",
         icon: <i className="pi pi-th-large"></i>,
         link: "/seller/product",
+      },
+
+      {
+        label: "Usuários",
+        icon: <i className="pi pi-users"></i>,
+        link: "/seller/user",
       },
     ],
   };

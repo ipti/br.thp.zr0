@@ -1,23 +1,21 @@
 "use client";
 import { ZButton } from "@/components/button/button";
 import ZInputText from "@/components/input/input";
-import ZMessage from "@/components/message/message";
 import ZPassword from "@/components/password/password";
 import { logout } from "@/service/localstorage";
 import { primeFlex } from "@/utils/prime_flex";
 import { Form, Formik } from "formik";
 import { Divider } from "primereact/divider";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import * as Yup from "yup";
-import { SignUpController } from "../service/controller";
+import { CreateUserController } from "../services/controller";
 
-export default function FormSignUp() {
+export default function FormCreateUser() {
   const prime = primeFlex();
-  const [erros, setErros] = useState("");
 
   //   const history = useNavigation();
 
-  const controllerLogin = SignUpController(setErros);
+  const controllerLCreateUser = CreateUserController();
 
   useEffect(() => {
     logout();
@@ -54,22 +52,19 @@ export default function FormSignUp() {
     <div
       className={prime.flex + prime.column + prime.justify_center + "h-full"}
     >
-      {erros && (
-        <div className={"flex row m-4" + prime.justify_center}>
-          <ZMessage severity="error" text={erros} />
-        </div>
-      )}
-      <div className={"grid" + prime.justify_center}>
+     
+      <div>
         <Formik
           initialValues={{
             email: "",
             password: "",
+
             name: "",
             confirmpassword: "",
           }}
           validationSchema={schema}
           onSubmit={(values) => {
-            controllerLogin.SignUpAction({
+            controllerLCreateUser.CreateUserAction({
               name: values.name,
               email: values.email,
               password: values.password,
@@ -78,13 +73,10 @@ export default function FormSignUp() {
         >
           {({ values, handleChange, errors, touched }) => {
             return (
-              <Form className="col-11 md:col-4">
-                <div className={prime.flex + prime.row + prime.justify_center}>
-                  <h1>Criar conta</h1>
-                </div>
+              <Form>
                   <div className="p-2" />
-                  <div>
-                    <div className="mb-4">
+                  <div className="grid">
+                    <div className="col-12 md:col-6 mb-4">
                       <div className="flex flex-column ">
                         <label className="mb-2">Nome</label>
                         <ZInputText
@@ -102,7 +94,7 @@ export default function FormSignUp() {
                         ) : null}
                       </div>
                     </div>
-                    <div className="mb-4">
+                    <div className="col-12 md:col-6 mb-4">
                       <div className="flex flex-column ">
                         <label className="mb-2">Email</label>
                         <ZInputText
@@ -120,7 +112,7 @@ export default function FormSignUp() {
                         ) : null}
                       </div>
                     </div>
-                    <div className="mb-4">
+                    <div className="col-12 md:col-6 mb-4">
                       <div className="flex flex-column ">
                         <label className="mb-2">Senha</label>
                         <ZPassword
@@ -146,7 +138,7 @@ export default function FormSignUp() {
                         ) : null}
                       </div>
                     </div>
-                    <div className="mb-4">
+                    <div className="col-12 md:col-6 mb-4">
                       <div className="flex flex-column ">
                         <label className="mb-2">Confirmar senha</label>
                         <ZPassword
@@ -180,12 +172,6 @@ export default function FormSignUp() {
                         Criar
                       </ZButton>
                     </div>
-                  </div>
-                  <div className="p-4" />
-                  <div className={prime.flex + prime.row + "text-login" + prime.justify_center}>
-                    <p>Você já tem uma conta? </p>
-                    <div className="p-1" />
-                    <a href="/auth/login">Fazer Login</a>
                   </div>
               </Form>
             );
