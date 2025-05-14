@@ -8,6 +8,10 @@
     border-radius: 6px;
     padding-block:0.5rem;
     padding-inline: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
 }
 
 .p-button:not(:disabled):hover {

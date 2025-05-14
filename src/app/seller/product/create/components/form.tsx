@@ -1,11 +1,15 @@
 "use client";
 
+import ZInputText from "@/components/input/input";
 import TitlePage from "@/components/title_page/title_page";
 import { Form, Formik } from "formik";
 import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
+import { CategoryList } from "../type";
+import { Dropdown } from "primereact/dropdown";
 
-export default function FormCreateProduct() {
+export default function FormCreateProduct({category}: {category: CategoryList}) {
+
+  console.log(category)
   return (
     <div>
       <TitlePage title="Criar Produto" />
@@ -33,13 +37,13 @@ export default function FormCreateProduct() {
                 <div className="mb-4 col-12 md:col-6">
                   <div className="flex flex-column">
                     <label className="mb-2">Nome</label>
-                    <InputText
+                    <ZInputText
                       name="name"
                       value={values.name}
                       onChange={handleChange}
                       placeholder="Digite o seu nome"
                       invalid={!!(errors.name && touched.name)}
-                    ></InputText>
+                    ></ZInputText>
                     {errors.name && touched.name ? (
                       <>
                         <div className="p-1" />
@@ -51,13 +55,13 @@ export default function FormCreateProduct() {
                 <div className="mb-4 col-12 md:col-6">
                   <div className="flex flex-column">
                     <label className="mb-2">Preço</label>
-                    <InputText
+                    <ZInputText
                       name="price"
                       value={values.price}
                       onChange={handleChange}
                       placeholder="Digite sua senha"
                       invalid={!!(errors.price && touched.price)}
-                    ></InputText>
+                    ></ZInputText>
                     {errors.price && touched.price ? (
                       <>
                         <div className="p-1" />
@@ -69,13 +73,13 @@ export default function FormCreateProduct() {
                 <div className="mb-4 col-12 md:col-6">
                   <div className="flex flex-column">
                     <label className="mb-2">Estoque</label>
-                    <InputText
+                    <ZInputText
                       name="stock"
                       value={values.stock}
                       onChange={handleChange}
                       placeholder="Digite um stock"
                       invalid={!!(errors.stock && touched.stock)}
-                    ></InputText>
+                    ></ZInputText>
                     {errors.stock && touched.stock ? (
                       <>
                         <div className="p-1" />
@@ -87,13 +91,16 @@ export default function FormCreateProduct() {
                 <div className="mb-4 col-12 md:col-6">
                   <div className="flex flex-column">
                     <label className="mb-2">Categoria</label>
-                    <InputText
+                    <Dropdown
                       name="category"
                       value={values.category}
+                      options={category}
                       onChange={handleChange}
                       placeholder="Digite a localização"
+                      optionValue="id"
+                      optionLabel="name"
                       invalid={!!(errors.category && touched.category)}
-                    ></InputText>
+                    ></Dropdown>
                     {errors.category && touched.category ? (
                       <>
                         <div className="p-1" />
