@@ -1,0 +1,6 @@
+export enum PerfisEnum {
+  SELLER = "SELLER",
+  SELLER_MANAGER = "SELLER_MANAGER",
+  CUSTOMER = "CUSTOMER",
+  ADMIN = "ADMIN"
+}

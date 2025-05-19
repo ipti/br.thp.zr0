@@ -1,6 +1,7 @@
 import HeaderSeller from "@/components/header/header_seller/header_seller";
 import SlideBar from "@/components/slider_bar/slider_bar";
 import { SliderBarType } from "@/components/slider_bar/type";
+import { Providers } from "./provider";
 
 export default function Seller({ children }: { children: React.ReactNode }) {
   const itensList: SliderBarType = {
@@ -35,7 +36,9 @@ export default function Seller({ children }: { children: React.ReactNode }) {
         <SlideBar itens={itensList.itens} />
         <div className="flex flex-column w-full">
           <HeaderSeller />
-          <main className="h-full w-full p-8">{children}</main>
+          <main className="h-full w-full p-8">
+            <Providers>{children}</Providers>
+          </main>
         </div>
         {/* <TabBar /> */}
       </div>

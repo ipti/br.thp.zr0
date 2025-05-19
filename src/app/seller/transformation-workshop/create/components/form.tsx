@@ -1,36 +1,46 @@
 "use client";
 
+import ZInputText from "@/components/input/input";
 import TitlePage from "@/components/title_page/title_page";
-import { primeFlex } from "@/utils/prime_flex";
 import { Form, Formik } from "formik";
 import { Button } from "primereact/button";
-import { Divider } from "primereact/divider";
-import { InputText } from "primereact/inputtext";
-import { Password } from "primereact/password";
+import { TransformationWorkshopController } from "../service/controller";
+import InputAddress from "@/components/inputs_address/inputs_address";
 
 export default function FormCreateTransformationWorkshop() {
-  const prime = primeFlex();
+  const controllerCreateTW = TransformationWorkshopController();
   return (
     <div>
       <TitlePage title="Criar Oficina de transformação" />
       <Formik
         initialValues={{
-          email: "",
-          password: "",
+          location: "",
           name: "",
-          confirmpassword: "",
           cnpj: "",
+          address: "",
+          cep: "",
+          complement: "",
+          neighborhood: "",
+          number: "",
+          city: undefined,
+          state: undefined,
         }}
         //   validationSchema={schema}
         onSubmit={(values) => {
-          // controllerLogin.SignUpAction({
-          //   name: values.name,
-          //   email: values.email,
-          //   password: values.password,
-          // });
+          controllerCreateTW.CreateTransformationWorkshopAction({
+            cnpj: values.cnpj,
+            address: values.address,
+            cep: values.cep,
+            city_fk: values.city,
+            state_fk: values.state,
+            complement: values.complement,
+            neighborhood: values.neighborhood,
+            number: values.number,
+            name: values.name,
+          });
         }}
       >
-        {({ values, handleChange, errors, touched }) => {
+        {({ values, handleChange, errors, touched, setFieldValue }) => {
           return (
             <Form>
               <div className="p-2" />
@@ -38,13 +48,13 @@ export default function FormCreateTransformationWorkshop() {
                 <div className="mb-4 col-12 md:col-6">
                   <div className="flex flex-column">
                     <label className="mb-2">Nome</label>
-                    <InputText
+                    <ZInputText
                       name="name"
                       value={values.name}
                       onChange={handleChange}
                       placeholder="Digite o seu nome"
                       invalid={!!(errors.name && touched.name)}
-                    ></InputText>
+                    ></ZInputText>
                     {errors.name && touched.name ? (
                       <>
                         <div className="p-1" />
@@ -55,32 +65,14 @@ export default function FormCreateTransformationWorkshop() {
                 </div>
                 <div className="mb-4 col-12 md:col-6">
                   <div className="flex flex-column">
-                    <label className="mb-2">Email</label>
-                    <InputText
-                      name="email"
-                      value={values.email}
-                      onChange={handleChange}
-                      placeholder="Digite sua senha"
-                      invalid={!!(errors.email && touched.email)}
-                    ></InputText>
-                    {errors.email && touched.email ? (
-                      <>
-                        <div className="p-1" />
-                        <div style={{ color: "red" }}>{errors.email}</div>
-                      </>
-                    ) : null}
-                  </div>
-                </div>
-                <div className="mb-4 col-12 md:col-6">
-                  <div className="flex flex-column">
                     <label className="mb-2">CNPJ</label>
-                    <InputText
+                    <ZInputText
                       name="cnpj"
                       value={values.cnpj}
                       onChange={handleChange}
                       placeholder="Digite um CNPJ"
                       invalid={!!(errors.cnpj && touched.cnpj)}
-                    ></InputText>
+                    ></ZInputText>
                     {errors.cnpj && touched.cnpj ? (
                       <>
                         <div className="p-1" />
@@ -89,78 +81,16 @@ export default function FormCreateTransformationWorkshop() {
                     ) : null}
                   </div>
                 </div>
-                <div className="mb-4 col-12 md:col-6">
-                  <div className="flex flex-column">
-                    <label className="mb-2">Localização</label>
-                    <InputText
-                      name="name"
-                      value={values.name}
-                      onChange={handleChange}
-                      placeholder="Digite a localização"
-                      invalid={!!(errors.name && touched.name)}
-                    ></InputText>
-                    {errors.name && touched.name ? (
-                      <>
-                        <div className="p-1" />
-                        <div style={{ color: "red" }}>{errors.name}</div>
-                      </>
-                    ) : null}
-                  </div>
-                </div>
-                <div className="mb-4 col-12 md:col-6">
-                  <div className="flex flex-column">
-                    <label className="mb-2">Senha</label>
-                    <Password
-                      name="password"
-                      value={values.password}
-                      onChange={handleChange}
-                      placeholder="Digite sua senha"
-                      invalid={!!(errors.password && touched.password)}
-                      //   footer={footer}
-                      weakLabel="Fraca"
-                      mediumLabel="Médio"
-                      strongLabel="Forte"
-                      promptLabel="Digite uma senha"
-                      toggleMask
-                    ></Password>
-                    {errors.password && touched.password ? (
-                      <>
-                        <div className="p-1" />
-                        <div style={{ color: "red" }}>{errors.password}</div>
-                      </>
-                    ) : null}
-                  </div>
-                </div>
-                <div className="mb-4 col-12 md:col-6">
-                  <div className="flex flex-column">
-                    <label className="mb-2">Confirmar senha</label>
-                    <Password
-                      name="confirmpassword"
-                      value={values.confirmpassword}
-                      onChange={handleChange}
-                      placeholder="Confirme sua senha"
-                      toggleMask
-                      promptLabel="Digite uma senha"
-                      invalid={
-                        !!(errors.confirmpassword && touched.confirmpassword)
-                      }
-                    ></Password>
-                    {errors.confirmpassword && touched.confirmpassword ? (
-                      <div style={{ color: "red" }}>
-                        <>
-                          <div className="p-1" />
-                          {errors.confirmpassword}
-                        </>
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-                <div className="p-2" />
+                <InputAddress
+                  errors={errors}
+                  handleChange={handleChange}
+                  setFieldValue={setFieldValue}
+                  touched={touched}
+                  values={values}
+                />
               </div>
               <div className="flex flex-row justify-content-end">
-                <Button className="col-12 md:col-4">
-                  Criar
-                </Button>
+                <Button className="col-12 md:col-4">Criar</Button>
               </div>
               <div className="p-2" />
             </Form>
