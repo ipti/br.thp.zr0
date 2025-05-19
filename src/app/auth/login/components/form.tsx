@@ -23,7 +23,7 @@ export default function FormLogin() {
   const schema = Yup.object().shape({
     password: Yup.string()
       .required("Campo Obrigatório")
-      .min(8, "Senha deve ter pelo menos 8 caracteres"),
+      .min(6, "Senha deve ter pelo menos 6 caracteres"),
     email: Yup.string().required("Campo Obrigatório"),
   });
 
