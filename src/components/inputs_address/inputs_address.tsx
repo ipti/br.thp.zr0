@@ -69,6 +69,7 @@ const InputAddress = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.state]);
 
+
   return (
     <>
       <div className="mb-4 col-12 md:col-6">
@@ -152,6 +153,7 @@ const InputAddress = ({
                 placeholder="Estado"
                 name="state"
                 optionLabel="name"
+                optionValue="id"
                 onChange={(e) => {
                   setFieldValue("state", e.target.value);
                   props.setStateId(e.target.value.id);
@@ -175,6 +177,7 @@ const InputAddress = ({
                   placeholder="Cidade"
                   name="city"
                   optionLabel="name"
+                   optionValue="id"
                   onChange={handleChange}
                   options={
                     props.state.find((item) => item.id === props.stateId)?.city
