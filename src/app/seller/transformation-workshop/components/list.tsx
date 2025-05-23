@@ -1,11 +1,9 @@
 "use client";
+import { redirect, useRouter } from "next/navigation";
+import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import { oficinasMock } from "../service/oficinas.mock";
-import { Button } from "primereact/button";
-import { redirect, useRouter } from "next/navigation";
 import { useFetchRequestTransformationWorkshop } from "../service/query";
-import { useNavigation } from "@/utils/navigation";
 
 export default function ListTransformationWorkshop() {
   const history = useRouter()
@@ -27,7 +25,7 @@ export default function ListTransformationWorkshop() {
   return (
     <div>
       <DataTable value={otRequest} header={header} onSelectionChange={(e) => history.push("/seller/transformation-workshop/one?idOt="+e.value.transformation_workshop.id)} selectionMode="single" loading={isLoading}>
-        <Column field="transformation_workshop.name" header="Name"></Column>
+        <Column field="transformation_workshop.name" header="Nome"></Column>
         <Column field="transformation_workshop.cnpj" header="CNPJ"></Column>
         <Column field="transformation_workshop.city.name" header="Cidade"></Column>
         <Column field="transformation_workshop.state.name" header="Email"></Column>
