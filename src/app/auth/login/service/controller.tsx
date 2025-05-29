@@ -27,6 +27,9 @@ export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
             if(data.data.userRegistered.role === PerfisEnum.ADMIN){
                  history.history.push("/seller/home")  
             }
+            if(data.data.userRegistered.role === PerfisEnum.CUSTOMER){
+                 history.history.push("/")  
+            }
             // history.history.push("/")
         }).catch(erros => {
             console.log(erros.response.data.message)
