@@ -1,15 +1,13 @@
-import http from "@/service/axios";
-import ListPage from "./components/list";
 import TitlePage from "@/components/title_page/title_page";
+import ListPage from "./components/list";
 
 export default async function User() {
-  const { data } = await http.get("/users");
 
   return (
     <div>
       <TitlePage title="" />
 
-      <ListPage user={data} />
+      <ListPage />
     </div>
   );
 }
