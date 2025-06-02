@@ -1,16 +1,17 @@
 "use client";
+import { useFetchRequestTransformationWorkshop } from "@/app/seller/transformation-workshop/service/query";
 import { ZButton } from "@/components/button/button";
 import ZDropdown from "@/components/dropdown/dropdown";
 import ZInputText from "@/components/input/input";
 import ZPassword from "@/components/password/password";
 import { logout } from "@/service/localstorage";
+import { list_perfis } from "@/utils/list/listt_perfis";
 import { primeFlex } from "@/utils/prime_flex";
 import { Form, Formik } from "formik";
 import { Divider } from "primereact/divider";
 import { useEffect } from "react";
 import * as Yup from "yup";
 import { CreateUserController } from "../services/controller";
-import { list_perfis } from "@/utils/list/listt_perfis";
 
 export default function FormCreateUser() {
   const prime = primeFlex();
@@ -18,6 +19,8 @@ export default function FormCreateUser() {
   //   const history = useNavigation();
 
   const controllerLCreateUser = CreateUserController();
+
+  const {data: otRequest} = useFetchRequestTransformationWorkshop()
 
   useEffect(() => {
     logout();
@@ -63,6 +66,7 @@ export default function FormCreateUser() {
             role: "",
             name: "",
             confirmpassword: "",
+            ot_fk: '',
           }}
           validationSchema={schema}
           onSubmit={(values) => {
@@ -71,6 +75,7 @@ export default function FormCreateUser() {
               email: values.email,
               role: values.role,
               password: values.password,
+              ot_fk: values.ot_fk
             });
           }}
         >
@@ -129,6 +134,27 @@ export default function FormCreateUser() {
                         invalid={!!(errors.role && touched.role)}
                       ></ZDropdown>
                       {errors.role && touched.role ? (
+                        <>
+                          <div className="p-1" />
+                          <div style={{ color: "red" }}>{errors.role}</div>
+                        </>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="col-12 md:col-6 mb-4">
+                    <div className="flex flex-column ">
+                      <label className="mb-2">Oficina de transformação</label>
+                      <ZDropdown
+                        name="ot_fk"
+                        options={otRequest}
+                        optionLabel="transformation_workshop.name"
+                        optionValue="transformation_workshop.id"
+                        value={values.ot_fk}
+                        onChange={handleChange}
+                        placeholder="Selecione a oficina"
+                        invalid={!!(errors.ot_fk && touched.ot_fk)}
+                      ></ZDropdown>
+                      {errors.ot_fk && touched.ot_fk ? (
                         <>
                           <div className="p-1" />
                           <div style={{ color: "red" }}>{errors.role}</div>

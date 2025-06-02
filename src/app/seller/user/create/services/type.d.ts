@@ -3,4 +3,5 @@ export interface CreateUserTypes {
     password?: string
     name?: string
     role?: string
+    ot_fk?: string
 }

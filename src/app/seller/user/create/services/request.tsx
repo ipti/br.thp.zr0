@@ -6,7 +6,7 @@ export const CreateUserRequest = async (
 ) => {
   return await http
     .post(
-      "/users",
+      "/user-bff/created-user-with-tw",
       body,
       { skipAuth: true }
     )

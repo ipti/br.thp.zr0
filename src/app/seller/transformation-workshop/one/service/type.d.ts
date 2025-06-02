@@ -1,3 +1,8 @@
+export interface AddUserTrnasfWorkType {
+  user_fk: number
+  tw_fk: number
+}
+
 export interface TransfWorkOneType {
   id: number
   name: string
