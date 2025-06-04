@@ -5,8 +5,6 @@ export default async function Product() {
 
     const { data } = await http.get('/product');
 
-console.log(data)
-
     return(
         <div>
             <ListPage product={data} />

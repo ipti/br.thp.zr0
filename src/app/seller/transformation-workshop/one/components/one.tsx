@@ -1,10 +1,10 @@
 "use client";
+import TitlePage from "@/components/title_page/title_page";
 import { useSearchParams } from "next/navigation";
 import { useFetchRequestTransformationWorkshopOne } from "../service/query";
-import { useLocation } from "react-router-dom";
 import { TransfWorkOneType } from "../service/type";
-import TitlePage from "@/components/title_page/title_page";
 import MemberTransformationWorkshop from "./members/members";
+import ZCard from "@/components/card/card";
 
 export default function TransformationWorkshopOneComponent() {
   const searchParams = useSearchParams();
@@ -14,7 +14,7 @@ export default function TransformationWorkshopOneComponent() {
   const { data: transfWorkRequest } =
     useFetchRequestTransformationWorkshopOne(idOt);
 
-  let transfWork: TransfWorkOneType | undefined = transfWorkRequest;
+  var transfWork: TransfWorkOneType | undefined = transfWorkRequest;
 
   return (
     <div>
@@ -23,6 +23,9 @@ export default function TransformationWorkshopOneComponent() {
       <div className="p-1" />
       <p>CEP: {transfWork?.cep}</p>
       <div className="p-4" />
+      <div className="col-12 md:col-6">
+        <ZCard title="Produtos" icon={true} path_img_or_icon="pi pi-box" />
+      </div>
       <MemberTransformationWorkshop
         members={transfWork?.transformation_workshop_user}
       />

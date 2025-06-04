@@ -5,6 +5,7 @@ import { StateList } from "./type";
 import ZInputText from "../input/input";
 import ZDropdown from "../dropdown/dropdown";
 import { useFetchRequestState } from "./query";
+import ZInputMask from "../input_mask/input_mask";
 
 const InputAddressState = () => {
   const [state, setState] = useState<StateList | undefined>();
@@ -76,9 +77,9 @@ const InputAddress = ({
         <div className="flex flex-column">
           <label>CEP </label>
           <div className="p-2" />
-          <ZInputText
+          <ZInputMask
             value={values.cep}
-            // mask="99999-999"
+            mask="99999-999"
             placeholder="Cep"
             onChange={(e) => {
               setFieldValue("cep", e.target.value);
