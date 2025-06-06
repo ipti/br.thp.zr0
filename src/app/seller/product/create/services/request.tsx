@@ -1,13 +1,11 @@
 import http from "@/service/axios";
-import { CreateProductTypes } from "./type";
 
 export const CreateProductRequest = async (
-  body: CreateProductTypes
+  body: FormData
 ) => {
   return await http
     .post(
       "/product",
       body,
-      { skipAuth: true }
     )
 };

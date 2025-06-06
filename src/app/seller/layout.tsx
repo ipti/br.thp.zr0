@@ -36,7 +36,7 @@ export default function Seller({ children }: { children: React.ReactNode }) {
         <SlideBar itens={itensList.itens} />
         <div className="flex flex-column w-full">
           <HeaderSeller />
-          <main className="h-full w-full p-8">
+          <main className="h-full w-full overflow-auto p-8">
             <Providers>{children}</Providers>
           </main>
         </div>

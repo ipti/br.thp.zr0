@@ -5,7 +5,7 @@ export default async function Product() {
 
     return(
         <div>
-            <ListPage product={data} />
+            <ListPage />
         </div>
     )
 }

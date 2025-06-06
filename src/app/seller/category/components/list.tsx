@@ -3,9 +3,12 @@ import { redirect } from "next/navigation";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import { CategoryList } from "../type";
+import { useFetchRequestCategory } from "../service/query";
 
-export default function ListPage({category}: {category: CategoryList}) {
+export default function ListPage() {
+
+    const {data, isLoading} = useFetchRequestCategory()
+  
   const header = (
     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
       <span className="text-xl text-900 font-bold">
@@ -20,9 +23,11 @@ export default function ListPage({category}: {category: CategoryList}) {
       />
     </div>
   );
+
+
   return (
     <div>
-      <DataTable value={category} header={header}>
+      <DataTable value={data} header={header} loading={isLoading}>
         <Column field="name" header="Name"></Column>
       </DataTable>
     </div>

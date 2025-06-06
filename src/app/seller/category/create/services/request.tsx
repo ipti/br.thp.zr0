@@ -8,6 +8,5 @@ export const CreateCategoryRequest = async (
     .post(
       "/category",
       body,
-      { skipAuth: true }
     )
 };
