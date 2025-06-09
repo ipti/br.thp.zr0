@@ -25,7 +25,7 @@ export default function ListPage() {
     <div>
       <DataTable value={data} header={header} loading={isLoading}>
       <Column header={"Imagem"} body={(e)=>
-        <img src={e?.product_image[0]?.img_url} alt="Imagem produto"></img>
+        <img style={{height: "64px"}} src={e?.product_image[0]?.img_url} alt="Imagem produto"></img>
         }></Column>
         <Column field="name" header="Nome"></Column>
         <Column field="category.name" header="Categoria"></Column>

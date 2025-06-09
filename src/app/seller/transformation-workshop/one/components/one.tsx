@@ -5,6 +5,7 @@ import { useFetchRequestTransformationWorkshopOne } from "../service/query";
 import { TransfWorkOneType } from "../service/type";
 import MemberTransformationWorkshop from "./members/members";
 import ZCard from "@/components/card/card";
+import ProductTransformationWorkshop from "./products/products";
 
 export default function TransformationWorkshopOneComponent() {
   const searchParams = useSearchParams();
@@ -23,12 +24,18 @@ export default function TransformationWorkshopOneComponent() {
       <div className="p-1" />
       <p>CEP: {transfWork?.cep}</p>
       <div className="p-4" />
-      <div className="col-12 md:col-6">
-        <ZCard title="Produtos" icon={true} path_img_or_icon="pi pi-box" />
+      <div className="grid">
+        <div className="col-12 md:col-7">
+          <ProductTransformationWorkshop
+            product={transfWork?.transformation_workshop_product}
+          />
+        </div>
+        <div className="col-12 md:col-5">
+          <MemberTransformationWorkshop
+            members={transfWork?.transformation_workshop_user}
+          />
+        </div>
       </div>
-      <MemberTransformationWorkshop
-        members={transfWork?.transformation_workshop_user}
-      />
     </div>
   );
 }

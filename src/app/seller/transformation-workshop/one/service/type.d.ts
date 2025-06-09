@@ -1,7 +1,13 @@
-export interface AddUserTrnasfWorkType {
+export interface AddUserTransfWorkType {
   user_fk: number
   tw_fk: number
 }
+
+export interface AddProductTransfWorkType {
+  product_fk: number
+  tw_fk: number
+}
+
 
 export interface TransfWorkOneType {
   id: number
@@ -18,6 +24,7 @@ export interface TransfWorkOneType {
   city_fk: number
   state: State
   city: City
+  transformation_workshop_product: TransformationWorkshopProduct[]
   transformation_workshop_user: TransformationWorkshopUser[]
 }
 
@@ -37,6 +44,25 @@ export interface City {
   ddd2: number
 }
 
+export interface TransformationWorkshopProduct {
+  id: number
+  product: Product
+}
+
+export interface Product {
+  id: number
+  name: string
+  description: string
+  price: number
+  createdAt: string
+  updatedAt: string
+  category_fk: number
+  weight: number
+  height: number
+  width: number
+  length: number
+}
+
 export interface TransformationWorkshopUser {
   users: Users
 }
@@ -44,7 +70,7 @@ export interface TransformationWorkshopUser {
 export interface Users {
   id: number
   email: string
-  username: string
+  username: any
   role: string
   name: string
   password: string

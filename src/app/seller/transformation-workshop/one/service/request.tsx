@@ -1,6 +1,6 @@
 import http from "@/service/axios";
 import { logout } from "@/service/localstorage";
-import { AddUserTrnasfWorkType } from "./type";
+import { AddProductTransfWorkType, AddUserTransfWorkType } from "./type";
 
 export const requestTransformationWorkshopOne = (idOne?: string) => {
   let path = "/transformation-workshop-user-bff/one?id=" + idOne;
@@ -18,7 +18,7 @@ export const requestTransformationWorkshopOne = (idOne?: string) => {
   }
 };
 
-export const requestAddTransformationWorkshop = (body: AddUserTrnasfWorkType) => {
+export const requestAddUserTransformationWorkshop = (body: AddUserTransfWorkType ) => {
   let path = "/transformation-workshop-user-bff/add-user";
 
     return http
@@ -34,3 +34,18 @@ export const requestAddTransformationWorkshop = (body: AddUserTrnasfWorkType) =>
   
 };
 
+export const requestAddProductTransformationWorkshop = (body: AddProductTransfWorkType) => {
+  let path = "/transformation-workshop-product-bff/add-product";
+
+    return http
+      .post(path, body)
+      .then((response) => response.data)
+      .catch((err) => {
+        if (err.response.status === 401) {
+          logout();
+          window.location.reload();
+        }
+        throw err;
+      });
+  
+};

@@ -22,8 +22,7 @@ export default function MemberTransformationWorkshop({
   return (
     <DataTable value={members} header={header}>
       <Column field="users.name" header="Nome"></Column>
-      <Column field="users.email" header="Email"></Column>
-      <Column field="users.role" header="Cidade"></Column>
+      <Column field="users.role" header="Perfil"></Column>
     </DataTable>
   );
 }
