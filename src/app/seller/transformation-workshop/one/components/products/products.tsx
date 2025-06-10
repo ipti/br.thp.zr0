@@ -6,6 +6,7 @@ import { useState } from "react";
 import ModalAddProduct from "./modal_add_product/modal_add_product";
 import ZInputText from "@/components/input/input";
 import ZInputNumber from "@/components/input_number/input_number";
+import { TransfWorkshopController } from "../../service/controller";
 
 export default function ProductTransformationWorkshop({
   product,
@@ -14,6 +15,7 @@ export default function ProductTransformationWorkshop({
 }) {
  
   const [visible, setVisible] = useState(false)
+    const transfWorkshopController = TransfWorkshopController();
   const header = (
     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
       <span className="text-xl text-900 font-bold">Produtos</span>
@@ -36,6 +38,8 @@ export default function ProductTransformationWorkshop({
 
 
       const onRowEditComplete = (e: any) => {
+        const rowData = e.newData
+        transfWorkshopController.UpdateProductTransfWorkshopAction(rowData.id, {quantity: rowData.quantity})
        console.log(e)
     };
   return (
@@ -43,8 +47,8 @@ export default function ProductTransformationWorkshop({
       <Column header={"Imagem"} style={{ width: '10%' }}  body={(e)=>
         <img style={{height: "64px"}} src={e?.product?.product_image?.length > 0 ? e?.product?.product_image![0]?.img_url : null} alt="Imagem produto"></img>
         }></Column>
-      <Column field="product.name" editor={(options) => textEditor(options)} header="Nome"></Column>
-      <Column field="product.length" editor={(options) => textEditorNumber(options)} header="Quantidade"></Column>
+      <Column field="product.name" header="Nome"></Column>
+      <Column field="quantity" editor={(options) => textEditorNumber(options)} header="Quantidade"></Column>
       <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
     </DataTable>
   );

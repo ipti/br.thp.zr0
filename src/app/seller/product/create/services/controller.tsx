@@ -1,6 +1,7 @@
 import { useNavigation } from "@/utils/navigation"
 import { CreateProductRequest } from "./request"
 import { CreateProductTypes } from "./type"
+import queryClient from "@/service/react-query"
 
 export function CreateProductController() {
 
@@ -25,7 +26,8 @@ export function CreateProductController() {
           });
         
         CreateProductRequest(formData).then(data => {
-            history.history.push("/")
+            history.history.push("/seller/product")
+            queryClient.refetchQueries('userequestProduct')
         }).catch(erros => {
             
         })

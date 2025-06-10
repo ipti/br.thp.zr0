@@ -5,7 +5,7 @@ import ZDialog from "@/components/dialog/dialog";
 import ZDropdown from "@/components/dropdown/dropdown";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { AddUserTransfWorkshopController } from "../../../service/controller";
+import { TransfWorkshopController } from "../../../service/controller";
 import { useSearchParams } from "next/navigation";
 
 export default function ModalAddMember({
@@ -22,7 +22,7 @@ export default function ModalAddMember({
     const idOt = searchParams.get("idOt");
   
 
-  const addUserTransfWorkshopController = AddUserTransfWorkshopController();
+  const transfWorkshopController = TransfWorkshopController();
 
   const schema = Yup.object().shape({
     user: Yup.object().required("Campo Obrigatório"),
@@ -38,7 +38,7 @@ export default function ModalAddMember({
         initialValues={initial}
         validationSchema={schema}
         onSubmit={(values) => {
-          addUserTransfWorkshopController.AddUserTransfWorkshopAction({
+          transfWorkshopController.AddUserTransfWorkshopAction({
             user_fk: values.user?.id,
             tw_fk: parseInt(idOt ?? ""),
           });
