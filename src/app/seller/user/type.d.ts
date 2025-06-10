@@ -5,5 +5,5 @@ export interface User {
   name: string
   email: string
   active: boolean
-  role: string
+  role: "SELLER" | "SELLER_MANAGER" | "CUSTOMER" | "ADMIN"
 }

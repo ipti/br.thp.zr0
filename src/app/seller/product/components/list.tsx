@@ -1,11 +1,12 @@
 "use client";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useFetchRequestProduct } from "../service/query";
 
 export default function ListPage() {
+  const history = useRouter()
   const {data, isLoading} = useFetchRequestProduct()
   const header = (
     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -15,7 +16,7 @@ export default function ListPage() {
       <Button
         icon="pi pi-plus"
         onClick={() => {
-          redirect("/seller/product/create");
+          history.push("/seller/product/create");
         }}
         label="Criar"
       />

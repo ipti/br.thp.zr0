@@ -1,14 +1,17 @@
 "use client";
-import { redirect } from "next/navigation";
+import { getTranslatedLabelPerfis } from "@/utils/label_translation/perfis";
+import { useRouter } from "next/navigation";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import { UserList } from "../type";
 import { useFetchListUserTransformationWorkshop } from "../service/query";
+import { User, UserList } from "../type";
 
 export default function ListPage() {
 
   const {data: listUserRequest} = useFetchListUserTransformationWorkshop()
+
+  const history = useRouter()
 
   var listUser: UserList | undefined = listUserRequest
   const header = (
@@ -17,7 +20,7 @@ export default function ListPage() {
       <Button
         icon="pi pi-plus"
         onClick={() => {
-          redirect("/seller/user/create");
+          history.push("/seller/user/create");
         }}
         label="Criar"
       />
@@ -29,7 +32,9 @@ export default function ListPage() {
       <DataTable value={listUser} header={header}>
         <Column field="name" header="Nome"></Column>
         <Column field="email" header="Email"></Column>
-        <Column field="role" header="Perfil"></Column>
+        <Column body={(e: User) => {
+          return <>{getTranslatedLabelPerfis(e.role)}</>
+        }} header="Perfil"></Column>
       </DataTable>
     </div>
   );

@@ -4,3 +4,4 @@ export enum PerfisEnum {
   CUSTOMER = "CUSTOMER",
   ADMIN = "ADMIN"
 }
+

@@ -1,7 +1,8 @@
+import { ConditionalSlideBar } from "@/components/slider_bar/conditional";
 import HeaderSeller from "@/components/header/header_seller/header_seller";
-import SlideBar from "@/components/slider_bar/slider_bar";
 import { SliderBarType } from "@/components/slider_bar/type";
 import { Providers } from "./provider";
+import { SlideBarProvider } from "@/components/slider_bar/slide_bar_context";
 
 export default function Seller({ children }: { children: React.ReactNode }) {
   const itensList: SliderBarType = {
@@ -29,19 +30,27 @@ export default function Seller({ children }: { children: React.ReactNode }) {
       },
     ],
   };
+
+
+
   return (
-    <div className="h-full">
-      {/* <HeaderSeller /> */}
-      <div className="flex flex-row h-full">
-        <SlideBar itens={itensList.itens} />
-        <div className="flex flex-column w-full">
-          <HeaderSeller />
-          <main className="h-full w-full overflow-auto p-8">
-            <Providers>{children}</Providers>
-          </main>
+    <SlideBarProvider>
+      <Providers>
+
+        <div className="h-full">
+          {/* <HeaderSeller /> */}
+          <div className="flex flex-row h-full">
+            <ConditionalSlideBar itens={itensList.itens} />
+            <div className="flex flex-column w-full">
+              <HeaderSeller />
+              <main className="h-full w-full overflow-auto p-4 md:p-8 ">
+                {children}
+              </main>
+            </div>
+            {/* <TabBar /> */}
+          </div>
         </div>
-        {/* <TabBar /> */}
-      </div>
-    </div>
+      </Providers>
+    </SlideBarProvider>
   );
 }
