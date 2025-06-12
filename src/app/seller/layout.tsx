@@ -5,7 +5,10 @@ import { Providers } from "./provider";
 import { SlideBarProvider } from "@/components/slider_bar/slide_bar_context";
 
 export default function Seller({ children }: { children: React.ReactNode }) {
-  const itensList: SliderBarType = {
+
+
+
+  const itensListManager: SliderBarType = {
     itens: [
       {
         label: "Oficinas de Transformações",
@@ -31,6 +34,28 @@ export default function Seller({ children }: { children: React.ReactNode }) {
     ],
   };
 
+  const itensListSeller: SliderBarType = {
+    itens: [
+      {
+        label: "Pedidos da OT",
+        icon: <i className="pi pi-receipt"></i>,
+        link: "/seller/product",
+      },
+      {
+        label: "Produtos da OT",
+        icon: <i className="pi pi-th-large"></i>,
+        link: "/seller/product/tw",
+      },
+      {
+        label: "Membros da OT",
+        icon: <i className="pi pi-users"></i>,
+        link: "/seller/product",
+      },
+      
+    ],
+  };
+
+
 
 
   return (
@@ -40,7 +65,7 @@ export default function Seller({ children }: { children: React.ReactNode }) {
         <div className="h-full">
           {/* <HeaderSeller /> */}
           <div className="flex flex-row h-full">
-            <ConditionalSlideBar itens={itensList.itens} />
+            <ConditionalSlideBar itens={itensListSeller.itens} />
             <div className="flex flex-column w-full">
               <HeaderSeller />
               <main className="h-full w-full overflow-auto p-4 md:p-8 ">
