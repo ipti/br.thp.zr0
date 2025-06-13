@@ -65,7 +65,7 @@ export default function Seller({ children }: { children: React.ReactNode }) {
         <div className="h-full">
           {/* <HeaderSeller /> */}
           <div className="flex flex-row h-full">
-            <ConditionalSlideBar itens={itensListSeller.itens} />
+            <ConditionalSlideBar itens={itensListManager.itens} />
             <div className="flex flex-column w-full">
               <HeaderSeller />
               <main className="h-full w-full overflow-auto p-4 md:p-8 ">

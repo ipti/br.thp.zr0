@@ -5,13 +5,22 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useState } from "react";
 import ModalAddProduct from "./modal_add_product/modal_add_product";
+import { useFetchRequestProductTransformationWorkshop } from "../service/query";
+import { getIdTw } from "@/service/localstorage";
+import { useSearchParams } from "next/navigation";
 
 export default function ListPage() {
-   const [visible, setVisible] = useState(false)
+   const [visible, setVisible] = useState(false);
+   const searchParams = useSearchParams();
+   
+     const idOt = searchParams.get("idOt");
   //  const transfWorkshopController = TransfWorkshopController();
+
+  const {data} = useFetchRequestProductTransformationWorkshop(parseInt(idOt ?? "") ?? parseInt(getIdTw() ?? "99999"))
+
    const header = (
       <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-        <span className="text-xl text-900 font-bold">Produtos</span>
+        <span className="text-xl text-900 font-bold">Produtos da OT</span>
         <ModalAddProduct visible={visible} onHide={() => {setVisible(!visible)}} />
         <ZButton icon="pi pi-plus" onClick={() => {setVisible(!visible)}} label="Adicionar" />
       </div>
@@ -32,7 +41,7 @@ export default function ListPage() {
          console.log(e)
       };
     return (
-      <DataTable editMode="row" dataKey="id" onRowEditComplete={onRowEditComplete} value={[]} header={header}>
+      <DataTable editMode="row" dataKey="id" onRowEditComplete={onRowEditComplete} value={data?.transformation_workshop_product} header={header}>
         <Column header={"Imagem"} style={{ width: '10%' }}  body={(e)=>
           <img style={{height: "64px"}} src={e?.product?.product_image?.length > 0 ? e?.product?.product_image![0]?.img_url : null} alt="Imagem produto"></img>
           }></Column>

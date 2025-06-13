@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { requestProduct } from "./request";
+import { requestProductTransformationWorkshop } from "./request";
 
-export const useFetchRequestProduct = () => {
-    return useQuery(["userequestProduct"], () => requestProduct());
+export const useFetchRequestProductTransformationWorkshop = (idTw: number) => {
+    return useQuery(["userequestProductTransformationWorkshop"], () => requestProductTransformationWorkshop(idTw));
 };

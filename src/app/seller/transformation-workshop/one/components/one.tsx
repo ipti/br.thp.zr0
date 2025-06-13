@@ -4,7 +4,6 @@ import { useSearchParams } from "next/navigation";
 import { useFetchRequestTransformationWorkshopOne } from "../service/query";
 import { TransfWorkOneType } from "../service/type";
 import MemberTransformationWorkshop from "./members/members";
-import ZCard from "@/components/card/card";
 import ProductTransformationWorkshop from "./products/products";
 
 export default function TransformationWorkshopOneComponent() {

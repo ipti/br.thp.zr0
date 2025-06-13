@@ -1,12 +1,10 @@
 import { ZButton } from "@/components/button/button";
+import ZInputNumber from "@/components/input_number/input_number";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import { TransformationWorkshopProduct } from "../../service/type";
 import { useState } from "react";
-import ModalAddProduct from "./modal_add_product/modal_add_product";
-import ZInputText from "@/components/input/input";
-import ZInputNumber from "@/components/input_number/input_number";
 import { TransfWorkshopController } from "../../service/controller";
+import { TransformationWorkshopProduct } from "../../service/type";
 
 export default function ProductTransformationWorkshop({
   product,
@@ -19,8 +17,7 @@ export default function ProductTransformationWorkshop({
   const header = (
     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
       <span className="text-xl text-900 font-bold">Produtos</span>
-      <ModalAddProduct visible={visible} onHide={() => {setVisible(!visible)}} />
-      <ZButton icon="pi pi-plus" onClick={() => {setVisible(!visible)}} label="Adicionar" />
+      <ZButton text onClick={() => {setVisible(!visible)}} label="Ver mais" />
     </div>
   );
 
