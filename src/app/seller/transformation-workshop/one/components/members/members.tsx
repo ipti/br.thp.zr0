@@ -1,10 +1,11 @@
+"use client"
 import { ZButton } from "@/components/button/button";
+import { getTranslatedLabelPerfis } from "@/utils/label_translation/perfis";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { TransformationWorkshopUser } from "../../service/type";
-import ModalAddMember from "./modal_add_member/modal_add_member";
-import { useState } from "react";
-import { getTranslatedLabelPerfis } from "@/utils/label_translation/perfis";
+import { getIdTw } from "@/service/cookies";
 
 export default function MemberTransformationWorkshop({
   members,
@@ -12,12 +13,15 @@ export default function MemberTransformationWorkshop({
   members: TransformationWorkshopUser[];
 }) {
 
-  const [visible, setVisible] = useState(false)
+    const searchParams = useSearchParams();
+  
+    const idOt = searchParams.get("idOt");
+    const history = useRouter()
+
   const header = (
     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
       <span className="text-xl text-900 font-bold">Membros</span>
-      <ModalAddMember visible={visible} onHide={() => {setVisible(!visible)}} />
-      <ZButton icon="pi pi-plus" onClick={() => {setVisible(!visible)}} label="Adicionar" />
+      <ZButton text onClick={() => { history.push("/seller/transformation-workshop/member?idOt=" +(idOt ?? getIdTw())) }} label="Ver mais" />
     </div>
   );
   return (

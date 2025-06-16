@@ -6,7 +6,7 @@ import { useSlideBar } from "../../slider_bar/slide_bar_context";
 import ZDropdown from "@/components/dropdown/dropdown";
 import { useFetchRequestTransformationWorkshop } from "@/app/seller/transformation-workshop/service/query";
 import { useEffect, useState } from "react";
-import { getIdTw, idTw } from "@/service/localstorage";
+import { getIdTw, idTw } from "@/service/cookies";
 
 export default function HeaderSeller() {
   const { toggleVisibility } = useSlideBar();

@@ -1,10 +1,10 @@
+"use client"
 import { ZButton } from "@/components/button/button";
-import ZInputNumber from "@/components/input_number/input_number";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import { TransfWorkshopController } from "../../service/controller";
 import { TransformationWorkshopProduct } from "../../service/type";
+import { getIdTw } from "@/service/cookies";
 
 export default function ProductTransformationWorkshop({
   product,
@@ -18,35 +18,26 @@ export default function ProductTransformationWorkshop({
   const idOt = searchParams.get("idOt");
   const history = useRouter()
 
-  const transfWorkshopController = TransfWorkshopController();
   const header = (
     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
       <span className="text-xl text-900 font-bold">Produtos</span>
-      <ZButton text onClick={() => { history.push("/seller/product/tw?idOt=" + idOt) }} label="Ver mais" />
+      <ZButton text onClick={() => { history.push("/seller/transformation-workshop/product?idOt=" + (idOt ?? getIdTw()))}} label="Ver mais" />
     </div>
   );
 
-  const textEditorNumber = (options: any) => {
-    return <ZInputNumber pt={{ input: { root: { style: { witdh: "32px" } } } }} value={options.value} onChange={(e) => options.editorCallback(e.value)} />;
-  };
 
-  const allowEdit = (rowData: any) => {
-    return rowData.name !== 'Blue Band';
-  };
-
-
-  const onRowEditComplete = (e: any) => {
-    const rowData = e.newData
-    transfWorkshopController.UpdateProductTransfWorkshopAction(rowData.id, { quantity: rowData.quantity })
-  };
+  // const onRowEditComplete = (e: any) => {
+  //   const rowData = e.newData
+  //   transfWorkshopController.UpdateProductTransfWorkshopAction(rowData.id, { quantity: rowData.quantity })
+  // };
   return (
-    <DataTable editMode="row" dataKey="id" onRowEditComplete={onRowEditComplete} value={product} header={header}>
+    <DataTable editMode="row" dataKey="id" value={product} header={header}>
       <Column header={"Imagem"} style={{ width: '10%' }} body={(e) =>
         <img style={{ height: "64px" }} src={e?.product?.product_image?.length > 0 ? e?.product?.product_image![0]?.img_url : null} alt="Imagem produto"></img>
       }></Column>
       <Column field="product.name" header="Nome"></Column>
-      <Column field="quantity" editor={(options) => textEditorNumber(options)} header="Quantidade"></Column>
-      <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
+      <Column field="quantity" header="Quantidade"></Column>
+      {/* <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column> */}
     </DataTable>
   );
 }

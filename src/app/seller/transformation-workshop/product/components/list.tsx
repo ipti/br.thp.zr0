@@ -6,17 +6,18 @@ import { DataTable } from "primereact/datatable";
 import { useState } from "react";
 import ModalAddProduct from "./modal_add_product/modal_add_product";
 import { useFetchRequestProductTransformationWorkshop } from "../service/query";
-import { getIdTw } from "@/service/localstorage";
 import { useSearchParams } from "next/navigation";
+import { ProductTransfWorkshopController } from "../service/controller";
+import { getIdTw } from "@/service/cookies";
 
 export default function ListPage() {
    const [visible, setVisible] = useState(false);
    const searchParams = useSearchParams();
    
      const idOt = searchParams.get("idOt");
-  //  const transfWorkshopController = TransfWorkshopController();
+   const productTransfWorkshopController = ProductTransfWorkshopController();
 
-  const {data} = useFetchRequestProductTransformationWorkshop(parseInt(idOt ?? "") ?? parseInt(getIdTw() ?? "99999"))
+  const {data} = useFetchRequestProductTransformationWorkshop(parseInt(idOt ?? "") ?? parseInt(getIdTw() ?? ""))
 
    const header = (
       <div className="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -37,8 +38,7 @@ export default function ListPage() {
   
         const onRowEditComplete = (e: any) => {
           const rowData = e.newData
-          // transfWorkshopController.UpdateProductTransfWorkshopAction(rowData.id, {quantity: rowData.quantity})
-         console.log(e)
+          productTransfWorkshopController.UpdateProductTransfWorkshopAction(rowData.id, {quantity: rowData.quantity})
       };
     return (
       <DataTable editMode="row" dataKey="id" onRowEditComplete={onRowEditComplete} value={data?.transformation_workshop_product} header={header}>

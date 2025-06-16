@@ -1,4 +1,4 @@
-import TransformationWorkshopOneComponent from "../transformation-workshop/components/components/one";
+import TransformationWorkshopOneComponent from "../transformation-workshop/one/components/one";
 
 export default function TransformationWorkshopOne(){
     return(

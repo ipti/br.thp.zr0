@@ -7,6 +7,8 @@ import ZInputNumber from "@/components/input_number/input_number";
 import { Form, Formik } from "formik";
 import { useSearchParams } from "next/navigation";
 import * as Yup from "yup";
+import { ProductTransfWorkshopController } from "../../service/controller";
+import { getIdTw } from "@/service/cookies";
 // import { TransfWorkshopController } from "../../../service/controller";
 
 export default function ModalAddProduct({
@@ -22,7 +24,7 @@ export default function ModalAddProduct({
 
   const idOt = searchParams.get("idOt");
 
-  // const transfWorkshopController = TransfWorkshopController();
+  const productTransfWorkshopController = ProductTransfWorkshopController();
 
   const schema = Yup.object().shape({
     product: Yup.object().required("Campo Obrigatório"),
@@ -39,11 +41,11 @@ export default function ModalAddProduct({
         initialValues={initial}
         validationSchema={schema}
         onSubmit={(values) => {
-          // transfWorkshopController.AddProductTransfWorkshopAction({
-          //   product_fk: values.product?.id,
-          //   tw_fk: parseInt(idOt ?? ""),
-          //   quantity: values.quantity ?? 0
-          // });
+          productTransfWorkshopController.AddProductTransfWorkshopAction({
+            product_fk: values.product?.id,
+            tw_fk: idOt ? parseInt(idOt ?? "") : parseInt(getIdTw() ?? ""),
+            quantity: values.quantity ?? 0
+          });
           onHide();
         }}
       >

@@ -3,7 +3,7 @@ import Swal from "sweetalert2"
 import { requestAddUserTransformationWorkshop } from "./request"
 import { AddUserTransfWorkType } from "./type"
 
-export function TransfWorkshopController() {
+export function MemberTransfWorkshopController() {
 
 
     function AddUserTransfWorkshopAction(body: AddUserTransfWorkType) {

@@ -5,6 +5,7 @@ import { useFetchRequestTransformationWorkshopOne } from "../service/query";
 import { TransfWorkOneType } from "../service/type";
 import MemberTransformationWorkshop from "./members/members";
 import ProductTransformationWorkshop from "./products/products";
+import { getIdTw } from "@/service/cookies";
 
 export default function TransformationWorkshopOneComponent() {
   const searchParams = useSearchParams();
@@ -12,7 +13,7 @@ export default function TransformationWorkshopOneComponent() {
   const idOt = searchParams.get("idOt");
 
   const { data: transfWorkRequest } =
-    useFetchRequestTransformationWorkshopOne(idOt);
+    useFetchRequestTransformationWorkshopOne(idOt ?? getIdTw());
 
   var transfWork: TransfWorkOneType | undefined = transfWorkRequest;
 

@@ -3,11 +3,10 @@ import { UserList } from "@/app/seller/user/type";
 import { ZButton } from "@/components/button/button";
 import ZDialog from "@/components/dialog/dialog";
 import ZDropdown from "@/components/dropdown/dropdown";
-import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { TransfWorkshopController } from "../../../service/controller";
 import { useSearchParams } from "next/navigation";
-import { getIdTw } from "@/service/localstorage";
+import * as Yup from "yup";
+import { MemberTransfWorkshopController } from "../../service/controller";
 
 export default function ModalAddMember({
   onHide,
@@ -23,7 +22,7 @@ export default function ModalAddMember({
     const idOt = searchParams.get("idOt");
   
 
-  const transfWorkshopController = TransfWorkshopController();
+  const memberTransfWorkshopController = MemberTransfWorkshopController();
 
   const schema = Yup.object().shape({
     user: Yup.object().required("Campo Obrigatório"),
@@ -39,9 +38,9 @@ export default function ModalAddMember({
         initialValues={initial}
         validationSchema={schema}
         onSubmit={(values) => {
-          transfWorkshopController.AddUserTransfWorkshopAction({
+          memberTransfWorkshopController.AddUserTransfWorkshopAction({
             user_fk: values.user?.id,
-            tw_fk: idOt ? parseInt(idOt ?? "") : parseInt(getIdTw() ?? "1"),
+            tw_fk: parseInt(idOt ?? ""),
           });
           onHide()
         }}

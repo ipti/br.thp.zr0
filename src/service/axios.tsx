@@ -7,6 +7,7 @@ const http = axios.create({
 
 http.interceptors.request.use(async config => {
   const token = Cookies.get('access_token');
+  console.log(token)
   if (!config.skipAuth && token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

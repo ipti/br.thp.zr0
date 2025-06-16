@@ -1,13 +1,19 @@
-import { ConditionalSlideBar } from "@/components/slider_bar/conditional";
 import HeaderSeller from "@/components/header/header_seller/header_seller";
-import { SliderBarType } from "@/components/slider_bar/type";
-import { Providers } from "./provider";
+import { ConditionalSlideBar } from "@/components/slider_bar/conditional";
 import { SlideBarProvider } from "@/components/slider_bar/slide_bar_context";
+import { SliderBarType } from "@/components/slider_bar/type";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { Providers } from "./provider";
 
 export default function Seller({ children }: { children: React.ReactNode }) {
 
+  const cookieStore = cookies();
+  const token = cookieStore.get('access_token');
 
-
+  if (!token) {
+    redirect('/auth/login'); // Redireciona para login se não houver token
+  }
   const itensListManager: SliderBarType = {
     itens: [
       {
