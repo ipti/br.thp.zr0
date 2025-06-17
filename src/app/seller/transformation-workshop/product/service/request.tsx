@@ -2,7 +2,7 @@ import http from "@/service/axios";
 import { logout } from "@/service/localstorage";
 import { AddProductTransfWorkType, UpdateProductTransfWorkType } from "./type";
 
-export const requestProductTransformationWorkshop = (idTw: number) => {
+export const requestProductTransformationWorkshop = (idTw?: string) => {
     let path = "/transformation-workshop-user-bff/product?id="+idTw;
     if(idTw){return http
         .get(path)

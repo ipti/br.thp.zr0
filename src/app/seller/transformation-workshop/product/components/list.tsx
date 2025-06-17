@@ -17,7 +17,7 @@ export default function ListPage() {
      const idOt = searchParams.get("idOt");
    const productTransfWorkshopController = ProductTransfWorkshopController();
 
-  const {data} = useFetchRequestProductTransformationWorkshop(parseInt(idOt ?? "") ?? parseInt(getIdTw() ?? ""))
+  const {data} = useFetchRequestProductTransformationWorkshop(idOt ?? getIdTw())
 
    const header = (
       <div className="flex flex-wrap align-items-center justify-content-between gap-2">
