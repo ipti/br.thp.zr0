@@ -9,5 +9,12 @@ export const idTw = (idTw: string) => {
 }
 
 export const getIdTw = () => {
-  return Cookies.get('id_tw') ?? "";
+  return Cookies.get('id_tw');
+}
+
+export const logout = () => {
+  const allCookies = Cookies.get()
+  Object.keys(allCookies).forEach((cookieName) => {
+    Cookies.remove(cookieName)
+  })
 }

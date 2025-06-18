@@ -6,7 +6,7 @@ import { useSlideBar } from "../../slider_bar/slide_bar_context";
 import ZDropdown from "@/components/dropdown/dropdown";
 import { useFetchRequestTransformationWorkshop } from "@/app/seller/transformation-workshop/service/query";
 import { useEffect, useState } from "react";
-import { getIdTw, idTw } from "@/service/cookies";
+import { getIdTw, idTw, logout } from "@/service/cookies";
 
 export default function HeaderSeller() {
   const { toggleVisibility } = useSlideBar();
@@ -17,12 +17,12 @@ export default function HeaderSeller() {
   useEffect(() => {
     if (!transformationWorkshop && transformationWorkshopRequest && !getIdTw()) {
 
-    
+
       setTransformationWorkshop(transformationWorkshopRequest![0]?.transformation_workshop?.id);
       idTw(transformationWorkshopRequest![0]?.transformation_workshop?.id);
 
-    } 
-    if(getIdTw()){
+    }
+    if (getIdTw()) {
       setTransformationWorkshop(parseInt(getIdTw() ?? "1"))
     }
   }, [transformationWorkshopRequest, transformationWorkshop])
@@ -48,8 +48,16 @@ export default function HeaderSeller() {
           </div>
         </div>
       </div>
-      <div className="flex flex-column justify-content-center mr-3">
+      <div className="flex flex-row align-items-center justify-content-center mr-3">
         <ZDropdown value={transformationWorkshop} onChange={(e) => { idTw(e.target.value); setTransformationWorkshop(e.target.value); window.location.reload() }} options={transformationWorkshopRequest} optionLabel="transformation_workshop.name" optionValue="transformation_workshop.id" className="w-14rem" />
+        <div className="flex flex-row gap-2 ml-2 cursor-pointer" onClick={() => { logout(); window.location.reload() }}>
+          <div className="flex flex-column justify-content-center">
+            <i className="pi pi-sign-out"></i>
+          </div>
+          <div className="flex flex-column justify-content-center">
+            <h3>Sair</h3>
+          </div>
+        </div>
       </div>
     </div>
   );

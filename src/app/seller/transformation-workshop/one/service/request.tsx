@@ -16,6 +16,8 @@ export const requestTransformationWorkshopOne = (idOne?: string) => {
         throw err;
       });
   }
+
+  return []
 };
 
 export const requestAddUserTransformationWorkshop = (body: AddUserTransfWorkType ) => {

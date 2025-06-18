@@ -4,6 +4,7 @@ import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import "../components/component.css";
 import "./globals.css";
+import Header from "@/components/header/header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        {/* <Header /> */}
+        <div className="overflow-auto">
         {children}
+        </div>
       </body>
     </html>
   );

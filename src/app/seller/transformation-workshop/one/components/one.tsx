@@ -6,16 +6,22 @@ import { TransfWorkOneType } from "../service/type";
 import MemberTransformationWorkshop from "./members/members";
 import ProductTransformationWorkshop from "./products/products";
 import { getIdTw } from "@/service/cookies";
+import { useEffect, useState } from "react";
 
 export default function TransformationWorkshopOneComponent() {
-  const searchParams = useSearchParams();
+const searchParams = useSearchParams();
+  const [id, setId] = useState<string | undefined>(undefined);
 
-  const idOt = searchParams.get("idOt");
+  useEffect(() => {
+    const idOtParam = searchParams.get("idOt");
+    setId(idOtParam ?? getIdTw());
+  }, [searchParams]);
 
-  const { data: transfWorkRequest } =
-    useFetchRequestTransformationWorkshopOne(idOt ?? getIdTw());
+  const { data: transfWorkRequest } = useFetchRequestTransformationWorkshopOne(id);
 
-  var transfWork: TransfWorkOneType | undefined = transfWorkRequest;
+  const transfWork: TransfWorkOneType | undefined = transfWorkRequest;
+
+  // if (!id) return window;
 
   return (
     <div>

@@ -18,13 +18,14 @@ export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
     function LoginAction(body: LoginTypes) {
         LoginRequest(body).then(data => {
             setErros("")
-            Cookies.set('access_token', data.data.access_token, {expires: exp90})
+            Cookies.set('access_token', data.data.access_token, { expires: exp90 })
             login(data.data.access_token);
-            if(data.data.userRegistered.role === PerfisEnum.CUSTOMER){
-                 history.history.push("/")  
+            if (data.data.userRegistered.role === PerfisEnum.CUSTOMER) {
+                history.history.push("/")
             } else {
-                history.history.push("/seller/home")  
+                history.history.push("/seller/home")
             }
+            // window.location.reload()
             // history.history.push("/")
         }).catch(erros => {
             console.log(erros.response.data.message)
