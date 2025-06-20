@@ -4,8 +4,11 @@ import { Product, ProductImage } from "@/app/seller/product/type";
 import { Card } from "primereact/card";
 import { ZButton } from "../button/button";
 import ZGalleria from "../galleria/galleria";
+import { useRouter } from "next/navigation";
 
 export default function CardProduct({ item }: { item: Product }) {
+
+    const history = useRouter()
     const itemTemplate = (image: ProductImage) => {
         return (
             <img
@@ -40,7 +43,7 @@ export default function CardProduct({ item }: { item: Product }) {
                 <ZButton
                     label="Comprar"
                     icon="pi pi-cart-plus"
-                //   onClick={() => props.addProductCart(item)}
+                  onClick={() => history.push('product?product='+item.id)}
                 />
             </div>
         </Card>
