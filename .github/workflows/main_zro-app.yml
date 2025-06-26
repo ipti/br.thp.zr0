@@ -9,9 +9,13 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: production
     permissions:
       contents: read #This is required for actions/checkout
 
