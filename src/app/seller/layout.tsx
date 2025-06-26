@@ -5,6 +5,7 @@ import { SliderBarType } from "@/components/slider_bar/type";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Providers } from "./provider";
+import { Suspense } from "react";
 
 export default function Seller({ children }: { children: React.ReactNode }) {
 
@@ -72,7 +73,7 @@ export default function Seller({ children }: { children: React.ReactNode }) {
         icon: <i className="pi pi-users"></i>,
         link: "/seller/product",
       },
-      
+
     ],
   };
 
@@ -90,7 +91,9 @@ export default function Seller({ children }: { children: React.ReactNode }) {
             <div className="flex flex-column w-full">
               <HeaderSeller />
               <main className="h-full w-full overflow-auto p-4 md:p-8 ">
-                {children}
+                <Suspense>
+                  {children}
+                </Suspense>
               </main>
             </div>
             {/* <TabBar /> */}

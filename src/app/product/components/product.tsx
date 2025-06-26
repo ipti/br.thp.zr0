@@ -62,7 +62,7 @@ export default function ProductView() {
         {/* Left - Product Image */}
         <Card>
           <div className="border-round border-1 surface-border p-4 flex align-items-center justify-content-center">
-            <Image
+            <img
               src={image?.img_url ?? "/fallback.jpg"} // Evita erro se `img_url` for undefined
               alt="Yellow Casual Sweater"
               width={350}
@@ -82,7 +82,7 @@ export default function ProductView() {
                 } border-round p-1 cursor-pointer`}
                 onClick={() => setImage(item)}
               >
-                <Image
+                <img
                   src={item.img_url}
                   alt="Thumbnail"
                   width={60}
