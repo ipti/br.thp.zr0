@@ -6,7 +6,7 @@ import { VerifyEmailController } from "../service/controller";
 
 export default function VerifyEmailComponent() {
   const prime = primeFlex();
-const searchParams = useSearchParams()
+  const searchParams = useSearchParams()
   const token = searchParams.get('token')
 
   const { VerifyEmailAction } = VerifyEmailController();

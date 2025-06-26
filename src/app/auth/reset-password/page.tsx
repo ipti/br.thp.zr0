@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import FormSignUp from "./components/form";
 import './sign-up.css'
 
