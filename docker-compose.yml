@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  app:
+    image: zro-app
+    build:
+      context: .
+      target: production
+      dockerfile: Dockerfile
+    environment:
+      - NEXT_PUBLIC_API_URL=https://zro-api.azurewebsites.net/
+    volumes:
+        - .:/app
+        - /app/node_modules
+        - /app/.next
+    ports:
+      - "3000:3000"
