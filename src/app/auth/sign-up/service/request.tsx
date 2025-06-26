@@ -8,6 +8,5 @@ export const SignUpRequest = async (
     .post(
       "/users",
       body,
-      { skipAuth: true }
     )
 };

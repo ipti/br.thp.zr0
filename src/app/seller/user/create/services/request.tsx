@@ -8,6 +8,5 @@ export const CreateUserRequest = async (
     .post(
       "/user-bff/created-user-with-tw",
       body,
-      { skipAuth: true }
     )
 };

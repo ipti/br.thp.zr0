@@ -10,6 +10,7 @@ export function SignUpController(setErros: Dispatch<SetStateAction<string>>) {
     const history = useNavigation()
 
     function SignUpAction(body: SignUpTypes) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         SignUpRequest(body).then(data => {
             history.history.push("/auth/login")
             

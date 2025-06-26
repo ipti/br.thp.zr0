@@ -10,6 +10,7 @@ export function ResetPasswordController(setErros: Dispatch<SetStateAction<string
 
   function ResetPasswordAction(body: ResetPasswordTypes, token?: string) {
     ResetPasswordRequest(body, token)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .then((data) => {
         history.history.push("/auth/login");
       })

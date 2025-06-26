@@ -46,7 +46,7 @@ export default function ProductView() {
     idProductParam!
   );
 
-  var productOne: ProductOne | undefined = productOneRequest;
+  const productOne: ProductOne | undefined = productOneRequest;
 
   useEffect(() => {
     if (productOneRequest && loading) {
@@ -56,17 +56,19 @@ export default function ProductView() {
   }, [productOneRequest, loading]);
 
   return (
+    
     <div className="p-4 flex flex-row justify-content-center">
       <div className="grid md:grid-cols-2 gap-8">
         {/* Left - Product Image */}
         <Card>
           <div className="border-round border-1 surface-border p-4 flex align-items-center justify-content-center">
-            <img
-              src={image?.img_url}
+            <Image
+              src={image?.img_url ?? "/fallback.jpg"} // Evita erro se `img_url` for undefined
               alt="Yellow Casual Sweater"
               width={350}
               height={350}
               className="w-full max-w-20rem"
+              unoptimized={false} // opcional: remove isso se quiser otimização automática
             />
           </div>
 
@@ -80,7 +82,7 @@ export default function ProductView() {
                 } border-round p-1 cursor-pointer`}
                 onClick={() => setImage(item)}
               >
-                <img
+                <Image
                   src={item.img_url}
                   alt="Thumbnail"
                   width={60}
@@ -153,7 +155,15 @@ export default function ProductView() {
             label="Add To Cart"
             icon="pi pi-shopping-cart"
             className="p-button-danger w-max"
-            onClick={() => addToCart({id: productOne?.id.toString() ?? "2", name: productOne?.name ?? "", price: productOne?.price ?? 1, quantity: 1, image: productOne?.product_image[0].img_url ?? ""})}
+            onClick={() =>
+              addToCart({
+                id: productOne?.id.toString() ?? "2",
+                name: productOne?.name ?? "",
+                price: productOne?.price ?? 1,
+                quantity: 1,
+                image: productOne?.product_image[0].img_url ?? "",
+              })
+            }
           />
 
           <p className="text-sm text-gray-600">

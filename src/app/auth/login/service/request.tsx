@@ -9,6 +9,5 @@ export const LoginRequest = async (
     .post(
       "/auth/login",
       { username: body.email, password: body.password },
-      { skipAuth: true }
     )
 };

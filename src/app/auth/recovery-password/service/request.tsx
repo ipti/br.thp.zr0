@@ -9,6 +9,5 @@ export const SendEmailRecoveryPasswordRequest = async (
     .put(
       "/aux-user/send-email-recover-password",
       { email: body.email },
-      { skipAuth: true }
     )
 };
