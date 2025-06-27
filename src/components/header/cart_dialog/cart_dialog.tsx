@@ -1,14 +1,7 @@
 import { ZButton } from "@/components/button/button";
 import ZSliderBarDialog from "@/components/sidebar/sidebar";
-import { CartItem, getCart, removeFromCart } from "@/service/localstorage";
-<<<<<<< HEAD
 import { useCartStore } from "@/service/store/cart_store";
-=======
-import { useRouter } from "next/navigation";
->>>>>>> 8c8bb0efcbccd3151885280fba3569806ee88ed6
-import { Card } from "primereact/card";
 import { Image } from "primereact/image";
-import { useEffect, useState } from "react";
 
 export default function CartDialog({
   onHide,
