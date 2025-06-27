@@ -1,22 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { Rating } from "primereact/rating";
+import { useFetchrequestProductOne } from "@/app/seller/product/one/service/query";
+import {
+    ProductImage,
+    ProductOne,
+} from "@/app/seller/product/one/service/type";
+import { ZButton } from "@/components/button/button";
+import ZDropdown from "@/components/dropdown/dropdown";
+import ZInputMask from "@/components/input_mask/input_mask";
+import { useCartStore } from "@/service/store/cart_store";
+import { Form, Formik } from "formik";
+import { useSearchParams } from "next/navigation";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
-import { useFetchrequestProductOne } from "@/app/seller/product/one/service/query";
-import { useSearchParams } from "next/navigation";
-import {
-  ProductImage,
-  ProductOne,
-} from "@/app/seller/product/one/service/type";
-import ZInputMask from "@/components/input_mask/input_mask";
-import { ZButton } from "@/components/button/button";
+import { Rating } from "primereact/rating";
+import { useEffect, useState } from "react";
 import { ProductClientController } from "../service/controller";
-import { Form, Formik } from "formik";
-import ZDropdown from "@/components/dropdown/dropdown";
-import { addToCart } from "@/service/localstorage";
 
 export default function ProductView() {
   const [image, setImage] = useState<ProductImage | undefined>();
@@ -152,16 +151,16 @@ export default function ProductView() {
           </Formik>
           {/* Add to Cart */}
           <Button
-            label="Add To Cart"
+            label="Adicionar ao carrinho"
             icon="pi pi-shopping-cart"
             className="p-button-danger w-max"
             onClick={() =>
-              addToCart({
+              useCartStore.getState().addItem({
                 id: productOne?.id.toString() ?? "2",
                 name: productOne?.name ?? "",
                 price: productOne?.price ?? 1,
                 quantity: 1,
-                image: productOne?.product_image[0].img_url ?? "",
+                image: productOne?.product_image![0]?.img_url ?? "",
               })
             }
           />

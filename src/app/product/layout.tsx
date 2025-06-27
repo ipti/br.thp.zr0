@@ -7,8 +7,7 @@ export default function ProductLayout({ children }: { children: React.ReactNode 
             <main className="h-full">
                 <Providers>
                     <Suspense>
-
-                    {children}
+                        {children}
                     </Suspense>
                 </Providers>
             </main>
