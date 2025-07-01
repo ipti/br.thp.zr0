@@ -3,10 +3,23 @@ import ZSteps from "@/components/steps/steps";
 import { MenuItem } from "primereact/menuitem";
 import { useState } from "react";
 import CartList from "./cart_list/cart_list";
+import { ZButton } from "@/components/button/button";
+import Login from "@/app/auth/login/page";
+import Cookies from 'js-cookie';
+import Identify from "./identify/identify";
 
-export default function CartComponent(){
+
+export default function CartComponent() {
+
+  const token = Cookies.get('access_token');
 
     const [activeIndex, setActiveIndex] = useState(0);
+
+    const handleActiveIndex = (i: number) => {
+        setActiveIndex(i)
+    }
+
+
     const itemRenderer = (item: any, itemIndex: number) => {
         const isActiveItem = activeIndex === itemIndex;
         const backgroundColor = isActiveItem ? 'var(--primary-color)' : 'var(--surface-b)';
@@ -22,29 +35,31 @@ export default function CartComponent(){
             </span>
         );
     };
-    const items:  MenuItem[] | undefined = [
+    const items: MenuItem[] | undefined = [
         {
-            icon: 'pi pi-shopping-cart',
-            template: (item) => itemRenderer(item, 0)
+            label: 'Carrinho',
         },
         {
-            label: 'Seat',
-           
+            label: 'Identificação',
         },
         {
-            label: 'Payment',
-           
+            label: 'Endereço',
         },
         {
-            label: 'Confirmation',
+            label: 'Confirmação',
         }
     ];
 
-    console.log(activeIndex)
-    return(
+
+    return (
         <div className="p-8">
-            <ZSteps  model={items} activeIndex={activeIndex} onSelect={(e) => setActiveIndex(e.index)} readOnly={false}  />
+            <ZSteps model={items} activeIndex={activeIndex} onSelect={(e) => setActiveIndex(e.index)} readOnly={false} />
             {activeIndex === 0 && <CartList />}
+            {activeIndex === 1 && <Identify handleActiveIndex={handleActiveIndex} />}
+            <div className="flex flex-row gap-2">
+                <ZButton label="Voltar" disabled={activeIndex === 0} onClick={() => { setActiveIndex(activeIndex - 1) }} text raised />
+                <ZButton label="Continuar" disabled={activeIndex === 3} onClick={() => { setActiveIndex(activeIndex + 1) }} />
+            </div>
         </div>
     )
 }

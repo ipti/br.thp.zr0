@@ -64,7 +64,6 @@ export default function CartList() {
                     <img
                       src={item.image}
                       alt={item.name}
-                      fill
                       className="border-round object-contain"
                     />
                   </div>
