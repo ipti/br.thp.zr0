@@ -1,6 +1,7 @@
 import { ZButton } from "@/components/button/button";
 import ZSliderBarDialog from "@/components/sidebar/sidebar";
 import { useCartStore } from "@/service/store/cart_store";
+import { useRouter } from "next/navigation";
 import { Image } from "primereact/image";
 
 export default function CartDialog({
@@ -10,6 +11,7 @@ export default function CartDialog({
   visible: boolean;
   onHide: any;
 }) {
+  const history = useRouter()
   const cart = useCartStore((state) => state.cart);
   const removeItem = useCartStore((state) => state.removeItem);
   // const clear = useCartStore((state) => state.clear);
@@ -73,7 +75,7 @@ export default function CartDialog({
         </div>
         <div className="flex flex-column justify-content-end mt-3 gap-2">
           <ZButton label={"Finalizar compra" + ` (R$ ${total.toFixed(2)})`} />
-          <ZButton label="Ver carrinho" text onClick={() => {histoy.push('cart'); onHide()}} />
+          <ZButton label="Ver carrinho" text onClick={() => {history.push('cart'); onHide()}} />
         </div>
       </div>
     </ZSliderBarDialog>

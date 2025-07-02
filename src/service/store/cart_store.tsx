@@ -8,6 +8,7 @@ interface CartState {
   removeItem: (id: string) => void;
   clear: () => void;
   loadCart: () => void;
+  updateQuantity: (id: string, quantity: number) => void
 }
 
 const CART_KEY = "cart_items";
@@ -36,6 +37,15 @@ export const useCartStore = create<CartState>((set) => ({
         updated = [...state.cart, item];
       }
 
+      localStorage.setItem(CART_KEY, JSON.stringify(updated));
+      return { cart: updated };
+    }),
+
+    updateQuantity: (id: string, quantity: number) =>
+    set((state) => {
+      const updated = state.cart.map((item) =>
+        item.id === id ? { ...item, quantity: Math.max(quantity, 1) } : item
+      );
       localStorage.setItem(CART_KEY, JSON.stringify(updated));
       return { cart: updated };
     }),

@@ -54,12 +54,13 @@ export default function CartComponent() {
     return (
         <div className="p-8">
             <ZSteps model={items} activeIndex={activeIndex} onSelect={(e) => setActiveIndex(e.index)} readOnly={false} />
-            {activeIndex === 0 && <CartList />}
+            <div className="p-3" />
+            {activeIndex === 0 && <CartList handleActiveIndex={handleActiveIndex} />}
             {activeIndex === 1 && <Identify handleActiveIndex={handleActiveIndex} />}
-            <div className="flex flex-row gap-2">
+            {/* <div className="flex flex-row gap-2">
                 <ZButton label="Voltar" disabled={activeIndex === 0} onClick={() => { setActiveIndex(activeIndex - 1) }} text raised />
                 <ZButton label="Continuar" disabled={activeIndex === 3} onClick={() => { setActiveIndex(activeIndex + 1) }} />
-            </div>
+            </div> */}
         </div>
     )
 }

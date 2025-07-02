@@ -1,5 +1,7 @@
 .p-divider .p-divider-content {
     background-color: #d5d9d9;
+    height: 1px;
+    width: 100%;
   }
   .p-divider.p-divider-horizontal {
     margin: 1rem 0;

@@ -67,7 +67,6 @@ export default function ProductView() {
               width={350}
               height={350}
               className="w-full max-w-20rem"
-              unoptimized={false} // opcional: remove isso se quiser otimização automática
             />
           </div>
 
