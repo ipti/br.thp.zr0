@@ -5,15 +5,17 @@ import { ShippingCalculateType } from "./type";
 import { ShippingCalculateRequest } from "./request";
 
 
-export function ProductClientController() {
+export function ProductClientController({setShipping, setShippingSelect} :{setShipping: any, setShippingSelect: any}) {
   const history = useNavigation();
 
   function ShippingCalculateAction(body: ShippingCalculateType) {
     ShippingCalculateRequest(body)
       .then((data) => {
-        console.log(data)
+        setShipping(data.data)
+        setShippingSelect(data?.data?.shipments[0]?.result?.bestOption)
       })
       .catch((erros) => {
+        console.log(erros)
         Swal.fire({
           title: erros.response.data.message,
           icon: "error",
