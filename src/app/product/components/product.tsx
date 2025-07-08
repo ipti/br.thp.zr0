@@ -22,7 +22,7 @@ export default function ProductView() {
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
 
-  const productClientController = ProductClientController();
+  const productClientController = ProductClientController({});
 
   const handleShippingCalculate = (
     cep: string,

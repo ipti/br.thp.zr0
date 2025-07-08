@@ -14,7 +14,7 @@ import { useCartStore } from "@/service/store/cart_store";
 import { Form, Formik } from "formik";
 import { Button } from "primereact/button";
 import "./cart_list.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ShippingGetType, ValidOption } from "@/app/product/service/type";
 import ZRadioButton from "@/components/radio_button/radio_button";
 
@@ -22,6 +22,7 @@ import ZRadioButton from "@/components/radio_button/radio_button";
 export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i: number) => void }) {
   const [shipping, setShipping] = useState<ShippingGetType | undefined>();
   const [shippingSelect, setShippingSelect] = useState<ValidOption | undefined>()
+  const [cep, setCep] = useState<string | undefined>()
   const cart = useCartStore((state) => state.cart);
   const removeItem = useCartStore((state) => state.removeItem);
   const updateItem = useCartStore((state) => state.updateQuantity)
@@ -35,7 +36,14 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
       destinationZipCode: cep.replace(/[^a-zA-Z0-9 ]/g, ""),
       orderItems: cart.map((item) => { return { productId: parseInt(item.id), quantity: item.quantity } }),
     });
+    setCep(cep)
+
   };
+
+  useEffect(() => {
+    if(cep) handleShippingCalculate(cep)
+  }, [cart])
+  
 
   const total = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -93,7 +101,10 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
                           <ZDropdown
                             value={item.quantity}
                             name="quantity"
-                            onChange={(e) => {updateItem(item.id, e.target.value);}}
+                            onChange={(e) => 
+                              {updateItem(item.id, e.target.value);
+                              
+                            }}
                             options={[1, 2, 3, 4, 5, 6, 7, 8, 9]}
                           />
                         </div>
