@@ -1,17 +1,22 @@
 "use client"
 import ZSteps from "@/components/steps/steps";
-import { MenuItem } from "primereact/menuitem";
-import { useState } from "react";
-import CartList from "./cart_list/cart_list";
-import { ZButton } from "@/components/button/button";
-import Login from "@/app/auth/login/page";
 import Cookies from 'js-cookie';
+import { MenuItem } from "primereact/menuitem";
+import { useEffect, useState } from "react";
+import CartList from "./cart_list/cart_list";
 import Identify from "./identify/identify";
+import { useRouter, useSearchParams } from "next/navigation";
+import Address from "./address/address";
 
 
 export default function CartComponent() {
 
-  const token = Cookies.get('access_token');
+    const history = useRouter()
+
+    const token = Cookies.get('access_token');
+
+    const searchParams = useSearchParams()
+    const index = searchParams.get('index')
 
     const [activeIndex, setActiveIndex] = useState(0);
 
@@ -19,6 +24,9 @@ export default function CartComponent() {
         setActiveIndex(i)
     }
 
+    useEffect(() => {
+        handleActiveIndex(parseInt(index ?? "1"))
+    }, [index])
 
     const itemRenderer = (item: any, itemIndex: number) => {
         const isActiveItem = activeIndex === itemIndex;
@@ -35,12 +43,14 @@ export default function CartComponent() {
             </span>
         );
     };
+
     const items: MenuItem[] | undefined = [
         {
             label: 'Carrinho',
         },
         {
             label: 'Identificação',
+            disabled: !!token
         },
         {
             label: 'Endereço',
@@ -52,11 +62,12 @@ export default function CartComponent() {
 
 
     return (
-        <div className="p-8">
-            <ZSteps model={items} activeIndex={activeIndex} onSelect={(e) => setActiveIndex(e.index)} readOnly={false} />
+        <div className="p-4">
+            <ZSteps model={items} activeIndex={activeIndex} onSelect={(e) => {setActiveIndex(e.index); history.push('/cart?index='+ e.index)}} readOnly={false} />
             <div className="p-3" />
             {activeIndex === 0 && <CartList handleActiveIndex={handleActiveIndex} />}
             {activeIndex === 1 && <Identify handleActiveIndex={handleActiveIndex} />}
+            {activeIndex ===2 && <Address />}
             {/* <div className="flex flex-row gap-2">
                 <ZButton label="Voltar" disabled={activeIndex === 0} onClick={() => { setActiveIndex(activeIndex - 1) }} text raised />
                 <ZButton label="Continuar" disabled={activeIndex === 3} onClick={() => { setActiveIndex(activeIndex + 1) }} />

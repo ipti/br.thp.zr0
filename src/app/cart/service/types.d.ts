@@ -7,6 +7,13 @@ export interface LoginTypes {
     password?: string
 }
 
+
+export interface SignUpTypes {
+    name?: string,
+    email?: string,
+    password?: string
+}
+
 export interface VerifyEmailReturn {
     email: string, exists: boolean
 }
