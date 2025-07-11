@@ -4,8 +4,9 @@ import { LoginRequest } from "@/app/auth/login/service/request";
 import { login } from "@/service/localstorage";
 import Cookies from "js-cookie";
 import { Dispatch, SetStateAction, useReducer } from "react";
-import { VerifyEmailRequest } from "./request";
+import { CreateAddressCustomerRequest, VerifyEmailRequest } from "./request";
 import {
+  CreateAdressCustomer,
   LoginTypes,
   SignUpTypes,
   VerifyEmailReturn,
@@ -82,9 +83,29 @@ export function CartController(setErros: Dispatch<SetStateAction<string>>) {
         setErros(erros.response.data.message);
       });
   }
+
+  function CreateAddressCustomer(body: CreateAdressCustomer) {
+    CreateAddressCustomerRequest(body)
+      .then((data) => {
+        setErros("");
+        // if (data.data.userRegistered.role === PerfisEnum.CUSTOMER) {
+        //     history.history.push("/")
+        // } else {
+        //     history.history.push("/seller/home")
+        // }
+        // window.location.reload()
+        // history.history.push("/")
+      })
+      .catch((erros) => {
+
+        console.log(erros.response.data.message);
+        setErros(erros.response.data.message);
+      });
+  }
   return {
     VerifyEmailAction,
     LoginCartAction,
     SignUpCartAction,
+    CreateAddressCustomer
   };
 }

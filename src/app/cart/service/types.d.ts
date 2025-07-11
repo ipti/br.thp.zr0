@@ -17,3 +17,16 @@ export interface SignUpTypes {
 export interface VerifyEmailReturn {
     email: string, exists: boolean
 }
+
+export interface CreateAdressCustomer {
+  name: string
+  phone: string
+  cep: string
+  address: string
+  number: string
+  complement: string
+  neighborhood: string
+  stateId: number
+  cityId: number
+  customerId: number
+}
