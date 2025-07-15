@@ -4,23 +4,18 @@ import ZDialog from "@/components/dialog/dialog";
 import ZInputText from "@/components/input/input";
 import ZMessage from "@/components/message/message";
 import ZPassword from "@/components/password/password";
-import { logout } from "@/service/cookies";
 import { primeFlex } from "@/utils/prime_flex";
 import { Form, Formik } from "formik";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import * as Yup from "yup";
-import "./login_modal.css"
+import "./login_modal.css";
 
-export default function LoginModal() {
+export default function LoginModal({onHide, visible}:{visible: boolean, onHide(): void}) {
 
       const prime = primeFlex();
       const [erros, setErros] = useState("");
     
       const controllerLogin = LoginController(setErros);
-    
-      useEffect(() => {
-        logout();
-      }, []);
     
       const schema = Yup.object().shape({
         password: Yup.string()
@@ -30,23 +25,23 @@ export default function LoginModal() {
       });
     
     return(
-        <ZDialog visible={true} modal onHide={() => { }} content={(hide) => {
+        <ZDialog visible={visible} modal dismissableMask  onHide={onHide} content={(hide) => {
         return(
             <div className="login_modal" >
                  <div
-                      className={prime.flex + prime.column + prime.justify_center + "h-full"}
+                      className={prime.flex + prime.column + prime.justify_center + "h-full w-full"}
                     >
                       {erros && (
                         <div className={"flex row m-4" + prime.justify_center}>
                           <ZMessage severity="error" text={erros} />
                         </div>
                       )}
-                      <div className={"grid" + prime.justify_center}>
+                      <div className={prime.justify_center}>
                         <Formik
                           initialValues={{ email: "", password: "" }}
                           validationSchema={schema}
                           onSubmit={(values) => {
-                            controllerLogin.LoginAction({
+                            controllerLogin.LoginModalAction({
                               email: values.email,
                               password: values.password,
                             });

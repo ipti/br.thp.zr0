@@ -1,8 +1,12 @@
-import { Suspense } from "react";
-import { Providers } from "../../service/provider";
 import Header from "@/components/header/header";
+import { Providers } from "@/service/provider";
+import { Suspense } from "react";
 
-export default function ProductLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({
+    children,
+}: Readonly<{
+    children: React.ReactNode;
+}>) {
     return (
         <div className="h-full">
             <Header />

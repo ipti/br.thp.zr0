@@ -33,6 +33,19 @@ export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
         })
     }
 
+    function LoginModalAction(body: LoginTypes) {
+        LoginRequest(body).then(data => {
+            setErros("")
+            Cookies.set('access_token', data.data.access_token, { expires: exp90 })
+            login(data.data.access_token);
+            window.location.reload()
+            // history.history.push("/")
+        }).catch(erros => {
+            console.log(erros.response.data.message)
+            setErros(erros.response.data.message)
+        })
+    }
+
     
     function LoginCartAction(body: LoginTypes, handleActiveIndex: (i: number) => void) {
         LoginRequest(body).then(data => {
@@ -53,6 +66,6 @@ export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
         })
     }
     return {
-        LoginAction, LoginCartAction
+        LoginAction, LoginCartAction, LoginModalAction
     }
 }

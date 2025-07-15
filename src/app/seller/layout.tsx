@@ -4,7 +4,7 @@ import { SlideBarProvider } from "@/components/slider_bar/slide_bar_context";
 import { SliderBarType } from "@/components/slider_bar/type";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { Providers } from "./provider";
+import { Providers } from "../../service/provider";
 import { Suspense } from "react";
 
 export default function Seller({ children }: { children: React.ReactNode }) {

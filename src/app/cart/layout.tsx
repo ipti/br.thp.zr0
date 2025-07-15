@@ -1,6 +1,6 @@
 import Header from "@/components/header/header";
+import { Providers } from "@/service/provider";
 import { Suspense } from "react";
-import { Providers } from "./provider";
 
 export default function CartLayout({
   children,

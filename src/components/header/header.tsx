@@ -13,43 +13,50 @@ import CartDialog from "./cart_dialog/cart_dialog";
 import "./header.css";
 import MenuUser from "./menu_user/menu_user";
 import LoginModal from "./login/login_modal";
+import { Providers } from "@/service/provider";
 
 
 export default function Header() {
   const useNavigate = useRouter();
   const [visibleCart, setVisibleCart] = useState(false)
+  const [modalLogin, setModalLogin] = useState(false)
   const [menuUser, setMenuUser] = useState(false)
   const token = Cookies.get('access_token');
 
 
   const cart = useCartStore((state) => state.cart);
   return (
-    <div className="container">
-      <div className="flex flex-column justify-content-center cursor-pointer" onClick={() => { useNavigate.push('/') }}>
-        <Image alt="" src={logo} height={64} />
-      </div>
-      <div className="flex flex-column justify-content-center w-full md:w-29rem">
-        <div className="p-inputgroup flex-1 align-items-center">
-          <ZInputText placeholder="Pesquisar" />
-          <ZButton icon="pi pi-search" className="p-button-warning" />
+    <Providers>
+
+      <div className="container">
+        <div className="flex flex-column justify-content-center cursor-pointer" onClick={() => { useNavigate.push('/') }}>
+          <Image alt="" src={logo} height={64} />
         </div>
-      </div>
-      <div className="gap-3 flex flex-row align-items-center">
-        <Popover
-          isOpen={menuUser}
-          positions={['bottom']} // preferred positions by priority
-          content={<MenuUser />}
-        >
-          <div onClick={() => setMenuUser(!menuUser)}>
-            <i className="pi pi-user" style={{ fontSize: '1.5rem' }} />
+        <div className="flex flex-column justify-content-center w-full md:w-29rem">
+          <div className="p-inputgroup flex-1 align-items-center">
+            <ZInputText placeholder="Pesquisar" />
+            <ZButton icon="pi pi-search" className="p-button-warning" />
           </div>
-        </Popover>
-        <i className="cursor-pointer pi pi-shopping-cart p-overlay-badge" style={{ fontSize: '1.5rem' }} onClick={() => setVisibleCart(!visibleCart)}>
-          <ZBadge value={cart.length}></ZBadge>
-        </i>
+        </div>
+        <div className="gap-3 flex flex-row align-items-center">
+          <Popover
+            isOpen={menuUser}
+            transform={{ top: 32, }}
+            transformMode='relative'
+            positions={['bottom']} // preferred positions by priority
+            content={<MenuUser />}
+          >
+            <div onClick={() => token ? setMenuUser(!menuUser) : setModalLogin(!modalLogin)}>
+              <i className="pi pi-user cursor-pointer" style={{ fontSize: '1.5rem' }} />
+            </div>
+          </Popover>
+          <i className="cursor-pointer pi pi-shopping-cart p-overlay-badge" style={{ fontSize: '1.5rem' }} onClick={() => setVisibleCart(!visibleCart)}>
+            <ZBadge value={cart.length}></ZBadge>
+          </i>
+        </div>
+        <CartDialog visible={visibleCart} onHide={() => { setVisibleCart(!visibleCart) }} />
+        <LoginModal visible={modalLogin} onHide={() => setModalLogin(!modalLogin)} />
       </div>
-      <CartDialog visible={visibleCart} onHide={() => { setVisibleCart(!visibleCart) }} />
-      <LoginModal />
-    </div>
+    </Providers>
   );
 }

@@ -1,5 +1,18 @@
 .menu_user {
-    height: 128px;
     background-color: white;
+    padding: 8px;
+    min-width: 256px;
+}
+
+.item_menu {
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    padding: 8px;
+    cursor: pointer;
     
+    &:hover{
+        background-color: azure;
+    }
 }
