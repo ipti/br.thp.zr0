@@ -43,6 +43,7 @@ export default function Header() {
             isOpen={menuUser}
             transform={{ top: 32, }}
             transformMode='relative'
+            onClickOutside={() =>  setMenuUser(!menuUser)}
             positions={['bottom']} // preferred positions by priority
             content={<MenuUser />}
           >
