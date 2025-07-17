@@ -1,5 +1,5 @@
-import { updateCustumer } from "./request";
-import { UpdateCustomerType } from "./type";
+import { updateCustumer, updateUser } from "./request";
+import { UpdateCustomerType, UpdateUserType } from "./type";
 
 export function ControllerYourInformation(){
 
@@ -14,5 +14,16 @@ export function ControllerYourInformation(){
           });
       }
 
-    return {UpdateCustomer}
+       function UpdateUser(
+       {id, body}:{id: number, body: UpdateUserType}
+      ) {
+        updateUser({body: body, id: id})
+          .then((data) => {
+          })
+          .catch((erros) => {
+            console.log(erros.response.data.message);
+          });
+      }
+
+    return {UpdateCustomer, UpdateUser}
 }

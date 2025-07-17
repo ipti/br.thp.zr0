@@ -10,14 +10,19 @@ import { primeFlex } from "@/utils/prime_flex";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { ControllerYourInformation } from "../service/controller";
+import ZCalendar from "@/components/calendar/calendar";
+import ZRadioButton from "@/components/radio_button/radio_button";
+import { useState } from "react";
 
 
 export default function YourInformationComponents() {
 
+    const [cpfOrCnpj, setCpfOrCnpj] = useState(1)
+
     const controllerYourInformation = ControllerYourInformation()
 
-     const {data: userRequest, isLoading} = useFetchUserToken()
-    
+    const { data: userRequest, isLoading } = useFetchUserToken()
+
     const user: UserGlobal | undefined = userRequest
 
     const prime = primeFlex();
@@ -50,7 +55,7 @@ export default function YourInformationComponents() {
         </>
     );
 
-    if(isLoading) return null
+    if (isLoading) return null
 
     return (
         <div
@@ -63,12 +68,16 @@ export default function YourInformationComponents() {
                         email: user?.email ?? "",
                         name: user?.name ?? "",
                         phone: user?.customer.phone ?? "",
-                        birthday: user?.customer.birthday ?? ""
-
+                        birthday: user?.customer.birthday ? new Date(user?.customer.birthday) : "",
+                        cpf: user?.customer.cpf ?? "",
+                        cnpj: user?.customer.cnpj ?? "",
+                        trade_name: user?.customer.trade_name ?? "",
+                        corporate_name: user?.customer.corporate_name ?? "",
                     }}
                     // validationSchema={schema}
                     onSubmit={(values) => {
-                        controllerYourInformation.UpdateCustomer({id: user?.customer.id ?? 1, body: {phone: values.phone}})
+                        controllerYourInformation.UpdateCustomer({ id: user?.customer.id ?? 1, body: { phone: values.phone, birthday: values.birthday, cpf: values.cpf.replace(/[^a-zA-Z0-9 ]/g, "") } });
+                        controllerYourInformation.UpdateUser({ id: user?.id ?? 1, body: { email: values.email, name: values.name } })
                     }}
                 >
                     {({ values, handleChange, errors, touched }) => {
@@ -103,6 +112,7 @@ export default function YourInformationComponents() {
                                                 onChange={handleChange}
                                                 placeholder="Digite o seu nome"
                                                 invalid={!!(errors.email && touched.email)}
+                                                disabled
                                             ></ZInputText>
                                             {errors.email && touched.email ? (
                                                 <>
@@ -134,22 +144,113 @@ export default function YourInformationComponents() {
                                     <div className="col-12 md:col-6 mb-4">
                                         <div className="flex flex-column ">
                                             <label className="mb-2">Data de nascimento</label>
-                                            <ZInputMask
-                                                name="phone"
-                                                value={values.phone}
+                                            <ZCalendar
+                                                name="birthday"
+                                                value={values.birthday}
                                                 onChange={handleChange}
                                                 placeholder="Digite sua data de nascimento"
-                                                invalid={!!(errors.phone && touched.phone)}
-                                                mask="99/99/9999"
-                                            ></ZInputMask>
-                                            {errors.phone && touched.phone ? (
+                                                dateFormat="dd/mm/yy"
+                                                invalid={!!(errors.birthday && touched.birthday)}
+                                            ></ZCalendar>
+                                            {errors.birthday && touched.birthday ? (
                                                 <>
                                                     <div className="p-1" />
-                                                    <div style={{ color: "red" }}>{errors.phone}</div>
+                                                    <div style={{ color: "red" }}>{errors.birthday}</div>
                                                 </>
                                             ) : null}
                                         </div>
                                     </div>
+                                    <div className="col-12 flex flex-row gap-3">
+
+                                        <div className="gap-2">
+                                            <ZRadioButton value={1} checked={cpfOrCnpj === 1} onChange={() => { setCpfOrCnpj(1) }} />
+                                            <label>CPF</label>
+                                        </div>
+                                        <div className="gap-2">
+                                            <ZRadioButton value={2} checked={cpfOrCnpj === 2} onChange={() => { setCpfOrCnpj(2) }} />
+                                            <label >CNPJ</label>
+                                        </div>
+                                    </div>
+                                    {cpfOrCnpj === 1 ? <>
+                                        <div className="col-12 md:col-6 mb-4">
+                                            <div className="flex flex-column ">
+                                                <label className="mb-2">CPF</label>
+                                                <ZInputMask
+                                                    name="cpf"
+                                                    value={values.cpf}
+                                                    onChange={handleChange}
+                                                    placeholder="Digite seu CPF"
+                                                    mask="999.999.999-99"
+                                                    invalid={!!(errors.cpf && touched.cpf)}
+                                                ></ZInputMask>
+                                                {errors.cpf && touched.cpf ? (
+                                                    <>
+                                                        <div className="p-1" />
+                                                        <div style={{ color: "red" }}>{errors.cpf}</div>
+                                                    </>
+                                                ) : null}
+                                            </div>
+                                        </div>
+
+
+                                    </> : <>
+                                        <div className="col-12 md:col-6 mb-4">
+                                            <div className="flex flex-column ">
+                                                <label className="mb-2">CPNJ</label>
+                                                <ZInputMask
+                                                    name="cnpj"
+                                                    value={values.cnpj}
+                                                    onChange={handleChange}
+                                                    placeholder="Digite sua data de nascimento"
+                                                    invalid={!!(errors.cnpj && touched.cnpj)}
+                                                ></ZInputMask>
+                                                {errors.cnpj && touched.cnpj ? (
+                                                    <>
+                                                        <div className="p-1" />
+                                                        <div style={{ color: "red" }}>{errors.cnpj}</div>
+                                                    </>
+                                                ) : null}
+                                            </div>
+                                        </div>
+                                        <div className="col-12 md:col-6 mb-4">
+                                            <div className="flex flex-column ">
+                                                <label className="mb-2">Razão Social</label>
+                                                <ZInputMask
+                                                    name="corporate_name"
+                                                    value={values.corporate_name}
+                                                    onChange={handleChange}
+                                                    mask=""
+                                                    placeholder="Digite sua Razão Social"
+                                                    invalid={!!(errors.corporate_name && touched.corporate_name)}
+                                                ></ZInputMask>
+                                                {errors.corporate_name && touched.corporate_name ? (
+                                                    <>
+                                                        <div className="p-1" />
+                                                        <div style={{ color: "red" }}>{errors.corporate_name}</div>
+                                                    </>
+                                                ) : null}
+                                            </div>
+                                        </div>
+                                        <div className="col-12 md:col-6 mb-4">
+                                            <div className="flex flex-column ">
+                                                <label className="mb-2">Nome fantasia</label>
+                                                <ZInputMask
+                                                    name="trade_name"
+                                                    value={values.trade_name}
+                                                    onChange={handleChange}
+                                                    mask=""
+                                                    placeholder="Digite seu Nome fantasia"
+                                                    invalid={!!(errors.trade_name && touched.trade_name)}
+                                                ></ZInputMask>
+                                                {errors.trade_name && touched.trade_name ? (
+                                                    <>
+                                                        <div className="p-1" />
+                                                        <div style={{ color: "red" }}>{errors.trade_name}</div>
+                                                    </>
+                                                ) : null}
+                                            </div>
+                                        </div>
+                                    </>}
                                     <div className="p-2" />
                                 </div>
                                 <div className="flex flex-row justify-content-end">
