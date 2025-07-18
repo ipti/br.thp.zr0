@@ -20,7 +20,8 @@ export default function ProfileComponent() {
         title: "Endereços",
         description: "Endereços salvos na sua conta.",
         icon: true,
-        src: "pi pi-map-marker"
+        src: "pi pi-map-marker",
+        link: "/profile/address"
     }, {
         title: "Teste",
         description: "Teste para a descriç,ão do card da tela de perfil",

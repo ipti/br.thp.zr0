@@ -76,7 +76,7 @@ export default function YourInformationComponents() {
                     }}
                     // validationSchema={schema}
                     onSubmit={(values) => {
-                        controllerYourInformation.UpdateCustomer({ id: user?.customer.id ?? 1, body: { phone: values.phone, birthday: values.birthday, cpf: values.cpf.replace(/[^a-zA-Z0-9 ]/g, "") } });
+                        controllerYourInformation.UpdateCustomer({ id: user?.customer.id ?? 1, body: { phone: values.phone.replace(/[^a-zA-Z0-9 ]/g, ""), birthday: values.birthday, cpf: values.cpf?.replace(/[^a-zA-Z0-9 ]/g, ""), corporate_name: values.corporate_name, cnpj: values.cnpj?.replace(/[^a-zA-Z0-9 ]/g, ""), trade_name: values.trade_name } });
                         controllerYourInformation.UpdateUser({ id: user?.id ?? 1, body: { email: values.email, name: values.name } })
                     }}
                 >
@@ -163,11 +163,11 @@ export default function YourInformationComponents() {
                                     <div className="col-12 flex flex-row gap-3">
 
                                         <div className="gap-2">
-                                            <ZRadioButton value={1} checked={cpfOrCnpj === 1} onChange={() => { setCpfOrCnpj(1) }} />
+                                            <ZRadioButton value={1} className="mr-2" checked={cpfOrCnpj === 1} onChange={() => { setCpfOrCnpj(1) }} />
                                             <label>CPF</label>
                                         </div>
                                         <div className="gap-2">
-                                            <ZRadioButton value={2} checked={cpfOrCnpj === 2} onChange={() => { setCpfOrCnpj(2) }} />
+                                            <ZRadioButton value={2} className="mr-2" checked={cpfOrCnpj === 2} onChange={() => { setCpfOrCnpj(2) }} />
                                             <label >CNPJ</label>
                                         </div>
                                     </div>
@@ -196,13 +196,14 @@ export default function YourInformationComponents() {
                                     </> : <>
                                         <div className="col-12 md:col-6 mb-4">
                                             <div className="flex flex-column ">
-                                                <label className="mb-2">CPNJ</label>
+                                                <label className="mb-2">CNPJ</label>
                                                 <ZInputMask
                                                     name="cnpj"
                                                     value={values.cnpj}
                                                     onChange={handleChange}
-                                                    placeholder="Digite sua data de nascimento"
+                                                    placeholder="Digite seu cnpj"
                                                     invalid={!!(errors.cnpj && touched.cnpj)}
+                                                    mask="99.999.999/9999-99"
                                                 ></ZInputMask>
                                                 {errors.cnpj && touched.cnpj ? (
                                                     <>
@@ -215,14 +216,13 @@ export default function YourInformationComponents() {
                                         <div className="col-12 md:col-6 mb-4">
                                             <div className="flex flex-column ">
                                                 <label className="mb-2">Razão Social</label>
-                                                <ZInputMask
+                                                <ZInputText
                                                     name="corporate_name"
                                                     value={values.corporate_name}
                                                     onChange={handleChange}
-                                                    mask=""
                                                     placeholder="Digite sua Razão Social"
                                                     invalid={!!(errors.corporate_name && touched.corporate_name)}
-                                                ></ZInputMask>
+                                                ></ZInputText>
                                                 {errors.corporate_name && touched.corporate_name ? (
                                                     <>
                                                         <div className="p-1" />
@@ -234,14 +234,13 @@ export default function YourInformationComponents() {
                                         <div className="col-12 md:col-6 mb-4">
                                             <div className="flex flex-column ">
                                                 <label className="mb-2">Nome fantasia</label>
-                                                <ZInputMask
+                                                <ZInputText
                                                     name="trade_name"
                                                     value={values.trade_name}
                                                     onChange={handleChange}
-                                                    mask=""
                                                     placeholder="Digite seu Nome fantasia"
                                                     invalid={!!(errors.trade_name && touched.trade_name)}
-                                                ></ZInputMask>
+                                                ></ZInputText>
                                                 {errors.trade_name && touched.trade_name ? (
                                                     <>
                                                         <div className="p-1" />
