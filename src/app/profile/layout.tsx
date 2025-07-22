@@ -10,7 +10,7 @@ export default function Layout({
     return (
         <div className="h-full">
             <Header />
-            <main className="overflow-auto">
+            <main className="h-full w-full overflow-auto p-4 md:p-8 ">
                 <Providers>
                     <Suspense>
                         {children}

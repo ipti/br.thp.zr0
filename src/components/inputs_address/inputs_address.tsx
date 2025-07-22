@@ -1,3 +1,4 @@
+"use client"
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -105,6 +106,23 @@ const InputAddress = ({
           {errors.address ? (
             <div style={{ color: "red", marginTop: "8px" }}>
               {errors.address}
+            </div>
+          ) : null}
+        </div>
+      </div>
+       <div className="mb-4 col-12 md:col-6">
+        <div className="flex flex-column">
+          <label>Número </label>
+          <div className="p-2" />
+          <ZInputText
+            value={values.number}
+            placeholder="Número"
+            onChange={handleChange}
+            name="number"
+          />
+          {errors.number ? (
+            <div style={{ color: "red", marginTop: "8px" }}>
+              {errors.number}
             </div>
           ) : null}
         </div>
