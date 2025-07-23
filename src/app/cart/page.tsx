@@ -1,9 +1,13 @@
 import CartComponent from "./components/components";
+import CartProvider from "./context/context";
 
-export default function CartPage(){
+export default function CartPage() {
     return (
         <div>
-            <CartComponent />
+            <CartProvider>
+
+                <CartComponent />
+            </CartProvider>
         </div>
     )
 }

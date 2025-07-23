@@ -28,6 +28,10 @@ export interface Address {
   phone: string
 }
 
+export interface AddressCart extends Address {
+  selected: boolean
+}
+
 export interface Customer {
   id: number
   cpf: string

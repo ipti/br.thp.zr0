@@ -18,7 +18,7 @@ export const CreateAddressCustomerRequest = async (
   return await http
     .post(
       "/users/get-email",
-      { email: body.email },
+      body
     )
 };
 

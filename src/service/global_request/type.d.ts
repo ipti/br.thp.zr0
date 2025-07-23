@@ -15,4 +15,17 @@ export interface Customer {
   corporate_name: any
   trade_name: any
   user_fk: number
+  billing_address: BillingAddress
+}
+
+export interface BillingAddress {
+  id: number
+  cep: string
+  address: string
+  number: string
+  complement: string
+  neighborhood: string
+  state_fk: number
+  city_fk: number
+  customer_fk: number
 }

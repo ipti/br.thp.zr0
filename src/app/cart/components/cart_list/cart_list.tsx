@@ -102,9 +102,7 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
                             value={item.quantity}
                             name="quantity"
                             onChange={(e) => 
-                              {updateItem(item.id, e.target.value);
-                              
-                            }}
+                              {updateItem(item.id, e.target.value);}}
                             options={[1, 2, 3, 4, 5, 6, 7, 8, 9]}
                           />
                         </div>

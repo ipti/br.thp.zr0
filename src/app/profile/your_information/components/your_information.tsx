@@ -13,6 +13,7 @@ import { ControllerYourInformation } from "../service/controller";
 import ZCalendar from "@/components/calendar/calendar";
 import ZRadioButton from "@/components/radio_button/radio_button";
 import { useState } from "react";
+import InputAddress from "@/components/inputs_address/inputs_address";
 
 
 export default function YourInformationComponents() {
@@ -73,14 +74,27 @@ export default function YourInformationComponents() {
                         cnpj: user?.customer.cnpj ?? "",
                         trade_name: user?.customer.trade_name ?? "",
                         corporate_name: user?.customer.corporate_name ?? "",
+                        cep: user?.customer.billing_address.cep ?? "",
+                        address: user?.customer?.billing_address?.address ?? "",
+                        number: user?.customer?.billing_address?.number ?? "",
+                        complement: user?.customer?.billing_address?.complement ?? "",
+                        neighborhood: user?.customer?.billing_address?.neighborhood ?? "",
+                        city: user?.customer?.billing_address?.city_fk ?? undefined,
+                        state: user?.customer?.billing_address?.state_fk ?? undefined,
                     }}
                     // validationSchema={schema}
                     onSubmit={(values) => {
                         controllerYourInformation.UpdateCustomer({ id: user?.customer.id ?? 1, body: { phone: values.phone.replace(/[^a-zA-Z0-9 ]/g, ""), birthday: values.birthday, cpf: values.cpf?.replace(/[^a-zA-Z0-9 ]/g, ""), corporate_name: values.corporate_name, cnpj: values.cnpj?.replace(/[^a-zA-Z0-9 ]/g, ""), trade_name: values.trade_name } });
                         controllerYourInformation.UpdateUser({ id: user?.id ?? 1, body: { email: values.email, name: values.name } })
+                        if (user?.customer.billing_address.id) {
+                            controllerYourInformation.UpdateAddressBilling({ body: { address: values.address, cep: values.cep, cityId: values.city, complement: values.complement, customerId: user?.customer?.id ?? 1, neighborhood: values.neighborhood, number: values.number, stateId: values.state }, id: user.customer.billing_address.id })
+
+                        } else {
+                            controllerYourInformation.CreateAddressBilling({ body: { address: values.address, cep: values.cep, cityId: values.city, complement: values.complement, customerId: user?.customer?.id ?? 1, neighborhood: values.neighborhood, number: values.number, stateId: values.state } })
+                        }
                     }}
                 >
-                    {({ values, handleChange, errors, touched }) => {
+                    {({ values, handleChange, errors, touched, setFieldValue }) => {
                         return (
                             <Form>
                                 <div className="p-2" />
@@ -250,8 +264,14 @@ export default function YourInformationComponents() {
                                             </div>
                                         </div>
                                     </>}
-                                    <div className="p-2" />
+
                                 </div>
+                                <h3>Endereço de cobrança</h3>
+                                <div className="p-2" />
+                                <div className="grid">
+                                    <InputAddress errors={errors} handleChange={handleChange} setFieldValue={setFieldValue} touched={touched} values={values} />
+                                </div>
+                                <div className="p-2" />
                                 <div className="flex flex-row justify-content-end">
                                     <ZButton className="col-12 md:col-4">Salvar</ZButton>
                                 </div>
