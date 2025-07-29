@@ -5,12 +5,12 @@ export interface CardContextType {
     initialValue: {
         cep: string;
         address_selected: number | undefined;
-        product_selected: never[];
+        product_selected: string[] | undefined;
     }
     setInitialValue: Dispatch<SetStateAction<{
         cep: string;
         address_selected: number | undefined;
-        product_selected: never[];
+        product_selected: string[] | undefined;
     }>>
 }
 

@@ -13,7 +13,6 @@ export default function AddressComponent() {
 
     var addressList: AddressList | undefined = data
 
-    console.log(data)
     return (
         <div>
             <div className="m-4 flex flex-row justify-content-end">

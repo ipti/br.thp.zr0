@@ -28,20 +28,51 @@ export default function YourInformationComponents() {
 
     const prime = primeFlex();
 
-    const schema = Yup.object().shape({
-        name: Yup.string()
-            .required("Campo Obrigatório")
-            .min(8, "Nome deve ter pelo menos 8 caracteres"),
-        role: Yup.string().required("Campo Obrigatório"),
-        password: Yup.string()
-            .required("Campo Obrigatório")
-            .min(8, "Senha deve ter pelo menos 8 caracteres"),
-        email: Yup.string().required("Campo Obrigatório"),
-        confirmpassword: Yup.string()
-            .label("Confirmar senha")
-            .required("Campo Obrigatório")
-            .oneOf([Yup.ref("password")], "Senhas difirentes"),
-    });
+ const schema = (cpfOrCnpj: number) =>
+  Yup.object().shape({
+    email: Yup.string()
+      .email("E-mail inválido")
+      .required("E-mail é obrigatório"),
+
+    name: Yup.string().required("Nome é obrigatório"),
+
+    phone: Yup.string().required("Telefone é obrigatório"),
+
+    birthday: Yup.date().required("Data de nascimento é obrigatória"),
+
+    cpf:
+      cpfOrCnpj === 1
+        ? Yup.string().required("CPF é obrigatório")
+        : Yup.string().notRequired(),
+
+    cnpj:
+      cpfOrCnpj === 2
+        ? Yup.string().required("CNPJ é obrigatório")
+        : Yup.string().notRequired(),
+
+    trade_name:
+      cpfOrCnpj === 2
+        ? Yup.string().required("Nome fantasia é obrigatório")
+        : Yup.string().notRequired(),
+
+    corporate_name:
+      cpfOrCnpj === 2
+        ? Yup.string().required("Razão social é obrigatória")
+        : Yup.string().notRequired(),
+
+    cep: Yup.string().required("CEP é obrigatório"),
+    address: Yup.string().required("Endereço é obrigatório"),
+    number: Yup.string().required("Número é obrigatório"),
+    complement: Yup.string(),
+    neighborhood: Yup.string().required("Bairro é obrigatório"),
+    city: Yup.number()
+      .typeError("Cidade é obrigatória")
+      .required("Cidade é obrigatória"),
+    state: Yup.number()
+      .typeError("Estado é obrigatório")
+      .required("Estado é obrigatório"),
+  });
+
 
     const footer = (
         <>
@@ -74,7 +105,7 @@ export default function YourInformationComponents() {
                         cnpj: user?.customer.cnpj ?? "",
                         trade_name: user?.customer.trade_name ?? "",
                         corporate_name: user?.customer.corporate_name ?? "",
-                        cep: user?.customer.billing_address.cep ?? "",
+                        cep: user?.customer?.billing_address?.cep ?? "",
                         address: user?.customer?.billing_address?.address ?? "",
                         number: user?.customer?.billing_address?.number ?? "",
                         complement: user?.customer?.billing_address?.complement ?? "",
@@ -82,7 +113,7 @@ export default function YourInformationComponents() {
                         city: user?.customer?.billing_address?.city_fk ?? undefined,
                         state: user?.customer?.billing_address?.state_fk ?? undefined,
                     }}
-                    // validationSchema={schema}
+                    validationSchema={schema(cpfOrCnpj)}
                     onSubmit={(values) => {
                         controllerYourInformation.UpdateCustomer({ id: user?.customer.id ?? 1, body: { phone: values.phone.replace(/[^a-zA-Z0-9 ]/g, ""), birthday: values.birthday, cpf: values.cpf?.replace(/[^a-zA-Z0-9 ]/g, ""), corporate_name: values.corporate_name, cnpj: values.cnpj?.replace(/[^a-zA-Z0-9 ]/g, ""), trade_name: values.trade_name } });
                         controllerYourInformation.UpdateUser({ id: user?.id ?? 1, body: { email: values.email, name: values.name } })
@@ -95,6 +126,8 @@ export default function YourInformationComponents() {
                     }}
                 >
                     {({ values, handleChange, errors, touched, setFieldValue }) => {
+
+                        console.log(errors)
                         return (
                             <Form>
                                 <div className="p-2" />
@@ -150,7 +183,7 @@ export default function YourInformationComponents() {
                                             {errors.phone && touched.phone ? (
                                                 <>
                                                     <div className="p-1" />
-                                                    <div style={{ color: "red" }}>{errors.phone}</div>
+                                                    <div style={{ color: "red" }}>{errors.phone.toString()}</div>
                                                 </>
                                             ) : null}
                                         </div>
@@ -160,7 +193,7 @@ export default function YourInformationComponents() {
                                             <label className="mb-2">Data de nascimento</label>
                                             <ZCalendar
                                                 name="birthday"
-                                                value={values.birthday}
+                                                value={new Date(values.birthday)}
                                                 onChange={handleChange}
                                                 placeholder="Digite sua data de nascimento"
                                                 dateFormat="dd/mm/yy"
@@ -200,7 +233,7 @@ export default function YourInformationComponents() {
                                                 {errors.cpf && touched.cpf ? (
                                                     <>
                                                         <div className="p-1" />
-                                                        <div style={{ color: "red" }}>{errors.cpf}</div>
+                                                        <div style={{ color: "red" }}>{errors.cpf.toString()}</div>
                                                     </>
                                                 ) : null}
                                             </div>
@@ -222,7 +255,7 @@ export default function YourInformationComponents() {
                                                 {errors.cnpj && touched.cnpj ? (
                                                     <>
                                                         <div className="p-1" />
-                                                        <div style={{ color: "red" }}>{errors.cnpj}</div>
+                                                        <div style={{ color: "red" }}>{errors.cnpj.toString()}</div>
                                                     </>
                                                 ) : null}
                                             </div>
@@ -240,7 +273,7 @@ export default function YourInformationComponents() {
                                                 {errors.corporate_name && touched.corporate_name ? (
                                                     <>
                                                         <div className="p-1" />
-                                                        <div style={{ color: "red" }}>{errors.corporate_name}</div>
+                                                        <div style={{ color: "red" }}>{errors.corporate_name.toString()}</div>
                                                     </>
                                                 ) : null}
                                             </div>
@@ -258,7 +291,7 @@ export default function YourInformationComponents() {
                                                 {errors.trade_name && touched.trade_name ? (
                                                     <>
                                                         <div className="p-1" />
-                                                        <div style={{ color: "red" }}>{errors.trade_name}</div>
+                                                        <div style={{ color: "red" }}>{errors.trade_name.toString()}</div>
                                                     </>
                                                 ) : null}
                                             </div>

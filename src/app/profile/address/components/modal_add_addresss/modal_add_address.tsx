@@ -68,7 +68,7 @@ export default function ModalAddressCustomer({visible, onHide}:{visible: boolean
                 cityId: values.city,
                 customerId: user?.customer.id ?? 1
             })
-            
+            onHide()
             }} validationSchema={schema}>
                 {({ values, handleChange, errors, touched, setFieldValue }) => {
                     return (

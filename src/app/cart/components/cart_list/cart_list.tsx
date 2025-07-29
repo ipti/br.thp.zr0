@@ -14,9 +14,11 @@ import { useCartStore } from "@/service/store/cart_store";
 import { Form, Formik } from "formik";
 import { Button } from "primereact/button";
 import "./cart_list.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ShippingGetType, ValidOption } from "@/app/product/service/type";
 import ZRadioButton from "@/components/radio_button/radio_button";
+import { CartContext } from "../../context/context";
+import ZCheckbox from "@/components/checkbox/checkbox";
 
 
 export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i: number) => void }) {
@@ -26,6 +28,7 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
   const cart = useCartStore((state) => state.cart);
   const removeItem = useCartStore((state) => state.removeItem);
   const updateItem = useCartStore((state) => state.updateQuantity)
+  const cartContext = useContext(CartContext)
 
   const productClientController = ProductClientController({ setShipping, setShippingSelect });
 
@@ -34,7 +37,7 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
   ) => {
     productClientController.ShippingCalculateAction({
       destinationZipCode: cep.replace(/[^a-zA-Z0-9 ]/g, ""),
-      orderItems: cart.map((item) => { return { productId: parseInt(item.id), quantity: item.quantity } }),
+      orderItems: cart.map((item) =>  {  return  { productId: parseInt(item.id), quantity: item.quantity } }),
     });
     setCep(cep)
 
@@ -43,10 +46,15 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
   useEffect(() => {
     if(cep) handleShippingCalculate(cep)
   }, [cart])
+
+  useEffect(() => {
+     cartContext?.setInitialValue(prev => ({...prev, product_selected: cart.map(item => {return item.id})}))
+  }, [])
+  
   
 
   const total = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + (cartContext?.initialValue.product_selected?.find(props => props === item.id) ? item.price * item.quantity : 0),
     0
   );
 
@@ -60,12 +68,25 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
           ) : (
             <>
               <div className="flex flex-column gap-4">
-                {cart.map((item) => (
+                {cart.map((item) => {
+                  const isSelect = !!cartContext?.initialValue.product_selected?.find(prop => prop === item.id)
+                  return(
                   <div
                     key={item.id}
                     className="card_list_item"
                   >
-                    <div className="flex flex-row align-items-center gap-4 flex-wrap md:flex-nowrap">
+                    <div className="flex flex-column justify-content-center">
+                    <ZCheckbox value={item.id} onChange={() => {
+                      if(isSelect){
+                        cartContext?.setInitialValue(prev => ({...prev, product_selected: prev.product_selected?.filter(props => props !== item.id)}))
+                      } else {
+                        // cartContext?.initialValue.product_selected?.push(item.id)
+                        cartContext?.setInitialValue(prev => ({...prev, product_selected: prev.product_selected?.concat(item.id)}))
+                        // cartContext?.setInitialValue(prev => ({...prev, product_selected: prev.product_selected?.push(props => props !== item.id)}))
+                      }
+                    }} checked={isSelect} />
+                    </div>
+                    <div className="flex flex-row align-items-center w-full gap-4 flex-wrap md:flex-nowrap">
                       <div style={{ position: "relative", }}>
                         <img
                           src={item.image}
@@ -81,7 +102,6 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
                             <h3 className="m-0">{item.name}</h3>
                             <div className="p-1" />
                             <div className="flex flex-row">
-
                               <p className="text-sm m-0 text-600">
                                 R${item.price.toFixed(2)} x {item.quantity}
                               </p>
@@ -109,7 +129,7 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
                       </div>
                     </div>
                   </div>
-                ))}
+                )} )}
               </div>
             </>
           )}
@@ -127,7 +147,7 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
             <h3>Frete</h3>
             <div className="p-1" />
             <div className="gap-3">
-              {shipping?.shipments[0].result.validOptions.map((item, index) => {
+              {shipping?.shipments[0]?.result?.validOptions?.map((item, index) => {
                 return (
                   <div key={index} className="flex flex-row justify-content-between">
                     <div className="flex flex-row">

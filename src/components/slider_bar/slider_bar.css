@@ -1,5 +1,6 @@
 .container_slider {
     box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+    background-color: white;
 }
 
 .item_slider {
