@@ -75,7 +75,7 @@ export default function CartDialog({
         </div>
         <div className="flex flex-column justify-content-end mt-3 gap-2">
           <ZButton label={"Finalizar compra" + ` (R$ ${total.toFixed(2)})`} />
-          <ZButton label="Ver carrinho" text onClick={() => {history.push('cart'); onHide()}} />
+          <ZButton label="Ver carrinho" text onClick={() => {history.push('/cart'); onHide()}} />
         </div>
       </div>
     </ZSliderBarDialog>
