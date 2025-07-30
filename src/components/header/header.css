@@ -7,3 +7,9 @@
     box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
     background-color: white;
 }
+
+.container h3 {
+    font-family: 'hitv-demo', sans-serif;
+    font-size: 32px;
+    font-weight: 400;
+}

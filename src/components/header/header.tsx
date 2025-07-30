@@ -33,10 +33,25 @@ export default function Header() {
           <Image alt="" src={logo} height={64} />
         </div>
         <div className="flex flex-column justify-content-center w-full md:w-29rem">
-          <div className="p-inputgroup flex-1 align-items-center">
+          <div className="flex flex-row align-items-center gap-3">
+
+            <h3>
+              SOBRE
+            </h3>
+             <h3>
+              IMPACTO
+            </h3>
+             <h3>
+              PRODUTOS
+            </h3>
+             <h3>
+              CONTATO
+            </h3>
+            </div>
+          {/* <div className="p-inputgroup flex-1 align-items-center">
             <ZInputText placeholder="Pesquisar" />
             <ZButton icon="pi pi-search" className="p-button-warning" />
-          </div>
+          </div> */}
         </div>
         <div className="gap-3 flex flex-row align-items-center">
           <Popover
