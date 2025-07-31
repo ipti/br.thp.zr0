@@ -14,6 +14,7 @@ import "./header.css";
 import MenuUser from "./menu_user/menu_user";
 import LoginModal from "./login/login_modal";
 import { Providers } from "@/service/provider";
+import bag from "../../assets/img/bag.svg";
 
 
 export default function Header() {
@@ -66,9 +67,10 @@ export default function Header() {
               <i className="pi pi-user cursor-pointer" style={{ fontSize: '1.5rem' }} />
             </div>
           </Popover>
-          <i className="cursor-pointer pi pi-shopping-cart p-overlay-badge" style={{ fontSize: '1.5rem' }} onClick={() => setVisibleCart(!visibleCart)}>
+          <div className="cursor-pointer p-overlay-badge" style={{ fontSize: '1.5rem' }} onClick={() => setVisibleCart(!visibleCart)}>
+            <Image alt="Bag Icon" src={bag} width={48} height={48} />
             <ZBadge value={cart.length}></ZBadge>
-          </i>
+          </div>
         </div>
         <CartDialog visible={visibleCart} onHide={() => { setVisibleCart(!visibleCart) }} />
         <LoginModal visible={modalLogin} onHide={() => setModalLogin(!modalLogin)} />

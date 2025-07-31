@@ -1,0 +1,24 @@
+.p-splitter {
+    background: #ffffff;
+    border-radius: 3px;
+    color: #495057;
+  }
+  .p-splitter .p-splitter-gutter {
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+      transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+     background-image: url('../../assets/img/Union.svg'); /* caminho da imagem */
+  background-size: cover; /* ou 'contain', conforme necessário */
+  background-repeat: no-repeat;
+  background-position: center;
+  }
+  .p-splitter .p-splitter-gutter .p-splitter-gutter-handle {
+    background: #dee2e6;
+  }
+  .p-splitter .p-splitter-gutter .p-splitter-gutter-handle:focus-visible {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 0.2rem #a6d5fa;
+  }
+  .p-splitter .p-splitter-gutter-resizing {
+    background: #dee2e6;
+  }

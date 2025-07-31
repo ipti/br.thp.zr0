@@ -1,6 +1,8 @@
 import CardProduct from "@/components/card_product/card_product";
 import Header from "@/components/header/header";
 import http from "@/service/axios";
+import SplitterHome from "./components/splitter_home/splitter_home";
+import About from "./components/about/about";
 
 
 export default async function Home() {
@@ -10,6 +12,8 @@ export default async function Home() {
   return (
     <div>
       <Header />
+      <SplitterHome />
+      <About />
       <div className="p-4">
         <div className="grid">
           {product?.data?.map((item, index) => {

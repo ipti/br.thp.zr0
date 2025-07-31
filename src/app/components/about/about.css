@@ -1,0 +1,10 @@
+.container_about {
+   background-color: #14B5B2;
+   padding: 32px;
+}
+
+.container_about h1 {
+    font-family: 'hitv-demo', sans-serif;
+    font-size: 64px;
+    font-weight: 700;
+}
