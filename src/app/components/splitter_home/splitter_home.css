@@ -18,7 +18,7 @@
 
  .p-splitter .p-splitter-gutter {
      transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
-     background-image: url('../../../assets/img//Union.png');
+     background-image: url('../../../assets/img/Union.png');
      z-index: 200;
      /* caminho da imagem */
      background-size: cover;
