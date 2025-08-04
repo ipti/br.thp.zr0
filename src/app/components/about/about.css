@@ -1,23 +1,33 @@
 .container_about {
     background-color: #F07724;
+      position: relative; /* garante que elementos absolutos fiquem dentro */
+  overflow: hidden;  
     min-height: 1200px;
+    z-index: 1;
 }
 
 .container_verde {
-    width: 100%;
-    height: 100%; /* Define a altura mínima */
-    /* Ou defina uma altura fixa, tipo 600px */
-    background-image: url('../../../assets/img/verde_home.png');
-    background-size: cover;
-    /* Faz a imagem cobrir toda a div */
-    background-repeat: no-repeat;
-    /* Não repete a imagem */
-    background-position: center;
-    /* Centraliza a imagem */
-    position: relative;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 100; /* fundo, atrás de tudo */
+  background-image: url("../../../assets/img/verde_home.png"); /* se estiver em /public */
+  background-size: 100% 800px; /* ou 'cover', conforme necessário */
+  background-repeat: no-repeat;
 }
 
-.container_about h1 {
+.about_text {
+    z-index: 200;
+    position: absolute;
+}
+
+.about_text p {
+    font-family: 'hurme-geometric-sans-1', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin: 0 8px;
+}
+.about_text h1 {
     font-family: 'hitv-demo', sans-serif;
     font-size: 64px;
     font-weight: 700;

@@ -21,6 +21,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'hurme-geometric-sans-1';
+  src: url('../assets/font/HurmeGeometricSans1.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 
 html,
 body {

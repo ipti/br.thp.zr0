@@ -1,0 +1,13 @@
+.container_contact {
+    position: relative; /* garante que elementos absolutos fiquem dentro */
+    overflow: hidden;  
+    z-index: 1;
+
+    padding: 64px;
+}
+
+.container_contact h1 {
+    font-family: 'hitv-demo', sans-serif;
+    font-size: 64px;
+    font-weight: 700;
+}

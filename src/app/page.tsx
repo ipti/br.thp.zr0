@@ -3,6 +3,7 @@ import Header from "@/components/header/header";
 import http from "@/service/axios";
 import SplitterHome from "./components/splitter_home/splitter_home";
 import About from "./components/about/about";
+import Contact from "./components/contact/contact";
 
 
 export default async function Home() {
@@ -25,6 +26,7 @@ export default async function Home() {
           })}
         </div>
       </div>
+      <Contact />
     </div>
 
   );
