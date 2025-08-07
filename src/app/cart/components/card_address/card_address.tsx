@@ -4,7 +4,9 @@ import ZRadioButton from "@/components/radio_button/radio_button";
 import { useContext } from "react";
 import { CardContextType, CartContext } from "../../context/context";
 
-export default function CardAddress({ item }: { item: Address }) {
+export default function CardAddress({ item, isView }: { item: Address, isView?: boolean }) {
+
+    console.log(item)
 
     const { initialValue, setInitialValue } = useContext(CartContext) as CardContextType
 
@@ -13,22 +15,22 @@ export default function CardAddress({ item }: { item: Address }) {
             ...prev, address_selected: item.id
         }))}>
             <div className="flex flex-row">
-                <div className="flex flex-column justify-content-center">
+                {!isView && <div className="flex flex-column justify-content-center">
                     <ZRadioButton value={item.id} checked={item.id === initialValue.address_selected} />
-                </div>
+                </div>}
                 <div className="p-2" />
                 <div className="flex flex-column">
 
                     <h4>
-                        {item.address}, {item.number}
+                        {item?.address}, {item?.number}
                     </h4>
                     <div className="p-1" />
                     <p>
-                        {item.cep} - {item.city.name} - {item.state.acronym}
+                        {item?.cep} - {item?.city?.name} - {item?.state?.acronym}
                     </p>
                     <div className="p-1" />
                     <p>
-                        {item.name} - {item.phone}
+                        {item?.name} - {item?.phone}
                         { }            </p>
                 </div>
             </div>

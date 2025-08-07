@@ -7,6 +7,7 @@ import CartList from "./cart_list/cart_list";
 import Identify from "./identify/identify";
 import { useRouter, useSearchParams } from "next/navigation";
 import Address from "./address/address";
+import Finish from "./finish/finish";
 
 
 export default function CartComponent() {
@@ -63,11 +64,13 @@ export default function CartComponent() {
 
     return (
         <div className="p-4">
-            <ZSteps model={items} activeIndex={activeIndex} onSelect={(e) => {setActiveIndex(e.index); history.push('/cart?index='+ e.index)}} readOnly={false} />
+            <ZSteps model={items} activeIndex={activeIndex} onSelect={(e) => { setActiveIndex(e.index); history.push('/cart?index=' + e.index) }} readOnly={false} />
             <div className="p-3" />
-            {activeIndex === 0 && <CartList handleActiveIndex={handleActiveIndex} />}
+            {activeIndex === 0 && <CartList key={0} handleActiveIndex={handleActiveIndex} />}
             {activeIndex === 1 && <Identify handleActiveIndex={handleActiveIndex} />}
-            {activeIndex ===2 && <Address handleActiveIndex={handleActiveIndex} />}
+            {activeIndex === 2 && <Address handleActiveIndex={handleActiveIndex} />}
+            {activeIndex === 3 && <Finish handleActiveIndex={handleActiveIndex} />}
+
             {/* <div className="flex flex-row gap-2">
                 <ZButton label="Voltar" disabled={activeIndex === 0} onClick={() => { setActiveIndex(activeIndex - 1) }} text raised />
                 <ZButton label="Continuar" disabled={activeIndex === 3} onClick={() => { setActiveIndex(activeIndex + 1) }} />
