@@ -1,6 +1,7 @@
 "use client";
 import http from "@/service/axios";
 import { CreateAdressCustomer, VerifyEmailTypes } from "./types";
+import { logout } from "@/service/cookies";
 
 export const VerifyEmailRequest = async (
   body: VerifyEmailTypes
@@ -22,3 +23,19 @@ export const CreateAddressCustomerRequest = async (
     )
 };
 
+export const getAddressOneRequest = async (
+  id: number
+) => {
+  return await http
+    .get(
+      "/address-customer/" + id
+    ).then((response) => response.data)
+    .catch((err) => {
+      if (err.response.status === 401) {
+        logout();
+        window.location.reload();
+      }
+      throw err;
+    });
+
+};

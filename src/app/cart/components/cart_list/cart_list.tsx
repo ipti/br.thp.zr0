@@ -34,28 +34,17 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
 
   const productClientController = ProductClientController({ setShipping, setShippingSelect });
 
-  const productSelected = () => {
-    const array: OrderItems[] = []
-    for (const i of cart) {
-      if (cartContext?.initialValue.product_selected?.find(props => props === i.id)) {
-        array.push({ productId: parseInt(i.id), quantity: i.quantity })
-      }
-    }
-    return array
-  }
-
   const handleShippingCalculate = (
-    cep?: string
+    cep?: string,
   ) => {
     if (cep) {
       setLoading(true)
       productClientController.ShippingCalculateAction({
         destinationZipCode: cep.replace(/[^a-zA-Z0-9 ]/g, ""),
-        orderItems: productSelected()
+        orderItems: cartContext?.productSelected() ?? []
       }, setLoading);
       setCep(cep)
     }
-
   };
 
   useEffect(() => {
@@ -65,8 +54,6 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
   useEffect(() => {
     cartContext?.setInitialValue(prev => ({ ...prev, product_selected: cart.map(item => { return item.id }) }))
   }, [])
-
-
 
   const total = cart.reduce(
     (sum, item) => sum + (cartContext?.initialValue.product_selected?.find(props => props === item.id) ? item.price * item.quantity : 0),
@@ -83,11 +70,11 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
           ) : (
             <>
               <div className="flex flex-column gap-4">
-                {cart.map((item) => {
+                {cart.map((item, index) => {
                   const isSelect = !!cartContext?.initialValue.product_selected?.find(prop => prop === item.id)
                   return (
                     <div
-                      key={item.id}
+                      key={index}
                       className="card_list_item"
                     >
                       <div className="flex flex-column justify-content-center">
@@ -152,38 +139,36 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
         <div className="col-12 md:col-4">
           <div className="card_total">
             <div className="flex flex-row justify-content-between mb-1"><h4>Subtotal:</h4> <h3>R${total.toFixed(2)}</h3></div>
-            <div className="flex flex-row justify-content-between"><h4>Frete:</h4> {isLoadingCep ? <div className="flex flex-column justify-content-center"><ZSkeleton width="64px" /></div> :<h3>R${shippingSelect?.cost.toFixed(2)}</h3>}</div>
+            <div className="flex flex-row justify-content-between"><h4>Frete:</h4> {isLoadingCep ? <div className="flex flex-column justify-content-center"><ZSkeleton width="64px" /></div> : <h3>R${shippingSelect?.cost?.toFixed(2)}</h3>}</div>
             <ZDivider />
             <div className="flex flex-row justify-content-end">
               <h1>R${(total + (shippingSelect?.cost ?? 0)).toFixed(2)}</h1>
             </div>
             <div className="p-2" />
-            {shipping && <div className="bg-black-alpha-10 p-3 border-round-2xl">
+            {shipping && <div className="bg-black-alpha-10 p-3" style={{ borderRadius: "8px" } }>
               <h3>Frete</h3>
               <div className="p-1" />
               <div className="gap-3">
                 {isLoadingCep ? <div className="flex flex-column gap-2"><ZSkeleton /><ZSkeleton /><ZSkeleton /></div> : <>
                   {shipping?.shipments[0]?.result?.validOptions?.map((item, index) => {
                     return (
-                      <>
-                        {<div key={index} className="flex flex-row justify-content-between">
-                          <div className="flex flex-row">
-
-                            <ZRadioButton value={item} checked={item.cost === shippingSelect?.cost} onChange={(e) => { console.log(e); setShippingSelect(e.target.value) }} />
+                      <div key={index} className="my-2">
+                        {<div className="flex flex-row justify-content-between m-1">
+                          <div className="flex flex-row align-items-center">
+                            <ZRadioButton value={item} checked={item.cost === shippingSelect?.cost} onChange={(e) => { setShippingSelect(e.target.value) }} />
                             <div className="p-1" />
                             <label>{item.carrier}</label>
                           </div>
                           <div>
-                            <h3>R${item.cost.toFixed(2)}</h3>
+                            <h5>R${item.cost.toFixed(2)}</h5>
+                            <p>{item.deliveryTime} Dias úteis</p>
                           </div>
                         </div>}
-                      </>
+                      </div>
                     )
                   })}
                 </>}
-
               </div></div>}
-
             <div className="p-2" />
             <Formik
               initialValues={{ cep: "", quantity: 1 }}

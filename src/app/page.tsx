@@ -15,7 +15,7 @@ export default async function Home() {
       <Header />
       <SplitterHome />
       <About />
-      <div className="p-4">
+      {/* <div className="p-4">
         <div className="grid">
           {product?.data?.map((item, index) => {
             return (
@@ -25,8 +25,7 @@ export default async function Home() {
             )
           })}
         </div>
-      </div>
-      <Contact />
+      </div> */}
     </div>
 
   );
