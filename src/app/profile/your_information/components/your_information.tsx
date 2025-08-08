@@ -14,6 +14,7 @@ import ZCalendar from "@/components/calendar/calendar";
 import ZRadioButton from "@/components/radio_button/radio_button";
 import { useState } from "react";
 import InputAddress from "@/components/inputs_address/inputs_address";
+import "./your_information.css"
 
 
 export default function YourInformationComponents() {
@@ -93,7 +94,7 @@ export default function YourInformationComponents() {
         <div
             className={prime.flex + prime.column + prime.justify_center + "h-full p-4 md:p-8"}
         >
-            <ZCard >
+            <ZCard className="card-style-profile">
                 <h3>Atualize seus dados</h3>
                 <Formik
                     initialValues={{
@@ -117,17 +118,18 @@ export default function YourInformationComponents() {
                     onSubmit={(values) => {
                         controllerYourInformation.UpdateCustomer({ id: user?.customer.id ?? 1, body: { phone: values.phone.replace(/[^a-zA-Z0-9 ]/g, ""), birthday: values.birthday, cpf: values.cpf?.replace(/[^a-zA-Z0-9 ]/g, ""), corporate_name: values.corporate_name, cnpj: values.cnpj?.replace(/[^a-zA-Z0-9 ]/g, ""), trade_name: values.trade_name } });
                         controllerYourInformation.UpdateUser({ id: user?.id ?? 1, body: { email: values.email, name: values.name } })
-                        if (user?.customer.billing_address.id) {
+                        if (user?.customer?.billing_address?.id) {
                             controllerYourInformation.UpdateAddressBilling({ body: { address: values.address, cep: values.cep, cityId: values.city, complement: values.complement, customerId: user?.customer?.id ?? 1, neighborhood: values.neighborhood, number: values.number, stateId: values.state }, id: user.customer.billing_address.id })
 
                         } else {
+
+                            console.log("create address")
                             controllerYourInformation.CreateAddressBilling({ body: { address: values.address, cep: values.cep, cityId: values.city, complement: values.complement, customerId: user?.customer?.id ?? 1, neighborhood: values.neighborhood, number: values.number, stateId: values.state } })
                         }
                     }}
                 >
                     {({ values, handleChange, errors, touched, setFieldValue }) => {
 
-                        console.log(errors)
                         return (
                             <Form>
                                 <div className="p-2" />

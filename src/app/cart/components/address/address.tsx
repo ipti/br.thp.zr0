@@ -108,8 +108,15 @@ export default function Address({
             </div>
           )
         })}
-         <div className="m-4 flex flex-row justify-content-end">
-          <ZButton label="Continuar" onClick={() => { handleActiveIndex(3) }}/>
+         <div className="m-4 flex flex-row justify-content-end gap-1">
+           <ZButton
+          label="Voltar"
+          security="secondary"
+          onClick={() => {
+            handleActiveIndex(0);
+          }}
+        />
+          <ZButton label="Continuar" onClick={() => { handleActiveIndex(2) }}/>
         </div>
         {/* {addingAddress()} */}
         <ModalAddressCustomer visible={visibleAddAddress} onHide={() => setVisibleAddAddress(!visibleAddAddress)} />

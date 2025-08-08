@@ -1,3 +1,4 @@
+"use client"
 import { ZButton } from "@/components/button/button";
 import ZDivider from "@/components/divider/divider";
 import ZSkeleton from "@/components/skeleton/skeleton";
@@ -9,6 +10,9 @@ import CardAddress from "../card_address/card_address";
 import { Address } from "@/app/profile/address/service/type";
 import { ProductClientController } from "@/app/product/service/controller";
 import { ShippingGetType, ValidOption } from "@/app/product/service/type";
+import { useFetchUserToken } from "@/service/global_request/query";
+import { UserGlobal } from "@/service/global_request/type";
+import CardPerson from "../card_person/card_person";
 
 export default function Finish({ handleActiveIndex }: { handleActiveIndex: (i: number) => void }) {
 
@@ -22,6 +26,10 @@ export default function Finish({ handleActiveIndex }: { handleActiveIndex: (i: n
     const cartContext = useContext(CartContext)
 
     const { data, isLoading } = useFetchAddressOneRequest(cartContext?.initialValue.address_selected ?? 0)
+
+        const { data: userRequest, isLoadingUser } = useFetchUserToken()
+    
+        const user: UserGlobal | undefined = userRequest
 
     const total = cart.reduce(
         (sum, item) => sum + (cartContext?.initialValue.product_selected?.find(props => props === item.id) ? item.price * item.quantity : 0),
@@ -57,9 +65,15 @@ export default function Finish({ handleActiveIndex }: { handleActiveIndex: (i: n
             <div className="p-2" />
             <div className="grid">
                 <div className="col-12 md:col-8">
+                    <h4>Faturamento</h4>
+                    <div className="p-2" />
+                    {!isLoading && <CardPerson item={user!} isEdit />}
+                    <div className="p-2" />
                     <h4>Endereço selecionado</h4>
                     <div className="p-2" />
-                    {!isLoading && <CardAddress item={address!} isView />}
+                    {!isLoading && <CardAddress item={address!} isView isEdit/>}
+                    <div className="p-2" />
+                    <h4>Produtos selecionados</h4>
                     <div className="p-2" />
                     {cart.map((item) => {
                         const isSelect = !!cartContext?.initialValue.product_selected?.find(prop => prop === item.id)

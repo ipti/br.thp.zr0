@@ -8,6 +8,8 @@ import Identify from "./identify/identify";
 import { useRouter, useSearchParams } from "next/navigation";
 import Address from "./address/address";
 import Finish from "./finish/finish";
+import Delivery from "./delivery/delivery";
+import Payment from "./payment/payment";
 
 
 export default function CartComponent() {
@@ -49,27 +51,36 @@ export default function CartComponent() {
         {
             label: 'Carrinho',
         },
-        {
-            label: 'Identificação',
-            disabled: !!token
-        },
+        // {
+        //     label: 'Identificação',
+        //     disabled: !!token
+        // },
         {
             label: 'Endereço',
         },
         {
+            label: 'Entrega',
+        },
+        {
+            label: 'Pagamento',
+        },
+        {
             label: 'Confirmação',
+            disabled: true
         }
     ];
 
 
     return (
         <div className="p-4">
-            <ZSteps model={items} activeIndex={activeIndex} onSelect={(e) => { setActiveIndex(e.index); history.push('/cart?index=' + e.index) }} readOnly={false} />
+            <ZSteps model={items} activeIndex={activeIndex}  onSelect={(e) => { setActiveIndex(e.index); history.push('/cart?index=' + e.index) }} readOnly={false} />
             <div className="p-3" />
             {activeIndex === 0 && <CartList key={0} handleActiveIndex={handleActiveIndex} />}
-            {activeIndex === 1 && <Identify handleActiveIndex={handleActiveIndex} />}
-            {activeIndex === 2 && <Address handleActiveIndex={handleActiveIndex} />}
-            {activeIndex === 3 && <Finish handleActiveIndex={handleActiveIndex} />}
+            {/* {activeIndex === 1 && <Identify handleActiveIndex={handleActiveIndex} />} */}
+            {activeIndex === 1 && <Address handleActiveIndex={handleActiveIndex} />}
+            {activeIndex === 2 && <Delivery handleActiveIndex={handleActiveIndex} />}
+            {activeIndex === 3 && <Payment handleActiveIndex={handleActiveIndex} />}
+            {activeIndex === 4 && <Finish handleActiveIndex={handleActiveIndex} />}
 
             {/* <div className="flex flex-row gap-2">
                 <ZButton label="Voltar" disabled={activeIndex === 0} onClick={() => { setActiveIndex(activeIndex - 1) }} text raised />

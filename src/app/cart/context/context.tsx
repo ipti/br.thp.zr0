@@ -8,13 +8,16 @@ export interface CardContextType {
         cep: string;
         address_selected: number | undefined;
         product_selected: string[] | undefined;
+        deliverySelected?: any
     }
     setInitialValue: Dispatch<SetStateAction<{
         cep: string;
         address_selected: number | undefined;
         product_selected: string[] | undefined;
+        deliverySelected?: any
     }>>
     productSelected: () => OrderItems[]
+    
 }
 
 export const CartContext = createContext<CardContextType | null>(null)
@@ -28,6 +31,7 @@ export default function CartProvider({ children }: { children: React.ReactNode }
         cep: "",
         address_selected: undefined,
         product_selected: [],
+        deliverySelected: undefined
     });
 
     const cart = useCartStore((state) => state.cart);
