@@ -6,23 +6,32 @@
 //   saveCart,
 // } from "@/utils/cartStorage";
 import { ProductClientController } from "@/app/product/service/controller";
+import { ShippingGetType, ValidOption } from "@/app/product/service/type";
 import { ZButton } from "@/components/button/button";
+import ZCheckbox from "@/components/checkbox/checkbox";
 import ZDivider from "@/components/divider/divider";
 import ZDropdown from "@/components/dropdown/dropdown";
 import ZInputMask from "@/components/input_mask/input_mask";
+import ZRadioButton from "@/components/radio_button/radio_button";
+import ZSkeleton from "@/components/skeleton/skeleton";
 import { useCartStore } from "@/service/store/cart_store";
 import { Form, Formik } from "formik";
+import Cookies from 'js-cookie';
 import { Button } from "primereact/button";
-import "./cart_list.css";
 import { useContext, useEffect, useState } from "react";
-import { OrderItems, ShippingGetType, ValidOption } from "@/app/product/service/type";
-import ZRadioButton from "@/components/radio_button/radio_button";
 import { CartContext } from "../../context/context";
-import ZCheckbox from "@/components/checkbox/checkbox";
-import ZSkeleton from "@/components/skeleton/skeleton";
+import "./cart_list.css";
+import LoginModal from "@/components/header/login/login_modal";
+
 
 
 export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i: number) => void }) {
+  const [modalLogin, setModalLogin] = useState(false)
+  const token = Cookies.get('access_token');
+
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+
   const [shipping, setShipping] = useState<ShippingGetType | undefined>();
   const [shippingSelect, setShippingSelect] = useState<ValidOption | undefined>()
   const [isLoadingCep, setLoading] = useState(false)
@@ -65,12 +74,12 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
       <h2 className="text-2xl font-bold mb-4">Seu Carrinho</h2>
       <div className="grid">
         <div className="col-12 md:col-8">
-          {cart.length === 0 ? (
+          {hydrated && cart?.length === 0 ? (
             <p>Seu carrinho está vazio.</p>
           ) : (
             <>
               <div className="flex flex-column gap-4">
-                {cart.map((item, index) => {
+                {hydrated && cart?.map((item, index) => {
                   const isSelect = !!cartContext?.initialValue.product_selected?.find(prop => prop === item.id)
                   return (
                     <div
@@ -145,7 +154,7 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
               <h1>R${(total + (shippingSelect?.cost ?? 0)).toFixed(2)}</h1>
             </div>
             <div className="p-2" />
-            {shipping && <div className="bg-black-alpha-10 p-3" style={{ borderRadius: "8px" } }>
+            {shipping && <div className="bg-black-alpha-10 p-3" style={{ borderRadius: "8px" }}>
               <h3>Frete</h3>
               <div className="p-1" />
               <div className="gap-3">
@@ -200,10 +209,11 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
               }}
             </Formik>
             <div className="p-3" />
-            <ZButton label="Continuar" style={{ width: "100%" }} onClick={() => { handleActiveIndex(1) }} />
+            <ZButton label="Continuar" style={{ width: "100%" }} onClick={() => { token ? handleActiveIndex(1) : setModalLogin(!modalLogin) }} />
           </div>
         </div>
       </div>
+      <LoginModal visible={modalLogin} onHide={() => setModalLogin(!modalLogin)} />
 
     </div>
   );

@@ -13,13 +13,11 @@ import { ShippingGetType, ValidOption } from "@/app/product/service/type";
 import { useFetchUserToken } from "@/service/global_request/query";
 import { UserGlobal } from "@/service/global_request/type";
 import CardPerson from "../card_person/card_person";
+import { CartController } from "../../service/controller";
 
 export default function Finish({ handleActiveIndex }: { handleActiveIndex: (i: number) => void }) {
 
-    const [shipping, setShipping] = useState<ShippingGetType | undefined>();
-    const [shippingSelect, setShippingSelect] = useState<ValidOption | undefined>()
-    const [loadingCep, setLoading] = useState(false)
-    const productClientController = ProductClientController({ setShipping, setShippingSelect });
+    const controllerCart = CartController()
 
     const cart = useCartStore((state) => state.cart);
 
@@ -27,35 +25,37 @@ export default function Finish({ handleActiveIndex }: { handleActiveIndex: (i: n
 
     const { data, isLoading } = useFetchAddressOneRequest(cartContext?.initialValue.address_selected ?? 0)
 
-        const { data: userRequest, isLoadingUser } = useFetchUserToken()
-    
-        const user: UserGlobal | undefined = userRequest
+    const { data: userRequest, isLoadingUser } = useFetchUserToken()
+
+    const user: UserGlobal | undefined = userRequest
 
     const total = cart.reduce(
         (sum, item) => sum + (cartContext?.initialValue.product_selected?.find(props => props === item.id) ? item.price * item.quantity : 0),
         0
     );
 
-    const handleShippingCalculate = (
-        cep?: string,
-    ) => {
-        if (cep) {
-            // setLoading(true)
-            productClientController.ShippingCalculateAction({
-                destinationZipCode: cep.replace(/[^a-zA-Z0-9 ]/g, ""),
-                orderItems: cartContext?.productSelected() ?? []
-            }, setLoading);
-
-        }
-
-    };
 
     var address: Address | undefined = data;
-    useEffect(() => {
-        if (address) handleShippingCalculate(address.cep)
-    }, [address])
 
+    const handleCreateOrder = () => {
 
+        controllerCart.CreateOrder({
+            address: {
+                address: address?.address ?? "",
+                cep: address?.cep ?? "",
+                number: address?.number ?? "",
+                complement: address?.complement ?? "",
+                neighborhood: address?.neighborhood ?? "",
+                cityId: address?.city.id ?? 0,
+                stateId: address?.state.id ?? 0,
+                name: address?.name ?? "",
+                phone: address?.phone ?? "",
+            },
+            userId: user?.id ?? 0,
+            items: cartContext?.productSelected().map(item => item.productId.toString()) ?? [],
+            observation: "",
+        })
+    }
 
     return (
         <div>
@@ -71,7 +71,7 @@ export default function Finish({ handleActiveIndex }: { handleActiveIndex: (i: n
                     <div className="p-2" />
                     <h4>Endereço selecionado</h4>
                     <div className="p-2" />
-                    {!isLoading && <CardAddress item={address!} isView isEdit/>}
+                    {!isLoading && <CardAddress item={address!} isView isEdit />}
                     <div className="p-2" />
                     <h4>Produtos selecionados</h4>
                     <div className="p-2" />
@@ -119,20 +119,26 @@ export default function Finish({ handleActiveIndex }: { handleActiveIndex: (i: n
                 <div className="col-12 md:col-4">
                     <div className="card_total">
                         <div className="flex flex-row justify-content-between mb-1"><h4>Subtotal:</h4> <h3>R${total.toFixed(2)}</h3></div>
-                        <div className="flex flex-row justify-content-between"><h4>Frete:</h4> {loadingCep ? <div className="flex flex-column justify-content-center"><ZSkeleton width="64px" /></div> : <h3>R${shippingSelect?.cost?.toFixed(2)}</h3>}</div>
-                           
-                <ZDivider />
-                <div className="flex flex-row justify-content-end">
-                    <h1>R${(total + ""
-                        // (shippingSelect?.cost ?? 0)).toFixed(2)
-                    )}
-                    </h1>
-                </div>
-                <div className="p-2" />
-                <ZButton label="Finalizar" style={{ width: "100%" }} onClick={() => { handleActiveIndex(1) }} />
-            </div>
-        </div>
+                        <div className="flex flex-row justify-content-between"><h4>Frete:</h4> {!cartContext?.initialValue.deliverySelected?.cost ? <div className="flex flex-column justify-content-center"><ZSkeleton width="64px" /></div> : <h3>R${cartContext?.initialValue.deliverySelected?.cost?.toFixed(2)}</h3>}</div>
 
+                        <ZDivider />
+                        <div className="flex flex-row justify-content-end">
+                            <h1>R${(total + ""
+                                // (shippingSelect?.cost ?? 0)).toFixed(2)
+                            )}
+                            </h1>
+                        </div>
+                        <div className="p-2" />
+                        <div className="flex flex-row align-items-center gap-2">
+                            <i className="pi pi-truck" style={{ fontSize: "1rem", color: "var(--primary-color)" }} />
+                            <h3>Envio</h3>
+                        </div>
+                        <div className="p-1" />
+                        {cartContext?.initialValue.deliverySelected?.carrier} {cartContext?.initialValue.deliverySelected?.service} - {cartContext?.initialValue.deliverySelected?.deliveryTime} Dias úteis
+                        <div className="p-3" />
+                        <ZButton label="Finalizar" style={{ width: "100%" }} onClick={() => { handleActiveIndex(1) }} />
+                    </div>
+                </div>
             </div >
             <div className="p-2" />
             <ZButton onClick={() => handleActiveIndex(2)}>Voltar</ZButton>

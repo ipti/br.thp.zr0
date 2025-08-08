@@ -4,9 +4,10 @@ import { LoginRequest } from "@/app/auth/login/service/request";
 import { login } from "@/service/localstorage";
 import Cookies from "js-cookie";
 import { Dispatch, SetStateAction, useReducer } from "react";
-import { CreateAddressCustomerRequest, VerifyEmailRequest } from "./request";
+import { CreateAddressCustomerRequest, CreateOrderRequest, VerifyEmailRequest } from "./request";
 import {
   CreateAdressCustomer,
+  CreateOrder,
   LoginTypes,
   SignUpTypes,
   VerifyEmailReturn,
@@ -15,7 +16,7 @@ import {
 import { SignUpRequest } from "@/app/auth/sign-up/service/request";
 import { useRouter } from "next/navigation";
 
-export function CartController(setErros: Dispatch<SetStateAction<string>>) {
+export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
   const exp90 = new Date();
   exp90.setMinutes(exp90.getMinutes() + 90);
 
@@ -102,10 +103,30 @@ export function CartController(setErros: Dispatch<SetStateAction<string>>) {
         setErros(erros.response.data.message);
       });
   }
+
+  function CreateOrder(body: CreateOrder) {
+    CreateOrderRequest(body)
+      .then((data) => {
+        setErros("");
+        // if (data.data.userRegistered.role === PerfisEnum.CUSTOMER) {
+        //     history.history.push("/")
+        // } else {
+        //     history.history.push("/seller/home")
+        // }
+        // window.location.reload()
+        // history.history.push("/")
+      })
+      .catch((erros) => {
+
+        console.log(erros.response.data.message);
+        setErros(erros.response.data.message);
+      });
+  }
   return {
     VerifyEmailAction,
     LoginCartAction,
     SignUpCartAction,
-    CreateAddressCustomer
+    CreateAddressCustomer,
+    CreateOrder
   };
 }

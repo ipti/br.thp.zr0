@@ -33,7 +33,7 @@ export default function Delivery({
   console.log(cartContext?.initialValue)
   const handleShippingCalculate = (cep?: string) => {
     if (cep) {
-      // setLoading(true)
+      setLoading(true)
       productClientController.ShippingCalculateAction(
         {
           destinationZipCode: cep.replace(/[^a-zA-Z0-9 ]/g, ""),
@@ -51,16 +51,16 @@ export default function Delivery({
 
   return (
     <div>
-      {shipping && (
+      { (
         <div className="bg-black-alpha-10 p-3" style={{ borderRadius: "8px" }}>
           <h3>Frete</h3>
           <div className="p-1" />
           <div className="gap-3">
             {loadingCep ? (
               <div className="flex flex-column gap-2">
-                <ZSkeleton />
-                <ZSkeleton />
-                <ZSkeleton />
+                <ZSkeleton height="32px" />
+                <ZSkeleton height="32px" />
+                <ZSkeleton height="32px" />
               </div>
             ) : (
               <>
@@ -100,7 +100,7 @@ export default function Delivery({
           </div>
         </div>
       )}
-      <div className="m-4 flex flex-row justify-content-end gap-1">
+      <div className="mt-4 flex flex-row justify-content-end gap-1">
         <ZButton
           label="Voltar"
           security="secondary"

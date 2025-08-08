@@ -104,19 +104,19 @@ export default function Address({
         {addressList?.map((item) => {
           return (
             <div key={item.id}>
-              <CardAddress item={item} /> 
+              <CardAddress item={item} />
             </div>
           )
         })}
-         <div className="m-4 flex flex-row justify-content-end gap-1">
-           <ZButton
-          label="Voltar"
-          security="secondary"
-          onClick={() => {
-            handleActiveIndex(0);
-          }}
-        />
-          <ZButton label="Continuar" onClick={() => { handleActiveIndex(2) }}/>
+        <div className="mt-4 flex flex-row justify-content-end gap-1">
+          <ZButton
+            label="Voltar"
+            security="secondary"
+            onClick={() => {
+              handleActiveIndex(0);
+            }}
+          />
+          <ZButton label="Continuar" onClick={() => { handleActiveIndex(2) }} />
         </div>
         {/* {addingAddress()} */}
         <ModalAddressCustomer visible={visibleAddAddress} onHide={() => setVisibleAddAddress(!visibleAddAddress)} />

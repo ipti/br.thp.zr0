@@ -1,6 +1,6 @@
 "use client";
 import http from "@/service/axios";
-import { CreateAdressCustomer, VerifyEmailTypes } from "./types";
+import { CreateAdressCustomer, CreateOrder, VerifyEmailTypes } from "./types";
 import { logout } from "@/service/cookies";
 
 export const VerifyEmailRequest = async (
@@ -22,6 +22,17 @@ export const CreateAddressCustomerRequest = async (
       body
     )
 };
+
+export const CreateOrderRequest = async (
+  body: CreateOrder
+) => {
+  return await http
+    .post(
+      "/orders",
+      body
+    )
+};
+
 
 export const getAddressOneRequest = async (
   id: number

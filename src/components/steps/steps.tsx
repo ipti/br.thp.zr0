@@ -1,3 +1,4 @@
+"use client";
 import { Steps, StepsProps } from "primereact/steps";
 
 import "./steps.css"

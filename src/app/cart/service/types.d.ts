@@ -7,6 +7,25 @@ export interface LoginTypes {
     password?: string
 }
 
+export interface CreateOrder {
+  userId: number
+  items: string[]
+  observation: string
+  address: Address
+}
+
+export interface Address {
+  name: string
+  phone: string
+  cep: string
+  address: string
+  number: string
+  complement: string
+  neighborhood: string
+  stateId: number
+  cityId: number
+}
+
 
 export interface SignUpTypes {
     name?: string,

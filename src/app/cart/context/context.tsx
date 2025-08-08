@@ -3,18 +3,28 @@ import { OrderItems } from "@/app/product/service/type";
 import { useCartStore } from "@/service/store/cart_store";
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 
+export interface DeliverySelectedType {
+  service: string
+  carrier: string
+  cost: number
+  deliveryTime: number
+  tracking: boolean
+  error: any
+  serviceCode: string
+}
+
 export interface CardContextType {
     initialValue: {
         cep: string;
         address_selected: number | undefined;
         product_selected: string[] | undefined;
-        deliverySelected?: any
+        deliverySelected?: DeliverySelectedType | undefined
     }
     setInitialValue: Dispatch<SetStateAction<{
         cep: string;
         address_selected: number | undefined;
         product_selected: string[] | undefined;
-        deliverySelected?: any
+        deliverySelected?: DeliverySelectedType | undefined
     }>>
     productSelected: () => OrderItems[]
     

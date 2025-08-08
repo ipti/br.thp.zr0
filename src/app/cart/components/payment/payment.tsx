@@ -11,7 +11,7 @@ export default function Payment({
       <ZCard className="p-4">
         <h3>Em breve</h3>
       </ZCard>
-      <div className="m-4 flex flex-row justify-content-end gap-1">
+      <div className="mt-4 flex flex-row justify-content-end gap-1">
         <ZButton
           label="Voltar"
           security="secondary"

@@ -57,12 +57,15 @@ export default function CartComponent() {
         // },
         {
             label: 'Endereço',
+            disabled: true
         },
         {
             label: 'Entrega',
+            disabled: true
         },
         {
             label: 'Pagamento',
+            disabled: true,
         },
         {
             label: 'Confirmação',
@@ -72,7 +75,7 @@ export default function CartComponent() {
 
 
     return (
-        <div className="p-4">
+        <div>
             <ZSteps model={items} activeIndex={activeIndex}  onSelect={(e) => { setActiveIndex(e.index); history.push('/cart?index=' + e.index) }} readOnly={false} />
             <div className="p-3" />
             {activeIndex === 0 && <CartList key={0} handleActiveIndex={handleActiveIndex} />}
