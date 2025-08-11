@@ -2,7 +2,7 @@ import http from "@/service/axios";
 import { ShippingCalculateType } from "./type";
 
 export const requestProductOne = (id: string) => {
-    let path = "/product/"+id;
+    let path = "/product-bff/"+id;
     return http
         .get(path)
         .then((response) => response.data)

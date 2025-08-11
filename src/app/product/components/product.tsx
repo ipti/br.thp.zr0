@@ -16,6 +16,7 @@ import { Card } from "primereact/card";
 import { Rating } from "primereact/rating";
 import { useEffect, useState } from "react";
 import { ProductClientController } from "../service/controller";
+import useCreateArrayUpToNumber from "@/utils/hook/useCreateArrayUpToNumber";
 
 export default function ProductView() {
   const [image, setImage] = useState<ProductImage | undefined>();
@@ -53,6 +54,8 @@ export default function ProductView() {
       setLoading(false);
     }
   }, [productOneRequest, loading]);
+
+  const arrayQuantity = useCreateArrayUpToNumber(productOne?.quantity ?? 1)
 
   return (
     
@@ -130,7 +133,7 @@ export default function ProductView() {
                       value={values.quantity}
                       name="quantity"
                       onChange={handleChange}
-                      options={[1, 2, 3, 4, 5, 6, 7, 89]}
+                      options={arrayQuantity}
                     />
                   </div>
                   <div className="p-2" />

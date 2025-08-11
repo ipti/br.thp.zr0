@@ -7,9 +7,14 @@ export interface LoginTypes {
     password?: string
 }
 
+export interface CartItem {
+  productId: number;
+  quantity: number;
+}
+
 export interface CreateOrder {
   userId: number
-  items: string[]
+  items: CartItem[]
   observation: string
   address: Address
 }

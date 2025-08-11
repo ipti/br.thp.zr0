@@ -52,7 +52,9 @@ export default function Finish({ handleActiveIndex }: { handleActiveIndex: (i: n
                 phone: address?.phone ?? "",
             },
             userId: user?.id ?? 0,
-            items: cartContext?.productSelected().map(item => item.productId.toString()) ?? [],
+            items: cart.filter(item => cartContext?.initialValue.product_selected?.find(prop => prop === item.id)).map((item) => {
+                return { productId: parseInt(item.id), quantity: item.quantity }
+            }),
             observation: "",
         })
     }
@@ -136,7 +138,7 @@ export default function Finish({ handleActiveIndex }: { handleActiveIndex: (i: n
                         <div className="p-1" />
                         {cartContext?.initialValue.deliverySelected?.carrier} {cartContext?.initialValue.deliverySelected?.service} - {cartContext?.initialValue.deliverySelected?.deliveryTime} Dias úteis
                         <div className="p-3" />
-                        <ZButton label="Finalizar" style={{ width: "100%" }} onClick={() => { handleActiveIndex(1) }} />
+                        <ZButton label="Finalizar" style={{ width: "100%" }} onClick={() => { handleCreateOrder() }} />
                     </div>
                 </div>
             </div >

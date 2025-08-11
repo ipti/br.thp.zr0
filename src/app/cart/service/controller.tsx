@@ -1,9 +1,11 @@
 "use client";
 
 import { LoginRequest } from "@/app/auth/login/service/request";
+import { SignUpRequest } from "@/app/auth/sign-up/service/request";
 import { login } from "@/service/localstorage";
 import Cookies from "js-cookie";
-import { Dispatch, SetStateAction, useReducer } from "react";
+import { useRouter } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
 import { CreateAddressCustomerRequest, CreateOrderRequest, VerifyEmailRequest } from "./request";
 import {
   CreateAdressCustomer,
@@ -13,8 +15,6 @@ import {
   VerifyEmailReturn,
   VerifyEmailTypes,
 } from "./types";
-import { SignUpRequest } from "@/app/auth/sign-up/service/request";
-import { useRouter } from "next/navigation";
 
 export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
   const exp90 = new Date();
