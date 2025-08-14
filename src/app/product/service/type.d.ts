@@ -9,13 +9,12 @@ export interface ShippingCalculateType {
   }
   
   export interface ShippingGetType {
-  totalCost: number
-  shipments: Shipment[]
-}
-
-export interface Shipment {
-  workshopId: number
   result: Result
+  workshopId: number
+  quantity: number
+  workshopName: string
+  productId: number
+  productName: string
 }
 
 export interface Result {

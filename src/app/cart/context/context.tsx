@@ -1,16 +1,14 @@
 "use client"
-import { OrderItems } from "@/app/product/service/type";
+import { OrderItems, ValidOption } from "@/app/product/service/type";
 import { useCartStore } from "@/service/store/cart_store";
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 
 export interface DeliverySelectedType {
-  service: string
-  carrier: string
-  cost: number
-  deliveryTime: number
-  tracking: boolean
-  error: any
-  serviceCode: string
+    productId: number;
+    productName: string;
+    workshopName: string;
+    workshopId: number;
+    validOptions: ValidOption;
 }
 
 export interface CardContextType {
@@ -18,13 +16,13 @@ export interface CardContextType {
         cep: string;
         address_selected: number | undefined;
         product_selected: string[] | undefined;
-        deliverySelected?: DeliverySelectedType | undefined
+        deliverySelected?: DeliverySelectedType[] | undefined
     }
     setInitialValue: Dispatch<SetStateAction<{
         cep: string;
         address_selected: number | undefined;
         product_selected: string[] | undefined;
-        deliverySelected?: DeliverySelectedType | undefined
+        deliverySelected?: DeliverySelectedType[] | undefined
     }>>
     productSelected: () => OrderItems[]
     
@@ -41,7 +39,7 @@ export default function CartProvider({ children }: { children: React.ReactNode }
         cep: "",
         address_selected: undefined,
         product_selected: [],
-        deliverySelected: undefined
+        deliverySelected: []
     });
 
     const cart = useCartStore((state) => state.cart);

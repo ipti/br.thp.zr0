@@ -32,7 +32,7 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
 
-  const [shipping, setShipping] = useState<ShippingGetType | undefined>();
+  const [shipping, setShipping] = useState<ShippingGetType[] | undefined>();
   const [shippingSelect, setShippingSelect] = useState<ValidOption | undefined>()
   const [isLoadingCep, setLoading] = useState(false)
   const [cep, setCep] = useState<string | undefined>()
@@ -159,23 +159,30 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
               <div className="p-1" />
               <div className="gap-3">
                 {isLoadingCep ? <div className="flex flex-column gap-2"><ZSkeleton /><ZSkeleton /><ZSkeleton /></div> : <>
-                  {shipping?.shipments[0]?.result?.validOptions?.map((item, index) => {
-                    return (
-                      <div key={index} className="my-2">
-                        {<div className="flex flex-row justify-content-between m-1">
-                          <div className="flex flex-row align-items-center">
-                            <ZRadioButton value={item} checked={item.cost === shippingSelect?.cost} onChange={(e) => { setShippingSelect(e.target.value) }} />
-                            <div className="p-1" />
-                            <label>{item.carrier}</label>
+                  {shipping.map((shippingItem) => {
+                    return (<>
+                      <h3>{shippingItem.productName} - {shippingItem.workshopName}</h3>
+                      <h5>Quantidade - {shippingItem.quantity}</h5>
+                      {shippingItem?.result?.validOptions?.map((item, index) => {
+                        return (
+                          <div key={index} className="my-2">
+                            {<div className="flex flex-row justify-content-between m-1">
+                              <div className="flex flex-row align-items-center">
+                                <ZRadioButton value={item} checked={item.cost === shippingSelect?.cost} onChange={(e) => { setShippingSelect(e.target.value) }} />
+                                <div className="p-1" />
+                                <label>{item.carrier}</label>
+                              </div>
+                              <div>
+                                <h5>R${item.cost.toFixed(2)}</h5>
+                                <p>{item.deliveryTime} Dias úteis</p>
+                              </div>
+                            </div>}
                           </div>
-                          <div>
-                            <h5>R${item.cost.toFixed(2)}</h5>
-                            <p>{item.deliveryTime} Dias úteis</p>
-                          </div>
-                        </div>}
-                      </div>
-                    )
+                        )
+                      })}
+                    </>)
                   })}
+
                 </>}
               </div></div>}
             <div className="p-2" />

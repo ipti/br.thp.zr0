@@ -121,11 +121,11 @@ export default function Finish({ handleActiveIndex }: { handleActiveIndex: (i: n
                 <div className="col-12 md:col-4">
                     <div className="card_total">
                         <div className="flex flex-row justify-content-between mb-1"><h4>Subtotal:</h4> <h3>R${total.toFixed(2)}</h3></div>
-                        <div className="flex flex-row justify-content-between"><h4>Frete:</h4> {!cartContext?.initialValue.deliverySelected?.cost ? <div className="flex flex-column justify-content-center"><ZSkeleton width="64px" /></div> : <h3>R${cartContext?.initialValue.deliverySelected?.cost?.toFixed(2)}</h3>}</div>
+                        <div className="flex flex-row justify-content-between"><h4>Frete:</h4> {!((cartContext?.initialValue.deliverySelected?.length ?? 0) > 0) ? <div className="flex flex-column justify-content-center"><ZSkeleton width="64px" /></div> : <h3>R${cartContext?.initialValue.deliverySelected?.reduce((sum, item) => sum + item.validOptions.cost, 0).toFixed(2)}</h3>}</div>
 
                         <ZDivider />
                         <div className="flex flex-row justify-content-end">
-                            <h1>R${(total + ""
+                            <h1>R${(total + (cartContext?.initialValue.deliverySelected?.reduce((sum, item) => sum + item.validOptions.cost, 0) ?? 0) +""
                                 // (shippingSelect?.cost ?? 0)).toFixed(2)
                             )}
                             </h1>
@@ -136,7 +136,16 @@ export default function Finish({ handleActiveIndex }: { handleActiveIndex: (i: n
                             <h3>Envio</h3>
                         </div>
                         <div className="p-1" />
-                        {cartContext?.initialValue.deliverySelected?.carrier} {cartContext?.initialValue.deliverySelected?.service} - {cartContext?.initialValue.deliverySelected?.deliveryTime} Dias úteis
+                        {cartContext?.initialValue.deliverySelected?.map((item, index) => {
+                            return (
+                                <div key={index} className="mb-1">
+                                    <h5>{item.productName} - {item.workshopName}</h5>
+                                    <p>
+                                        {item.validOptions.carrier} {item.validOptions.service} - {item.validOptions.deliveryTime} Dias úteis
+                                    </p>
+                                </div>
+                            )
+                        })}
                         <div className="p-3" />
                         <ZButton label="Finalizar" style={{ width: "100%" }} onClick={() => { handleCreateOrder() }} />
                     </div>

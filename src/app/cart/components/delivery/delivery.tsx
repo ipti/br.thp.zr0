@@ -3,7 +3,7 @@ import { ZButton } from "@/components/button/button";
 import ZRadioButton from "@/components/radio_button/radio_button";
 import { useContext, useEffect, useState } from "react";
 import { useFetchAddressOneRequest } from "../../service/query";
-import { CartContext } from "../../context/context";
+import { CartContext, DeliverySelectedType } from "../../context/context";
 import { ProductClientController } from "@/app/product/service/controller";
 import { Address } from "@/app/profile/address/service/type";
 import ZSkeleton from "@/components/skeleton/skeleton";
@@ -13,10 +13,10 @@ export default function Delivery({
 }: {
   handleActiveIndex: (i: number) => void;
 }) {
-  const [shipping, setShipping] = useState<ShippingGetType | undefined>();
+  const [shipping, setShipping] = useState<ShippingGetType[] | undefined>();
   const [shippingSelect, setShippingSelect] = useState<
-    ValidOption | undefined
-  >();
+    DeliverySelectedType[]
+  >([]);
   const [loadingCep, setLoading] = useState(false);
 
   const productClientController = ProductClientController({
@@ -49,9 +49,26 @@ export default function Delivery({
     if (address) handleShippingCalculate(address.cep);
   }, [address]);
 
+  const handleSelectOptions = (data: DeliverySelectedType) => {
+
+    if (shippingSelect?.find((item) => item.productId === data.productId && item.workshopId === data.workshopId)) {
+      const t = shippingSelect?.filter((item) => !(item.productId === data.productId && item.workshopId === data.workshopId))
+
+
+
+      return ([...t, { productId: data.productId, workshopId: data.workshopId, validOptions: data.validOptions, productName: data.productName, workshopName: data.workshopName }])
+    } else {
+      return [...shippingSelect, { productId: data.productId, workshopId: data.workshopId, validOptions: data.validOptions, productName: data.productName, workshopName: data.workshopName }]
+    }
+
+
+  }
+
+  console.log(shippingSelect)
+
   return (
     <div>
-      { (
+      {(
         <div className="bg-black-alpha-10 p-3" style={{ borderRadius: "8px" }}>
           <h3>Frete</h3>
           <div className="p-1" />
@@ -64,38 +81,46 @@ export default function Delivery({
               </div>
             ) : (
               <>
-                {shipping?.shipments[0]?.result?.validOptions?.map(
-                  (item, index) => {
-                    return (
-                      <div key={index} className="my-2">
-                        {
-                          <div className="flex flex-row justify-content-between m-1">
-                            <div className="flex flex-row align-items-center">
-                              <ZRadioButton
-                                value={item}
-                                checked={item.cost === shippingSelect?.cost}
-                                onChange={(e) => {
-                                  setShippingSelect(e.target.value);
-                                  cartContext?.setInitialValue((prev) => ({
-                                    ...prev,
-                                    deliverySelected: e.target.value,
-                                  }));
-                                }}
-                              />
-                              <div className="p-1" />
-                              <label>{item.carrier}</label>
-                            </div>
-                            <div>
-                              <h5>R${item.cost.toFixed(2)}</h5>
-                              <p>{item.deliveryTime} Dias úteis</p>
-                            </div>
+                {shipping?.map((shippingItem) => {
+                  return (<>
+                    <h3>{shippingItem.productName} - {shippingItem.workshopName}</h3>
+                    <h5>Quantidade - {shippingItem.quantity}</h5>
+                    {shippingItem.result?.validOptions?.map(
+                      (item, index) => {
+                        return (
+                          <div key={index} className="my-2">
+                            {
+                              <div className="flex flex-row justify-content-between m-1">
+                                <div className="flex flex-row align-items-center">
+                                  <ZRadioButton
+                                    value={item}
+                                    checked={!!shippingSelect?.find((select) => (select.productId === shippingItem.productId && select.workshopId === shippingItem.workshopId && select.validOptions.cost === item?.cost))}
+                                    onChange={(e) => {
+                                     const newState =  handleSelectOptions({ productId: shippingItem.productId, workshopId: shippingItem.workshopId, validOptions: item, productName: shippingItem.productName, workshopName: shippingItem.workshopName })
+                                     setShippingSelect(newState) 
+                                     cartContext?.setInitialValue((prev) => ({
+                                        ...prev,
+                                        deliverySelected: newState,
+                                      }));
+                                    }}
+                                  />
+                                  <div className="p-1" />
+                                  <label>{item.carrier}</label>
+                                </div>
+                                <div>
+                                  <h5>R${item.cost.toFixed(2)}</h5>
+                                  <p>{item.deliveryTime} Dias úteis</p>
+                                </div>
+                              </div>
+                            }
                           </div>
-                        }
-                      </div>
-                    );
-                  }
-                )}
+                        );
+                      }
+                    )}
+                  </>)
+                })}
               </>
+
             )}
           </div>
         </div>
