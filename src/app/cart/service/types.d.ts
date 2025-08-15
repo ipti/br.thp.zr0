@@ -10,6 +10,8 @@ export interface LoginTypes {
 export interface CartItem {
   productId: number;
   quantity: number;
+  delivery_estimate: Json
+  workshopId: number
 }
 
 export interface CreateOrder {

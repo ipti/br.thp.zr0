@@ -159,8 +159,8 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
               <div className="p-1" />
               <div className="gap-3">
                 {isLoadingCep ? <div className="flex flex-column gap-2"><ZSkeleton /><ZSkeleton /><ZSkeleton /></div> : <>
-                  {shipping.map((shippingItem) => {
-                    return (<>
+                  {shipping.map((shippingItem, index) => {
+                    return (<div key={index}>
                       <h3>{shippingItem.productName} - {shippingItem.workshopName}</h3>
                       <h5>Quantidade - {shippingItem.quantity}</h5>
                       {shippingItem?.result?.validOptions?.map((item, index) => {
@@ -180,7 +180,7 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
                           </div>
                         )
                       })}
-                    </>)
+                    </div>)
                   })}
 
                 </>}

@@ -37,6 +37,8 @@ export default function Finish({ handleActiveIndex }: { handleActiveIndex: (i: n
 
     var address: Address | undefined = data;
 
+    console.log(address)
+
     const handleCreateOrder = () => {
 
         controllerCart.CreateOrder({
@@ -53,7 +55,8 @@ export default function Finish({ handleActiveIndex }: { handleActiveIndex: (i: n
             },
             userId: user?.id ?? 0,
             items: cart.filter(item => cartContext?.initialValue.product_selected?.find(prop => prop === item.id)).map((item) => {
-                return { productId: parseInt(item.id), quantity: item.quantity }
+                const delivery = cartContext?.initialValue?.deliverySelected?.find((delivery) => (delivery.productId === Number(item.id)))
+                return { productId: parseInt(item.id), quantity: item.quantity, delivery_estimate: JSON.stringify(delivery?.validOptions), workshopId: delivery?.workshopId ?? 0  }
             }),
             observation: "",
         })
