@@ -21,7 +21,25 @@ export interface TransfWorkOneType {
   city: City
   transformation_workshop_product: TransformationWorkshopProduct[]
   transformation_workshop_user: TransformationWorkshopUser[]
+  order: TransformationWorkshopOrder[]
 }
+
+export interface TransformationWorkshopOrder {
+  id: number
+  user_fk: number
+  workshop_fk: number
+  status: string
+  total_amount: number
+  createdAt: string
+  updatedAt: string
+  payment_status: string
+  payment_method: any
+  notes: string
+  _count: {
+    order_items: number
+  }
+}
+
 
 export interface State {
   id: number

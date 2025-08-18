@@ -20,6 +20,24 @@ export const requestTransformationWorkshopOne = (idOne?: string) => {
   return []
 };
 
+export const requestOrdersTransformationWorkshopOne = (idOne?: string) => {
+  let path = "/orders-bff/tw/" + idOne;
+  if (idOne) {
+    return http
+      .get(path)
+      .then((response) => response.data)
+      .catch((err) => {
+        if (err.response.status === 401) {
+          logout();
+          window.location.reload();
+        }
+        throw err;
+      });
+  }
+
+  return []
+};
+
 export const requestAddUserTransformationWorkshop = (body: AddUserTransfWorkType ) => {
   let path = "/transformation-workshop-user-bff/add-user";
 
