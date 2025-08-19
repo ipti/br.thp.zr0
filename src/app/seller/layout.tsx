@@ -25,7 +25,7 @@ export default function Seller({ children }: { children: React.ReactNode }) {
       {
         label: "Pedidos da OT",
         icon: <i className="pi pi-receipt"></i>,
-        link: "/seller/product",
+        link: "/seller/transformation-workshop/orders",
       },
       {
         label: "Produtos da OT",

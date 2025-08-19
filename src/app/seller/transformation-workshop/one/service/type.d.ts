@@ -35,6 +35,7 @@ export interface TransformationWorkshopOrder {
   payment_status: string
   payment_method: any
   notes: string
+  uid: string
   _count: {
     order_items: number
   }

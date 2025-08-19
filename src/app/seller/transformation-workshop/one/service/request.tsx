@@ -16,8 +16,6 @@ export const requestTransformationWorkshopOne = (idOne?: string) => {
         throw err;
       });
   }
-
-  return []
 };
 
 export const requestOrdersTransformationWorkshopOne = (idOne?: string) => {

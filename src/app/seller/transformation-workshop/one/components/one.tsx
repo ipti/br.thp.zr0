@@ -18,11 +18,13 @@ export default function TransformationWorkshopOneComponent() {
     setId(idOtParam ?? getIdTw());
   }, [searchParams]);
 
-  const { data: transfWorkRequest } = useFetchRequestTransformationWorkshopOne(id);
-
+  
+  const { data: transfWorkRequest, isLoading } = useFetchRequestTransformationWorkshopOne(id);
+  
+  console.log(transfWorkRequest)
   const transfWork: TransfWorkOneType | undefined = transfWorkRequest;
 
-  // if (!id) return window;
+  if (isLoading) return <div>Carregando...</div>;
 
   return (
     <div>

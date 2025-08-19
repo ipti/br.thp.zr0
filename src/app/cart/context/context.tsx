@@ -9,6 +9,7 @@ export interface DeliverySelectedType {
     workshopName: string;
     workshopId: number;
     validOptions: ValidOption;
+    quantity: number
 }
 
 export interface CardContextType {
