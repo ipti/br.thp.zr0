@@ -53,15 +53,10 @@ export default function Delivery({
 
     if (shippingSelect?.find((item) => item.productId === data.productId && item.workshopId === data.workshopId)) {
       const t = shippingSelect?.filter((item) => !(item.productId === data.productId && item.workshopId === data.workshopId))
-
-
-
       return ([...t, { productId: data.productId, workshopId: data.workshopId, validOptions: data.validOptions, productName: data.productName, workshopName: data.workshopName, quantity: data.quantity  }])
     } else {
       return [...shippingSelect, { productId: data.productId, workshopId: data.workshopId, validOptions: data.validOptions, productName: data.productName, workshopName: data.workshopName, quantity: data.quantity }]
     }
-
-
   }
 
   console.log(shippingSelect)

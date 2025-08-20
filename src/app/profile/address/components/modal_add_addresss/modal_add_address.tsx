@@ -12,12 +12,12 @@ import { useFetchUserToken } from "@/service/global_request/query";
 import { UserGlobal } from "@/service/global_request/type";
 
 
-export default function ModalAddressCustomer({visible, onHide}:{visible: boolean, onHide: any}) {
+export default function ModalAddressCustomer({ visible, onHide }: { visible: boolean, onHide: any }) {
 
     const { data: userRequest, isLoading } = useFetchUserToken()
 
     const user: UserGlobal | undefined = userRequest
-     
+
 
     const controllerAddressCustomer = ControllerAddressCustomer()
 
@@ -30,9 +30,9 @@ export default function ModalAddressCustomer({visible, onHide}:{visible: boolean
         cep: Yup.string()
             .required("Campo Obrigatório"),
         address: Yup.string()
-            .required("Campo Obrigatório"),   
+            .required("Campo Obrigatório"),
         number: Yup.string()
-            .required("Campo Obrigatório"),  
+            .required("Campo Obrigatório"),
         complement: Yup.string(),
         neighborhood: Yup.string()
             .required("Campo Obrigatório"),
@@ -44,7 +44,7 @@ export default function ModalAddressCustomer({visible, onHide}:{visible: boolean
 
 
     return (
-        <ZDialog visible={visible} onHide={onHide}>
+        <ZDialog visible={visible} onHide={onHide} header={"Adicionar endereço de entrega"} className="w-10 md:w-6">
             <Formik initialValues={{
                 name: "",
                 phone: "",
@@ -55,20 +55,20 @@ export default function ModalAddressCustomer({visible, onHide}:{visible: boolean
                 neighborhood: "",
                 city: undefined,
                 state: undefined,
-            }} onSubmit={(values) => { 
+            }} onSubmit={(values) => {
                 controllerAddressCustomer.CreateAddressCustomerAction({
-                address: values.address,
-                cep: values.cep,
-                name: values.name,
-                neighborhood: values.neighborhood,
-                number: values.number,
-                phone: values.phone,
-                complement: values.complement,
-                stateId: values.state,
-                cityId: values.city,
-                customerId: user?.customer.id ?? 1
-            })
-            onHide()
+                    address: values.address,
+                    cep: values.cep,
+                    name: values.name,
+                    neighborhood: values.neighborhood,
+                    number: values.number,
+                    phone: values.phone,
+                    complement: values.complement,
+                    stateId: values.state,
+                    cityId: values.city,
+                    customerId: user?.customer.id ?? 1
+                })
+                onHide()
             }} validationSchema={schema}>
                 {({ values, handleChange, errors, touched, setFieldValue }) => {
                     return (

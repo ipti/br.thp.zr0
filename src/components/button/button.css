@@ -1,11 +1,11 @@
 .p-button {
-    color: #ffffff;
+    color: var(--primary-color-text);
     background: var(--primary-color);
     border: 1px solid var(--primary-color);
     padding: 0.5rem 1rem;
     font-size: 1rem;
     transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
-    border-radius: 6px;
+    /* border-radius: 6px; */
     padding-block:0.5rem;
     padding-inline: 0.75rem;
     display: flex;
@@ -15,15 +15,15 @@
 }
 
 .p-button:not(:disabled):hover {
-    background: #0d89ec;
-    color: #ffffff;
-    border-color: #0d89ec;
+    background: var(--hover-primary-color);
+    color: var(--primary-color-text);
+    border-color: var(--hover-primary-color);
 }
 
 .p-button:not(:disabled):active {
-    background: #0b7ad1;
-    color: #ffffff;
-    border-color: #0b7ad1;
+    background: var(--hover-primary-color);
+    color: var(--primary-color-text);
+    border-color: var(--hover-primary-color);
 }
 
 .p-button.p-button-outlined {

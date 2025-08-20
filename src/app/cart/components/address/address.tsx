@@ -16,6 +16,9 @@ export default function Address({
   handleActiveIndex: (i: number) => void;
 }) {
 
+    const { initialValue } = useContext(
+      CartContext
+    ) as CardContextType;
 
   const [visibleAddAddress, setVisibleAddAddress] = useState(false)
 
@@ -116,7 +119,7 @@ export default function Address({
               handleActiveIndex(0);
             }}
           />
-          <ZButton label="Continuar" onClick={() => { handleActiveIndex(2) }} />
+          <ZButton label="Continuar" disabled={!initialValue.address_selected} onClick={() => { handleActiveIndex(2) }} />
         </div>
         {/* {addingAddress()} */}
         <ModalAddressCustomer visible={visibleAddAddress} onHide={() => setVisibleAddAddress(!visibleAddAddress)} />

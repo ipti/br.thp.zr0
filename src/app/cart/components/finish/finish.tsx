@@ -88,10 +88,10 @@ export default function Finish({
       <div className="p-2" />
       <p>Confirme os detalhes do seu pedido antes de finalizar.</p>
       <div className="p-2" />
-      <div className="grid">
-        <div className="col-12 md:col-8">
           <h4>Faturamento</h4>
           <div className="p-2" />
+      <div className="grid">
+        <div className="col-12 md:col-8">
           {!isLoading && <CardPerson item={user!} isEdit />}
           <div className="p-2" />
           <h4>Endereço selecionado</h4>

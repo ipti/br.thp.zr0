@@ -21,10 +21,17 @@ export default function TransformationWorkshopOneComponent() {
   
   const { data: transfWorkRequest, isLoading } = useFetchRequestTransformationWorkshopOne(id);
   
-  console.log(transfWorkRequest)
   const transfWork: TransfWorkOneType | undefined = transfWorkRequest;
 
   if (isLoading) return <div>Carregando...</div>;
+
+  if(!transfWorkRequest){
+    return (
+      <>
+        Sem oficina de transformação
+      </>
+    )
+  }
 
   return (
     <div>
