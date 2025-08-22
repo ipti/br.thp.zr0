@@ -1,34 +1,55 @@
-.container_about {
-    background-color: #F07724;
-      position: relative; /* garante que elementos absolutos fiquem dentro */
-  overflow: hidden;  
-    min-height: 1200px;
-    z-index: 1;
+/* Container geral da seção */
+.section-sobre {
+  padding: 2rem 1rem;
 }
 
-.container_verde {
-  position: absolute;
+/* Centraliza e limita largura */
+.section-sobre .content {
+  max-width: 900px; /* equivalente ao lg:w-9 */
+  margin: 0 auto;
   width: 100%;
-  height: 100%;
-  z-index: 100; /* fundo, atrás de tudo */
-  background-image: url("../../../assets/img/verde_home.png"); /* se estiver em /public */
-  background-size: 100% 800px; /* ou 'cover', conforme necessário */
-  background-repeat: no-repeat;
 }
 
-.about_text {
-    z-index: 200;
-    position: absolute;
+/* Grid base */
+.section-sobre .grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
 }
 
-.about_text p {
-    font-family: 'hurme-geometric-sans-1', sans-serif;
-    font-size: 20px;
-    font-weight: 400;
-    margin: 0 8px;
+/* Responsivo para duas colunas */
+@media (min-width: 768px) {
+  .section-sobre .grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
-.about_text h1 {
-    font-family: 'hitv-demo', sans-serif;
-    font-size: 64px;
-    font-weight: 700;
+
+/* Título */
+.section-sobre h2 {
+  font-size: 2.25rem; /* equivalente a text-4xl */
+  margin-bottom: 1rem;
+}
+
+/* Parágrafos */
+.section-sobre p {
+  color: #6b7280; /* equivalente a text-600 */
+  line-height: 1.75rem; /* equivalente a line-height-3 */
+  margin: 0;
+}
+
+/* Botão */
+.section-sobre .btn-sobre {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid #d1d5db; /* border-400 */
+  color: #6b7280;
+  border-radius: 0.5rem;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.section-sobre .btn-sobre:hover {
+  background-color: #f9fafb; /* surface-50 */
 }
