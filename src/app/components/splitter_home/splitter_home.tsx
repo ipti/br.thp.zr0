@@ -10,7 +10,9 @@ export default function SplitterHome() {
     return (
         <div className="container_splitter_home">
             <div className="container_logo">
-                <Image alt="Logo white" src={logo_white} width={256} height={256} />
+                <Image alt="Logo white" src={logo_white} width={128} height={128} />
+                <h1>Transformando plástico em{"\n"}</h1>
+                <h1>em oportunidades</h1>
             </div>
             <div className="h-full">
                 <ZSplitter className="h-full">

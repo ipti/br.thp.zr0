@@ -6,6 +6,10 @@
   --primary-color: black;
   --hover-primary-color: rgba(0, 0, 0, 0.752);
   --primary-color-text: #ffffff;
+  --text-base: 14px;
+  --text-2xl: 18px;
+  --text-xl: 16px
+
   :root {
     --blue-50: #f5f9ff;
     --blue-100: #d0e1fd;
@@ -127,7 +131,7 @@
     --primary-700: #047f94;
     --primary-800: #036475;
     --primary-900: #024955;
-}
+  }
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -142,19 +146,20 @@
   }
 } */
 
-@font-face {
+/* @font-face {
   font-family: 'hitv-demo';
   src: url('../assets/font/HiTV.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
-
+  */
 @font-face {
-  font-family: 'hurme-geometric-sans-1';
-  src: url('../assets/font/HurmeGeometricSans1.otf') format('truetype');
+  font-family: 'Libre Baskerville';
+  src: url('../assets/font/LibreBaskerville-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
+
 
 
 html,
@@ -162,12 +167,56 @@ body {
   max-width: 100vw;
   height: 100%;
   overflow-x: hidden;
+  font-family: 'Libre Baskerville', serif;
+
+}
+
+h1 {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  line-height: 1.5;
+  font-family: 'Libre Baskerville', serif;
+}
+
+h2 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.5;
+  font-family: 'Libre Baskerville', serif;
+}
+
+h3 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: 1.5;
+  font-family: 'Libre Baskerville', serif;
+}
+
+h4 {
+  font-size: var(--text-base);
+  font-weight: 600;
+  line-height: 1.5;
+  font-family: 'Libre Baskerville', serif;
+}
+
+p {
+  font-size: var(--text-base);
+  font-weight: normal;
+  line-height: 1.5;
+  font-family: 'Libre Baskerville', serif;
+}
+
+label {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+  font-family: 'Libre Baskerville', serif;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Inter var, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol;
+  /* font-family: Inter var, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

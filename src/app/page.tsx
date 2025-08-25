@@ -5,6 +5,8 @@ import Impact from "./components/impact/impact";
 import Product from "./components/product/product";
 import SplitterHome from "./components/splitter_home/splitter_home";
 import VideoComponet from "./components/video/video";
+import Footer from "./components/footer/footer";
+import Gallery from "./components/gallery/gallery";
 
 
 
@@ -23,16 +25,16 @@ export default async function Home() {
       <VideoComponet />
       <Impact />
       <div className="p-4">
-        <div className="grid">
-          {product?.data?.map((item, index) => {
-            return (
-              <div className="col-12 md:col-4" key={index} >
-                <Product item={item} />
-              </div>
-            )
-          })}
-        </div>
+        {product?.data?.map((item, index) => {
+          return (
+            <div key={index} >
+              <Product item={item} />
+            </div>
+          )
+        })}
       </div>
+      <Gallery />
+      <Footer />
     </div>
 
   );

@@ -2,17 +2,12 @@
 import { Providers } from "@/service/provider";
 import { useCartStore } from "@/service/store/cart_store";
 import Cookies from 'js-cookie';
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Popover } from "react-tiny-popover";
-import bag from "../../assets/img/bag.svg";
-import logo from "../../assets/img/ZR0_logotipo.png";
-import ZBadge from "../badge/badge";
-import CartDialog from "./cart_dialog/cart_dialog";
+import zioLogo from '../../assets/img/ZR0_logotipo.png';
 import "./header.css";
-import LoginModal from "./login/login_modal";
-import MenuUser from "./menu_user/menu_user";
+import Image from "next/image";
+
 
 
 export default function Header() {
@@ -27,54 +22,56 @@ export default function Header() {
 
 
   const cart = useCartStore((state) => state.cart);
+
+  const total = cart.length
   return (
     <Providers>
 
-      <div className="container">
-        <div className="flex flex-column justify-content-center cursor-pointer" onClick={() => { useNavigate.push('/') }}>
-          <Image alt="" src={logo} height={64} />
-        </div>
-        <div className="flex flex-column justify-content-center w-full md:w-29rem">
-          <div className="flex flex-row align-items-center gap-3">
-            <h3>
-              SOBRE
-            </h3>
-            <h3>
-              IMPACTO
-            </h3>
-            <h3>
-              PRODUTOS
-            </h3>
-            <h3>
-              CONTATO
-            </h3>
-          </div>
-          {/* <div className="p-inputgroup flex-1 align-items-center">
-            <ZInputText placeholder="Pesquisar" />
-            <ZButton icon="pi pi-search" className="p-button-warning" />
-          </div> */}
-        </div>
-        <div className="gap-3 flex flex-row align-items-center">
-          <Popover
-            isOpen={menuUser}
-            transform={{ top: 32, }}
-            transformMode='relative'
-            onClickOutside={() => setMenuUser(!menuUser)}
-            positions={['bottom']} // preferred positions by priority
-            content={<MenuUser />}
-          >
-            <div onClick={() => token ? setMenuUser(!menuUser) : setModalLogin(!modalLogin)}>
-              <i className="pi pi-user cursor-pointer" style={{ fontSize: '1.5rem' }} />
-            </div>
-          </Popover>
-          <div className="cursor-pointer p-overlay-badge" style={{ fontSize: '1.5rem' }} onClick={() => setVisibleCart(!visibleCart)}>
-            <Image alt="Bag Icon" src={bag} width={48} height={48} />
-            <ZBadge value={hydrated ? cart.length : 0}></ZBadge>
-          </div>
-        </div>
-        <CartDialog visible={visibleCart} onHide={() => {setVisibleCart(!visibleCart)}} />
-        <LoginModal visible={modalLogin} onHide={() => setModalLogin(!modalLogin)} />
-      </div>
+      <header className="header">
+  <div className="header-container">
+    {/* Left - Navigation */}
+    <div className="header-left">
+      {true && (
+        <button 
+          // onClick={onNavigateToProducts}
+          className="nav-button"
+        >
+          <p>
+          Produtos
+          </p>
+        </button>
+      )}
+    </div>
+
+    {/* Center - Logo */}
+    <div className="header-logo">
+      {true ? (
+        <button className="logo-button">
+          <Image height={32} src={zioLogo} alt="ZIo" />
+        </button>
+      ) : (
+        <img src={zioLogo} alt="ZIo" />
+      )}
+    </div>
+
+    {/* Right - Language and Cart */}
+    <div className="header-right">
+      {/* Desktop Language Selector */}
+      
+      <button 
+        className="cart-button"
+      >
+        <div  className="cart-icon pi pi-shopping-cart" />
+        <span className="cart-text">Carrinho ({total})</span>
+        <span className="cart-text-mobile">({total})</span>
+        {total > 0 && (
+          <span className="cart-badge">{total}</span>
+        )}
+      </button>
+    </div>
+  </div>
+</header>
+
     </Providers>
   );
 }
