@@ -34,6 +34,7 @@ export default function Header() {
       {true && (
         <button 
           // onClick={onNavigateToProducts}
+          onClick={() => useNavigate.push('/product')}
           className="nav-button"
         >
           <p>
@@ -46,7 +47,7 @@ export default function Header() {
     {/* Center - Logo */}
     <div className="header-logo">
       {true ? (
-        <button className="logo-button">
+        <button className="logo-button" onClick={() => useNavigate.push('/')}>
           <Image height={32} src={zioLogo} alt="ZIo" />
         </button>
       ) : (
@@ -60,6 +61,7 @@ export default function Header() {
       
       <button 
         className="cart-button"
+        onClick={() => useNavigate.push('/cart')}
       >
         <div  className="cart-icon pi pi-shopping-cart" />
         <span className="cart-text">Carrinho ({total})</span>

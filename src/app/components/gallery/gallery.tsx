@@ -15,7 +15,7 @@ export default async function Gallery() {
                         return (
                             <div key={index} >
                                 <div className="gallery-item">
-                                    <img src={item.product_image[0].img_url} alt="Galeria 1" />
+                                    <img src={item.product_image![0]?.img_url} alt="Galeria 1" />
                                 </div>
                             </div>
                         )

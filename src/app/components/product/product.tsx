@@ -15,7 +15,7 @@ export default function Product({ item }: { item: ProductType }) {
       <div className="product-image">
         <div className="image-wrapper">
           <img
-            src={item.product_image[0].img_url}
+            src={item.product_image[0]?.img_url}
             alt="Mesa de Centro Artesanal"
           />
         </div>
