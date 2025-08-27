@@ -13,7 +13,7 @@ export default function Products() {
           mas também pelo seu compromisso com o meio ambiente.
         </p>
       </div>
-      <ProductFilters categories={[]} selectedCategory='' searchTerm='' sortBy='' onCategoryChange={()=> {}} onSearchChange={() => {}} onSortChange={() => {}} />
+      {/* <ProductFilters categories={[]} selectedCategory='' searchTerm='' sortBy='' onCategoryChange={()=> {}} onSearchChange={() => {}} onSortChange={() => {}} /> */}
     </div>
   );
 }
