@@ -1,5 +1,5 @@
 export interface ProductOne {
-  id: number
+   id: number
   name: string
   description: string
   price: number
@@ -11,6 +11,7 @@ export interface ProductOne {
   width: number
   length: number
   product_image: ProductImage[]
+  quantity: number
 }
 
 export interface ProductImage {

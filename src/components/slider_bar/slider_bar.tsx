@@ -2,16 +2,18 @@
 import { useRouter } from "next/navigation";
 import { SliderBarType } from "./type";
 import "./slider_bar.css";
+import Image from "next/image";
+import logo from "../../assets/img/ZR0_logotipo.png"
 
 export default function SlideBar({ itens }: SliderBarType) {
   const history = useRouter()
   return (
     <div className="container_slider w-19rem h-full">
       <div className="gap-4">
-        <div className="p-3 cursor-pointer" onClick={() => {history.push("/seller/home")}}>
-          Logo
+        <div className="flex flex-column justify-content-center align-items-center cursor-pointer" onClick={() => { history.push('/seller/home') }}>
+          <Image alt="" src={logo} height={64} />
         </div>
-        <div className="p-3"/>
+        <div className="p-3" />
         {itens?.map((item, index) => {
           return (
             <div

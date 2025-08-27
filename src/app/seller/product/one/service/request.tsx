@@ -1,7 +1,7 @@
 import http from "@/service/axios";
 
 export const requestProductOne = (id: string) => {
-    let path = "/product/"+id;
+    let path = "/product-bff/"+id;
     return http
         .get(path)
         .then((response) => response.data)

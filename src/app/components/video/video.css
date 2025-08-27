@@ -1,0 +1,10 @@
+.video-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Mantém proporção de vídeo */
+  border-radius: 1rem; /* equivalente a border-round-2xl */
+  justify-content: center;
+  overflow: hidden;
+  background-color: #434343; /* cor do tema Prime */
+  cursor: pointer;
+}

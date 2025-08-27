@@ -1,9 +1,8 @@
 import { ZButton } from "@/components/button/button";
 import ZSliderBarDialog from "@/components/sidebar/sidebar";
-import { CartItem, getCart, removeFromCart } from "@/service/localstorage";
-import { Card } from "primereact/card";
+import { useCartStore } from "@/service/store/cart_store";
+import { useRouter } from "next/navigation";
 import { Image } from "primereact/image";
-import { useEffect, useState } from "react";
 
 export default function CartDialog({
   onHide,
@@ -12,17 +11,12 @@ export default function CartDialog({
   visible: boolean;
   onHide: any;
 }) {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const history = useRouter()
+  const cart = useCartStore((state) => state.cart);
+  const removeItem = useCartStore((state) => state.removeItem);
+  // const clear = useCartStore((state) => state.clear);
 
-  useEffect(() => {
-    setCart(getCart());
-  }, []);
-
-  const handleRemove = (id: string) => {
-    removeFromCart(id);
-    setCart(getCart());
-  };
-
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const customHeader = (
     <div className="flex align-items-center gap-2">
       <i className="pi pi-shopping-bag" />
@@ -30,7 +24,6 @@ export default function CartDialog({
     </div>
   );
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   return (
     <ZSliderBarDialog
       position="right"
@@ -41,9 +34,11 @@ export default function CartDialog({
       <div className="h-full flex flex-column justify-content-between">
         <div className="overflow-auto">
         <div className="p-4" />
+        <div className="gap-4">
+
           {cart.map((item) => {
             return (
-              <div key={item.id} className="w-full">
+              <div key={item.id} className="w-full mb-5">
                 <div className="flex gap-4 items-center">
                   <Image
                     src={item.image}
@@ -67,7 +62,7 @@ export default function CartDialog({
                         className="p-button-danger p-button-sm"
                         text
                         rounded
-                        onClick={() => handleRemove(item.id)}
+                        onClick={() => removeItem(item.id)}
                       />
                     </div>
                   </div>
@@ -75,10 +70,12 @@ export default function CartDialog({
               </div>
             );
           })}
+                  </div>
+
         </div>
         <div className="flex flex-column justify-content-end mt-3 gap-2">
           <ZButton label={"Finalizar compra" + ` (R$ ${total.toFixed(2)})`} />
-          <ZButton label="Ver carrinho" text />
+          <ZButton label="Ver carrinho" text onClick={() => {history.push('/cart'); onHide()}} />
         </div>
       </div>
     </ZSliderBarDialog>

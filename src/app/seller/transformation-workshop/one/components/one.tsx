@@ -7,9 +7,10 @@ import MemberTransformationWorkshop from "./members/members";
 import ProductTransformationWorkshop from "./products/products";
 import { getIdTw } from "@/service/cookies";
 import { useEffect, useState } from "react";
+import OrdersTransformationWorkshop from "./orders/orders";
 
 export default function TransformationWorkshopOneComponent() {
-const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
   const [id, setId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -17,11 +18,20 @@ const searchParams = useSearchParams();
     setId(idOtParam ?? getIdTw());
   }, [searchParams]);
 
-  const { data: transfWorkRequest } = useFetchRequestTransformationWorkshopOne(id);
-
+  
+  const { data: transfWorkRequest, isLoading } = useFetchRequestTransformationWorkshopOne(id);
+  
   const transfWork: TransfWorkOneType | undefined = transfWorkRequest;
 
-  // if (!id) return window;
+  if (isLoading) return <div>Carregando...</div>;
+
+  if(!transfWorkRequest){
+    return (
+      <>
+        Sem oficina de transformação
+      </>
+    )
+  }
 
   return (
     <div>
@@ -30,6 +40,9 @@ const searchParams = useSearchParams();
       <div className="p-1" />
       <p>CEP: {transfWork?.cep}</p>
       <div className="p-4" />
+      <div className="mb-2">
+        <OrdersTransformationWorkshop order={transfWork?.order} />
+      </div>
       <div className="grid">
         <div className="col-12 md:col-7">
           <ProductTransformationWorkshop
@@ -41,6 +54,7 @@ const searchParams = useSearchParams();
             members={transfWork?.transformation_workshop_user}
           />
         </div>
+
       </div>
     </div>
   );

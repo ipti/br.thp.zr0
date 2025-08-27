@@ -1,9 +1,9 @@
-import ProductView from "./components/product";
+import Products from "./components/products";
 
 export default function ProductPage(){
     return(
         <div className="p-4">
-            <ProductView />
+            <Products />
         </div>
     )
 }

@@ -1,0 +1,14 @@
+.card-style {
+    padding: 24px;
+}
+
+.card-style p {
+    font-size: 12px;
+    color: var(--text-color);
+}
+
+.text-blue p {
+    color: var(--primary-color);
+    font-weight: 700;
+    cursor: pointer;
+}

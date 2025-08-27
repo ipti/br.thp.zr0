@@ -16,6 +16,22 @@ export const requestTransformationWorkshopOne = (idOne?: string) => {
         throw err;
       });
   }
+};
+
+export const requestOrdersTransformationWorkshopOne = (idOne?: string) => {
+  let path = "/orders-bff/tw/" + idOne;
+  if (idOne) {
+    return http
+      .get(path)
+      .then((response) => response.data)
+      .catch((err) => {
+        if (err.response.status === 401) {
+          logout();
+          window.location.reload();
+        }
+        throw err;
+      });
+  }
 
   return []
 };

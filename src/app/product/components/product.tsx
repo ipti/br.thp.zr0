@@ -1,29 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { Rating } from "primereact/rating";
+import { useFetchrequestProductOne } from "@/app/seller/product/one/service/query";
+import {
+    ProductImage,
+    ProductOne,
+} from "@/app/seller/product/one/service/type";
+import { ZButton } from "@/components/button/button";
+import ZDropdown from "@/components/dropdown/dropdown";
+import ZInputMask from "@/components/input_mask/input_mask";
+import { useCartStore } from "@/service/store/cart_store";
+import { Form, Formik } from "formik";
+import { useSearchParams } from "next/navigation";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
-import { useFetchrequestProductOne } from "@/app/seller/product/one/service/query";
-import { useSearchParams } from "next/navigation";
-import {
-  ProductImage,
-  ProductOne,
-} from "@/app/seller/product/one/service/type";
-import ZInputMask from "@/components/input_mask/input_mask";
-import { ZButton } from "@/components/button/button";
+import { Rating } from "primereact/rating";
+import { useEffect, useState } from "react";
 import { ProductClientController } from "../service/controller";
-import { Form, Formik } from "formik";
-import ZDropdown from "@/components/dropdown/dropdown";
-import { addToCart } from "@/service/localstorage";
+import useCreateArrayUpToNumber from "@/utils/hook/useCreateArrayUpToNumber";
 
 export default function ProductView() {
   const [image, setImage] = useState<ProductImage | undefined>();
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
 
-  const productClientController = ProductClientController();
+  const productClientController = ProductClientController({});
 
   const handleShippingCalculate = (
     cep: string,
@@ -55,6 +55,8 @@ export default function ProductView() {
     }
   }, [productOneRequest, loading]);
 
+  const arrayQuantity = useCreateArrayUpToNumber(productOne?.quantity ?? 1)
+
   return (
     
     <div className="p-4 flex flex-row justify-content-center">
@@ -68,7 +70,6 @@ export default function ProductView() {
               width={350}
               height={350}
               className="w-full max-w-20rem"
-              unoptimized={false} // opcional: remove isso se quiser otimização automática
             />
           </div>
 
@@ -132,7 +133,7 @@ export default function ProductView() {
                       value={values.quantity}
                       name="quantity"
                       onChange={handleChange}
-                      options={[1, 2, 3, 4, 5, 6, 7, 89]}
+                      options={arrayQuantity}
                     />
                   </div>
                   <div className="p-2" />
@@ -152,16 +153,16 @@ export default function ProductView() {
           </Formik>
           {/* Add to Cart */}
           <Button
-            label="Add To Cart"
+            label="Adicionar ao carrinho"
             icon="pi pi-shopping-cart"
             className="p-button-danger w-max"
             onClick={() =>
-              addToCart({
+              useCartStore.getState().addItem({
                 id: productOne?.id.toString() ?? "2",
                 name: productOne?.name ?? "",
                 price: productOne?.price ?? 1,
                 quantity: 1,
-                image: productOne?.product_image[0].img_url ?? "",
+                image: productOne?.product_image![0]?.img_url ?? "",
               })
             }
           />

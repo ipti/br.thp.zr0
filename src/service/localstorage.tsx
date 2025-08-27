@@ -23,14 +23,6 @@ export const logout = () => {
 };
 
 // utils/cartStorage.ts
-export interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string; 
-}
-
 const CART_KEY = "cart_items";
 
 export const getCart = (): CartItem[] => {
