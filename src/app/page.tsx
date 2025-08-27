@@ -12,8 +12,15 @@ import Gallery from "./components/gallery/gallery";
 
 export default async function Home() {
 
-  const product = await http.get("/product");
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product`, {
+    cache: "no-store", // se não quiser cache
+  });
 
+  if (!res.ok) {
+    throw new Error("Erro ao buscar produtos");
+  }
+
+  const product = await res.json();
 
   return (
     <div>
