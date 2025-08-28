@@ -50,7 +50,7 @@ export default function CartProvider({ children }: { children: React.ReactNode }
         const array: OrderItems[] = []
         for (const i of cart) {
             if (initialValue.product_selected?.find(props => props === i.id)) {
-                array.push({ productId: parseInt(i.id), quantity: i.quantity })
+                array.push({ productId: i.id, quantity: i.quantity })
             }
         }
         return array

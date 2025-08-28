@@ -5,14 +5,16 @@ import {
     ProductImage,
     ProductOne,
 } from "@/app/seller/product/one/service/type";
-import useCreateArrayUpToNumber from "@/utils/hook/useCreateArrayUpToNumber";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import './product_one.css'
 import { useCartStore } from "@/service/store/cart_store";
+import useCreateArrayUpToNumber from "@/utils/hook/useCreateArrayUpToNumber";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import './product_one.css';
+import { useFetchrequestProductOneUid } from "../../service/query";
 
 export default function ProductOneComponent() {
     const [quantity, setQuantity] = useState(1)
+    const useNavigate = useRouter();
 
     const params = useParams(); // retorna { id: "123" }
     const id = params.id;
@@ -21,7 +23,7 @@ export default function ProductOneComponent() {
     }
     const [image, setImage] = useState<ProductImage | undefined>();
     const [loading, setLoading] = useState(true);
-    const { data: productOneRequest } = useFetchrequestProductOne(
+    const { data: productOneRequest } = useFetchrequestProductOneUid(
         id
     );
 
@@ -42,7 +44,8 @@ export default function ProductOneComponent() {
             <div className={"wrapper"}>
                 {/* Breadcrumb */}
                 <div className={"breadcrumb"}>
-                    <button onClick={() => { }}>Produtos</button>
+                    <button onClick={() => useNavigate.push('/product')}>Produtos</button>
+                    <i className="pi pi-angle-right" />
                     {/* <ChevronRight size={16} /> */}
                     <span>{productOne?.name}</span>
                 </div>
@@ -51,21 +54,21 @@ export default function ProductOneComponent() {
                 <div className={'detailGrid'}>
                     {/* Image */}
                     <div className={"imageBox"}>
-                        <img
+                        {productOne?.product_image[0].img_url && <img
                             src={productOne?.product_image[0].img_url}
                             alt={productOne?.name}
-                            className={'image'}
-                        />
+                            className="imageProduct"
+                        />}
                     </div>
-
                     {/* Info */}
                     <div className={"info"}>
                         <h1>{productOne?.name}</h1>
-                        <p className={'price'}>{productOne?.price}</p>
+                        <p className={'price'}>R$ {productOne?.price.toFixed(2)}</p>
 
                         <div className={'description'}>
-                            <p>Descrição do produto</p>
-                            <p>Local de produção: Santa Luiza do Itanhy</p>
+                            <p className="mb-2">Descrição do produto</p>
+                            <p>{productOne?.description}</p>
+                            {/* <p>Local de produção: Santa Luiza do Itanhy</p> */}
                         </div>
 
                         {/* Purchase */}
@@ -73,17 +76,16 @@ export default function ProductOneComponent() {
                             <button
                                 onClick={() =>
                                     useCartStore.getState().addItem({
-                                        id: productOne?.id.toString() ?? "2",
+                                        id: productOne?.uid.toString() ?? "2",
                                         name: productOne?.name ?? "",
                                         price: productOne?.price ?? 1,
                                         quantity: quantity,
                                         image: productOne?.product_image![0]?.img_url ?? "",
                                     })
                                 }
-                            // disabled={isAdding}
-                            // className={`${'cartButton'} ${
-                            //   isAdding ? 'cartButtonAdded' : ""
-                            // }`}
+                                // disabled={isAdding}
+                                className={`${'cartButton'} ${false ? 'cartButtonAdded' : ""
+                                    }`}
                             >
                                 {false ? (
                                     <>
@@ -106,7 +108,7 @@ export default function ProductOneComponent() {
                                     <i className="pi pi-minus" />
                                 </button>
                                 <span>{quantity}</span>
-                                <button onClick={() => handleQuantityChange(1)}>
+                                <button disabled={!((productOne?.quantity ?? 0)  > quantity)} onClick={() => handleQuantityChange(1)}>
                                     <i className="pi pi-plus" />
                                 </button>
                             </div>

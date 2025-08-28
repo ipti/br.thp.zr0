@@ -12,6 +12,7 @@ export interface ProductOne {
   length: number
   product_image: ProductImage[]
   quantity: number
+  uid: string
 }
 
 export interface ProductImage {

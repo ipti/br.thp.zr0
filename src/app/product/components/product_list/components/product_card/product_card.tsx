@@ -17,7 +17,7 @@ export const ProductCard = ({
     return (
         <div
             className="card"
-            onClick={() => useNavigate.push('/product/'+product.id)}
+            onClick={() => useNavigate.push('/product/'+product.uid)}
         >
             <div className={"imageWrapper"}>
                 <img src={product.product_image[0].img_url} alt={product.name} className={"image"} />
