@@ -15,10 +15,13 @@ import {
   VerifyEmailReturn,
   VerifyEmailTypes,
 } from "./types";
+import Swal from "sweetalert2";
+import { useCartStore } from "@/service/store/cart_store";
 
 export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
   const exp90 = new Date();
   exp90.setMinutes(exp90.getMinutes() + 90);
+    const removeItem = useCartStore((state) => state.removeItem);
 
   const history = useRouter();
 
@@ -107,19 +110,36 @@ export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
   function CreateOrder(body: CreateOrder) {
     CreateOrderRequest(body)
       .then((data) => {
-        setErros("");
         // if (data.data.userRegistered.role === PerfisEnum.CUSTOMER) {
         //     history.history.push("/")
         // } else {
         //     history.history.push("/seller/home")
         // }
         // window.location.reload()
-        // history.history.push("/")
+       const itemBuy =  body.items.map(item => item)
+
+      for(const i of itemBuy ){
+        removeItem(i.productId)
+      }
+
+        Swal.fire({
+          text:
+          "Pedido realizado com sucesso!",
+          icon: "success"
+        })
+        
+        history.push("/")
+        
       })
       .catch((erros) => {
 
-        console.log(erros.response.data.message);
-        setErros(erros.response.data.message);
+        console.log(erros.response.data.message)
+        Swal.fire({
+          text:
+          erros.response.data.message,
+          icon: "error"
+         
+        })
       });
   }
   return {

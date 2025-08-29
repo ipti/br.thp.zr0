@@ -47,6 +47,7 @@ export default function Finish({
 
   var address: Address | undefined = data;
 
+  console.log(cartContext?.initialValue?.deliverySelected)
 
   const handleCreateOrder = () => {
   

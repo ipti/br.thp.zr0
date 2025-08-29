@@ -40,7 +40,7 @@ export default function ListPage(){
                     }}
                     header="ID Pedido"
                   ></Column>
-                  <Column field="_count.order_items" header="Quantidade"></Column>
+                  <Column field="_count.order_items" header="Quant de itens"></Column>
                   <Column field="payment_status" header="Status de pagamento"></Column>
                   <Column field="status" header="Status do pedido"></Column>
                   <Column field="createdAt" header="Data do pedido"></Column>

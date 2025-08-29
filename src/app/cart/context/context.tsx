@@ -4,7 +4,7 @@ import { useCartStore } from "@/service/store/cart_store";
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 
 export interface DeliverySelectedType {
-    productId: number;
+    productId: string;
     productName: string;
     workshopName: string;
     workshopId: number;

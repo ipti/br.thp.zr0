@@ -109,8 +109,6 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
                           <div key={index} className="my-2">
                             {<div className="flex flex-row justify-content-between m-1">
                               <div className="flex flex-row align-items-center">
-                                <ZRadioButton value={item} checked={item.cost === shippingSelect?.cost} onChange={(e) => { setShippingSelect(e.target.value) }} />
-                                <div className="p-1" />
                                 <label>{item.carrier}</label>
                               </div>
                               <div>

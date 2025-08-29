@@ -72,7 +72,28 @@ export default function ProductOneComponent() {
                         </div>
 
                         {/* Purchase */}
-                        <div className={"actions"}>
+                        {productOne?.quantity === 0 ? <div className={"actions"}>
+                            <button
+                                onClick={() =>
+                                    console.log('Sem estoque')
+                                }
+                                disabled={productOne?.quantity === 0}
+                                className={`${'cartButton'} ${false ? 'cartButtonAdded' : ""
+                                    }`}
+                            >
+                                {false ? (
+                                    <>
+
+                                        Adicionado ao carrinho
+                                    </>
+                                ) : (
+                                    <>
+                                        <i className="pi pi-ban" />
+                                        Sem estoque
+                                    </>
+                                )}
+                            </button>
+                        </div> : <div className={"actions"}>
                             <button
                                 onClick={() =>
                                     useCartStore.getState().addItem({
@@ -83,7 +104,7 @@ export default function ProductOneComponent() {
                                         image: productOne?.product_image![0]?.img_url ?? "",
                                     })
                                 }
-                                // disabled={isAdding}
+                                disabled={productOne?.quantity === 0}
                                 className={`${'cartButton'} ${false ? 'cartButtonAdded' : ""
                                     }`}
                             >
@@ -95,7 +116,7 @@ export default function ProductOneComponent() {
                                 ) : (
                                     <>
                                         <i className="pi pi-shopping-cart" />
-                                        Adicionar ao carrinho
+                                        Adicionado ao carrinho
                                     </>
                                 )}
                             </button>
@@ -108,11 +129,11 @@ export default function ProductOneComponent() {
                                     <i className="pi pi-minus" />
                                 </button>
                                 <span>{quantity}</span>
-                                <button disabled={!((productOne?.quantity ?? 0)  > quantity)} onClick={() => handleQuantityChange(1)}>
+                                <button disabled={!((productOne?.quantity ?? 0) > quantity)} onClick={() => handleQuantityChange(1)}>
                                     <i className="pi pi-plus" />
                                 </button>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 </div>
 
