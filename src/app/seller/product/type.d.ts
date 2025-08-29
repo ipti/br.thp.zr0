@@ -1,6 +1,7 @@
 export type ProductList = ProductType[]
 
 export interface ProductType {
+  uid: string
   id: number
   name: string
   description: string

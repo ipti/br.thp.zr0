@@ -47,6 +47,7 @@ export default function Finish({
 
   var address: Address | undefined = data;
 
+  console.log(cartContext?.initialValue?.deliverySelected)
 
   const handleCreateOrder = () => {
   
@@ -169,11 +170,11 @@ export default function Finish({
               <h1>
                 R$
                 {
-                  total +
+                  (total +
                     (cartContext?.initialValue.deliverySelected?.reduce(
                       (sum, item) => sum + item.validOptions.cost,
                       0
-                    ) ?? 0) +
+                    ) ?? 0)).toFixed(2) +
                     ""
                   // (shippingSelect?.cost ?? 0)).toFixed(2)
                 }

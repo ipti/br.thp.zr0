@@ -1,24 +1,22 @@
 "use client";
 
+import ZInputText from '@/components/input/input';
 import './product_filter.css'
+import { ZButton } from '@/components/button/button';
+import ZIconField from '@/components/icon_field/icon_field';
+import ZInputIcon from '@/components/input_icon/input_icon';
 
 interface ProductFiltersProps {
   searchTerm: string;
-  onSearchChange: (term: string) => void;
   selectedCategory: string;
-  onCategoryChange: (category: string) => void;
   sortBy: string;
-  onSortChange: (sort: string) => void;
   categories: string[];
 }
 
 export function ProductFilters({
   searchTerm,
-  onSearchChange,
   selectedCategory,
-  onCategoryChange,
   sortBy,
-  onSortChange,
   categories,
 }: ProductFiltersProps) {
   return (
@@ -27,14 +25,13 @@ export function ProductFilters({
         <div className="filters-wrapper">
           {/* Search */}
           <div className="search-box">
-            <i className="pi pi-search" />
-            <input
-              type="text"
-              placeholder="Buscar produtos..."
-              value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="search-input"
-            />
+            <ZIconField iconPosition="left">
+              <ZInputIcon className='pi pi-search'  />
+              <ZInputText placeholder="Pesquisar" />
+            </ZIconField>
+            {/* <div className="p-inputgroup flex-1 align-items-center">
+              <ZButton icon="pi pi-search" className="p-button-warning" />
+            </div> */}
           </div>
 
           {/* Filters */}
@@ -46,7 +43,7 @@ export function ProductFilters({
 
             <select
               value={selectedCategory}
-              onChange={(e) => onCategoryChange(e.target.value)}
+              // onChange={(e) => onCategoryChange(e.target.value)}
               className="filters-select"
             >
               <option value="all">Todas</option>
@@ -59,7 +56,7 @@ export function ProductFilters({
 
             <select
               value={sortBy}
-              onChange={(e) => onSortChange(e.target.value)}
+              // onChange={(e) => onSortChange(e.target.value)}
               className="filters-select"
             >
               <option value="name">Nome</option>

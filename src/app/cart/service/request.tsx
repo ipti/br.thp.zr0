@@ -50,3 +50,19 @@ export const getAddressOneRequest = async (
     });
 
 };
+
+
+
+export const requestProductOneQuantity = (id: string) => {
+    let path = "/product-bff/quantity/"+id;
+    return http
+        .get(path)
+        .then((response) => response.data)
+        .catch((err) => {
+            if (err.response.status === 401) {
+               
+            }
+            throw err;
+        });
+
+};

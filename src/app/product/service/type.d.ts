@@ -4,7 +4,7 @@ export interface ShippingCalculateType {
   }
   
   export interface OrderItems {
-    productId: number
+    productId: string
     quantity: number
   }
   

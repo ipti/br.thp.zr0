@@ -1,8 +1,8 @@
 import http from "@/service/axios";
 import { ShippingCalculateType } from "./type";
 
-export const requestProductOne = (id: string) => {
-    let path = "/product-bff/"+id;
+export const requestProductOneUid = (id: string) => {
+    let path = "/product-bff/uid/"+id;
     return http
         .get(path)
         .then((response) => response.data)
@@ -14,6 +14,7 @@ export const requestProductOne = (id: string) => {
         });
 
 };
+
 
 export const ShippingCalculateRequest = async (
     body: ShippingCalculateType 

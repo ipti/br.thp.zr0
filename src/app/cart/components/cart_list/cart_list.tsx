@@ -8,27 +8,25 @@
 import { ProductClientController } from "@/app/product/service/controller";
 import { ShippingGetType, ValidOption } from "@/app/product/service/type";
 import { ZButton } from "@/components/button/button";
-import ZCheckbox from "@/components/checkbox/checkbox";
 import ZDivider from "@/components/divider/divider";
-import ZDropdown from "@/components/dropdown/dropdown";
+import LoginModal from "@/components/header/login/login_modal";
 import ZInputMask from "@/components/input_mask/input_mask";
 import ZRadioButton from "@/components/radio_button/radio_button";
 import ZSkeleton from "@/components/skeleton/skeleton";
 import { useCartStore } from "@/service/store/cart_store";
 import { Form, Formik } from "formik";
 import Cookies from 'js-cookie';
-import { Button } from "primereact/button";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../context/context";
 import "./cart_list.css";
-import LoginModal from "@/components/header/login/login_modal";
+import Item from "./item/item";
 
 
 
 export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i: number) => void }) {
   const [modalLogin, setModalLogin] = useState(false)
   const token = Cookies.get('access_token');
-
+   
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
 
@@ -37,9 +35,7 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
   const [isLoadingCep, setLoading] = useState(false)
   const [cep, setCep] = useState<string | undefined>()
   const cart = useCartStore((state) => state.cart);
-  const removeItem = useCartStore((state) => state.removeItem);
-  const updateItem = useCartStore((state) => state.updateQuantity)
-  const cartContext = useContext(CartContext)
+ const cartContext = useContext(CartContext)
 
   const productClientController = ProductClientController({ setShipping, setShippingSelect });
 
@@ -80,65 +76,10 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
             <>
               <div className="flex flex-column gap-4">
                 {hydrated && cart?.map((item, index) => {
-                  const isSelect = !!cartContext?.initialValue.product_selected?.find(prop => prop === item.id)
+                  
+                  
                   return (
-                    <div
-                      key={index}
-                      className="card_list_item"
-                    >
-                      <div className="flex flex-column justify-content-center">
-                        <ZCheckbox value={item.id} className="mr-4" onChange={() => {
-                          if (isSelect) {
-                            cartContext?.setInitialValue(prev => ({ ...prev, product_selected: prev.product_selected?.filter(props => props !== item.id) }))
-                          } else {
-                            // cartContext?.initialValue.product_selected?.push(item.id)
-                            cartContext?.setInitialValue(prev => ({ ...prev, product_selected: prev.product_selected?.concat(item.id) }))
-                            // cartContext?.setInitialValue(prev => ({...prev, product_selected: prev.product_selected?.push(props => props !== item.id)}))
-                          }
-                        }} checked={isSelect} />
-                      </div>
-                      <div className="flex flex-row align-items-center w-full gap-4 flex-wrap md:flex-nowrap">
-                        <div style={{ position: "relative", }}>
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            width={100}
-                            height={100}
-                            className="border-round object-contain"
-                          />
-                        </div>
-                        <div className="flex-1 min-w-min">
-                          <div className="flex justify-content-between align-items-start flex-wrap">
-                            <div>
-                              <h3 className="m-0">{item.name}</h3>
-                              <div className="p-1" />
-                              <div className="flex flex-row">
-                                <p className="text-sm m-0 text-600">
-                                  R${item.price.toFixed(2)} x {item.quantity}
-                                </p>
-                                <p className="text-sm text-pink-600 font-bold ml-1">
-                                  {" "} R${(item.price * item.quantity).toFixed(2)}
-                                </p>
-                              </div>
-                            </div>
-                            <Button
-                              icon="pi pi-times"
-                              className="p-button-text p-button-sm p-button-danger"
-                              onClick={() => removeItem(item.id)}
-                            />
-                          </div>
-                          <div>
-                            <div className="p-1" />
-                            <ZDropdown
-                              value={item.quantity}
-                              name="quantity"
-                              onChange={(e) => { updateItem(item.id, e.target.value); }}
-                              options={[1, 2, 3, 4, 5, 6, 7, 8, 9]}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <Item item={item} key={index}/>
                   )
                 })}
               </div>
@@ -168,8 +109,6 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
                           <div key={index} className="my-2">
                             {<div className="flex flex-row justify-content-between m-1">
                               <div className="flex flex-row align-items-center">
-                                <ZRadioButton value={item} checked={item.cost === shippingSelect?.cost} onChange={(e) => { setShippingSelect(e.target.value) }} />
-                                <div className="p-1" />
                                 <label>{item.carrier}</label>
                               </div>
                               <div>
@@ -207,6 +146,7 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
                           name="cep"
                           onChange={handleChange}
                           placeholder="Digite o seu CEP"
+                          className="w-full"
                         />
                         <ZButton label="Ok" />
                       </div>

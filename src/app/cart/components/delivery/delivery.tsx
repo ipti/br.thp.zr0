@@ -59,7 +59,6 @@ export default function Delivery({
     }
   }
 
-  console.log(shippingSelect)
 
   return (
     <div>
