@@ -22,16 +22,6 @@ export default function ProfileComponent() {
         icon: true,
         src: "pi pi-map-marker",
         link: "/profile/address"
-    }, {
-        title: "Teste",
-        description: "Teste para a descriç,ão do card da tela de perfil",
-        icon: true,
-        src: "pi pi-user"
-    }, {
-        title: "Teste",
-        description: "Teste para a descriç,ão do card da tela de perfil",
-        icon: true,
-        src: "pi pi-user"
     }]
 
     return (

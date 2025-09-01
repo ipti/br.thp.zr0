@@ -7,12 +7,13 @@ import { useEffect, useState } from "react";
 import zioLogo from '../../assets/img/ZR0_logotipo.png';
 import "./header.css";
 import Image from "next/image";
+import { Popover } from "react-tiny-popover";
+import MenuUser from "./menu_user/menu_user";
 
 
 
 export default function Header() {
   const useNavigate = useRouter();
-  const [visibleCart, setVisibleCart] = useState(false)
   const [modalLogin, setModalLogin] = useState(false)
   const [menuUser, setMenuUser] = useState(false)
   const token = Cookies.get('access_token');
@@ -54,11 +55,20 @@ export default function Header() {
         <img src={zioLogo} alt="ZIo" />
       )}
     </div>
-
-    {/* Right - Language and Cart */}
     <div className="header-right">
-      {/* Desktop Language Selector */}
-      
+        <Popover
+            isOpen={menuUser}
+            transform={{ top: 30, }}
+            transformMode='relative'
+            onClickOutside={() =>  setMenuUser(!menuUser)}
+            positions={['bottom']}
+            containerStyle={{ zIndex: 1000 }}
+            content={<MenuUser />}
+          >
+            <div className="cart-button" onClick={() => token ? setMenuUser(!menuUser) : setModalLogin(!modalLogin)}>
+              <i className="cart-icon pi pi-user cursor-pointer"/>
+            </div>
+          </Popover>
       <button 
         className="cart-button"
         onClick={() => useNavigate.push('/cart')}

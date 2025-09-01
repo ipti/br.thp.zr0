@@ -129,6 +129,7 @@ export default function Delivery({
         />
         <ZButton
           label="Continuar"
+          disabled={shippingSelect.length !== shipping?.length}
           onClick={() => {
             handleActiveIndex(3);
           }}

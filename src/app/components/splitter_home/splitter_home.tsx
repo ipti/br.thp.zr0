@@ -1,10 +1,10 @@
 import ZSplitter from "@/components/splitter/splitter";
-import ZSplitterPanel from "@/components/Splitter_panel/splitter_panel";
 import home_right from "../../../assets/img/home_right.png";
 import home_left from "../../../assets/img/left-home.png";
 import logo_white from "../../../assets/img/logo_white.png";
 import Image from "next/image";
 import "./splitter_home.css";
+import ZSplitterPanel from "@/components/splitter_panel/splitter_panel";
 
 export default function SplitterHome() {
     return (
