@@ -21,6 +21,8 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 ENV NODE_ENV=production
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
 # Cria usuário seguro
 RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
