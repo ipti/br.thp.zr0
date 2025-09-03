@@ -10,6 +10,9 @@ WORKDIR /app
 
 COPY . .
 
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+
 # Instalação limpa e build
 RUN npm ci
 RUN npm run build
