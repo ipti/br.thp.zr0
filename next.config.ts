@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',               // rota que o front chama
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`, // URL real da API (runtime)
+        destination: `${process.env.NEXT_PUBLIC_API_URL ?? "https://zro-api.azurewebsites.net/"}/:path*`, // URL real da API (runtime)
       },
     ];
   },
