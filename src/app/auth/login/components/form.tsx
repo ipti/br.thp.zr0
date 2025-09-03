@@ -41,6 +41,7 @@ export default function FormLogin() {
           initialValues={{ email: "", password: "" }}
           validationSchema={schema}
           onSubmit={(values) => {
+            console.log(process.env.NEXT_PUBLIC_API_URL)
             controllerLogin.LoginAction({
               email: values.email,
               password: values.password,
