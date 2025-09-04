@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 
 const http = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "https://zro-api.azurewebsites.net/",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://zro-api.azurewebsites.net/",
 });
 
 http.interceptors.request.use(async config => {
