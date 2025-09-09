@@ -6,12 +6,9 @@ import VideoComponet from "./components/video/video";
 import Footer from "./components/footer/footer";
 import Gallery from "./components/gallery/gallery";
 import SplitterHome from "./components/splitter_home/splitter_home";
+import { apiUrl } from "@/service/url_api";
 
 export const revalidate = 60; 
-
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://zro-api.azurewebsites.net";
-// a cada 60s revalida, mas serve página estática no meio tempo (ISR)
-// ou use "false" para estático 100% no build
 
 export default async function Home() {
   const res = await fetch(`${apiUrl}/product`, {

@@ -1,13 +1,13 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
+import { apiUrl } from "./url_api";
 
 const http = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://zro-api.azurewebsites.net/",
+  baseURL: apiUrl,
 });
 
 http.interceptors.request.use(async config => {
   const token = Cookies.get('access_token');
-  console.log(http.getUri())
   if (!config.skipAuth && token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

@@ -147,6 +147,7 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
                           onChange={handleChange}
                           placeholder="Digite o seu CEP"
                           className="w-full"
+                          disabled={cart.length === 0}
                         />
                         <ZButton label="Ok" />
                       </div>
