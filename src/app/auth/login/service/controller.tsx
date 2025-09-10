@@ -25,7 +25,7 @@ export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
             } else {
                 history.history.push("/seller/home")
             }
-            window.location.reload()
+            // window.location.reload()
             // history.history.push("/")
         }).catch(erros => {
             console.log(erros.response.data.message)
