@@ -14,6 +14,19 @@ export default function HeaderSeller() {
   const [transformationWorkshop, setTransformationWorkshop] = useState<number | undefined>()
   const { data: transformationWorkshopRequest } = useFetchRequestTransformationWorkshop();
 
+    const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    setIsDesktop(window.innerWidth > 600);
+
+    // Opcional: atualizar no resize
+    function handleResize() {
+      setIsDesktop(window.innerWidth > 600);
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     if (!transformationWorkshop && transformationWorkshopRequest && !getIdTw()) {
 
@@ -49,7 +62,7 @@ export default function HeaderSeller() {
         </div>
       </div>
       <div className="flex flex-row align-items-center justify-content-center mr-3">
-        <ZDropdown value={transformationWorkshop} onChange={(e) => { idTw(e.target.value); setTransformationWorkshop(e.target.value); window.location.reload() }} options={transformationWorkshopRequest} optionLabel="transformation_workshop.name" optionValue="transformation_workshop.id" className="w-14rem" />
+        <ZDropdown style={{display: isDesktop ? "flex" : "none"}} value={transformationWorkshop} onChange={(e) => { idTw(e.target.value); setTransformationWorkshop(e.target.value); window.location.reload() }} options={transformationWorkshopRequest} optionLabel="transformation_workshop.name" optionValue="transformation_workshop.id" className="w-14rem" />
         <div className="flex flex-row gap-2 ml-2 cursor-pointer" onClick={() => { logout(); window.location.reload() }}>
           <div className="flex flex-column justify-content-center">
             <i className="pi pi-sign-out"></i>

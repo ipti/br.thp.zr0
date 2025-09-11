@@ -9,6 +9,7 @@ import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { LoginController } from "../service/controller";
+import Logo from "@/components/logo/logo";
 
 export default function FormLogin() {
   const prime = primeFlex();
@@ -31,11 +32,14 @@ export default function FormLogin() {
     <div
       className={prime.flex + prime.column + prime.justify_center + "h-full"}
     >
+      <Logo />
+
       {erros && (
         <div className={"flex row m-4" + prime.justify_center}>
           <ZMessage severity="error" text={erros} />
         </div>
       )}
+
       <div className={"grid" + prime.justify_center}>
         <Formik
           initialValues={{ email: "", password: "" }}
@@ -113,7 +117,9 @@ export default function FormLogin() {
       <div className={prime.flex + prime.row + prime.justify_center + "text-sign"}>
         <p>Você já tem uma conta? </p>
         <div className="p-1" />
-        <a href="/auth/sign-up">Criar conta</a>
+        <div className={prime.flex + prime.column + prime.justify_center}>
+          <a href="/auth/sign-up">Criar conta</a>
+        </div>
       </div>
       <p className="p-2" />
     </div>

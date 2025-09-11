@@ -3,4 +3,23 @@
     border-radius: 32px;
     padding: 32px;
     width: 512px;
+    @media (max-width: 600px) {
+        width: 90%;
+    }
+}
+
+.login_modal p {
+    
+    @media (max-width: 600px) {
+        font-size: 10px;
+    }
+}
+
+.login_modal a {
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    @media (max-width: 600px) {
+        font-size: 10px;
+    }
 }

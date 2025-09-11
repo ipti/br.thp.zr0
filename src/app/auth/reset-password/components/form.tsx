@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { ResetPasswordController } from "../service/controller";
 import { useSearchParams } from "next/navigation";
+import Logo from "@/components/logo/logo";
 
 export default function FormResetPassword() {
   const prime = primeFlex();
@@ -53,6 +54,7 @@ export default function FormResetPassword() {
     <div
       className={prime.flex + prime.column + prime.justify_center + "h-full"}
     >
+      <Logo/>
       {erros && (
         <div className={"flex row m-4" + prime.justify_center}>
           <ZMessage severity="error" text={erros} />

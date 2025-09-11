@@ -8,6 +8,7 @@ import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { SendEmailRecoveryPasswordController } from "../service/controller";
+import Logo from "@/components/logo/logo";
 
 export default function FormSendEmailRecoveryPassword() {
   const prime = primeFlex();
@@ -27,6 +28,7 @@ export default function FormSendEmailRecoveryPassword() {
     <div
       className={prime.flex + prime.column + prime.justify_center + "h-full"}
     >
+      <Logo/>
       {erros && (
         <div className={"flex row m-4" + prime.justify_center}>
           <ZMessage severity="error" text={erros} />

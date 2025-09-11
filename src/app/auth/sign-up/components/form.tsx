@@ -10,6 +10,7 @@ import { Divider } from "primereact/divider";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { SignUpController } from "../service/controller";
+import Logo from "@/components/logo/logo";
 
 export default function FormSignUp() {
   const prime = primeFlex();
@@ -53,7 +54,8 @@ export default function FormSignUp() {
   return (
     <div
       className={prime.flex + prime.column + prime.justify_center + "h-full"}
-    >
+      >
+      <Logo/>
       {erros && (
         <div className={"flex row m-4" + prime.justify_center}>
           <ZMessage severity="error" text={erros} />
@@ -185,7 +187,9 @@ export default function FormSignUp() {
                   <div className={prime.flex + prime.row + "text-login" + prime.justify_center}>
                     <p>Você já tem uma conta? </p>
                     <div className="p-1" />
+                    <div className={prime.flex + prime.column + prime.justify_center}>
                     <a href="/auth/login">Fazer Login</a>
+                    </div>
                   </div>
               </Form>
             );
