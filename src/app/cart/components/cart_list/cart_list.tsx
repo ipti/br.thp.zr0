@@ -88,13 +88,13 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
         </div>
         <div className="col-12 md:col-4">
           <div className="card_total">
-            <div className="flex flex-row justify-content-between mb-1"><h4>Subtotal:</h4> <h3>R${total.toFixed(2)}</h3></div>
-            <div className="flex flex-row justify-content-between"><h4>Frete:</h4> {isLoadingCep ? <div className="flex flex-column justify-content-center"><ZSkeleton width="64px" /></div> : <h3>R${shippingSelect?.cost?.toFixed(2)}</h3>}</div>
-            <ZDivider />
+            <div className="flex flex-row justify-content-between mb-1"><h4>Total:</h4> <h3>R${total.toFixed(2)}</h3></div>
+            {/* <div className="flex flex-row justify-content-between"><h4>Frete:</h4> {isLoadingCep ? <div className="flex flex-column justify-content-center"><ZSkeleton width="64px" /></div> : <h3>R${shippingSelect?.cost?.toFixed(2)}</h3>}</div> */}
+            {/* <ZDivider />
             <div className="flex flex-row justify-content-end">
               <h1>R${(total + (shippingSelect?.cost ?? 0)).toFixed(2)}</h1>
             </div>
-            <div className="p-2" />
+            <div className="p-2" /> */}
             {shipping && <div className="bg-black-alpha-10 p-3" style={{ borderRadius: "8px" }}>
               <h3>Frete</h3>
               <div className="p-1" />

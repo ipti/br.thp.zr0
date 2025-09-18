@@ -15,9 +15,9 @@ export default async function Home() {
     next: { revalidate: 60 }, // tira cache: "no-store"
   });
 
-  if (!res.ok) {
-    throw new Error("Erro ao buscar produtos");
-  }
+  // if (!res.ok) {
+  //   throw new Error("Erro ao buscar produtos");
+  // }
 
   const product = await res.json();
 

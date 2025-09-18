@@ -4,6 +4,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { TransformationWorkshopOrder } from "../../service/type";
+import { paymentStatus } from "@/utils/enum/payment_status";
+import { formatDateToBR } from "@/utils/hook/format_data";
+import { orderStatus } from "@/utils/enum/order_status";
 
 export default function OrdersTransformationWorkshop({
   order,
@@ -38,9 +41,9 @@ export default function OrdersTransformationWorkshop({
         header="ID Pedido"
       ></Column>
       <Column field="_count.order_items" header="Quant de itens"></Column>
-      <Column field="payment_status" header="Status de pagamento"></Column>
-      <Column field="status" header="Status do pedido"></Column>
-      <Column field="createdAt" header="Data do pedido"></Column>
+      <Column field="payment_status" body={(e) => <>{paymentStatus[e.payment_status]}</>} header="Status de pagamento"></Column>
+      <Column field="status" body={(e) => <>{orderStatus[e.status]}</>} header="Status do pedido"></Column>
+      <Column field="createdAt" body={(e) => <>{formatDateToBR(e.createdAt)}</>} header="Data do pedido"></Column>
       <Column
         body={(e: TransformationWorkshopOrder) => {
           return <>R${e.total_amount}</>;
