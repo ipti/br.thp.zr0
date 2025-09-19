@@ -1,9 +1,9 @@
-import TransformationWorkshopOneComponent from "../transformation-workshop/one/components/one";
+import ListTransformationWorkshop from "../transformation-workshop/components/list";
 
 export default function TransformationWorkshopOne(){
     return(
         <div>
-            <TransformationWorkshopOneComponent />
+            <ListTransformationWorkshop />
         </div>
     )
 }

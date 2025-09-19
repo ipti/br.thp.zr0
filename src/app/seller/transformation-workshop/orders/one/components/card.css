@@ -52,7 +52,7 @@
 .order-section h3 {
   font-size: 16px;
   margin-bottom: 5px;
-  border-left: 4px solid #007bff;
+  border-left: 4px solid var(--primary-color);
   padding-left: 8px;
 }
 
@@ -86,6 +86,5 @@
 .order-footer {
   border-top: 2px solid #eee;
   padding-top: 10px;
-  text-align: right;
   font-weight: bold;
 }

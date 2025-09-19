@@ -8,7 +8,7 @@ import logo from "../../assets/img/ZR0_logotipo.png"
 export default function SlideBar({ itens }: SliderBarType) {
   const history = useRouter()
   return (
-    <div className="container_slider w-19rem h-full">
+    <div className="container_slider w-20rem h-full">
       <div className="gap-4">
         <div className="flex flex-column justify-content-center align-items-center cursor-pointer" onClick={() => { history.push('/seller/home') }}>
           <Image alt="" src={logo} height={64} />
