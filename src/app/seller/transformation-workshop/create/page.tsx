@@ -1,11 +1,12 @@
-import FormCreateTransformationWorkshop from "./components/form";
+// import FormCreateTransformationWorkshop from "./components/form";
+import FormTransformationWorkshop from "../components/form";
 
 export default function CreateTransformationWorkshop() {
 
     
     return(
         <div className="container">
-           <FormCreateTransformationWorkshop />
+           <FormTransformationWorkshop mode="create" />
         </div>
     )
 }
