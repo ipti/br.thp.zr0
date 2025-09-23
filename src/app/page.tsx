@@ -12,8 +12,8 @@ export const revalidate = 60;
 
 export default async function Home() {
   const res = await fetch(`${apiUrl}/product`, {
-    next: { revalidate: 60 }, // tira cache: "no-store"
-  });
+  cache: "no-store", // força a rodar em runtime, não no build
+});
 
   // if (!res.ok) {
   //   throw new Error("Erro ao buscar produtos");
