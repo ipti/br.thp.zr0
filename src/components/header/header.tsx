@@ -25,8 +25,6 @@ export default function Header() {
 
   const cart = useCartStore((state) => state.cart);
 
-  console.log(modalLogin, menuUser)
-
   const total = cart.length
   return (
     <Providers>

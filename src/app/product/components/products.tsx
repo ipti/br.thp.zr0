@@ -1,19 +1,11 @@
-import { apiUrl } from '@/service/url_api';
-import './product.css'
+import { getProducts } from '@/app/middleware/producs_list';
+import './product.css';
 import { ProductFilters } from './product_filter/product_filter';
 import ProductList from './product_list/product_list';
 export default async function Products() {
 
-    const res = await fetch(`${apiUrl}product`, {
-      next: { revalidate: 60 }, // tira cache: "no-store"
-    });
-  
-    // if (!res.ok) {
-    //   throw new Error("Erro ao buscar produtos");
-    // }
-  
-
-  const product = await res.json();
+  const product = await getProducts();
+    
 
   return (
     <div>

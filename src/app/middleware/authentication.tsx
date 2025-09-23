@@ -4,8 +4,6 @@ import { redirect } from 'next/navigation';
 export async function getServerSideProps() {
     const token = Cookies.get('access_token');
 
-    console.log(token)
-
   if (!token) redirect('/auth/login')
 
   return {
