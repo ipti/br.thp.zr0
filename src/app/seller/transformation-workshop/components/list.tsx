@@ -7,7 +7,7 @@ import { useFetchRequestTransformationWorkshop } from "../service/query";
 
 export default function ListTransformationWorkshop() {
   const history = useRouter()
-  const {data: otRequest, isLoading} = useFetchRequestTransformationWorkshop()
+  const { data: otRequest, isLoading } = useFetchRequestTransformationWorkshop()
   const header = (
     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
       <span className="text-xl text-900 font-bold">
@@ -22,13 +22,29 @@ export default function ListTransformationWorkshop() {
       />
     </div>
   );
+
+   const actionBodyTemplate = (rowData: any) => {
+    return (
+      <Button
+        icon="pi pi-pencil"
+        onClick={() => {
+          history.push(
+            `/seller/transformation-workshop/update?idOt=${rowData.transformation_workshop.id}`
+          );
+        }}
+        label="Editar"
+      />
+    );
+  };
+  
   return (
     <div>
-      <DataTable value={otRequest} header={header} onSelectionChange={(e) => history.push("/seller/transformation-workshop/one?idOt="+e.value.transformation_workshop.id)} selectionMode="single" loading={isLoading}>
+      <DataTable value={otRequest} header={header} onSelectionChange={(e) => history.push("/seller/transformation-workshop/one?idOt=" + e.value.transformation_workshop.id)} selectionMode="single" loading={isLoading}>
         <Column field="transformation_workshop.name" header="Nome"></Column>
         <Column field="transformation_workshop.cnpj" header="CNPJ"></Column>
         <Column field="transformation_workshop.city.name" header="Cidade"></Column>
         <Column field="transformation_workshop.state.name" header="Email"></Column>
+        <Column header="Ações" body={actionBodyTemplate}></Column>
       </DataTable>
     </div>
   );

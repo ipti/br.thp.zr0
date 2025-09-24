@@ -37,19 +37,10 @@ export default function TransformationWorkshopOneComponent() {
 
   return (
     <div>
-      <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-        <TitlePage title={transfWork?.name} />
-        <div>
-          <Button
-            icon="pi pi-pencil"
-            onClick={() => {
-              history.push(`/seller/transformation-workshop/update?idOt=${transfWork?.id}`);
-            }}
-            label="Editar"
-          />
-          <div className="p-4" />
-        </div>
-      </div>
+
+      <TitlePage title={transfWork?.name} />
+
+
       <p>CPNJ: {transfWork?.cnpj}</p>
       <div className="p-1" />
       <p>CEP: {transfWork?.cep}</p>

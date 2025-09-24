@@ -25,12 +25,23 @@ export default function ListPage() {
       />
     </div>
   );
-
+  
+   const actionBodyTemplate = (rowData: any) => {
+    return (
+      <Button
+        icon="pi pi-pencil"
+        onClick={() => {
+          history.push(`/seller/category/update?idCategory=${rowData.id}`);
+        }}
+      />
+    );
+  };
 
   return (
     <div>
       <DataTable value={data} header={header} loading={isLoading}>
         <Column field="name" header="Name"></Column>
+        <Column header="Ações" body={actionBodyTemplate}></Column>
       </DataTable>
     </div>
   );
