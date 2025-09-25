@@ -5,10 +5,15 @@ import TitlePage from "@/components/title_page/title_page";
 import { Form, Formik } from "formik";
 import { Button } from "primereact/button";
 import * as Yup from "yup";
-import { CreateCategoryController } from "../services/controller";
+import { CategoryController } from "../service/controller";
 
-export default function FormCreateCategory() {
-  const controllerCreateCategory = CreateCategoryController();
+type FormCategoryProps = {
+  mode: "create" | "update";
+  initialData?: any;
+};
+
+export default function FormCategory({ mode, initialData }: FormCategoryProps) {
+  const controller = CategoryController();
 
   const schema = Yup.object().shape({
     name: Yup.string()
@@ -17,16 +22,21 @@ export default function FormCreateCategory() {
   });
   return (
     <div>
-      <TitlePage title="Criar Categoria" />
+      <TitlePage title={mode === "create" ? "Criar Categoria" : "Editar Categoria"} />
       <Formik
         initialValues={{
-          name: "",
+          name: initialData?.name || "",
         }}
         validationSchema={schema}
         onSubmit={(values) => {
-          controllerCreateCategory.CreateCategoryAction({
-            name: values.name,
-          });
+
+          const payload = { name: values.name };
+
+          if (mode === "create") {
+            controller.CreateCategoryAction(payload);
+          } else {
+            controller.UpdateCategoryAction(initialData.id, payload);
+          }
         }}
       >
         {({ values, handleChange, errors, touched }) => {
@@ -55,7 +65,7 @@ export default function FormCreateCategory() {
                 <div className="p-2" />
               </div>
               <div className="flex flex-row justify-content-end">
-                <Button className="col-12 md:col-4">Criar</Button>
+                <Button className="col-12 md:col-4">{mode === "create" ? "Criar" : "Salvar"}</Button>
               </div>
               <div className="p-2" />
             </Form>

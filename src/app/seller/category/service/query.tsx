@@ -1,6 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { requestCategory } from "./request";
+import { requestCategory, requestCategoryOne } from "./request";
 
 export const useFetchRequestCategory = () => {
     return useQuery(["useRequestCategory"], () => requestCategory());
+};
+
+export const useFetchRequestCategoryOne = (idCategory?: string) => {
+    return useQuery(["useRequestCategoryOne", idCategory], () => requestCategoryOne(idCategory),  {
+      enabled: !!idCategory,
+    });
 };

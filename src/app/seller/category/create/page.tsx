@@ -1,11 +1,10 @@
-import FormCreateCategory from "./components/form";
-
+import FormCategory from "../components/form";
 
 export default async function CreateCategory() {
     
     return(
         <div className="container">
-           <FormCreateCategory />
+           <FormCategory mode="create" />
         </div>
     )
 }
