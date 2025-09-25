@@ -1,6 +1,4 @@
 import FormCategory from "../components/form";
-// import FormCreateCategory from "./components/form";
-
 
 export default async function CreateCategory() {
     

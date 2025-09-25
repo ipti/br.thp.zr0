@@ -27,12 +27,12 @@ export default function ListTransformationWorkshop() {
     return (
       <Button
         icon="pi pi-pencil"
+        className="p-button-rounded p-button-text p-button-plain"
         onClick={() => {
           history.push(
             `/seller/transformation-workshop/update?idOt=${rowData.transformation_workshop.id}`
           );
         }}
-        label="Editar"
       />
     );
   };

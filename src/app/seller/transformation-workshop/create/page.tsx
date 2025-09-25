@@ -1,4 +1,3 @@
-// import FormCreateTransformationWorkshop from "./components/form";
 import FormTransformationWorkshop from "../components/form";
 
 export default function CreateTransformationWorkshop() {

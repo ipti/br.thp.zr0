@@ -49,7 +49,7 @@ export const UpdateCategoryRequest = async (
 ) => {
   return await http
     .patch(
-      "/category",
+      `/category/${id}`,
       body,
     )
 };

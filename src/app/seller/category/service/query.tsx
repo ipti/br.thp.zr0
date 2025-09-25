@@ -7,6 +7,6 @@ export const useFetchRequestCategory = () => {
 
 export const useFetchRequestCategoryOne = (idCategory?: string) => {
     return useQuery(["useRequestCategoryOne", idCategory], () => requestCategoryOne(idCategory),  {
-      enabled: !!idCategory, // Só ativa a query se idCategory for truthy
+      enabled: !!idCategory,
     });
 };
