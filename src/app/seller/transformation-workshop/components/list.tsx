@@ -44,7 +44,7 @@ export default function ListTransformationWorkshop() {
         <Column field="transformation_workshop.cnpj" header="CNPJ"></Column>
         <Column field="transformation_workshop.city.name" header="Cidade"></Column>
         <Column field="transformation_workshop.state.name" header="Email"></Column>
-        <Column header="Ações" body={actionBodyTemplate}></Column>
+        <Column header="Ações" bodyStyle={{ textAlign: 'center' }} body={actionBodyTemplate}></Column>
       </DataTable>
     </div>
   );

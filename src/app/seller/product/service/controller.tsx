@@ -1,13 +1,14 @@
 import { useNavigation } from "@/utils/navigation"
-import { CreateProductRequest } from "./request"
-import { CreateProductTypes } from "./type"
+import { ProductTypes } from "./type"
+import Swal from "sweetalert2";
+import { CreateProductRequest, UpdateProductRequest } from "./request";
 import queryClient from "@/service/react-query"
 
-export function CreateProductController() {
+export function ProductController() {
 
     const history = useNavigation()
 
-    function CreateProductAction(body: CreateProductTypes) {
+    function CreateProductAction(body: ProductTypes) {
 
         const formData = new FormData()
 
@@ -23,16 +24,35 @@ export function CreateProductController() {
 
         body?.files?.forEach((file: any) => {
             formData.append('files', file);
-          });
-        
+        });
+
         CreateProductRequest(formData).then(data => {
             history.history.push("/seller/product")
             queryClient.refetchQueries('userequestProduct')
         }).catch(erros => {
-            
+
         })
     }
-    return {
-        CreateProductAction
+
+    async function UpdateProductAction(id: string, body: ProductTypes) {
+        try {
+            await UpdateProductRequest(id, body);
+            Swal.fire({
+                title: "Produto atualizado com sucesso!",
+                icon: "success",
+            });
+            history.history.push("/seller/product");
+        } catch (error: any) {
+            Swal.fire({
+                title: error.response?.data?.message || "Erro ao atualizar produto",
+                icon: "error",
+            });
+        }
+
     }
+
+    return {
+        CreateProductAction,
+        UpdateProductAction,
+    };
 }

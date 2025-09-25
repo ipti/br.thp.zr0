@@ -1,4 +1,4 @@
-export interface CreateProductTypes {
+export interface ProductTypes {
     name: string,
     price: number,
     idCategory: number,

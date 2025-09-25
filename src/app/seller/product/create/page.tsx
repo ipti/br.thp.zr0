@@ -1,12 +1,12 @@
-import FormCreateTransformationWorkshop from "./components/form";
+import FormProduct from "../components/form";
 
 
-export default async function CreateTransformationWorkshop() {
+export default function CreateProduct() {
 
     
     return(
         <div className="container">
-           <FormCreateTransformationWorkshop />
+           <FormProduct mode="create" />
         </div>
     )
 }

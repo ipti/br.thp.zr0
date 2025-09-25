@@ -22,6 +22,22 @@ export default function ListPage() {
       />
     </div>
   );
+
+  const actionBodyTemplate = (rowData: any) => {
+    return (
+      <Button
+        icon="pi pi-pencil"
+        className="p-button-rounded p-button-text p-button-plain"
+        onClick={() => {
+          history.push(
+            `/seller/product/update?idProduct=${rowData.id}`
+          );
+        }}
+      />
+    );
+  };
+
+
   return (
     <div>
       <DataTable value={data} header={header} loading={isLoading}>
@@ -33,6 +49,7 @@ export default function ListPage() {
         <Column header={"Preço"} body={(e)=>
         <>R${e.price.toFixed(2)}</>
         }></Column>
+        <Column header="Ações" bodyStyle={{ textAlign: 'center' }} body={actionBodyTemplate}></Column>
       </DataTable>
     </div>
   );

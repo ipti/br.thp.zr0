@@ -8,13 +8,18 @@ import TitlePage from "@/components/title_page/title_page";
 import { Form, Formik } from "formik";
 import { Button } from "primereact/button";
 import * as Yup from "yup";
-import { CreateProductController } from "../services/controller";
+import { ProductController } from "../service/controller"
 import ImageDropzone from "@/components/dropfile/dropfile";
 import ZInputTextArea from "@/components/input_text_area/input_text_area";
 
-export default function FormCreateProduct() {
+type FormProductProps = {
+  mode: "create" | "update";
+  initialData?: any;
+};
+
+export default function FormProduct({ mode, initialData }: FormProductProps) {
   const { data: categoryRequest, isLoading } = useFetchRequestCategory()
-  const controllerCreateProduct = CreateProductController();
+  const controller = ProductController();
 
   const schema = Yup.object().shape({
     name: Yup.string()
@@ -25,22 +30,22 @@ export default function FormCreateProduct() {
   });
   return (
     <div>
-      <TitlePage title="Criar Produto" />
+      <TitlePage title={mode === "create" ? "Criar Produto" : "Editar Produto"} />
       <Formik
         initialValues={{
-          name: "",
-          price: 0,
-          category: null,
-          description: "",
-          weight: 0,
-          height: 0,
-          width: 0,
-          length: 0,
+          name: initialData?.name || "",
+          price: initialData?.price || 0,
+          category: initialData?.category_fk || 0,
+          description: initialData?.description || "",
+          weight: initialData?.weight || 0,
+          height: initialData?.height || 0,
+          width: initialData?.width || 0,
+          length: initialData?.length || 0,
           files: undefined
         }}
         validationSchema={schema}
         onSubmit={(values) => {
-          controllerCreateProduct.CreateProductAction({
+           const payload = {
             name: values.name,
             price: values.price ?? 0,
             idCategory: values.category ?? 0,
@@ -50,7 +55,12 @@ export default function FormCreateProduct() {
             length:values.length,
             weight: values.weight,
             width: values.width
-          });
+          }
+          if (mode === "create") {
+            controller.CreateProductAction(payload);
+          } else {
+            controller.UpdateProductAction(initialData.id, payload);
+          }
         }}
       >
         {({ values, handleChange, errors, touched, setFieldValue }) => {
@@ -217,7 +227,7 @@ export default function FormCreateProduct() {
                 <div className="p-4" />
               </div>
               <div className="flex flex-row justify-content-end">
-                <Button className="col-12 md:col-4">Criar</Button>
+                <Button className="col-12 md:col-4">{mode === "create" ? "Criar" : "Salvar"}</Button>
               </div>
               <div className="p-2" />
             </Form>
