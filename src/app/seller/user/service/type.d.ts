@@ -1,4 +1,4 @@
-export interface CreateUserTypes {
+export interface UserTypes {
     email?: string,
     password?: string
     name?: string

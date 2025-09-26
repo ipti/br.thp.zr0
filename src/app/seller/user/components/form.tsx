@@ -11,16 +11,22 @@ import { Form, Formik } from "formik";
 import { Divider } from "primereact/divider";
 import { useEffect } from "react";
 import * as Yup from "yup";
-import { CreateUserController } from "../services/controller";
+import { UserController } from "../service/controller"
+import TitlePage from "@/components/title_page/title_page";
 
-export default function FormCreateUser() {
+type FormUserProps = {
+  mode: "create" | "update";
+  initialData?: any;
+};
+
+export default function FormUser({ mode, initialData }: FormUserProps) {
   const prime = primeFlex();
 
   //   const history = useNavigation();
 
-  const controllerLCreateUser = CreateUserController();
+  const controller = UserController();
 
-  const {data: otRequest} = useFetchRequestTransformationWorkshop()
+  const { data: otRequest } = useFetchRequestTransformationWorkshop()
 
   useEffect(() => {
     logout();
@@ -58,25 +64,33 @@ export default function FormCreateUser() {
     <div
       className={prime.flex + prime.column + prime.justify_center + "h-full"}
     >
+      <TitlePage title={mode === "create" ? "Criar Usuário" : "Editar Usuário"} />
       <div>
         <Formik
           initialValues={{
-            email: "",
+            email: initialData?.email || "",
             password: "",
-            role: "",
-            name: "",
+            role: initialData?.role || "",
+            name: initialData?.name || "",
             confirmpassword: "",
             ot_fk: '',
           }}
           validationSchema={schema}
           onSubmit={(values) => {
-            controllerLCreateUser.CreateUserAction({
+
+            const payload = {
               name: values.name,
               email: values.email,
               role: values.role,
               password: values.password,
               ot_fk: values.ot_fk
-            });
+            };
+
+            if (mode === "create") {
+              controller.CreateUserAction(payload);
+            } else {
+              controller.UpdateUserAction(initialData.id, payload);
+            }
           }}
         >
           {({ values, handleChange, errors, touched }) => {
@@ -213,7 +227,7 @@ export default function FormCreateUser() {
                   <div className="p-2" />
                 </div>
                 <div className="flex flex-row justify-content-end">
-                  <ZButton className="col-12 md:col-4">Criar</ZButton>
+                  <ZButton className="col-12 md:col-4">{mode === "create" ? "Criar " : "Salvar"}</ZButton>
                 </div>
               </Form>
             );

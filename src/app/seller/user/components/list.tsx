@@ -26,6 +26,19 @@ export default function ListPage() {
       />
     </div>
   );
+
+  const actionBodyTemplate = (rowData: any) => {
+    return (
+      <Button
+        icon="pi pi-pencil"
+        className="p-button-rounded p-button-text p-button-plain"
+        onClick={() => {
+          history.push(`/seller/user/update?idUser=${rowData.id}`);
+        }}
+      />
+    );
+  };
+
   return (
     <div>
      
@@ -35,6 +48,7 @@ export default function ListPage() {
         <Column body={(e: User) => {
           return <>{getTranslatedLabelPerfis(e.role)}</>
         }} header="Perfil"></Column>
+        <Column header="Ações" bodyStyle={{ textAlign: 'center' }} body={actionBodyTemplate}></Column>
       </DataTable>
     </div>
   );
