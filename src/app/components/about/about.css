@@ -1,14 +1,15 @@
 /* Container geral da seção */
 .section-sobre {
-    padding: 4rem 1rem;
+    padding: 5rem 1rem;
 }
 
 /* Centraliza e limita largura */
 .section-sobre .content {
-    max-width: 900px;
     /* equivalente ao lg:w-9 */
-    margin: 0 auto;
-    width: 100%;
+    margin: 0 4rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 /* Grid base */
@@ -27,19 +28,20 @@
 
 /* Título */
 .section-sobre h2 {
-    font-size: 2.25rem;
+    font-size: 64px;
     /* equivalente a text-4xl */
-    margin-bottom: 1rem;
 }
 
 /* Parágrafos */
-.section-sobre p {
-    color: #6b7280;
+.section-sobre p {     
     /* equivalente a text-600 */
-    font-weight: normal;
-    line-height: 1.75rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    line-height: 2.3rem;
+    font-size: 24px;
     /* equivalente a line-height-3 */
     margin: 0;
+    
 }
 
 /* Botão */
@@ -47,11 +49,11 @@
     gap: 8px;
     display: flex;
     align-items: center;
-    padding: 0.75rem 1.25rem;
-    border: 1px solid #d1d5db;
+    padding: 0.75rem 2rem;
+    border: 1px solid #000000;
     /* border-400 */
-    color: #6b7280;
-    border-radius: 0.5rem;
+    color: #000000;
+    border-radius: 24px;
     background: transparent;
     cursor: pointer;
     transition: background-color 0.2s ease;

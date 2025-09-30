@@ -1,4 +1,5 @@
 import './impact.css'
+import '../home.css'
 export default function Impact() {
 
     const impactStats = [
@@ -8,22 +9,27 @@ export default function Impact() {
         { number: '10.00', label: 'Avaliação média' }
     ]
     return (
-        <section className="impact-section">
-            <div className="impact-container">
-                <div className="impact-header">
-                    <h2>Impacto</h2>
-                </div>
+        <section className='section-home'>
 
-                <div className="impact-grid">
-                    {impactStats.map((stat, index) => (
-                        <div key={index} className="impact-item">
-                            <div className="impact-number">{stat.number}</div>
-                            <div className="impact-label">{stat.label}</div>
-                        </div>
-                    ))}
+            <div className="impact-section">
+                <div className='flex justify-content-end h-full'>
+
+                
+                <div className="impact-container">
+                    <div className="impact-header">
+                        <h2>Impacto</h2>
+                    </div>
+                    <div className="impact-grid">
+                        {impactStats.map((stat, index) => (
+                            <div key={index} className="impact-item">
+                                <div className="impact-number">{stat.number}</div>
+                                <div className="impact-label">{stat.label}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
                 </div>
             </div>
         </section>
-
     )
 }

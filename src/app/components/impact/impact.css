@@ -2,16 +2,25 @@
   padding: 5rem 2rem;
   background-color: #000;
   color: #fff;
+  height: 100%;
+  /* display: flex;
+  flex-direction: column; 
+  align-items: end; */
 }
 
 .impact-container {
   max-width: 72rem; /* equivalente ao max-w-6xl */
   margin: 0 auto;
+  height: 100%;
+ 
 }
 
 .impact-header {
   text-align: center;
   margin-bottom: 4rem;
+   /* display: flex; */
+  /* flex-direction: column; 
+  align-items: end; */
 }
 
 .impact-header h2 {
