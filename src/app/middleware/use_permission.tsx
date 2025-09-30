@@ -4,7 +4,7 @@ import { Perfil } from "./use_acess_page"
 
 export const Permission = async (token: { name: string, value: string }) => {
 
-    const res = await fetch(`${apiUrl}/user-bff/token`, {
+    const res = await fetch(`${apiUrl}user-bff/token`, {
         method: "GET", // Método da requisição (opcional; GET é o padrão)
         cache: "no-store", // Força rodar em runtime, não no build
         headers: {
@@ -14,8 +14,6 @@ export const Permission = async (token: { name: string, value: string }) => {
     });
 
     const user: User = await res.json()
-
-
 
     return user ? perfis.find(perfil => perfil.role === user.role) : undefined
 }
@@ -64,7 +62,7 @@ const perfis: Perfil[] = [
         }
     },
     {
-        role: 'SELLERMANAGER',
+        role: 'SELLER_MANAGER',
         page: [
             {
                 page: "category",

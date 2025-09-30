@@ -13,5 +13,9 @@ import { SliderBarType } from "@/components/slider_bar/type";
 }
  
  export const acessReadPage = (perfil?:Perfil, page: string ) => {
-    return perfil?.page.find(props => props.page === page)?.read 
+    if(!perfil) return false
+    if(perfil.role === 'ADMIN') return true
+    console.log('Page:', page);
+    console.log(perfil?.page.find(props => page.includes(props.page))?.read )
+    return perfil?.page.find(props => page.includes(props.page))?.read 
  }

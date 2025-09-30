@@ -24,7 +24,7 @@ export default async function Seller({ children }: { children: React.ReactNode }
    const currentPath = await getServerPath();
 
 
-   console.log('Current Path:', currentPath);
+   console.log('Current Path:', profile);
 
   const isAcesss = acessReadPage(profile, currentPath)
   return (
