@@ -13,6 +13,8 @@ export const revalidate = 60;
 export default async function Home() {
   const product = await getProducts();
 
+  console.log(product);
+
   return (
     <div>
       <Header />
@@ -21,13 +23,13 @@ export default async function Home() {
       <VideoComponet />
       <Impact />
       <div className="p-4">
-        {product?.data?.map((item: any, index: number) => (
+        {product?.map((item: any, index: number) => (
           <div key={index}>
             <Product item={item} />
           </div>
         ))}
       </div>
-      <Gallery />
+      {/* <Gallery /> */}
       <Footer />
     </div>
   );

@@ -160,7 +160,19 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Poppins Regular';
+  src: url('../assets/font/Poppins-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
+@font-face {
+  font-family: 'Inter Medium';
+  src: url('../assets/font/Poppins-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 html,
 body {

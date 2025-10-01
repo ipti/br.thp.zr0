@@ -28,20 +28,30 @@
 
 /* Título */
 .section-sobre h2 {
-    font-size: 64px;
+    font-size: 48px;
+
     /* equivalente a text-4xl */
+    @media (max-width: 600px) {
+        font-size: 36px;
+    }
+
 }
 
 /* Parágrafos */
-.section-sobre p {     
+.section-sobre p {
     /* equivalente a text-600 */
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins Regular', sans-serif;
     font-weight: 400;
     line-height: 2.3rem;
     font-size: 24px;
     /* equivalente a line-height-3 */
     margin: 0;
-    
+
+    @media (max-width: 600px) {
+        font-size: 18px;
+        line-height: 1.8rem;
+    }
+
 }
 
 /* Botão */
@@ -51,6 +61,7 @@
     align-items: center;
     padding: 0.75rem 2rem;
     border: 1px solid #000000;
+    font-family: 'Inter Medium', sans-serif;
     /* border-400 */
     color: #000000;
     border-radius: 24px;

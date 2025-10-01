@@ -2,8 +2,10 @@
   position: relative;  /* agora participa do fluxo */
   z-index: 10;         /* fica por cima dos irmãos */
   /* margin-top: -100px;  puxa o vídeo pra cima, sobre o About */
-  margin-bottom: -60vh; 
+  margin-top: -50vh;
+  margin-bottom: -50vh; 
   /* faz ele entrar também no Impact */
+ 
 }
 
 .video-container {
@@ -13,4 +15,48 @@
   border-radius: 1rem;
   background-color: #434343;
   cursor: pointer;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 1rem;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.video-container:hover .overlay {
+  opacity: 1; /* Exibe a overlay quando passar o mouse */
+}
+
+.play-btn {
+  width: 4rem;
+  height: 4rem;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.7);
+  transition: transform 0.2s ease-in-out;
+}
+
+.play-btn:hover {
+  background-color: rgba(255, 255, 255, 1);
+  transform: scale(1.1); /* Efeito de zoom ao passar o mouse */
+}
+
+@media (max-width: 768px) {
+  .play-btn {
+    width: 3.5rem; /* Ajustes em telas menores */
+    height: 3.5rem;
+  }
+
+  .text-4xl {
+    font-size: 1.5rem; /* Botão menor em dispositivos móveis */
+  }
 }

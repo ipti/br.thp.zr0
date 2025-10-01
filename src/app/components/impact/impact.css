@@ -3,15 +3,18 @@
   background-color: #000;
   color: #fff;
   height: 100%;
-  /* display: flex;
+  display: flex;
   flex-direction: column; 
-  align-items: end; */
+  justify-content: end;
+
+  @media (max-width: 1024px) {
+     justify-content: center;
+  }
 }
 
 .impact-container {
   max-width: 72rem; /* equivalente ao max-w-6xl */
   margin: 0 auto;
-  height: 100%;
  
 }
 
