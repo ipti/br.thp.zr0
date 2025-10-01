@@ -1,9 +1,12 @@
 import { ProductType } from '@/app/seller/product/type'
 import './product.css'
+import "../home.css"
+import { DetailsProduct } from './details_product/details_product'
+
 
 export default function Product({ item }: { item: ProductType }) {
   return (
-    <section className="product-page">
+    <section className='product-section'>
       <div className="product-container">
 
         {/* Cabeçalho */}
@@ -14,29 +17,14 @@ export default function Product({ item }: { item: ProductType }) {
           </p>
         </div>
 
-        <div className="product-content">
+        <div className="product-content ">
           {/* Imagem principal */}
           <div className="product-main-image">
             <img
               src={item.product_image[0]?.img_url}
               alt={item.name}
             />
-             <div className="product-details">
-            <h3 className="product-title">{item.name}</h3>
-            <p className="product-price">R$ {item.price?.toLocaleString('pt-BR')}</p>
-            <p className="product-description">{item.description}</p>
-            <p className="product-location">Local de produção: {item.location || "Santa Luzia do Itanhy"}</p>
-
-            {/* Ações */}
-            <div className="product-actions">
-              <button className="btn-buy">Comprar</button>
-              <div className="quantity-control">
-                <button>-</button>
-                <span>1</span>
-                <button>+</button>
-              </div>
-            </div>
-          </div>
+            <DetailsProduct item={item} home />
           </div>
 
           {/* Galeria lateral */}
@@ -48,7 +36,7 @@ export default function Product({ item }: { item: ProductType }) {
           </div>
 
           {/* Detalhes */}
-         
+
 
         </div>
       </div>

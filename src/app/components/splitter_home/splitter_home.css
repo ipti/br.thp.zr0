@@ -66,19 +66,19 @@
     /* cola no topo */
     /* left: -64px; */
     /* ajusta conforme necessário */
-    width: 90px;
+    width: 128px;
     height: 100%;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: top center;
 
-    @media (min-width: 1200px) {
+    /* @media (min-width: 1200px) {
         width: 128px;
-    }
+    } */
 
-     @media (min-width: 600px) {
+     /* @media (min-width: 600px) {
         width: 200px;
-    }
+    } */
 }
 
 .p-splitter .p-splitter-gutter .p-splitter-gutter-handle {

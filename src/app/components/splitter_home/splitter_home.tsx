@@ -14,14 +14,14 @@ export default function SplitterHome() {
                 <div className="container_logo">
                     <Image alt="Logo white" src={logo_white} width={256} height={200} />
                     <h1>Transformando plástico em oportunidades</h1>
-                <button>Conheça nossos produtos</button>
+                    <button>Conheça nossos produtos</button>
                 </div>
                 <div className="h-full">
                     <ZSplitter className="h-full">
                         <ZSplitterPanel className="relative  h-full w-full" size={30}><Image alt="" fill
-                            style={{ objectFit: "cover" }} src={home_left} /></ZSplitterPanel>
-                        <ZSplitterPanel className="relative  h-full w-full" size={70}><Image alt="" fill
                             style={{ objectFit: "cover" }} src={home_right} /></ZSplitterPanel>
+                        <ZSplitterPanel className="relative  h-full w-full" size={70}><Image alt="" fill
+                            style={{ objectFit: "cover" }} src={home_left} /></ZSplitterPanel>
                     </ZSplitter>
                 </div>
             </div>

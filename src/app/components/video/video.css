@@ -2,9 +2,19 @@
   position: relative;  /* agora participa do fluxo */
   z-index: 10;         /* fica por cima dos irmãos */
   /* margin-top: -100px;  puxa o vídeo pra cima, sobre o About */
-  margin-top: -50vh;
-  margin-bottom: -50vh; 
+  margin-top: -30vh;
+  margin-bottom: -60vh; 
   /* faz ele entrar também no Impact */
+
+  @media (max-width: 1024px) {
+    margin-top: 0; /* Ajuste para telas maiores */
+    margin-bottom: 0; 
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 0; /* Remove o margin-top em telas menores */
+    margin-bottom: 0;
+  }
  
 }
 
@@ -13,7 +23,7 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 1rem;
-  background-color: #434343;
+  background-color: #969696;
   cursor: pointer;
 }
 
@@ -41,12 +51,12 @@
   width: 4rem;
   height: 4rem;
   cursor: pointer;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.4);
   transition: transform 0.2s ease-in-out;
 }
 
 .play-btn:hover {
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.5);
   transform: scale(1.1); /* Efeito de zoom ao passar o mouse */
 }
 

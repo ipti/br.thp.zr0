@@ -50,7 +50,7 @@ export default function Header() {
           <div className="header-logo">
             {true ? (
               <button className="logo-button" onClick={() => useNavigate.push('/')}>
-                <Image height={32} src={zioLogo} alt="ZIo" />
+                <Image height={48} src={zioLogo} alt="ZIo" />
               </button>
             ) : (
               <img src={zioLogo} alt="ZIo" />

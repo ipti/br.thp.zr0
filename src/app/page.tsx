@@ -22,13 +22,11 @@ export default async function Home() {
       <About />
       <VideoComponet />
       <Impact />
-      <div className="p-4">
-        {product?.map((item: any, index: number) => (
-          <div key={index}>
-            <Product item={item} />
-          </div>
-        ))}
-      </div>
+      {product?.map((item: any, index: number) => (
+        <div key={index}>
+          <Product item={item} />
+        </div>
+      ))}
       {/* <Gallery /> */}
       <Footer />
     </div>

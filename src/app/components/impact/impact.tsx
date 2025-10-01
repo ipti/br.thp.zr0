@@ -1,6 +1,32 @@
+'use client'
 import './impact.css'
 import '../home.css'
+import { useEffect } from 'react';
 export default function Impact() {
+
+    useEffect(() => {
+    const items = document.querySelectorAll(".impact-item");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Adiciona a classe "active" ao elemento visível
+            entry.target.classList.add("active");
+
+            // Opcional: Desconectar o observer após ativar a animação
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 } // Ativa quando 20% do item está visível
+    );
+
+    items.forEach((item) => observer.observe(item));
+
+    return () => observer.disconnect(); // Cleanup ao desmontar o componente
+  }, []);
+
 
     const impactStats = [
         { number: '200', label: 'Peças transformadas' },

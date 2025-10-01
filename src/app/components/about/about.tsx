@@ -1,7 +1,36 @@
+"use client"
 import "./about.css";
 import '../home.css'
+import { useEffect } from "react";
 
 export default function About() {
+
+   useEffect(() => {
+        // Selecionar todos os elementos que queremos observar
+        const elements = document.querySelectorAll('.section-sobre h2, .section-sobre p');
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        // Quando o elemento é visível no viewport, adiciona a classe "animate"
+                        entry.target.classList.add('animate');
+
+                        // Opcional: Desconectar o observer após a animação ser ativada
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.2 } // Ativa quando 20% do elemento estiver visível
+        );
+
+        // Passa o observer em cada elemento
+        elements.forEach((el) => observer.observe(el));
+
+        // Cleanup do observer ao desmontar o componente
+        return () => observer.disconnect();
+    }, []);
+
   return (
     <section className="section-home">
       <div className="section-sobre">

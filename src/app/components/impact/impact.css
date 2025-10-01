@@ -44,6 +44,18 @@
   animation: fadeUp 0.8s ease forwards;
 }
 
+.impact-item {
+  text-align: center;
+  opacity: 0; /* Inicialmente invisível */
+  transform: translateY(30px); /* Deslocado para baixo */
+  transition: all 0.8s ease; /* Transição do efeito */
+}
+
+.impact-item.active {
+  opacity: 1; /* Fica visível */
+  transform: translateY(0); /* Volta para o lugar */
+}
+
 .impact-item:nth-child(1) {
   animation-delay: 0.1s;
 }

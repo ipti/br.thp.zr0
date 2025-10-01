@@ -25,6 +25,7 @@ export default function VideoComponent() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        // marginTop: "0rem",
       }}
       onClick={handleVideoToggle}
     >
