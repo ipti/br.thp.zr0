@@ -34,7 +34,7 @@ export const DetailsProduct = ({ item, home }: { item: any, home?: boolean }) =>
                                 id: item?.uid.toString() ?? "2",
                                 name: item?.name ?? "",
                                 price: item?.price ?? 1,
-                                quantity: item,
+                                quantity: quantity,
                                 image: item?.product_image![0]?.img_url ?? "",
                             })
                         }

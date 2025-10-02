@@ -4,11 +4,19 @@
   /* margin-top: -100px;  puxa o vídeo pra cima, sobre o About */
   margin-top: -30vh;
   margin-bottom: -60vh; 
+  padding: 8rem 5rem;
   /* faz ele entrar também no Impact */
+
+   /* @media (max-width: 1024px) {
+    margin-top: -20vh;
+    margin-bottom: -40vh; 
+  } */
+
 
   @media (max-width: 1024px) {
     margin-top: 0; /* Ajuste para telas maiores */
     margin-bottom: 0; 
+    padding: 2rem 1rem;
   }
 
   @media (max-width: 768px) {

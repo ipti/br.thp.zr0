@@ -1,3 +1,4 @@
+'use client'
 import { ProductType } from '@/app/seller/product/type'
 import './product.css'
 import "../home.css"
@@ -32,7 +33,7 @@ export default function Product({ item }: { item: ProductType }) {
             {item.product_image.slice(1, 4).map((img, idx) => (
               <img key={idx} src={img.img_url} alt={`Produto ${idx}`} />
             ))}
-            <button className="view-all">Ver todos os produtos →</button>
+            <button className="view-all" onClick={() => window.location.href = `/product`}>Ver todos os produtos →</button>
           </div>
 
           {/* Detalhes */}

@@ -70,7 +70,7 @@ export default function Header() {
                 <i className="cart-icon pi pi-user cursor-pointer" />
               </div>
             </Popover>
-            <button
+            {hydrated && <button
               className="cart-button"
               onClick={() => useNavigate.push('/cart')}
             >
@@ -80,7 +80,7 @@ export default function Header() {
               {total > 0 && (
                 <span className="cart-badge">{total}</span>
               )}
-            </button>
+            </button>}
           </div>
         </div>
       </header>
