@@ -9,7 +9,7 @@ export default async function Products() {
 
   return (
     <div>
-      <div className="text-center py-4 px-6 mb-16 fade-up">
+      <div className="text-center py-5 px-6 mb-4 fade-up">
         <h1 className="text-3xl sm:text-4xl mb-6">Nossos Produtos</h1>
         <p className="text-gray-600 w-6 mx-auto leading-relaxed">
           Explore as últimas tendências em design de interiores com nossa
@@ -19,10 +19,10 @@ export default async function Products() {
           mas também pelo seu compromisso com o meio ambiente.
         </p>
       </div>
-      <ProductFilters categories={[]} selectedCategory='' searchTerm='' sortBy='' />
-      <p className='py-4'>
+      {/* <ProductFilters categories={[]} selectedCategory='' searchTerm='' sortBy='' /> */}
+      {/* <p className='py-4'>
         {product?.length} produtos encontrados
-      </p>
+      </p> */}
       <ProductList filteredAndSortedProducts={product} />
     </div>
   );

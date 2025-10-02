@@ -50,7 +50,7 @@ export default function Header() {
           <div className="header-logo">
             {true ? (
               <button className="logo-button" onClick={() => useNavigate.push('/')}>
-                <Image height={32} src={zioLogo} alt="ZIo" />
+                <Image height={48} src={zioLogo} alt="ZIo" />
               </button>
             ) : (
               <img src={zioLogo} alt="ZIo" />
@@ -70,7 +70,7 @@ export default function Header() {
                 <i className="cart-icon pi pi-user cursor-pointer" />
               </div>
             </Popover>
-            <button
+            {hydrated && <button
               className="cart-button"
               onClick={() => useNavigate.push('/cart')}
             >
@@ -80,7 +80,7 @@ export default function Header() {
               {total > 0 && (
                 <span className="cart-badge">{total}</span>
               )}
-            </button>
+            </button>}
           </div>
         </div>
       </header>

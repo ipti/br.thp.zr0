@@ -11,16 +11,15 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import './product_one.css';
 import { useFetchrequestProductOneUid } from "../../service/query";
+import { ZButton } from "@/components/button/button";
+import { DetailsProduct } from "@/app/components/product/details_product/details_product";
 
 export default function ProductOneComponent() {
-    const [quantity, setQuantity] = useState(1)
     const useNavigate = useRouter();
 
     const params = useParams(); // retorna { id: "123" }
     const id = params.id;
-    const handleQuantityChange = (change: number) => {
-        setQuantity(prev => Math.max(1, prev + change))
-    }
+   
     const [image, setImage] = useState<ProductImage | undefined>();
     const [loading, setLoading] = useState(true);
     const { data: productOneRequest } = useFetchrequestProductOneUid(
@@ -52,7 +51,6 @@ export default function ProductOneComponent() {
 
                 {/* Product Detail */}
                 <div className={'detailGrid'}>
-                    {/* Image */}
                     <div className={"imageBox"}>
                         {productOne?.product_image[0].img_url && <img
                             src={productOne?.product_image[0].img_url}
@@ -60,18 +58,15 @@ export default function ProductOneComponent() {
                             className="imageProduct"
                         />}
                     </div>
-                    {/* Info */}
-                    <div className={"info"}>
+                    {/* <div className={"info"}>
                         <h1>{productOne?.name}</h1>
                         <p className={'price'}>R$ {productOne?.price.toFixed(2)}</p>
 
                         <div className={'description'}>
                             <p className="mb-2">Descrição do produto</p>
                             <p>{productOne?.description}</p>
-                            {/* <p>Local de produção: Santa Luiza do Itanhy</p> */}
                         </div>
 
-                        {/* Purchase */}
                         {productOne?.quantity === 0 ? <div className={"actions"}>
                             <button
                                 onClick={() =>
@@ -121,20 +116,11 @@ export default function ProductOneComponent() {
                                 )}
                             </button>
 
-                            <div className={"quantity"}>
-                                <button
-                                    onClick={() => handleQuantityChange(-1)}
-                                    disabled={quantity <= 1}
-                                >
-                                    <i className="pi pi-minus" />
-                                </button>
-                                <span>{quantity}</span>
-                                <button disabled={!((productOne?.quantity ?? 0) > quantity)} onClick={() => handleQuantityChange(1)}>
-                                    <i className="pi pi-plus" />
-                                </button>
-                            </div>
+                           
                         </div>}
-                    </div>
+                    </div> */}
+                    <DetailsProduct item={productOne} />
+
                 </div>
 
                 {/* Divider */}

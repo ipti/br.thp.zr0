@@ -12,7 +12,7 @@
 }
 
 .header-container {
-  max-width: 80rem;
+  max-width: 100rem;
   /* ~max-w-7xl */
   margin: 0 auto;
   display: flex;
@@ -50,7 +50,7 @@
 }
 
 .header-logo img {
-  height: 2rem;
+  height: 4rem;
   width: auto;
 }
 
