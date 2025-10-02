@@ -21,7 +21,7 @@ export default function ListPage() {
 
    const header = (
       <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-        <span className="text-xl text-900 font-bold">Produtos da OT</span>
+        <span className="text-xl text-900 font-bold">Produtos adicionados</span>
         <ModalAddProduct visible={visible} onHide={() => {setVisible(!visible)}} />
         <ZButton icon="pi pi-plus" onClick={() => {setVisible(!visible)}} label="Adicionar" />
       </div>
