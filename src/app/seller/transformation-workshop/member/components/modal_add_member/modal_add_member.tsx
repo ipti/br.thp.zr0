@@ -7,6 +7,7 @@ import { Form, Formik } from "formik";
 import { useSearchParams } from "next/navigation";
 import * as Yup from "yup";
 import { MemberTransfWorkshopController } from "../../service/controller";
+import { getIdTw } from "@/service/cookies";
 
 export default function ModalAddMember({
   onHide,
@@ -40,7 +41,7 @@ export default function ModalAddMember({
         onSubmit={(values) => {
           memberTransfWorkshopController.AddUserTransfWorkshopAction({
             user_fk: values.user?.id,
-            tw_fk: parseInt(idOt ?? ""),
+            tw_fk: idOt ? parseInt(idOt) : parseInt(getIdTw() ?? ""),
           });
           onHide()
         }}
