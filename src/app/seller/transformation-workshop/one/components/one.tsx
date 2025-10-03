@@ -38,13 +38,41 @@ export default function TransformationWorkshopOneComponent() {
   return (
     <div>
 
-      <TitlePage title={transfWork?.name} />
+      <TitlePage title={'Informações da oficina'} />
 
 
-      <p>CPNJ: {transfWork?.cnpj}</p>
-      <div className="p-1" />
-      <p>CEP: {transfWork?.cep}</p>
-      <div className="p-4" />
+      <div className="mb-4">
+        <div className="grid">
+          <div className="col-12 md:col-6">
+            <p><strong>Nome:</strong> {transfWork?.name}</p>
+          </div>
+          <div className="col-12 md:col-6">
+            <p><strong>CNPJ:</strong> {transfWork?.cnpj}</p>
+          </div>
+
+          <div className="col-12 md:col-6">
+            <p><strong>Endereço:</strong> {transfWork?.address}, {transfWork?.number}</p>
+          </div>
+          <div className="col-12 md:col-6">
+            <p><strong>Bairro:</strong> {transfWork?.neighborhood}</p>
+          </div>
+          <div className="col-12 md:col-6">
+            <p><strong>CEP:</strong> {transfWork?.cep}</p>
+          </div>
+
+          <div className="col-12 md:col-6">
+            <p><strong>Cidade:</strong> {transfWork?.city?.name}</p>
+          </div>
+          <div className="col-12 md:col-6">
+            <p><strong>Estado:</strong> {transfWork?.state?.acronym} - {transfWork?.state?.name}</p>
+          </div>
+          <div className="col-12 md:col-6">
+            <p><strong>Criada em:</strong> {new Date(transfWork?.createdAt).toLocaleDateString()}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="p-2" />
       <div className="mb-2">
         <OrdersTransformationWorkshop order={transfWork?.order} />
       </div>

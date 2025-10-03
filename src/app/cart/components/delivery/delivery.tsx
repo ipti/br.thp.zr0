@@ -30,7 +30,6 @@ export default function Delivery({
     cartContext?.initialValue.address_selected ?? 0
   );
 
-  console.log(cartContext?.initialValue)
   const handleShippingCalculate = (cep?: string) => {
     if (cep) {
       setLoading(true)

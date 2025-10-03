@@ -160,7 +160,19 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Poppins Regular';
+  src: url('../assets/font/Poppins-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
+@font-face {
+  font-family: 'Inter Medium';
+  src: url('../assets/font/Poppins-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 html,
 body {
@@ -237,8 +249,17 @@ flex-direction-column {
   flex-direction: column;
 }
 
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
+}
+
+
+home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  width: 100%;
 }

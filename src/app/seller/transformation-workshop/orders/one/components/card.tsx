@@ -27,7 +27,6 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
     const handleSave = () => {
         controllerOrder.OrderUpdateAction(order.id, { status: status, payment_status: payStatus })
         // aqui você pode chamar sua API (fetch/axios)
-        console.log("Novo status:", status, " | Novo pagamento:", payStatus);
     };
 
     if(!order) return <>Carregando...</>

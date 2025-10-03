@@ -1,17 +1,9 @@
 "use client";
-// import { CartItem } from "@/types/cart";
-// import {
-//   getCart,
-//   removeFromCart,
-//   saveCart,
-// } from "@/utils/cartStorage";
 import { ProductClientController } from "@/app/product/service/controller";
 import { ShippingGetType, ValidOption } from "@/app/product/service/type";
 import { ZButton } from "@/components/button/button";
-import ZDivider from "@/components/divider/divider";
 import LoginModal from "@/components/header/login/login_modal";
 import ZInputMask from "@/components/input_mask/input_mask";
-import ZRadioButton from "@/components/radio_button/radio_button";
 import ZSkeleton from "@/components/skeleton/skeleton";
 import { useCartStore } from "@/service/store/cart_store";
 import { Form, Formik } from "formik";
@@ -25,17 +17,21 @@ import Item from "./item/item";
 
 export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i: number) => void }) {
   const [modalLogin, setModalLogin] = useState(false)
-  const token = Cookies.get('access_token');
-   
   const [hydrated, setHydrated] = useState(false);
-  useEffect(() => setHydrated(true), []);
+  const [token, setToken] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    setHydrated(true);
+    setToken(Cookies.get("access_token"));
+  }, []);
+
 
   const [shipping, setShipping] = useState<ShippingGetType[] | undefined>();
   const [shippingSelect, setShippingSelect] = useState<ValidOption | undefined>()
   const [isLoadingCep, setLoading] = useState(false)
   const [cep, setCep] = useState<string | undefined>()
   const cart = useCartStore((state) => state.cart);
- const cartContext = useContext(CartContext)
+  const cartContext = useContext(CartContext)
 
   const productClientController = ProductClientController({ setShipping, setShippingSelect });
 
@@ -65,6 +61,11 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
     0
   );
 
+
+  if (!hydrated) {
+    return <div className="p-4"><ZSkeleton width="100%" /></div>;
+  }
+
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Seu Carrinho</h2>
@@ -76,11 +77,9 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
             <>
               <div className="flex flex-column gap-4">
                 {hydrated && cart?.map((item, index) => {
-                  
-                  
-                  return (
-                    <Item item={item} key={index}/>
-                  )
+                  return item ? (
+                    <Item item={item} key={index} />
+                  ) : (<div key={index}></div>);
                 })}
               </div>
             </>

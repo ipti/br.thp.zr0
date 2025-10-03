@@ -74,11 +74,11 @@ export default function Item({ item }: { item: CartItem }) {
                             onClick={() => handleQuantityChange(-1)}
                             disabled={quantity <= 1}
                         >
-                            <i className="pi pi-minus" />
+                            -
                         </button>
                         <span>{quantity}</span>
                         <button disabled={!((quantityProduct?.quantity ?? 0) > quantity)} onClick={() => handleQuantityChange(1)}>
-                            <i className="pi pi-plus" />
+                            +
                         </button>
                     </div>
                 </div>

@@ -24,13 +24,12 @@ export default function ListPage() {
 
   var order: OrderlistType[] | undefined = data
 
-  //    const header = (
-  //       <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-  //         <span className="text-xl text-900 font-bold">Produtos da OT</span>
-  //         <ModalAddProduct visible={visible} onHide={() => {setVisible(!visible)}} />
-  //         <ZButton icon="pi pi-plus" onClick={() => {setVisible(!visible)}} label="Adicionar" />
-  //       </div>
-  //     );
+     const header = (
+        <div className="flex flex-wrap align-items-center justify-content-between gap-2">
+          <span className="text-xl text-900 font-bold">Pedidos</span>
+          
+        </div>
+      );
 
 
 
@@ -39,7 +38,8 @@ export default function ListPage() {
     productTransfWorkshopController.UpdateProductTransfWorkshopAction(rowData.id, { quantity: rowData.quantity })
   };
   return (
-    <DataTable editMode="row" dataKey="id" onRowEditComplete={onRowEditComplete} value={order} onSelectionChange={(e) => history.push("/seller/transformation-workshop/orders/one?idOrder="+e.value.id)} selectionMode="single">
+    <>
+    <DataTable editMode="row" header={header} dataKey="id" onRowEditComplete={onRowEditComplete} value={order} onSelectionChange={(e) => history.push("/seller/transformation-workshop/orders/one?idOrder="+e.value.id)} selectionMode="single">
       <Column
         body={(e: TransformationWorkshopOrder) => {
           return <>{e.uid.substring(0, 6)}...</>;
@@ -58,5 +58,6 @@ export default function ListPage() {
         header="Total"
       ></Column>
     </DataTable>
+      </>
   );
 }
