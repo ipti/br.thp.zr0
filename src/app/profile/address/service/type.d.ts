@@ -12,7 +12,7 @@ export interface CreateAddressCustomerType {
 }
 
 
-export type AddressList = Address[]
+export type AddressList = {customer: {address_customer: Address[]}}
 
 export interface Address {
   id: number

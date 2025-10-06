@@ -2,7 +2,7 @@ import http from "@/service/axios";
 import { CreateAddressCustomerType } from "./type";
 
 export const requestGetAddressCustomer = () => {
-     let path = "/address-customer";
+     let path = "/user-bff/address-custumer";
     return http
         .get(path)
         .then((response) => response.data)

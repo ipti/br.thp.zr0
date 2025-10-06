@@ -101,7 +101,7 @@ export default function YourInformationComponents() {
                         email: user?.email ?? "",
                         name: user?.name ?? "",
                         phone: user?.customer.phone ?? "",
-                        birthday: user?.customer.birthday ? new Date(user?.customer.birthday) : "",
+                        birthday: user?.customer.birthday ? new Date(user?.customer.birthday) : new Date(Date.now() - 567648000000),
                         cpf: user?.customer.cpf ?? "",
                         cnpj: user?.customer.cnpj ?? "",
                         trade_name: user?.customer.trade_name ?? "",

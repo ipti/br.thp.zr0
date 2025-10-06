@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import { createAddressBilling, updateAddressBilling, updateCustumer, updateUser } from "./request";
 import { CreateAddressBilling, UpdateCustomerType, UpdateUserType } from "./type";
 
@@ -8,6 +9,10 @@ export function ControllerYourInformation(){
       ) {
         updateCustumer({body: body, id: id})
           .then((data) => {
+            Swal.fire({
+              title: "Dados atualizados com sucesso!",
+              icon: "success",
+            });
           })
           .catch((erros) => {
             console.log(erros.response.data.message);
