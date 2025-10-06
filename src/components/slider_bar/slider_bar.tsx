@@ -1,12 +1,14 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { SliderBarType } from "./type";
-import "./slider_bar.css";
+import { Menu } from "@/app/middleware/use_permission";
 import Image from "next/image";
-import logo from "../../assets/img/ZR0_logotipo.png"
+import { useRouter } from "next/navigation";
+import logo from "../../assets/img/ZR0_logotipo.png";
+import "./slider_bar.css";
 
-export default function SlideBar({ itens }: SliderBarType) {
+export default function SlideBar({ itens }: {itens: Menu[]}) {
   const history = useRouter()
+
+  console.log('itens', itens)
   return (
     <div className="container_slider w-20rem h-full">
       <div className="gap-4">
@@ -24,7 +26,7 @@ export default function SlideBar({ itens }: SliderBarType) {
               }}
             >
               <div className="flex flex-row justify-content-center text-2xl">
-                {item.icon}
+                <i className={item.icon} />
               </div>
               <div className="p-2"></div>
               <div className="flex flex-column justify-content-center">

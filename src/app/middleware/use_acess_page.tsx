@@ -1,6 +1,7 @@
 import { SliderBarType } from "@/components/slider_bar/type";
+import { Profile } from "./use_permission";
 
- export interface Perfil {
+export interface Perfil {
     role: string;
     page: {
         page: string;
@@ -11,11 +12,21 @@ import { SliderBarType } from "@/components/slider_bar/type";
     }[];
     menu?: SliderBarType;
 }
+
+export const acessReadPage = (perfil?: Profile, page: string) => {
+    if (!perfil) return false;
+    if (perfil.role === "ADMIN") return true;
+
+    // Filtra todas que casam
+    const matches = perfil.pages.filter((p) => page.includes(p.page));
+
+    if (matches.length === 0) return false;
+
+    // Escolhe a mais específica (maior comprimento)
+    const bestMatch = matches.reduce((prev, current) =>
+        current.page.length > prev.page.length ? current : prev
+    );
+
+    return bestMatch.read;
+};
  
- export const acessReadPage = (perfil?:Perfil, page: string ) => {
-    if(!perfil) return false
-    if(perfil.role === 'ADMIN') return true
-    console.log('Page:', page);
-    console.log(perfil?.page.find(props => page.includes(props.page))?.read )
-    return perfil?.page.find(props => page.includes(props.page))?.read 
- }

@@ -10,6 +10,7 @@ import Image from "next/image";
 import { Popover } from "react-tiny-popover";
 import MenuUser from "./menu_user/menu_user";
 import LoginModal from "./login/login_modal";
+import { ZButton } from "../button/button";
 
 
 
@@ -34,7 +35,7 @@ export default function Header() {
           {/* Left - Navigation */}
           <div className="header-left">
             {true && (
-              <button
+              <ZButton
                 // onClick={onNavigateToProducts}
                 onClick={() => useNavigate.push('/product')}
                 className="nav-button"
@@ -42,7 +43,7 @@ export default function Header() {
                 <p>
                   Produtos
                 </p>
-              </button>
+              </ZButton>
             )}
           </div>
 
