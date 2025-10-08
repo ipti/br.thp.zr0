@@ -41,8 +41,8 @@ export default function CardPerson({
         <>
           <ZDivider />
           <div className="card-style">
-            <div className="flex flex-row gap-2">
-              <i className="pi pi pi-exclamation-triangle" style={{color: "#eab308"}}></i>
+            <div className="flex flex-row gap-2" onClick={() => window.location.href = `/profile/your_information`}>
+              {!item.customer.billing_address &&<i className="pi pi pi-exclamation-triangle" style={{color: "#eab308"}}></i>}
               <div className="text-blue">
                 <p>Modificar dados de faturamento</p>
               </div>

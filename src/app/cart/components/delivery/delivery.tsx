@@ -74,8 +74,8 @@ export default function Delivery({
               </div>
             ) : (
               <>
-                {shipping?.map((shippingItem) => {
-                  return (<>
+                {shipping?.map((shippingItem, key) => {
+                  return (<div key={key}>
                     <h3>{shippingItem.productName} - {shippingItem.workshopName}</h3>
                     <h5>Quantidade - {shippingItem.quantity}</h5>
                     {shippingItem.result?.validOptions?.map(
@@ -110,7 +110,7 @@ export default function Delivery({
                         );
                       }
                     )}
-                  </>)
+                  </div>)
                 })}
               </>
 

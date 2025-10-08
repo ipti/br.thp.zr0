@@ -9,7 +9,7 @@ export default function CardAddress({ item }: { item: Address }) {
             </h4>
             <div className="p-1" />
             <p>
-                {item.cep} - {item.city.name} - {item.state.acronym}
+                {item.cep} - {item.city?.name} - {item.state?.acronym}
             </p>
             <div className="p-1" />
             <p>

@@ -1,19 +1,18 @@
 "use client";
+import { Address } from "@/app/profile/address/service/type";
 import { ZButton } from "@/components/button/button";
 import ZDivider from "@/components/divider/divider";
 import ZSkeleton from "@/components/skeleton/skeleton";
-import { useCartStore } from "@/service/store/cart_store";
-import { use, useContext, useEffect, useState } from "react";
-import { CartContext } from "../../context/context";
-import { useFetchAddressOneRequest } from "../../service/query";
-import CardAddress from "../card_address/card_address";
-import { Address } from "@/app/profile/address/service/type";
-import { ProductClientController } from "@/app/product/service/controller";
-import { ShippingGetType, ValidOption } from "@/app/product/service/type";
 import { useFetchUserToken } from "@/service/global_request/query";
 import { UserGlobal } from "@/service/global_request/type";
-import CardPerson from "../card_person/card_person";
+import { useCartStore } from "@/service/store/cart_store";
+import { useContext } from "react";
+import Swal from "sweetalert2";
+import { CartContext } from "../../context/context";
 import { CartController } from "../../service/controller";
+import { useFetchAddressOneRequest } from "../../service/query";
+import CardAddress from "../card_address/card_address";
+import CardPerson from "../card_person/card_person";
 
 export default function Finish({
   handleActiveIndex,
@@ -46,8 +45,6 @@ export default function Finish({
   );
 
   var address: Address | undefined = data;
-
-  console.log(cartContext?.initialValue?.deliverySelected)
 
   const handleCreateOrder = () => {
   
@@ -200,15 +197,22 @@ export default function Finish({
                     {item.validOptions.deliveryTime} Dias úteis
                   </p>
                 </div>
-              );
+              ); 
             })}
             <div className="p-3" />
             <ZButton
               label="Finalizar"
               style={{ width: "100%" }}
               onClick={() => {
+                if(!user?.customer?.billing_address?.address){
+                  Swal.fire({
+                    icon: 'warning',
+                    title: 'Atenção',
+                    text: 'Seu endereço de faturamento está incompleto. Por favor, atualize suas informações de faturamento antes de finalizar o pedido.',
+                })
+              } else {
                 handleCreateOrder();
-              }}
+              }}}
             />
           </div>
         </div>

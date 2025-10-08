@@ -59,7 +59,6 @@ export default function TransformationWorkshopOneComponent() {
           <div className="col-12 md:col-6">
             <p><strong>CEP:</strong> {transfWork?.cep}</p>
           </div>
-
           <div className="col-12 md:col-6">
             <p><strong>Cidade:</strong> {transfWork?.city?.name}</p>
           </div>

@@ -179,7 +179,7 @@ body {
   max-width: 100vw;
   height: 100%;
   overflow-x: hidden;
-  font-family: 'Libre Baskerville', serif;
+  font-family: 'Poppins Regular', serif;
 
 }
 
@@ -187,42 +187,42 @@ h1 {
   font-size: var(--text-2xl);
   font-weight: 600;
   line-height: 1.5;
-  font-family: 'Libre Baskerville', serif;
+  font-family: 'Poppins Regular', serif;
 }
 
 h2 {
   font-size: var(--text-xl);
   font-weight: 600;
   line-height: 1.5;
-  font-family: 'Libre Baskerville', serif;
+  font-family: 'Poppins Regular', serif;
 }
 
 h3 {
   font-size: var(--text-lg);
   font-weight: 600;
   line-height: 1.5;
-  font-family: 'Libre Baskerville', serif;
+  font-family: 'Poppins Regular', serif;
 }
 
 h4 {
   font-size: var(--text-base);
   font-weight: 600;
   line-height: 1.5;
-  font-family: 'Libre Baskerville', serif;
+  font-family: 'Poppins Regular', serif;
 }
 
 p {
   font-size: var(--text-base);
   font-weight: normal;
   line-height: 1.5;
-  font-family: 'Libre Baskerville', serif;
+  font-family: 'Poppins Regular', serif;
 }
 
 label {
   font-size: var(--text-base);
   font-weight: var(--font-weight-medium);
   line-height: 1.5;
-  font-family: 'Libre Baskerville', serif;
+  font-family: 'Poppins Regular', serif;
 }
 
 body {
@@ -263,3 +263,23 @@ home-container {
   padding: 0 1rem;
   width: 100%;
 }
+
+  .p-tooltip .p-tooltip-text {
+    background: #495057;
+    color: #ffffff;
+    padding: 0.5rem 0.5rem;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 3px;
+  }
+  .p-tooltip.p-tooltip-right .p-tooltip-arrow {
+    border-right-color: #495057;
+  }
+  .p-tooltip.p-tooltip-left .p-tooltip-arrow {
+    border-left-color: #495057;
+  }
+  .p-tooltip.p-tooltip-top .p-tooltip-arrow {
+    border-top-color: #495057;
+  }
+  .p-tooltip.p-tooltip-bottom .p-tooltip-arrow {
+    border-bottom-color: #495057;
+  }

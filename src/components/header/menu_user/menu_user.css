@@ -4,8 +4,13 @@
     min-width: 256px;
     z-index: 1000;
     display: relative;
+    font-family: 'Poppins Regular', sans-serif;
 }
 
+.menu_user p {
+    font-size: 1rem;
+    font-family: 'Poppins Regular', sans-serif;
+}
 .item_menu {
     border-radius: 8px;
     display: flex;
@@ -13,8 +18,10 @@
     gap: 8px;
     padding: 8px;
     cursor: pointer;
-    
-    &:hover{
+    font-family: 'Poppins Regular', sans-serif;
+
+
+    &:hover {
         background-color: azure;
     }
 }

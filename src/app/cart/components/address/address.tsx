@@ -9,6 +9,9 @@ import { Form, Formik } from "formik";
 import { useContext, useState } from "react";
 import CardAddress from "../card_address/card_address";
 import { CardContextType, CartContext } from "../../context/context";
+import * as Yup from "yup";
+import NotFoundAddress from "@/app/profile/address/components/not_found/not_found_address";
+
 
 export default function Address({
   handleActiveIndex,
@@ -16,9 +19,9 @@ export default function Address({
   handleActiveIndex: (i: number) => void;
 }) {
 
-    const { initialValue } = useContext(
-      CartContext
-    ) as CardContextType;
+  const { initialValue } = useContext(
+    CartContext
+  ) as CardContextType;
 
   const [visibleAddAddress, setVisibleAddAddress] = useState(false)
 
@@ -27,6 +30,9 @@ export default function Address({
 
   var addressList: AddressList | undefined = addressCustomerRequest
 
+const schema = Yup.object().shape({
+    address_selected: Yup.string().required("Selecione um endereço"),
+  });
 
   function addingAddress() {
     return (
@@ -104,23 +110,43 @@ export default function Address({
         <div className="m-4 flex flex-row justify-content-end">
           <ZButton label="Adicionar endereço" onClick={() => setVisibleAddAddress(!visibleAddAddress)} />
         </div>
-        {addressList?.map((item) => {
-          return (
-            <div key={item.id}>
-              <CardAddress item={item} />
-            </div>
-          )
-        })}
-        <div className="mt-4 flex flex-row justify-content-end gap-1">
-          <ZButton
-            label="Voltar"
-            security="secondary"
-            onClick={() => {
-              handleActiveIndex(0);
-            }}
-          />
-          <ZButton label="Continuar" disabled={!initialValue.address_selected} onClick={() => { handleActiveIndex(2) }} />
-        </div>
+
+        <Formik initialValues={{ address_selected: "" }} validationSchema={schema} onSubmit={() => {  handleActiveIndex(2) }}>
+          {({ setFieldValue, errors }) => {
+            return (
+              <Form>
+                {errors.address_selected && (
+                  <>
+                    <div style={{ color: "red" }}>{errors.address_selected}</div>
+                  </>
+                )}
+                <div className="p-2" />
+                {addressList?.customer?.address_customer.length === 0 && <NotFoundAddress />}
+                {addressList?.customer?.address_customer?.map((item) => {
+                  return (
+                    <div key={item.id}>
+                      <CardAddress item={item} setFieldValue={setFieldValue} />
+                    </div>
+                  )
+                })}
+                <div className="mt-4 flex flex-row justify-content-end gap-1">
+                  <ZButton
+                    label="Voltar"
+                    security="secondary"
+                    type="button"
+                    onClick={() => {
+                      handleActiveIndex(0);
+                    }}
+                  />
+                  <ZButton label="Continuar"
+                    // disabled={!initialValue.address_selected}
+                    />
+                </div>
+              </Form>
+            );
+          }}
+        </Formik>
+
         {/* {addingAddress()} */}
         <ModalAddressCustomer visible={visibleAddAddress} onHide={() => setVisibleAddAddress(!visibleAddAddress)} />
       </div>

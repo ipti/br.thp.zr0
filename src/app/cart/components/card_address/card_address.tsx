@@ -5,15 +5,21 @@ import { useContext } from "react";
 import { CardContextType, CartContext } from "../../context/context";
 import ZCard from "@/components/card/card";
 import ZDivider from "@/components/divider/divider";
+import { FormikErrors } from "formik";
 
 export default function CardAddress({
   item,
   isView,
   isEdit,
+  setFieldValue
 }: {
   item: Address;
   isView?: boolean;
   isEdit?: boolean;
+  setFieldValue?: (field: string, value: any, shouldValidate?: boolean) => Promise<void | FormikErrors<{
+    address_selected: string;
+}>>
+  
 }) {
   const { initialValue, setInitialValue } = useContext(
     CartContext
@@ -21,11 +27,14 @@ export default function CardAddress({
 
   return (
     <ZCard
-      onClick={() =>
+      onClick={() =>{
+
         setInitialValue((prev) => ({
           ...prev,
           address_selected: item.id,
         }))
+        if(setFieldValue) setFieldValue("address_selected", item.id)
+      }
       }
     >
       <div className=" card-style flex flex-row">
