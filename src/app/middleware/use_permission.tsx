@@ -3,7 +3,7 @@ import { apiUrl } from "@/service/url_api"
 
 export const Permission = async (token: { name: string, value: string }) => {
 
-    const res = await fetch(`${apiUrl}user-bff/profile`, {
+    const res = await fetch(`${apiUrl}/user-bff/profile`, {
         method: "GET", // Método da requisição (opcional; GET é o padrão)
         cache: "no-store", // Força rodar em runtime, não no build
         headers: {
