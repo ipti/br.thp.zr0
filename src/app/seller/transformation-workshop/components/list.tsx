@@ -4,10 +4,15 @@ import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useFetchRequestTransformationWorkshop } from "../service/query";
+import { useContext } from "react";
+import { ProfileContext } from "../../context/profile.context";
+import { acessCreatePage } from "@/app/middleware/use_create";
 
 export default function ListTransformationWorkshop() {
   const history = useRouter()
   const { data: otRequest, isLoading } = useFetchRequestTransformationWorkshop()
+  const data = useContext(ProfileContext)
+  const createPermission = acessCreatePage(data?.profile, '/seller/transformation-workshop/create')
   const header = (
     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
       <span className="text-xl text-900 font-bold">
