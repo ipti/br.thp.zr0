@@ -8,7 +8,6 @@ import "./slider_bar.css";
 export default function SlideBar({ itens }: {itens: Menu[]}) {
   const history = useRouter()
 
-  console.log('itens', itens)
   return (
     <div className="container_slider w-20rem h-full">
       <div className="gap-4">

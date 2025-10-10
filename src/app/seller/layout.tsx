@@ -25,7 +25,7 @@ export default async function Seller({ children }: { children: React.ReactNode }
   return (
     <SlideBarProvider>
       <Providers>
-        <ProfileProvider>
+        <ProfileProvider token={token}>
           <div className="h-full">
             {/* <HeaderSeller /> */}
             <div className="flex flex-row h-full">

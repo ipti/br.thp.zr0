@@ -13,7 +13,7 @@ export interface Perfil {
     menu?: SliderBarType;
 }
 
-export const acessCreatePage = (perfil?: Profile, page: string) => {
+export const acessUpdatePage = (perfil?: Profile, page: string) => {
     if (!perfil) return false;
     if (perfil.role === "ADMIN") return true;
 
@@ -27,8 +27,6 @@ export const acessCreatePage = (perfil?: Profile, page: string) => {
         current.page.length > prev.page.length ? current : prev
     );
 
-    console.log('bestMatch', bestMatch)
-
-    return bestMatch.create;
+    return bestMatch.update;
 };
  
