@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { Providers } from "../../service/provider";
 import { Permission } from "../middleware/use_permission";
 import { AccessPage } from "./components/access_page";
+import { ProfileProvider } from "./context/profile.context";
 
 export default async function Seller({ children }: { children: React.ReactNode }) {
 
@@ -24,23 +25,24 @@ export default async function Seller({ children }: { children: React.ReactNode }
   return (
     <SlideBarProvider>
       <Providers>
-
-        <div className="h-full">
-          {/* <HeaderSeller /> */}
-          <div className="flex flex-row h-full">
-            <ConditionalSlideBar itens={profile?.menu ?? []} />
-            <div className="flex flex-column w-full">
-              <HeaderSeller />
-              <main className="h-full w-full overflow-auto p-4 md:p-8 ">
-                <Suspense>
-                  <AccessPage profile={profile} >{children}</AccessPage>
-                </Suspense>
-              </main>
+        <ProfileProvider token={token}>
+          <div className="h-full">
+            {/* <HeaderSeller /> */}
+            <div className="flex flex-row h-full">
+              <ConditionalSlideBar itens={profile?.menu ?? []} />
+              <div className="flex flex-column w-full">
+                <HeaderSeller />
+                <main className="h-full w-full overflow-auto p-4 md:p-8 ">
+                  <Suspense>
+                    <AccessPage profile={profile} >{children}</AccessPage>
+                  </Suspense>
+                </main>
+              </div>
+              {/* <TabBar /> */}
             </div>
-            {/* <TabBar /> */}
           </div>
-        </div>
+        </ProfileProvider>
       </Providers>
-    </SlideBarProvider>
+    </SlideBarProvider >
   );
 }

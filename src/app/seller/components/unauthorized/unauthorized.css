@@ -1,0 +1,10 @@
+.container-unauthorized h2 {
+    font-family: "Libre Baskerville", serif;
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+.container-unauthorized p {
+    color: #BABFC2;
+    font-size: 1rem;
+}

@@ -120,16 +120,12 @@ export default function YourInformationComponents() {
                         controllerYourInformation.UpdateUser({ id: user?.id ?? 1, body: { email: values.email, name: values.name } })
                         if (user?.customer?.billing_address?.id) {
                             controllerYourInformation.UpdateAddressBilling({ body: { address: values.address, cep: values.cep, cityId: values.city, complement: values.complement, customerId: user?.customer?.id ?? 1, neighborhood: values.neighborhood, number: values.number, stateId: values.state }, id: user.customer.billing_address.id })
-
                         } else {
-
-                            console.log("create address")
                             controllerYourInformation.CreateAddressBilling({ body: { address: values.address, cep: values.cep, cityId: values.city, complement: values.complement, customerId: user?.customer?.id ?? 1, neighborhood: values.neighborhood, number: values.number, stateId: values.state } })
                         }
                     }}
                 >
                     {({ values, handleChange, errors, touched, setFieldValue }) => {
-
                         return (
                             <Form>
                                 <div className="p-2" />

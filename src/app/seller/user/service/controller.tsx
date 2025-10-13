@@ -14,7 +14,7 @@ export function UserController() {
           title: "Perfil criado, por favor verificar email",
           icon: "success",
         });
-        history.history.push("/");
+        history.history.push("/seller/user");
       })
       .catch((erros) => {
         Swal.fire({

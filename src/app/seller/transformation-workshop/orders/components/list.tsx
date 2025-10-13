@@ -31,8 +31,6 @@ export default function ListPage() {
         </div>
       );
 
-
-
   const onRowEditComplete = (e: any) => {
     const rowData = e.newData
     productTransfWorkshopController.UpdateProductTransfWorkshopAction(rowData.id, { quantity: rowData.quantity })
