@@ -27,8 +27,6 @@ export const acessCreatePage = (perfil?: Profile, page: string) => {
         current.page.length > prev.page.length ? current : prev
     );
 
-    console.log('bestMatch', bestMatch)
-
     return bestMatch.create;
 };
  

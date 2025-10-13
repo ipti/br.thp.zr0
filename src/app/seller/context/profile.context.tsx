@@ -16,18 +16,16 @@ export const ProfileProvider = ({ children, token }: { children: ReactNode; toke
 } }) => {
     const [profile, setProfile] = useState<Profile | undefined>(undefined);
 
-    // useEffect(() => {
-    //     if (!token) return;
+    useEffect(() => {
+        if (!token) return;
 
-    //     async function fetchProfile() {
-    //         const result = await Permission(token);
-    //         setProfile(result);
-    //     }
+        async function fetchProfile() {
+            const result = await Permission(token);
+            setProfile(result);
+        }
 
-    //     fetchProfile();
-    // }, [token]);
-
-    // console.log('profile context', profile)
+        fetchProfile();
+    }, [token]);
 
     return <ProfileContext.Provider value={{ profile }}>{children}</ProfileContext.Provider>;
 };

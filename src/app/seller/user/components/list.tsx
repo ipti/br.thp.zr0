@@ -18,6 +18,7 @@ export default function ListPage() {
   const history = useRouter()
 
   const { profile } = useContext(ProfileContext)
+  console.log(profile)
       const pathname = usePathname();
       const createPermission = acessCreatePage(profile, pathname)
       const updatePermission = acessUpdatePage(profile, pathname)
