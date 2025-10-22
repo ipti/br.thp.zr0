@@ -15,6 +15,7 @@ import Logo from "@/components/logo/logo";
 export default function FormResetPassword() {
   const prime = primeFlex();
   const [erros, setErros] = useState("");
+  const [loading, setLoading] = useState(false)
 
   const searchParams = useSearchParams()
     const token = searchParams.get('token')
@@ -50,6 +51,8 @@ export default function FormResetPassword() {
     </>
   );
 
+  console.log(loading)
+
   return (
     <div
       className={prime.flex + prime.column + prime.justify_center + "h-full"}
@@ -70,9 +73,10 @@ export default function FormResetPassword() {
           }}
           validationSchema={schema}
           onSubmit={(values) => {
+            setLoading(true)
             controllerResetPassword.ResetPasswordAction({
               password: values.password,
-            }, token ?? "");
+            }, token ?? "", setLoading);
           }}
         >
           {({ values, handleChange, errors, touched }) => {
