@@ -1,5 +1,6 @@
 import { ZButton } from "@/components/button/button";
 import ZCard from "@/components/card/card";
+import CheckoutComponent from "@/components/payment/payment";
 
 export default function Payment({
   handleActiveIndex,
@@ -9,7 +10,7 @@ export default function Payment({
   return (
     <div>
       <ZCard className="p-4">
-        <h3>Em breve</h3>
+        <CheckoutComponent />
       </ZCard>
       <div className="mt-4 flex flex-row justify-content-end gap-1">
         <ZButton

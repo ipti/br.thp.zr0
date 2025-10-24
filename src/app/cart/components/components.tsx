@@ -63,10 +63,10 @@ export default function CartComponent() {
             label: 'Entrega',
             disabled: true
         },
-        {
-            label: 'Pagamento',
-            disabled: true,
-        },
+        // {
+        //     label: 'Pagamento',
+        //     disabled: true,
+        // },
         {
             label: 'Confirmação',
             disabled: true
@@ -82,8 +82,8 @@ export default function CartComponent() {
             {/* {activeIndex === 1 && <Identify handleActiveIndex={handleActiveIndex} />} */}
             {activeIndex === 1 && <Address handleActiveIndex={handleActiveIndex} />}
             {activeIndex === 2 && <Delivery handleActiveIndex={handleActiveIndex} />}
-            {activeIndex === 3 && <Payment handleActiveIndex={handleActiveIndex} />}
-            {activeIndex === 4 && <Finish handleActiveIndex={handleActiveIndex} />}
+            {/* {activeIndex === 3 && <Payment handleActiveIndex={handleActiveIndex} />} */}
+            {activeIndex === 3 && <Finish handleActiveIndex={handleActiveIndex} />}
 
             {/* <div className="flex flex-row gap-2">
                 <ZButton label="Voltar" disabled={activeIndex === 0} onClick={() => { setActiveIndex(activeIndex - 1) }} text raised />
