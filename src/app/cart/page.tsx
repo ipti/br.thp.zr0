@@ -5,7 +5,6 @@ export default function CartPage() {
     return (
         <div>
             <CartProvider>
-
                 <CartComponent />
             </CartProvider>
         </div>

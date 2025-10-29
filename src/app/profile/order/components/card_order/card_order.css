@@ -1,0 +1,54 @@
+.card_order {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    padding: 24px;
+    border-radius: 8px;
+    background-color: var(--background);
+    height: 100%;
+    cursor: pointer;
+}
+
+.card_order p {
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.status {
+    height: 32px;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.status.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.refunded {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.approved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.paid {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.failed {
+  background: #f8d7da;
+  color: #721c24;
+}
+.status.canceled {
+  background: #f8d7da;
+  color: #721c24;
+}

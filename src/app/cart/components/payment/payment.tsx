@@ -9,9 +9,9 @@ export default function Payment({
 }) {
   return (
     <div>
-      <ZCard className="p-4">
+      {/* <ZCard className="p-4">
         <CheckoutComponent />
-      </ZCard>
+      </ZCard> */}
       <div className="mt-4 flex flex-row justify-content-end gap-1">
         <ZButton
           label="Voltar"
