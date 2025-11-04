@@ -44,18 +44,21 @@ export const DetailsProduct = ({ item, home }: { item: any, home?: boolean }) =>
                     disabled={item?.quantity === 0}
                     className='btn-buy'
                 >{home ? 'Ver detalhes' : "Adicionar ao carrinho"}</ZButton>
-                {!home && <div className={"quantity"}>
-                    <button
-                        onClick={() => handleQuantityChange(-1)}
-                        disabled={quantity <= 1}
-                    >
-                        -
-                    </button>
-                    <span>{quantity}</span>
-                    <button disabled={!((item?.quantity ?? 0) > quantity)} onClick={() => handleQuantityChange(1)}>
-                        +
-                    </button>
-                </div>}
+                {(!home) && <>
+                    {item?.quantity === 0 ? <div className='gap-2 flex flex-row'><i className='pi pi-ban flex flex-column justify-content-center'></i><p>Sem estoque</p></div>: <div className={"quantity"}>
+                        <button
+                            onClick={() => handleQuantityChange(-1)}
+                            disabled={quantity <= 1}
+                        >
+                            -
+                        </button>
+                        <span>{quantity}</span>
+                        <button disabled={!((item?.quantity ?? 0) > quantity)} onClick={() => handleQuantityChange(1)}>
+                            +
+                        </button>
+                    </div>}
+                </>
+                }
             </div>
         </div>
     )

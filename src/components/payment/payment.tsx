@@ -41,7 +41,6 @@ const CheckoutComponent = ({price, idOrder}: {price: number, idOrder: number}) =
     const options = { clientSecret, appearance };
     return (
         <div>
-            <h1>Página de Checkout</h1>
             {/* Renderiza o formulário apenas após carregar o clientSecret */}
             {clientSecret && <Elements stripe={stripePromise} options={options}>
 
