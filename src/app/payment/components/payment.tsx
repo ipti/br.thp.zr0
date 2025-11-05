@@ -2,7 +2,7 @@
 import ZCard from "@/components/card/card";
 import CheckoutComponent from "@/components/payment/payment";
 import { useParams, useSearchParams } from "next/navigation";
-import { useFetchRequestOrderOne } from "../service/query";
+import { useFetchRequestOrderOne, useFetchRequestPaymentIntentOne } from "../service/query";
 import { OrderOneType } from "../service/types";
 
 export default function PaymentComponent() {
@@ -11,11 +11,15 @@ export default function PaymentComponent() {
     const id = searchParams.get('id');
     const { data: orderService } = useFetchRequestOrderOne(id?.toString());
     const order: OrderOneType | undefined = orderService;
+   const {data: paymentService } = useFetchRequestPaymentIntentOne(order?.id)
+
+   console.log(paymentService)
     const delivery = order?.order_items;
     const totalProducts = order?.order_items.reduce(
         (acc: number, item: any) => acc + item.quantity,
         0
     );
+    
     return (
         <div className="grid">
             {order && <div className="col-6 p-4">
@@ -64,7 +68,7 @@ export default function PaymentComponent() {
                     </div>
                 </footer>
             </div>}
-            {order && <div className="col-6"><CheckoutComponent price={(order?.total_amount! + (delivery?.reduce((acumulador, item) => acumulador + item.delivery_estimate.cost, 0) ?? 0))} idOrder={order?.id ?? 0} /></div>}
+            {order && <div className="col-6"><CheckoutComponent clientSecret={paymentService?.client_secret ?? undefined}/></div>}
         </div>
     )
 }

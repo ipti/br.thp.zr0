@@ -18,7 +18,7 @@ export const acessCreatePage = (perfil?: Profile, page: string) => {
     if (perfil.role === "ADMIN") return true;
 
     // Filtra todas que casam
-    const matches = perfil.pages.filter((p) => page.includes(p.page));
+    const matches = perfil.pages?.filter((p) => page.includes(p.page));
 
     if (matches.length === 0) return false;
 

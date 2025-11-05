@@ -4,12 +4,14 @@ import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import BackButton from "@/components/back_button/back_button";
+import { primeFlex } from "@/utils/prime_flex";
 
 export default async function Layout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+     const prime = primeFlex();
 
     const cookieStore = cookies();
     const token = await cookieStore.get('access_token');
@@ -27,7 +29,9 @@ export default async function Layout({
                         <BackButton />
                         <div className="mb-4"/>
                         <Suspense>
+                            <div  className={ "h-full p-2 md:p-4"}>
                             {children}
+                            </div>
                         </Suspense>
                     </main>
                 </Providers>
