@@ -7,7 +7,7 @@ export default function TitlePage({
 }) {
   return (
     <div>
-      <h2>{title}</h2>
+      <h1>{title}</h1>
       <div className="p-4" />
       {description && (
         <>

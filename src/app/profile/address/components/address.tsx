@@ -6,6 +6,7 @@ import { useFetchRequestGetAddressCustomer } from "../service/query";
 import { AddressList } from "../service/type";
 import CardAddress from "./card_address/card_address";
 import NotFoundAddress from "./not_found/not_found_address";
+import TitlePage from "@/components/title_page/title_page";
 
 export default function AddressComponent() {
     const [visibleAddAddress, setVisibleAddAddress] = useState(false)
@@ -16,6 +17,7 @@ export default function AddressComponent() {
 
     return (
         <div>
+            <TitlePage title="Seus Endereços" />
             <div className="m-4 flex flex-row justify-content-end">
                 <ZButton label="Adicionar endereço" onClick={() => setVisibleAddAddress(!visibleAddAddress)} />
             </div>

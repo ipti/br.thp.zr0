@@ -97,36 +97,43 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
             <footer className="order-footer">
                 <p><strong>Total do Pedido:</strong> R$ {(order.total_amount + delivery.cost).toFixed(2)}</p>
 
-                <div className="status-edit mt-4">
-                    <div className="flex flex-column gap-2">
-                        <label>Status do Pedido</label>
-                        <div>
-                            <span className={`status ${status.toLowerCase()}`}>
-                                {orderStatus[status]}
-                            </span>
-                        </div>
-                        {/* <select >
+                <div className=" grid status-edit mt-4">
+                    <div className="col-6">
+
+                        <div className="flex flex-column gap-2">
+                            <label>Status do Pedido</label>
+                            <div>
+                                <span className={`status ${status.toLowerCase()}`}>
+                                    {orderStatus[status]}
+                                </span>
+                            </div>
+                            {/* <select >
               {Object.keys(orderStatus).map((key) => (
                 <option key={key} value={key}>
                   {orderStatus[key]}
                 </option>
               ))}
             </select> */}
-                    </div>
-                    <div className="flex flex-column gap-2 mt-4">
-                        <label>Status do Pagamento</label>
-                        <div>
-                            <span className={`status ${payStatus.toLowerCase()}`}>
-                                {paymentStatus[payStatus]}
-                            </span>
                         </div>
                     </div>
+                    <div className="col-6">
+
+                        <div className="flex flex-column gap-2 ">
+                            <label>Status do Pagamento</label>
+                            <div>
+                                <span className={`status ${payStatus.toLowerCase()}`}>
+                                    {paymentStatus[payStatus]}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div className="p-4" />
                 {(payStatus === 'PENDING' || payStatus === 'FAILED') &&
                     <>
                         <div className="flex flex-row justify-content-center">
-                            <ZButton onClick={() => history.push('/payment?id='+ order.id)}>
+                            <ZButton onClick={() => history.push('/payment?id=' + order.id)}>
                                 Realizar pagamento
                             </ZButton>
                         </div>

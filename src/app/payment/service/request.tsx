@@ -29,3 +29,18 @@ export const requestOrderOne = (idOne?: string) => {
         });}
 };
 
+
+export const requestPaymentIntentOne = (idOrder?: number) => {
+    let path = "/payment/create-intent/"+idOrder;
+    if(idOrder){return http
+        .get(path)
+        .then((response) => response.data)
+        .catch((err) => {
+            if (err.response.status === 401) {
+                logout();
+                window.location.reload();
+            }
+            throw err;
+        });}
+};
+

@@ -43,6 +43,7 @@ export interface OrderOneType {
   uid: string
   user_fk: number
   workshop_fk: number
+  payment_intent_id: string
   status: string
   total_amount: number
   createdAt: string
@@ -52,6 +53,7 @@ export interface OrderOneType {
   notes: string
   user: User
   workshop: Workshop
+  order_delivery_address: OrderDeliveryAddress
   order_items: OrderItem[]
 }
 
@@ -81,6 +83,56 @@ export interface Workshop {
   updatedAt: string
   state_fk: number
   city_fk: number
+  state: State
+  city: City
+}
+
+export interface State {
+  id: number
+  acronym: string
+  name: string
+}
+
+export interface City {
+  id: number
+  state_fk: number
+  name: string
+  cep_initial: string
+  cep_final: string
+  ddd1: number
+  ddd2: number
+}
+
+export interface OrderDeliveryAddress {
+  id: number
+  name: any
+  phone: any
+  cep: string
+  address: string
+  number: string
+  complement: string
+  neighborhood: string
+  state_fk: number
+  city_fk: number
+  order_fk: number
+  state: State2
+  city: City2
+}
+
+export interface State2 {
+  id: number
+  acronym: string
+  name: string
+}
+
+export interface City2 {
+  id: number
+  state_fk: number
+  name: string
+  cep_initial: string
+  cep_final: string
+  ddd1: number
+  ddd2: number
 }
 
 export interface OrderItem {
@@ -99,13 +151,13 @@ export interface OrderItem {
 }
 
 export interface DeliveryEstimate {
-  cost: number
-  error: any
-  carrier: string
   service: string
-  tracking: boolean
-  serviceCode: string
+  carrier: string
+  cost: number
   deliveryTime: number
+  tracking: boolean
+  error: any
+  serviceCode: string
 }
 
 export interface Product {
@@ -121,20 +173,4 @@ export interface Product {
   height: number
   width: number
   length: number
-}
-
-export interface OrderUser {
-  order: Order[]
-}
-
-
-export interface Order {
-  id: number
-  uid: string
-  createdAt: string
-  _count: Count
-}
-
-export interface Count {
-  order_items: number
 }
