@@ -9,9 +9,9 @@ export default async function Products() {
 
   return (
     <div>
-      <div className="text-center py-5 px-6 mb-4 fade-up">
-        <h1 className="text-3xl sm:text-4xl mb-6">Nossos Produtos</h1>
-        <p className="text-gray-600 w-6 mx-auto leading-relaxed">
+      <div className="text-center mb-4 fade-up">
+        <h1 className="mb-6">Nossos Produtos</h1>
+        <p className="text-gray-600 w-full lg:w-6 mx-auto leading-relaxed">
           Explore as últimas tendências em design de interiores com nossa
           coleção cuidadosamente selecionada. Cada peça é design para
           transformar sua casa em um espaço único. Incorporamos peças
