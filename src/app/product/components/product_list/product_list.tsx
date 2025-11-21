@@ -9,7 +9,7 @@ export default function ProductList({ filteredAndSortedProducts }: { filteredAnd
                 const delay = (index % itemsPerRow) * 100; // em ms
                 return (
                     <div
-                        className="col-3"
+                        className="col-12 sm:col-6 lg:col-4 xl:col-3"
                         key={product.id}
                     >
                         <div

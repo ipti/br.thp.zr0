@@ -31,7 +31,7 @@ export default function ListPage() {
     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
       <span className="text-xl text-900 font-bold">Produtos adicionados</span>
       { createPermission &&  <ModalAddProduct visible={visible} onHide={() => { setVisible(!visible) }} />}
-      {/* {createPermission && <ZButton icon="pi pi-plus" onClick={() => { setVisible(!visible) }} label="Adicionar" />} */}
+      {createPermission && <ZButton icon="pi pi-plus" onClick={() => { setVisible(!visible) }} label="Adicionar" />}
     </div>
   );
 

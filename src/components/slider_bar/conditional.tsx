@@ -6,7 +6,5 @@ import { useSlideBar } from "./slide_bar_context";
 export function ConditionalSlideBar({ itens }: { itens: Menu[] }) {
   const { isVisible } = useSlideBar();
 
-  if (!isVisible) return null;
-
-  return <SlideBar itens={itens} />;
+  return <SlideBar itens={itens} isOpen={isVisible} />;
 }

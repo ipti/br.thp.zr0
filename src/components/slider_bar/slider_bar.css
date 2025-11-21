@@ -1,11 +1,19 @@
 .container_slider {
     box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
     background-color: var(--background);
+    padding: 8px;
 }
+
+.container_slider_expanded {
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+    background-color: var(--background);
+    width: 25rem;
+    
+}
+
 
 .item_slider {
     border-radius: 4px;
-    cursor: pointer;
     padding: 8px 8px;
     margin: 8px;
     &:hover{
