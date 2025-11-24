@@ -5,6 +5,8 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || ''
 
 
 const CheckoutComponent = ({clientSecret}: {clientSecret: string}) => {
+
+    console.log('stripe:',process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || '')
    
     const appearance: { theme: 'stripe' } = { theme: 'stripe' };
     const options = { clientSecret, appearance };
