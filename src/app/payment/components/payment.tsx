@@ -14,7 +14,6 @@ export default function PaymentComponent() {
     const order: OrderOneType | undefined = orderService;
    const {data: paymentService } = useFetchRequestPaymentIntentOne(order?.id)
 
-   console.log(paymentService)
     const delivery = order?.order_items;
     const totalProducts = order?.order_items.reduce(
         (acc: number, item: any) => acc + item.quantity,
