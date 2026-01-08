@@ -1,25 +1,25 @@
 "use client";
 
-import { useFetchrequestProductOne } from "@/app/seller/product/one/service/query";
+import { DetailsProduct } from "@/app/components/product/details_product/details_product";
 import {
     ProductImage,
     ProductOne,
 } from "@/app/seller/product/one/service/type";
-import { useCartStore } from "@/service/store/cart_store";
 import useCreateArrayUpToNumber from "@/utils/hook/useCreateArrayUpToNumber";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import './product_one.css';
 import { useFetchrequestProductOneUid } from "../../service/query";
-import { ZButton } from "@/components/button/button";
-import { DetailsProduct } from "@/app/components/product/details_product/details_product";
+import './product_one.css';
 
 export default function ProductOneComponent() {
     const useNavigate = useRouter();
+    const [imageIndex, setImageIndex] = useState(0);
+
+
 
     const params = useParams(); // retorna { id: "123" }
     const id = params.id;
-   
+
     const [image, setImage] = useState<ProductImage | undefined>();
     const [loading, setLoading] = useState(true);
     const { data: productOneRequest } = useFetchrequestProductOneUid(
@@ -51,13 +51,23 @@ export default function ProductOneComponent() {
 
                 {/* Product Detail */}
                 <div className={'detailGrid'}>
-                    <div className={"imageBox"}>
-                        {productOne?.product_image[0].img_url && <img
-                            src={productOne?.product_image[0].img_url}
-                            alt={productOne?.name}
-                            className="imageProduct"
-                        />}
+                    <div className="flex flex-column">
+
+                        <div className={"imageBox"}>
+                            {productOne?.product_image[0].img_url && <img
+                                src={productOne?.product_image[imageIndex].img_url}
+                                alt={productOne?.name}
+                                className="imageProduct"
+                            />}
+                        </div>
+                        <div className="p-2" />
+                        <div className="product-gallery">
+                            {productOne?.product_image.slice(0, 3).map((img, idx) => (
+                                <img key={idx} src={img.img_url} onClick={() => setImageIndex(idx)} alt={`Produto ${idx}`} />
+                            ))}
+                        </div>
                     </div>
+
                     {/* <div className={"info"}>
                         <h1>{productOne?.name}</h1>
                         <p className={'price'}>R$ {productOne?.price.toFixed(2)}</p>
@@ -122,6 +132,7 @@ export default function ProductOneComponent() {
                     <DetailsProduct item={productOne} />
 
                 </div>
+
 
                 {/* Divider */}
                 <div className={"divider"}></div>

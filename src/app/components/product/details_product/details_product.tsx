@@ -24,7 +24,7 @@ export const DetailsProduct = ({ item, home }: { item: any, home?: boolean }) =>
             {/* Ações */}
             <div className="product-actions">
                 <ZButton
-                    icon={window.innerWidth < 600 ? "pi pi-cart-plus" : undefined}
+                    icon={window?.innerWidth < 600 ? "pi pi-cart-plus" : undefined}
                     onClick={() => {
                         if (home) {
 

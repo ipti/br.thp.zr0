@@ -304,6 +304,7 @@ export default function YourInformationComponents() {
                                 <div className="flex flex-row justify-content-end">
                                     <ZButton className="col-12 md:col-4">Salvar</ZButton>
                                 </div>
+                                <div className="p-2" />
                             </Form>
                         );
                     }}

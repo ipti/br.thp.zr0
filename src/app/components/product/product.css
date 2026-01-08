@@ -50,7 +50,8 @@
 }
 
 .product-gallery img {
-  width: 100%;
+
+  width: 128px;
   border-radius: 0.75rem;
   object-fit: cover;
   cursor: pointer;

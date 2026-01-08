@@ -219,7 +219,7 @@ export default function Finish({
                     text: 'Seu endereço de faturamento está incompleto. Por favor, atualize suas informações de faturamento antes de finalizar o pedido.',
                 })
               } else {
-                // handleCreateOrder();
+                handleCreateOrder();
               }}}
             />
           </div>

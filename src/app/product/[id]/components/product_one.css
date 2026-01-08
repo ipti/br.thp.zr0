@@ -36,6 +36,26 @@
   margin-bottom: 5rem;
 }
 
+.product-gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.product-gallery img {
+  width: 64px;
+  height: 64px;
+  border-radius: 0.75rem;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: 0.2s;
+}
+
+.product-gallery img:hover {
+  opacity: 1;
+}
+
 @media (min-width: 1024px) {
   .detailGrid {
     grid-template-columns: 1fr 1fr;

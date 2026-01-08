@@ -1,5 +1,7 @@
 .menu_user {
     background-color: white;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    border-radius: 8px;
     padding: 8px;
     min-width: 256px;
     z-index: 1000;
@@ -19,9 +21,9 @@
     padding: 8px;
     cursor: pointer;
     font-family: 'Poppins Regular', sans-serif;
-
+    margin: 4px 0px;
 
     &:hover {
-        background-color: azure;
+        background-color: rgb(183, 183, 183);
     }
 }
