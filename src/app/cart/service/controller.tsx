@@ -127,8 +127,7 @@ export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
           "Pedido realizado com sucesso!",
           icon: "success"
         })
-        
-        history.push("/")
+        history.push("/profile/order")
         
       })
       .catch((erros) => {

@@ -209,7 +209,7 @@ export default function Finish({
             })}
             <div className="p-3" />
             <ZButton
-              label="Finalizar"
+              label="Ir para pagamento"
               style={{ width: "100%" }}
               onClick={() => {
                 if(!user?.customer?.billing_address?.address && !checked){

@@ -7,9 +7,12 @@ import ZDropdown from "@/components/dropdown/dropdown";
 import { useFetchRequestTransformationWorkshop } from "@/app/seller/transformation-workshop/service/query";
 import { useEffect, useState } from "react";
 import { getIdTw, idTw, logout } from "@/service/cookies";
+import Image from "next/image";
+import menu_in from "../../../assets/img/menu-in.svg";
+
 
 export default function HeaderSeller() {
-  const { toggleVisibility } = useSlideBar();
+  const { toggleVisibility, isVisible} = useSlideBar();
   const navigate = useRouter();
   const [transformationWorkshop, setTransformationWorkshop] = useState<number | undefined>()
   const { data: transformationWorkshopRequest } = useFetchRequestTransformationWorkshop();
@@ -45,8 +48,8 @@ export default function HeaderSeller() {
   return (
     <div className="w-full h-5rem flex flex-row justify-content-between">
       <div className="flex flex-row">
-        <div onClick={toggleVisibility} className="flex flex-column justify-content-center cursor-pointer p-2 button-menu">
-          <i className="pi pi-bars" style={{ fontSize: "1.5rem" }}></i>
+        <div onClick={toggleVisibility} className="flex flex-column justify-content-center cursor-pointer button-menu">
+         <Image alt="" src={menu_in} height={24} style={{ transform: !isVisible ? '' : 'rotate(180deg)', margin: 12 }}/> 
         </div>
         <div className="h-full flex flex-column justify-content-center">
           <div

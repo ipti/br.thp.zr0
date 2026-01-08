@@ -22,7 +22,13 @@ export default function ProfileComponent() {
         icon: true,
         src: "pi pi-map-marker",
         link: "/profile/address"
-    }]
+    }, {
+        title: "Pedidos",
+        description: "Pedidos realizados.",
+        icon: true,
+        src: "pi pi-box",
+        link: "/profile/order"
+    },]
 
     return (
         <div className="p-4">

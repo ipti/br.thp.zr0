@@ -14,3 +14,16 @@
   animation: fadeUp 0.8s ease-out forwards;
   text-align: center;
 }
+.fade-up h1 {
+  font-family: 'Libre Baskerville';
+  font-size: 64px;
+  
+ @media (max-width: 600px) {
+        font-size: 32px;
+    }
+}
+
+.fade-up p {
+  font-size: 16px;
+  margin-bottom: 64px;
+}

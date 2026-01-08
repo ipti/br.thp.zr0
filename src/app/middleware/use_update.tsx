@@ -18,12 +18,12 @@ export const acessUpdatePage = (perfil?: Profile, page: string) => {
     if (perfil.role === "ADMIN") return true;
 
     // Filtra todas que casam
-    const matches = perfil.pages.filter((p) => page.includes(p.page));
+    const matches = perfil.pages?.filter((p) => page.includes(p.page));
 
-    if (matches.length === 0) return false;
+    if (matches?.length === 0) return false;
 
     // Escolhe a mais específica (maior comprimento)
-    const bestMatch = matches.reduce((prev, current) =>
+    const bestMatch = matches?.reduce((prev, current) =>
         current.page.length > prev.page.length ? current : prev
     );
 

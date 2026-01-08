@@ -1,20 +1,19 @@
 "use client"
 import { ZButton } from "@/components/button/button";
-import ZCard from "@/components/card/card";
+import ZCalendar from "@/components/calendar/calendar";
 import ZDivider from "@/components/divider/divider";
 import ZInputText from "@/components/input/input";
 import ZInputMask from "@/components/input_mask/input_mask";
+import InputAddress from "@/components/inputs_address/inputs_address";
+import ZRadioButton from "@/components/radio_button/radio_button";
+import TitlePage from "@/components/title_page/title_page";
 import { useFetchUserToken } from "@/service/global_request/query";
 import { UserGlobal } from "@/service/global_request/type";
-import { primeFlex } from "@/utils/prime_flex";
 import { Form, Formik } from "formik";
+import { useState } from "react";
 import * as Yup from "yup";
 import { ControllerYourInformation } from "../service/controller";
-import ZCalendar from "@/components/calendar/calendar";
-import ZRadioButton from "@/components/radio_button/radio_button";
-import { useState } from "react";
-import InputAddress from "@/components/inputs_address/inputs_address";
-import "./your_information.css"
+import "./your_information.css";
 
 
 export default function YourInformationComponents() {
@@ -27,7 +26,7 @@ export default function YourInformationComponents() {
 
     const user: UserGlobal | undefined = userRequest
 
-    const prime = primeFlex();
+   
 
  const schema = (cpfOrCnpj: number) =>
   Yup.object().shape({
@@ -92,10 +91,9 @@ export default function YourInformationComponents() {
 
     return (
         <div
-            className={prime.flex + prime.column + prime.justify_center + "h-full p-4 md:p-8"}
+           
         >
-            <ZCard className="card-style-profile">
-                <h3>Atualize seus dados</h3>
+            <TitlePage title="Atualize seus dados" />
                 <Formik
                     initialValues={{
                         email: user?.email ?? "",
@@ -310,7 +308,6 @@ export default function YourInformationComponents() {
                         );
                     }}
                 </Formik>
-            </ZCard>
         </div>
     );
 }
