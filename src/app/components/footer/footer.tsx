@@ -117,7 +117,7 @@ const currentYear = new Date().getFullYear()
             <div className="footer-bottom">
                 <div className="footer-bottom-container">
                     <div className="footer-copy">
-                        © {currentYear} ZIo. Todos os direitos reservados.
+                        © {currentYear} Zr0. Todos os direitos reservados.
                     </div>
 
                     {/* Pagination Dots */}

@@ -19,23 +19,23 @@ export default function CardPerson({
         {item.customer.cnpj && <p>CNPJ {item.customer.cnpj}</p>}
         <div className="p-1" />
         <div className="flex flex-column">
-          <div className="p-2" />
-          <h5>
-            {item?.customer?.billing_address?.address},{" "}
-            {item?.customer?.billing_address?.number}
-          </h5>
-          <div className="p-1" />
-          <p>
-            {item?.customer?.billing_address?.cep} -{" "}
-            {item?.customer.billing_address?.city?.name} -{" "}
-            {item?.customer.billing_address?.state?.acronym}
-          </p>
-          <div className="p-1" />
-          <p>
-            {item?.name} - {item?.customer?.phone}
-            { }{" "}
-          </p>
-        </div>
+  <div className="p-2" />
+  <h5>
+    {item?.customer?.billing_address?.address}
+    {item?.customer?.billing_address?.number && `, ${item?.customer?.billing_address?.number}`}
+  </h5>
+  <div className="p-1" />
+  <p>
+    {item?.customer?.billing_address?.cep}
+    {item?.customer?.billing_address?.city?.name && ` - ${item?.customer.billing_address?.city?.name}`}
+    {item?.customer?.billing_address?.state?.acronym && ` - ${item?.customer.billing_address?.state?.acronym}`}
+  </p>
+  <div className="p-1" />
+  <p>
+    {item?.name}
+    {item?.customer?.phone && ` - ${item?.customer?.phone}`}
+  </p>
+</div>
       </div>
       {isEdit && (
         <>

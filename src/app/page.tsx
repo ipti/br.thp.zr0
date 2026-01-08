@@ -21,7 +21,7 @@ export default async function Home() {
       <About />
       <VideoComponet />
       <Impact />
-      {product?.map((item: any, index: number) => (
+      {(product as any[])?.slice(0, 1).map((item: any, index: number) => (
         <div key={index}>
           <Product item={item} />
         </div>

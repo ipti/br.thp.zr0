@@ -6,19 +6,23 @@ import ZSkeleton from "@/components/skeleton/skeleton";
 import { useFetchUserToken } from "@/service/global_request/query";
 import { UserGlobal } from "@/service/global_request/type";
 import { useCartStore } from "@/service/store/cart_store";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import { CartContext } from "../../context/context";
 import { CartController } from "../../service/controller";
 import { useFetchAddressOneRequest } from "../../service/query";
 import CardAddress from "../card_address/card_address";
 import CardPerson from "../card_person/card_person";
+import ToggleButtonComponent from "@/components/toggle_button/toggle_button";
 
 export default function Finish({
   handleActiveIndex,
 }: {
   handleActiveIndex: (i: number) => void;
 }) {
+
+  const [checked, setChecked] = useState(false);
+
   const controllerCart = CartController();
 
   const cart = useCartStore((state) => state.cart);
@@ -91,6 +95,10 @@ export default function Finish({
       <div className="grid">
         <div className="col-12 md:col-8">
           {!isLoading && <CardPerson item={user!} isEdit />}
+          <div className="p-2" />
+          <div className="flex flex-row align-items-center gap-2">
+            O endereço de faturamento o mesmo de entrega? <ToggleButtonComponent onLabel="Sim" offLabel="Não" checked={checked} onChange={(e) => setChecked(e.value)} />
+          </div>
           <div className="p-2" />
           <h4>Endereço selecionado</h4>
           <div className="p-2" />
@@ -204,14 +212,14 @@ export default function Finish({
               label="Finalizar"
               style={{ width: "100%" }}
               onClick={() => {
-                if(!user?.customer?.billing_address?.address){
+                if(!user?.customer?.billing_address?.address && !checked){
                   Swal.fire({
                     icon: 'warning',
                     title: 'Atenção',
                     text: 'Seu endereço de faturamento está incompleto. Por favor, atualize suas informações de faturamento antes de finalizar o pedido.',
                 })
               } else {
-                handleCreateOrder();
+                // handleCreateOrder();
               }}}
             />
           </div>
