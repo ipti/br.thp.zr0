@@ -27,6 +27,7 @@ export default function CardAddress({
 
   return (
     <ZCard
+      style={{border: item.id === initialValue.address_selected && !isEdit ? '1px solid var(--primary-color' : ''}}
       onClick={() =>{
 
         setInitialValue((prev) => ({

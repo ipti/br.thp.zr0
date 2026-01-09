@@ -12,6 +12,12 @@
     color: var(--text-color);
 }
 
+.card_order img {
+  height: 32px;
+  width: 32px;
+  border-radius: 8px;
+}
+
 .status {
     height: 32px;
   padding: 8px;

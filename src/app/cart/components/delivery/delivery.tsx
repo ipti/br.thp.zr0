@@ -7,6 +7,7 @@ import { CartContext, DeliverySelectedType } from "../../context/context";
 import { ProductClientController } from "@/app/product/service/controller";
 import { Address } from "@/app/profile/address/service/type";
 import ZSkeleton from "@/components/skeleton/skeleton";
+import { CardDelivery } from "./card_delivery";
 
 export default function Delivery({
   handleActiveIndex,
@@ -62,8 +63,8 @@ export default function Delivery({
   return (
     <div>
       {(
-        <div className="bg-black-alpha-10 p-3" style={{ borderRadius: "8px" }}>
-          <h3>Frete</h3>
+        <div className="p-3" style={{ borderRadius: "8px" }}>
+          <h1>Frete</h1>
           <div className="p-1" />
           <div className="gap-3">
             {loadingCep ? (
@@ -76,40 +77,7 @@ export default function Delivery({
               <>
                 {shipping?.map((shippingItem, key) => {
                   return (<div key={key}>
-                    <h3>{shippingItem.productName} - {shippingItem.workshopName}</h3>
-                    <h5>Quantidade - {shippingItem.quantity}</h5>
-                    {shippingItem.result?.validOptions?.map(
-                      (item, index) => {
-                        return (
-                          <div key={index} className="my-2">
-                            {
-                              <div className="flex flex-row justify-content-between m-1">
-                                <div className="flex flex-row align-items-center">
-                                  <ZRadioButton
-                                    value={item}
-                                    checked={!!shippingSelect?.find((select) => (select.productId === shippingItem.productId && select.workshopId === shippingItem.workshopId && select.validOptions.cost === item?.cost))}
-                                    onChange={(e) => {
-                                     const newState =  handleSelectOptions({ productId: shippingItem.productId, workshopId: shippingItem.workshopId, validOptions: item, productName: shippingItem.productName, workshopName: shippingItem.workshopName, quantity: shippingItem.quantity })
-                                     setShippingSelect(newState) 
-                                     cartContext?.setInitialValue((prev) => ({
-                                        ...prev,
-                                        deliverySelected: newState,
-                                      }));
-                                    }}
-                                  />
-                                  <div className="p-1" />
-                                  <label>{item.carrier}</label>
-                                </div>
-                                <div>
-                                  <h5>R${item.cost.toFixed(2)}</h5>
-                                  <p>{item.deliveryTime} Dias úteis</p>
-                                </div>
-                              </div>
-                            }
-                          </div>
-                        );
-                      }
-                    )}
+                    <CardDelivery cartContext={cartContext} handleSelectOptions={handleSelectOptions} setShippingSelect={setShippingSelect} shippingItem={shippingItem} shippingSelect={shippingSelect} />
                   </div>)
                 })}
               </>

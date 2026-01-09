@@ -25,7 +25,7 @@ const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
       elements,
       confirmParams: {
         // Se você quiser redirecionar após 3DS ou método que requer redirecionamento:
-        return_url: `${window.location.origin}`,
+        return_url: `${window.location.origin}/profile/order`,
         payment_method_data: {
           billing_details: {}
         },

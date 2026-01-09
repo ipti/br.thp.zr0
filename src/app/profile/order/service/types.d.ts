@@ -134,7 +134,25 @@ export interface Order {
   createdAt: string
   payment_status: string
   status: string
+  order_items: OrderItem[]
   _count: Count
+}
+
+export interface OrderItem {
+  product: Product
+}
+
+export interface Product {
+  id: number
+  name: string
+  product_image: ProductImage[]
+}
+
+export interface ProductImage {
+  id: number
+  img_url: string
+  order: any
+  product_fk: number
 }
 
 export interface Count {

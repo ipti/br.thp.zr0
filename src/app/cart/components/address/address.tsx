@@ -23,6 +23,8 @@ export default function Address({
     CartContext
   ) as CardContextType;
 
+  console.log("initialValue address", initialValue);
+
   const [visibleAddAddress, setVisibleAddAddress] = useState(false)
 
 
@@ -111,7 +113,7 @@ const schema = Yup.object().shape({
           <ZButton label="Adicionar endereço" onClick={() => setVisibleAddAddress(!visibleAddAddress)} />
         </div>
 
-        <Formik initialValues={{ address_selected: "" }} validationSchema={schema} onSubmit={() => {  handleActiveIndex(2) }}>
+        <Formik initialValues={{ address_selected: initialValue.address_selected }} validationSchema={schema} onSubmit={() => {  handleActiveIndex(2) }}>
           {({ setFieldValue, errors }) => {
             return (
               <Form>
@@ -122,13 +124,16 @@ const schema = Yup.object().shape({
                 )}
                 <div className="p-2" />
                 {addressList?.customer?.address_customer.length === 0 && <NotFoundAddress />}
+                <div className="grid">
+
                 {addressList?.customer?.address_customer?.map((item) => {
                   return (
-                    <div key={item.id}>
+                    <div key={item.id} className="col-12 md:col-6">
                       <CardAddress item={item} setFieldValue={setFieldValue} />
                     </div>
                   )
                 })}
+                </div>
                 <div className="mt-4 flex flex-row justify-content-end gap-1">
                   <ZButton
                     label="Voltar"
