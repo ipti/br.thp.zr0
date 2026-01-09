@@ -8,7 +8,7 @@ export function OrderController() {
     function OrderUpdateAction(id: string, body: OrderUpdate) {
         requestOrderUpdate(id, body).then(data => {
             Swal.fire({
-                title: "Produto adicionado!",
+                title: "Pedido atualizado!",
                 icon: "success",
 
             })

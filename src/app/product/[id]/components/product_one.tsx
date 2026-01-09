@@ -10,6 +10,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useFetchrequestProductOneUid } from "../../service/query";
 import './product_one.css';
+import Shipping from "@/components/shipping/shipping";
 
 export default function ProductOneComponent() {
     const useNavigate = useRouter();
@@ -129,8 +130,7 @@ export default function ProductOneComponent() {
                            
                         </div>}
                     </div> */}
-                    <DetailsProduct item={productOne} />
-
+                        <DetailsProduct item={productOne} />
                 </div>
 
 

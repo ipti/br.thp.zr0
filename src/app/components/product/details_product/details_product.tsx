@@ -2,6 +2,7 @@
 import './details_product.css'
 
 import { ZButton } from "@/components/button/button"
+import Shipping from '@/components/shipping/shipping'
 import { useCartStore } from "@/service/store/cart_store"
 import { useState } from 'react'
 
@@ -60,6 +61,7 @@ export const DetailsProduct = ({ item, home }: { item: any, home?: boolean }) =>
                 </>
                 }
             </div>
+        {  !home &&  <Shipping orderItems={[{ productId: item?.uid?.toString() ?? '1', quantity: quantity }]}  disabled={item?.quantity === 0 }/>}
         </div>
     )
 }

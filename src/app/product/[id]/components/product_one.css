@@ -43,7 +43,7 @@
 }
 
 .product-gallery img {
-  width: 64px;
+  max-width: 64px;
   height: 64px;
   border-radius: 0.75rem;
   object-fit: cover;

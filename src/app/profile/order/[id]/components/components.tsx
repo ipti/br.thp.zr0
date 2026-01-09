@@ -17,6 +17,7 @@ export function OrderOneComponents() {
            ) : (
             <div>Nenhum pedido encontrado</div>
            )}
+           <div className="p-2" />
         </div>
     )
 }

@@ -12,6 +12,7 @@ import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../context/context";
 import "./cart_list.css";
 import Item from "./item/item";
+import Shipping from "@/components/shipping/shipping";
 
 
 
@@ -26,31 +27,9 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
   }, []);
 
 
-  const [shipping, setShipping] = useState<ShippingGetType[] | undefined>();
-  const [shippingSelect, setShippingSelect] = useState<ValidOption | undefined>()
-  const [isLoadingCep, setLoading] = useState(false)
-  const [cep, setCep] = useState<string | undefined>()
+
   const cart = useCartStore((state) => state.cart);
   const cartContext = useContext(CartContext)
-
-  const productClientController = ProductClientController({ setShipping, setShippingSelect });
-
-  const handleShippingCalculate = (
-    cep?: string,
-  ) => {
-    if (cep) {
-      setLoading(true)
-      productClientController.ShippingCalculateAction({
-        destinationZipCode: cep.replace(/[^a-zA-Z0-9 ]/g, ""),
-        orderItems: cartContext?.productSelected() ?? []
-      }, setLoading);
-      setCep(cep)
-    }
-  };
-
-  useEffect(() => {
-    if (cep) handleShippingCalculate(cep)
-  }, [cart, cartContext?.initialValue.product_selected])
 
   useEffect(() => {
     cartContext?.setInitialValue(prev => ({ ...prev, product_selected: cart.map(item => { return item.id }) }))
@@ -94,67 +73,7 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
               <h1>R${(total + (shippingSelect?.cost ?? 0)).toFixed(2)}</h1>
             </div>
             <div className="p-2" /> */}
-            {shipping && <div className="bg-black-alpha-10 p-3" style={{ borderRadius: "8px" }}>
-              <h3>Frete</h3>
-              <div className="p-1" />
-              <div className="gap-3">
-                {isLoadingCep ? <div className="flex flex-column gap-2"><ZSkeleton /><ZSkeleton /><ZSkeleton /></div> : <>
-                  {shipping.map((shippingItem, index) => {
-                    return (<div key={index}>
-                      <h3>{shippingItem.productName} - {shippingItem.workshopName}</h3>
-                      <h5>Quantidade - {shippingItem.quantity}</h5>
-                      {shippingItem?.result?.validOptions?.map((item, index) => {
-                        return (
-                          <div key={index} className="my-2">
-                            {<div className="flex flex-row justify-content-between m-1">
-                              <div className="flex flex-row align-items-center">
-                                <label>{item.carrier}</label>
-                              </div>
-                              <div>
-                                <h5>R${item.cost.toFixed(2)}</h5>
-                                <p>{item.deliveryTime} Dias úteis</p>
-                              </div>
-                            </div>}
-                          </div>
-                        )
-                      })}
-                    </div>)
-                  })}
-
-                </>}
-              </div></div>}
-            <div className="p-2" />
-            <Formik
-              initialValues={{ cep: "", quantity: 1 }}
-              onSubmit={(values) => {
-                handleShippingCalculate(
-                  values.cep
-                );
-              }}
-            >
-              {({ values, handleChange }) => {
-                return (
-                  <Form>
-                    <div className="flex flex-column">
-                      <label>Calcular frete</label>
-                      <div className="p-1" />
-                      <div className="flex flex-row gap-2">
-                        <ZInputMask
-                          mask="99999-999"
-                          value={values.cep}
-                          name="cep"
-                          onChange={handleChange}
-                          placeholder="Digite o seu CEP"
-                          className="w-full"
-                          disabled={cart.length === 0}
-                        />
-                        <ZButton label="Ok" />
-                      </div>
-                    </div>
-                  </Form>
-                );
-              }}
-            </Formik>
+           <Shipping orderItems={cartContext?.productSelected() ?? []} cart={cart} />
             <div className="p-3" />
             <ZButton label="Continuar" style={{ width: "100%" }} onClick={() => { token ? handleActiveIndex(1) : setModalLogin(!modalLogin) }} />
           </div>
