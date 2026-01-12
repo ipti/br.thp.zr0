@@ -9,16 +9,16 @@ import Swal from "sweetalert2";
 export function ResetPasswordController(setErros: Dispatch<SetStateAction<string>>) {
   const history = useNavigation();
 
-  function ResetPasswordAction(body: ResetPasswordTypes, token?: string, setLoading?: Dispatch<SetStateAction<boolean>>) {
+  function ResetPasswordAction(body: ResetPasswordTypes, token?: string, handleReturn?: () => void) {
     ResetPasswordRequest(body, token)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .then((data) => {
-        setLoading!(false)
+        handleReturn && handleReturn();
         history.history.push("/auth/login");
       })
       .catch((erros) => {
         console.log(erros.response);
-        setLoading!(false)
+        handleReturn && handleReturn();
         if(erros?.response?.status === 401){
           setErros('Tempo expirado!');
         }else {

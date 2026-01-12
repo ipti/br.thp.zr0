@@ -11,10 +11,11 @@ export function SendEmailRecoveryPasswordController(setErros: Dispatch<SetStateA
 
       const history = useNavigation()
 
-    function SendEmailRecoveryPasswordAction(body: SendEmailRecoveryTypes) {
+    function SendEmailRecoveryPasswordAction(body: SendEmailRecoveryTypes, handleReturn?: () => void) {
         SendEmailRecoveryPasswordRequest(body).then(data => {
             setErros("")
             login(data.data.access_token);
+            handleReturn && handleReturn()
             Swal.fire({
                 title: "Email enviado",
                 text: "Acesse o email para poder resetar suar senha?",
@@ -28,6 +29,7 @@ export function SendEmailRecoveryPasswordController(setErros: Dispatch<SetStateA
               }, 3600);
         }).catch(erros => {
             console.log(erros.response.data.message)
+            handleReturn && handleReturn()
             setErros(erros.response.data.message)
         })
     }

@@ -51,7 +51,9 @@ export default function FormResetPassword() {
     </>
   );
 
-  console.log(loading)
+  const handleReturn = () => {
+    setLoading(false);
+  }
 
   return (
     <div
@@ -76,7 +78,7 @@ export default function FormResetPassword() {
             setLoading(true)
             controllerResetPassword.ResetPasswordAction({
               password: values.password,
-            }, token ?? "", setLoading);
+            }, token ?? "", handleReturn);
           }}
         >
           {({ values, handleChange, errors, touched }) => {
@@ -143,6 +145,7 @@ export default function FormResetPassword() {
                     <div className="">
                       <ZButton
                         style={{ width: "100%", justifyContent: "center" }}
+                        loading={loading}
                       >
                         Salvar
                       </ZButton>

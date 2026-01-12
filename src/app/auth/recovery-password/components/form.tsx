@@ -13,6 +13,8 @@ import Logo from "@/components/logo/logo";
 export default function FormSendEmailRecoveryPassword() {
   const prime = primeFlex();
   const [erros, setErros] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
   const controllerSendEmailRecoveryPassword = SendEmailRecoveryPasswordController(setErros);
 
@@ -23,6 +25,10 @@ export default function FormSendEmailRecoveryPassword() {
   const schema = Yup.object().shape({
     email: Yup.string().required("Campo Obrigatório"),
   });
+
+   const handleReturn = () => {
+    setLoading(false);
+  }
 
   return (
     <div
@@ -39,9 +45,10 @@ export default function FormSendEmailRecoveryPassword() {
           initialValues={{ email: "" }}
           validationSchema={schema}
           onSubmit={(values) => {
+            setLoading(true);
             controllerSendEmailRecoveryPassword.SendEmailRecoveryPasswordAction({
               email: values.email
-            });
+            }, handleReturn);
           }}
         >
           {({ values, handleChange, errors, touched }) => {
@@ -72,7 +79,7 @@ export default function FormSendEmailRecoveryPassword() {
                   </div>
                   <div className="p-2" />
                   <div >
-                    <ZButton type="submit" style={{ width: "100%", justifyContent: "center" }}>
+                    <ZButton type="submit" style={{ width: "100%", justifyContent: "center" }} loading={loading}>
                       Enviar
                     </ZButton>
                   </div>
