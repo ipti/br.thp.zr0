@@ -15,11 +15,12 @@ export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
 
     const history = useNavigation()
 
-    function LoginAction(body: LoginTypes) {
+    function LoginAction(body: LoginTypes, handleReturn?: () => void) {
         LoginRequest(body).then(data => {
             setErros("")
             Cookies.set('access_token', data.data.access_token, { expires: exp90 })
             login(data.data.access_token);
+            handleReturn && handleReturn()
             if (data.data.userRegistered.role === PerfisEnum.CUSTOMER) {
                 history.history.push("/")
             } else {
@@ -28,20 +29,23 @@ export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
             // window.location.reload()
             // history.history.push("/")
         }).catch(erros => {
+            handleReturn && handleReturn()
             console.log(erros.response.data.message)
             setErros(erros.response.data.message)
         })
     }
 
-    function LoginModalAction(body: LoginTypes) {
+    function LoginModalAction(body: LoginTypes, handleReturn?: () => void) {
         LoginRequest(body).then(data => {
             setErros("")
+            handleReturn && handleReturn()
             Cookies.set('access_token', data.data.access_token, { expires: exp90 })
             login(data.data.access_token);
             window.location.reload()
             // history.history.push("/")
         }).catch(erros => {
             console.log(erros.response.data.message)
+            handleReturn && handleReturn()
             setErros(erros.response.data.message)
         })
     }

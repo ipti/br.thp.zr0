@@ -14,6 +14,8 @@ import Logo from "@/components/logo/logo";
 export default function FormLogin() {
   const prime = primeFlex();
   const [erros, setErros] = useState("");
+    const [loading, setLoading] = useState(false);
+
 
   const controllerLogin = LoginController(setErros);
 
@@ -27,6 +29,10 @@ export default function FormLogin() {
       .min(6, "Senha deve ter pelo menos 6 caracteres"),
     email: Yup.string().required("Campo Obrigatório"),
   });
+
+    const handleReturn = () => {
+    setLoading(false);
+  }
 
   return (
     <div
@@ -45,10 +51,11 @@ export default function FormLogin() {
           initialValues={{ email: "", password: "" }}
           validationSchema={schema}
           onSubmit={(values) => {
+            setLoading(true);
             controllerLogin.LoginAction({
               email: values.email,
               password: values.password,
-            });
+            }, handleReturn);
           }}
         >
           {({ values, handleChange, errors, touched }) => {
@@ -99,7 +106,7 @@ export default function FormLogin() {
                   </div>
                   <div className="p-2" />
                   <div >
-                    <ZButton style={{ width: "100%", justifyContent: "center" }}>
+                    <ZButton style={{ width: "100%", justifyContent: "center" }} loading={loading}>
                       Entrar
                     </ZButton>
                   </div>

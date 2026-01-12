@@ -10,10 +10,11 @@ export function SignUpController(setErros: Dispatch<SetStateAction<string>>) {
 
     const history = useNavigation()
 
-    function SignUpAction(body: SignUpTypes) {
+    function SignUpAction(body: SignUpTypes, handleReturn?: () => void) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         SignUpRequest(body).then(data => {
             // history.history.push("/auth/login")
+            handleReturn && handleReturn()
             Swal.fire({
                 icon: 'success',
                 title: 'Cadastro realizado com sucesso!',
@@ -25,6 +26,7 @@ export function SignUpController(setErros: Dispatch<SetStateAction<string>>) {
             });
         }).catch(erros => {
             console.log(erros.response.data.message)
+            handleReturn && handleReturn()
             setErros(erros.response.data.message)
         })
     }

@@ -15,6 +15,7 @@ import Logo from "@/components/logo/logo";
 export default function FormSignUp() {
   const prime = primeFlex();
   const [erros, setErros] = useState("");
+  const [loading, setLoading] = useState(false);
 
   //   const history = useNavigation();
 
@@ -51,6 +52,10 @@ export default function FormSignUp() {
     </>
   );
 
+  const handleReturn = () => {
+    setLoading(false);
+  }
+
   return (
     <div
       className={prime.flex + prime.column + prime.justify_center + "h-full"}
@@ -71,11 +76,12 @@ export default function FormSignUp() {
           }}
           validationSchema={schema}
           onSubmit={(values) => {
+            setLoading(true);
             controllerLogin.SignUpAction({
               name: values.name,
               email: values.email,
               password: values.password,
-            });
+            }, handleReturn);
           }}
         >
           {({ values, handleChange, errors, touched }) => {
@@ -178,6 +184,7 @@ export default function FormSignUp() {
                     <div className="">
                       <ZButton
                         style={{ width: "100%", justifyContent: "center" }}
+                        loading={loading}
                       >
                         Criar
                       </ZButton>
