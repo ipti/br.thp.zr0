@@ -107,7 +107,7 @@ export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
       });
   }
 
-  function CreateOrder(body: CreateOrder) {
+  function CreateOrder(body: CreateOrder, handleReturn?: (value: any) => void) {
     CreateOrderRequest(body)
       .then((data) => {
         // if (data.data.userRegistered.role === PerfisEnum.CUSTOMER) {
@@ -117,6 +117,8 @@ export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
         // }
         // window.location.reload()
        const itemBuy =  body.items.map(item => item)
+
+       handleReturn && handleReturn(data.data)
 
       for(const i of itemBuy ){
         removeItem(i.productId)
@@ -131,7 +133,7 @@ export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
         
       })
       .catch((erros) => {
-
+      handleReturn && handleReturn(erros.response.data)
         console.log(erros.response.data.message)
         Swal.fire({
           text:

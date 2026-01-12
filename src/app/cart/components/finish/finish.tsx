@@ -21,6 +21,8 @@ export default function Finish({
   handleActiveIndex: (i: number) => void;
 }) {
 
+  const [isLoadingFinish, setIsLoadingFinish] = useState(false);
+
   const [checked, setChecked] = useState(false);
 
   const controllerCart = CartController();
@@ -50,7 +52,12 @@ export default function Finish({
 
   var address: Address | undefined = data;
 
+  const handleReturn = (value: any) => {
+    setIsLoadingFinish(false);
+  }
+
   const handleCreateOrder = () => {
+    setIsLoadingFinish(true);
   
     controllerCart.CreateOrder({
       address: {
@@ -81,7 +88,7 @@ export default function Finish({
         }
       }),
       observation: "",
-    });
+    }, handleReturn);
   };
 
   return (
@@ -209,8 +216,9 @@ export default function Finish({
             })}
             <div className="p-3" />
             <ZButton
-              label="Ir para pagamento"
+              label="Conitnuar e finalizar pedido"
               style={{ width: "100%" }}
+              loading={isLoadingFinish}
               onClick={() => {
                 if(!user?.customer?.billing_address?.address && !checked){
                   Swal.fire({

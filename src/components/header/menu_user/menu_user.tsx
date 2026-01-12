@@ -20,7 +20,7 @@ export default function MenuUser() {
              <div className="item_menu" onClick={() => {
                 history.push("/profile")
              }}>
-                <ZAvatar label={user?.name.slice(0,1)} shape="circle" size="large" />
+                <ZAvatar label={user?.name?.slice(0,1)} shape="circle" size="large" />
                 <div className="flex flex-column">
                 <p>{user?.name}</p>
                 <p className="cursor-pointer mt-0">Meu perfil {">"}</p>

@@ -30,9 +30,10 @@ export default function CardPerson({
     {item?.customer?.billing_address?.city?.name && ` - ${item?.customer.billing_address?.city?.name}`}
     {item?.customer?.billing_address?.state?.acronym && ` - ${item?.customer.billing_address?.state?.acronym}`}
   </p>
+  {!(item?.customer?.billing_address?.address && item?.customer?.billing_address.number) &&<h3>Sem endereço de cobrança cadastrado</h3>}
   <div className="p-1" />
+
   <p>
-    {item?.name}
     {item?.customer?.phone && ` - ${item?.customer?.phone}`}
   </p>
 </div>

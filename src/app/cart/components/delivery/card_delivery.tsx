@@ -36,7 +36,7 @@ export function CardDelivery({ shippingItem, shippingSelect, setShippingSelect, 
                                                 }}
                                             />
                                             <div className="p-1" />
-                                            <h1>{item.carrier}</h1>
+                                            <h1>{item.carrier} ({item.service})</h1>
                                         </div>
                                         <div>
                                             <h2>R${item.cost.toFixed(2)}</h2>

@@ -83,7 +83,7 @@ export default function Shipping({ orderItems, disabled }: { orderItems: OrderIt
                                         <ZCard key={index} className="my-2 p-1">
                                             {<div className="flex flex-row justify-content-between m-1">
                                                 <div className="flex flex-row align-items-center">
-                                                    <h5>{item.carrier}</h5>
+                                                    <h5>{item.carrier} ({item.service})</h5>
                                                 </div>
                                                 <div>
                                                     <h5>R${item.cost.toFixed(2)}</h5>

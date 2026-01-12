@@ -28,6 +28,8 @@
   border-radius: 8px;
   font-size: 14px;
   font-weight: bold;
+  background: #d4edda;
+  color: #155724;
 }
 
 .status.pending {
