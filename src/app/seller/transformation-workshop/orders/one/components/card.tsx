@@ -110,7 +110,6 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
               ))}
             </select> */}
                     </div>
-
                     <div className="flex flex-column gap-2 mt-4">
                         <label>Status do Pagamento</label>
                         <ZDropdown options={Object.keys(paymentStatus).map((item) => { return { name: paymentStatus[item], value: item } })} optionLabel="name" value={payStatus} onChange={(e) => setPayStatus(e.target.value)} />

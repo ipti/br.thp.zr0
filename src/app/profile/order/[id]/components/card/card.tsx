@@ -1,17 +1,20 @@
 'use client'
-import React, { useState } from "react";
-import "./card.css";
+import { ZButton } from "@/components/button/button";
+import ZConfirmDialog from "@/components/confirm_dialog/confirm_dialog";
 import { orderStatus } from "@/utils/enum/order_status";
 import { paymentStatus } from "@/utils/enum/payment_status";
-import ZDropdown from "@/components/dropdown/dropdown";
-import { ZButton } from "@/components/button/button";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { OrderController } from "../../../service/controller";
+import "./card.css";
 
 interface OrderProps {
     order: any;
 }
 
 const OrderCard: React.FC<OrderProps> = ({ order }) => {
+
+    const [canceled, setCanceled] = useState(false);
 
     const history = useRouter()
     const totalProducts = order.order_items.reduce(
@@ -26,18 +29,39 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
     const [status, setStatus] = useState(order.status);
     const [payStatus, setPayStatus] = useState(order.payment_status);
 
-
+ const controllerOrder = OrderController()
 
     if (!order) return <>Carregando...</>
 
+    const handleSave = () => {
+        controllerOrder.OrderUpdateAction(order.id, { status: 'SOLITED_CANCELLATION', payment_status: payStatus })
+        // aqui você pode chamar sua API (fetch/axios)
+    };
+
     return (
         <div className="order-card">
+
             <header className="order-header grid">
                 <p className="md: flex flex-row gap-1"><p style={{ fontWeight: 'bold' }}>Pedido</p> #{order.uid}</p>
                 <span className={`status ${status.toLowerCase()}`}>
                     {orderStatus[status]}
                 </span>
             </header>
+
+            <div className="flex flex-row justify-content-start gap-2 mb-4">
+                {(payStatus === 'PENDING' || payStatus === 'FAILED') && !(status === 'SOLITED_CANCELLATION') &&
+                    <>
+                        <ZButton onClick={() => history.push('/payment?id=' + order.id)} icon="pi pi-credit-card" label="  " severity="success">
+                            Realizar pagamento
+                        </ZButton>
+                    </>
+                }
+                {
+                    status === 'CONFIRMED' || status === 'PENDING' &&  <ZButton onClick={() => {setCanceled(!canceled)}} label="Solicitar cancelamento" severity="danger" icon="pi pi-times-circle"/>
+                }
+               
+
+            </div>
 
             <section className="order-section">
                 <h3>Cliente</h3>
@@ -130,17 +154,9 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
 
                 </div>
                 <div className="p-4" />
-                {(payStatus === 'PENDING' || payStatus === 'FAILED') &&
-                    <>
-                        <div className="flex flex-row justify-content-center">
-                            <ZButton onClick={() => history.push('/payment?id=' + order.id)}>
-                                Realizar pagamento
-                            </ZButton>
-                        </div>
-                    </>
-                }
             </footer>
-        </div>
+            <ZConfirmDialog message="Deseja mesmo solicitar o cancelamento?" header="Confirmação" accept={() => handleSave()} acceptLabel="Sim" rejectLabel="Não" visible={canceled} onHide={() => setCanceled(false)} />
+        </div >
     );
 };
 
