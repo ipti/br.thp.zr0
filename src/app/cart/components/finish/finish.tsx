@@ -8,12 +8,12 @@ import { UserGlobal } from "@/service/global_request/type";
 import { useCartStore } from "@/service/store/cart_store";
 import { useContext, useState } from "react";
 import Swal from "sweetalert2";
-import { CartContext } from "../../context/context";
 import { CartController } from "../../service/controller";
 import { useFetchAddressOneRequest } from "../../service/query";
 import CardAddress from "../card_address/card_address";
 import CardPerson from "../card_person/card_person";
 import ToggleButtonComponent from "@/components/toggle_button/toggle_button";
+import { useCartStepsStore } from "../../zustand/zustand";
 
 export default function Finish({
   handleActiveIndex,
@@ -29,10 +29,12 @@ export default function Finish({
 
   const cart = useCartStore((state) => state.cart);
 
-  const cartContext = useContext(CartContext);
+      const cartSteps = useCartStepsStore(state => state)
+  
+
 
   const { data, isLoading } = useFetchAddressOneRequest(
-    cartContext?.initialValue.address_selected ?? 0
+    cartSteps?.cartSteps.address_selected ?? 0
   );
 
   const { data: userRequest, isLoadingUser } = useFetchUserToken();
@@ -42,7 +44,7 @@ export default function Finish({
   const total = cart.reduce(
     (sum, item) =>
       sum +
-      (cartContext?.initialValue.product_selected?.find(
+      (cartSteps?.cartSteps.product_selected?.find(
         (props) => props === item.id
       )
         ? item.price * item.quantity
@@ -72,9 +74,9 @@ export default function Finish({
         phone: address?.phone ?? "",
       },
       userId: user?.id ?? 0,
-      items: cartContext?.initialValue?.deliverySelected?.map((item) => {
+      items: cartSteps?.cartSteps.deliverySelected?.map((item) => {
         const product = cart.find((cartItem) =>
-          cartContext?.initialValue.product_selected?.find(
+          cartSteps?.cartSteps.product_selected?.find(
             (prop) => prop === cartItem.id
           )
         );
@@ -86,26 +88,20 @@ export default function Finish({
             workshopId: item?.workshopId ?? 0,
           };
         }
-      }),
+      }) || [],
       observation: "",
     }, handleReturn);
   };
 
   return (
     <div>
-      <h3>Revise e confirme</h3>
+      <h1>Revise e confirme</h1>
       <div className="p-2" />
       <p>Confirme os detalhes do seu pedido antes de finalizar.</p>
       <div className="p-2" />
-          <h4>Faturamento</h4>
-          <div className="p-2" />
       <div className="grid">
         <div className="col-12 md:col-8">
-          {!isLoading && <CardPerson item={user!} isEdit />}
-          <div className="p-2" />
-          <div className="flex flex-row align-items-center gap-2">
-            O endereço de faturamento o mesmo de entrega? <ToggleButtonComponent onLabel="Sim" offLabel="Não" checked={checked} onChange={(e) => setChecked(e.value)} />
-          </div>
+          {!isLoading && <CardPerson item={user!} cep={address?.cep} isEdit />}
           <div className="p-2" />
           <h4>Endereço selecionado</h4>
           <div className="p-2" />
@@ -114,7 +110,7 @@ export default function Finish({
           <h4>Produtos selecionados</h4>
           <div className="p-2" />
           {cart.map((item) => {
-            const isSelect = !!cartContext?.initialValue.product_selected?.find(
+            const isSelect = !!cartSteps?.cartSteps.product_selected?.find(
               (prop) => prop === item.id
             );
             return (
@@ -162,7 +158,7 @@ export default function Finish({
             <div className="flex flex-row justify-content-between">
               <h4>Frete:</h4>{" "}
               {!(
-                (cartContext?.initialValue.deliverySelected?.length ?? 0) > 0
+                (cartSteps?.cartSteps.deliverySelected?.length ?? 0) > 0
               ) ? (
                 <div className="flex flex-column justify-content-center">
                   <ZSkeleton width="64px" />
@@ -170,7 +166,7 @@ export default function Finish({
               ) : (
                 <h3>
                   R$
-                  {cartContext?.initialValue.deliverySelected
+                  {cartSteps?.cartSteps.deliverySelected
                     ?.reduce((sum, item) => sum + item.validOptions.cost, 0)
                     .toFixed(2)}
                 </h3>
@@ -183,7 +179,7 @@ export default function Finish({
                 R$
                 {
                   (total +
-                    (cartContext?.initialValue.deliverySelected?.reduce(
+                    (cartSteps?.cartSteps.deliverySelected?.reduce(
                       (sum, item) => sum + item.validOptions.cost,
                       0
                     ) ?? 0)).toFixed(2) +
@@ -201,7 +197,7 @@ export default function Finish({
               <h3>Envio</h3>
             </div>
             <div className="p-1" />
-            {cartContext?.initialValue.deliverySelected?.map((item, index) => {
+            {cartSteps?.cartSteps.deliverySelected?.map((item, index) => {
               return (
                 <div key={index} className="mb-1">
                   <h5>
@@ -220,11 +216,11 @@ export default function Finish({
               style={{ width: "100%" }}
               loading={isLoadingFinish}
               onClick={() => {
-                if(!user?.customer?.billing_address?.address && !checked){
+                if(!user?.customer?.phone && !checked){
                   Swal.fire({
                     icon: 'warning',
                     title: 'Atenção',
-                    text: 'Seu endereço de faturamento está incompleto. Por favor, atualize suas informações de faturamento antes de finalizar o pedido.',
+                    text: 'Seus dados pessoais estão incompletas. Por favor, atualize suas informações de faturamento antes de finalizar o pedido.',
                 })
               } else {
                 handleCreateOrder();

@@ -1,17 +1,17 @@
-import { CartContext } from "@/app/cart/context/context";
+import { useFetchProductOneQuantity } from "@/app/cart/service/query";
+import { useCartStepsStore } from "@/app/cart/zustand/zustand";
 import { ZButton } from "@/components/button/button";
 import ZCheckbox from "@/components/checkbox/checkbox";
-import ZDropdown from "@/components/dropdown/dropdown";
 import { useCartStore } from "@/service/store/cart_store";
 import { CartItem } from "@/service/store/type";
-import { useContext, useState } from "react";
-import './item.css'
-import { useFetchProductOneQuantity } from "@/app/cart/service/query";
+import { useState } from "react";
+import './item.css';
 
 export default function Item({ item }: { item: CartItem }) {
-    const cartContext = useContext(CartContext)
+      const cartSteps = useCartStepsStore(state => state)
+    
     const [quantity, setQuantity] = useState(item.quantity)
-    const isSelect = !!cartContext?.initialValue.product_selected?.find(prop => prop === item.id)
+    const isSelect = !!cartSteps.cartSteps?.product_selected?.find(prop => prop === item.id)
     const removeItem = useCartStore((state) => state.removeItem);
     const updateItem = useCartStore((state) => state.updateQuantity)
 
@@ -31,10 +31,10 @@ export default function Item({ item }: { item: CartItem }) {
             <div className="flex flex-column justify-content-center">
                 <ZCheckbox value={item.id} className="mr-4" onChange={() => {
                     if (isSelect) {
-                        cartContext?.setInitialValue(prev => ({ ...prev, product_selected: prev.product_selected?.filter(props => props !== item.id) }))
+                        cartSteps.updateCartSteps({ ...cartSteps.cartSteps, product_selected: cartSteps.cartSteps.product_selected?.filter(props => props !== item.id) })
                     } else {
                         // cartContext?.initialValue.product_selected?.push(item.id)
-                        cartContext?.setInitialValue(prev => ({ ...prev, product_selected: prev.product_selected?.concat(item.id) }))
+                        cartSteps.updateCartSteps({ ...cartSteps.cartSteps, product_selected: cartSteps.cartSteps.product_selected?.concat(item.id) })
                         // cartContext?.setInitialValue(prev => ({...prev, product_selected: prev.product_selected?.push(props => props !== item.id)}))
                     }
                 }} checked={isSelect} />

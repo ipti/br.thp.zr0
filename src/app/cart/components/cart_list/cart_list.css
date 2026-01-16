@@ -6,7 +6,8 @@ box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 
 }
 
 .card_total h4 {
-    color: silver;
+    color: rgb(130, 130, 130);
+    font-size: 14px;
 }
 
 .card_total h3 {

@@ -1,18 +1,14 @@
 "use client";
-import { ProductClientController } from "@/app/product/service/controller";
-import { ShippingGetType, ValidOption } from "@/app/product/service/type";
 import { ZButton } from "@/components/button/button";
 import LoginModal from "@/components/header/login/login_modal";
-import ZInputMask from "@/components/input_mask/input_mask";
+import Shipping from "@/components/shipping/shipping";
 import ZSkeleton from "@/components/skeleton/skeleton";
 import { useCartStore } from "@/service/store/cart_store";
-import { Form, Formik } from "formik";
 import Cookies from 'js-cookie';
-import { useContext, useEffect, useState } from "react";
-import { CartContext } from "../../context/context";
+import { useEffect, useState } from "react";
+import { useCartStepsStore } from "../../zustand/zustand";
 import "./cart_list.css";
 import Item from "./item/item";
-import Shipping from "@/components/shipping/shipping";
 
 
 
@@ -29,14 +25,14 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
 
 
   const cart = useCartStore((state) => state.cart);
-  const cartContext = useContext(CartContext)
+  const cartSteps = useCartStepsStore(state => state)
 
   useEffect(() => {
-    cartContext?.setInitialValue(prev => ({ ...prev, product_selected: cart.map(item => { return item.id }) }))
+    cartSteps.updateCartSteps({...cartSteps.cartSteps,product_selected: cart.map(item => { return item.id }) })
   }, [])
 
   const total = cart.reduce(
-    (sum, item) => sum + (cartContext?.initialValue.product_selected?.find(props => props === item.id) ? item.price * item.quantity : 0),
+    (sum, item) => sum + (cartSteps.cartSteps.product_selected?.find(props => props === item.id) ? item.price * item.quantity : 0),
     0
   );
 
@@ -66,16 +62,17 @@ export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i:
         </div>
         <div className="col-12 md:col-4">
           <div className="card_total">
-            <div className="flex flex-row justify-content-between mb-1"><h4>Total:</h4> <h3>R${total.toFixed(2)}</h3></div>
+            <h1 className="mb-3">Resumo do pedido</h1>
+            <div className="flex flex-row justify-content-between mb-1"><h4>Valor total dos produtos:</h4> <h2>R${total.toFixed(2)}</h2></div>
             {/* <div className="flex flex-row justify-content-between"><h4>Frete:</h4> {isLoadingCep ? <div className="flex flex-column justify-content-center"><ZSkeleton width="64px" /></div> : <h3>R${shippingSelect?.cost?.toFixed(2)}</h3>}</div> */}
             {/* <ZDivider />
             <div className="flex flex-row justify-content-end">
               <h1>R${(total + (shippingSelect?.cost ?? 0)).toFixed(2)}</h1>
             </div>
             <div className="p-2" /> */}
-           <Shipping orderItems={cartContext?.productSelected() ?? []} cart={cart} />
-            <div className="p-3" />
-            <ZButton label="Continuar" style={{ width: "100%" }} onClick={() => { token ? handleActiveIndex(1) : setModalLogin(!modalLogin) }} />
+          {(token && cart.length > 0) && <Shipping orderItems={cartSteps?.productSelected() ?? []} cart={cart} />}
+           <div className="p-3" />
+           <ZButton label="Continuar" style={{ width: "100%" }} onClick={() => { token ? handleActiveIndex(1) : setModalLogin(!modalLogin) }} />
           </div>
         </div>
       </div>

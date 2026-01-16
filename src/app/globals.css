@@ -6,9 +6,9 @@
   --primary-color: black;
   --hover-primary-color: rgba(0, 0, 0, 0.752);
   --primary-color-text: #ffffff;
-  --text-base: 14px;
-  --text-2xl: 18px;
-  --text-xl: 16px
+  --text-base: 16px;
+  --text-2xl: 20px;
+  --text-xl: 18px
 
   :root {
     --blue-50: #f5f9ff;
