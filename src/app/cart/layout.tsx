@@ -1,11 +1,12 @@
-import Header from "@/components/header/header";
-import { Providers } from "@/service/provider";
-import { Suspense } from "react";
+import Header from '@/components/header/header'
+import { Providers } from '@/service/provider'
+import { Suspense } from 'react'
+import Footer from '../components/footer/footer'
 
 export default function CartLayout({
-  children,
+  children
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <div className="h-full">
@@ -17,6 +18,7 @@ export default function CartLayout({
           </main>
         </Providers>
       </div>
+      <Footer />
     </div>
-  );
+  )
 }
