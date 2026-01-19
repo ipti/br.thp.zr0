@@ -6,7 +6,7 @@ export const SignUpRequest = async (
 ) => {
   return await http
     .post(
-      "/users",
+      "/user-bff/created-user-with-custumer",
       body,
     )
 };
