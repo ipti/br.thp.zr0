@@ -1,27 +1,19 @@
 'use client'
-import { ProductList, ProductType } from '@/app/seller/product/type'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { ProductList } from '@/app/seller/product/type'
 import './product.css'
 import '../home.css'
 import { DetailsProduct } from './details_product/details_product'
-import { useRouter } from 'next/navigation'
 
 type ProductProps = {
-  item: ProductType
   listProduct: ProductList
 }
-const Product: React.FC<ProductProps> = ({ item, listProduct }) => {
+const Product: React.FC<ProductProps> = ({ listProduct }) => {
   const router = useRouter()
-  const allProducts = listProduct.map(product => {
-    if (product.uid !== item.uid) {
-      return product
-    }
-  })
 
-  const handleSelectProduct = (id: string) => {
-    router.push(`/product/${id}`)
-  }
+  const [focusProduct, setFocusProduct] = useState(listProduct[0])
 
-  console.log({ allProducts })
   return (
     <section className="product-section">
       <div className="product-container">
@@ -38,23 +30,22 @@ const Product: React.FC<ProductProps> = ({ item, listProduct }) => {
           {/* Imagem principal */}
           <div className="product-main-image">
             <img
-              src={item.product_image[0]?.img_url}
-              alt={item.name}
-              onClick={() => handleSelectProduct(item.uid)}
+              src={focusProduct.product_image[0].img_url}
+              alt={focusProduct.description}
             />
-            <DetailsProduct item={item} home />
+            <DetailsProduct item={focusProduct} home />
           </div>
 
           {/* Galeria lateral */}
           <div className="product-gallery">
-            {allProducts.map(product => {
-              if (product) {
+            {listProduct.map((product, index) => {
+              if (product.uid !== focusProduct.uid) {
                 return (
                   <img
                     key={product.name}
                     src={product.product_image[0].img_url}
                     alt={`Produto ${product.name}`}
-                    onClick={() => handleSelectProduct(product.uid)}
+                    onClick={() => setFocusProduct(listProduct[index])}
                   />
                 )
               }
@@ -66,7 +57,12 @@ const Product: React.FC<ProductProps> = ({ item, listProduct }) => {
               Ver todos os produtos →
             </button>
           </div>
-
+          <button
+            className="view-all-mobile"
+            onClick={() => router.push(`/product`)}
+          >
+            Ver todos os produtos →
+          </button>
           {/* Detalhes */}
         </div>
       </div>

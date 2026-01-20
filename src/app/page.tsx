@@ -19,11 +19,7 @@ export default async function Home() {
       <About />
       <VideoComponet />
       <Impact />
-      {product?.slice(0, 1).map(item => (
-        <div key={item.uid}>
-          <Product item={item} listProduct={product} />
-        </div>
-      ))}
+      <Product listProduct={product} />
       {/* <Gallery /> */}
       <Footer />
     </div>
