@@ -42,6 +42,10 @@
   object-fit: cover;
 }
 
+.product-main-image img:hover {
+  cursor: pointer;
+}
+
 /* Galeria lateral */
 .product-gallery {
   display: flex;

@@ -1,22 +1,36 @@
 'use client'
-import { ProductType } from '@/app/seller/product/type'
+import { ProductList, ProductType } from '@/app/seller/product/type'
 import './product.css'
-import "../home.css"
+import '../home.css'
 import { DetailsProduct } from './details_product/details_product'
-import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
+type ProductProps = {
+  item: ProductType
+  listProduct: ProductList
+}
+const Product: React.FC<ProductProps> = ({ item, listProduct }) => {
+  const router = useRouter()
+  const allProducts = listProduct.map(product => {
+    if (product.uid !== item.uid) {
+      return product
+    }
+  })
 
-export default function Product({ item }: { item: ProductType }) {
-  const [imageIndex, setImageIndex] = useState(0);
+  const handleSelectProduct = (id: string) => {
+    router.push(`/product/${id}`)
+  }
+
+  console.log({ allProducts })
   return (
-    <section className='product-section'>
+    <section className="product-section">
       <div className="product-container">
-
         {/* Cabeçalho */}
         <div className="product-header">
           <h2>Cada peça carrega uma história</h2>
           <p>
-            Produzido artesanalmente com plástico reciclado, cada móvel é único e feito com propósito.
+            Produzido artesanalmente com plástico reciclado, cada móvel é único
+            e feito com propósito.
           </p>
         </div>
 
@@ -24,25 +38,40 @@ export default function Product({ item }: { item: ProductType }) {
           {/* Imagem principal */}
           <div className="product-main-image">
             <img
-              src={item.product_image[imageIndex]?.img_url}
+              src={item.product_image[0]?.img_url}
               alt={item.name}
+              onClick={() => handleSelectProduct(item.uid)}
             />
             <DetailsProduct item={item} home />
           </div>
 
           {/* Galeria lateral */}
           <div className="product-gallery">
-            {item.product_image.slice(0, 3).map((img, idx) => (
-              <img key={idx} src={img.img_url} onClick={() => setImageIndex(idx)} alt={`Produto ${idx}`} />
-            ))}
-            <button className="view-all" onClick={() => window.location.href = `/product`}>Ver todos os produtos →</button>
+            {allProducts.map(product => {
+              if (product) {
+                return (
+                  <img
+                    key={product.name}
+                    src={product.product_image[0].img_url}
+                    alt={`Produto ${product.name}`}
+                    onClick={() => handleSelectProduct(product.uid)}
+                  />
+                )
+              }
+            })}
+            <button
+              className="view-all"
+              onClick={() => router.push(`/product`)}
+            >
+              Ver todos os produtos →
+            </button>
           </div>
 
           {/* Detalhes */}
-
-
         </div>
       </div>
     </section>
   )
 }
+
+export default Product
