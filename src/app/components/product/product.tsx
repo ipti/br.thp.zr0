@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { ProductList } from '@/app/seller/product/type'
 import './product.css'
 import '../home.css'
@@ -10,9 +9,11 @@ type ProductProps = {
   listProduct: ProductList
 }
 const Product: React.FC<ProductProps> = ({ listProduct }) => {
-  const router = useRouter()
-
   const [focusProduct, setFocusProduct] = useState(listProduct[0])
+
+  const handleNavigateToProducts = () => {
+    window.location.href = '/product'
+  }
 
   return (
     <section className="product-section">
@@ -50,16 +51,13 @@ const Product: React.FC<ProductProps> = ({ listProduct }) => {
                 )
               }
             })}
-            <button
-              className="view-all"
-              onClick={() => router.push(`/product`)}
-            >
+            <button className="view-all" onClick={handleNavigateToProducts}>
               Ver todos os produtos →
             </button>
           </div>
           <button
             className="view-all-mobile"
-            onClick={() => router.push(`/product`)}
+            onClick={handleNavigateToProducts}
           >
             Ver todos os produtos →
           </button>
