@@ -57,36 +57,20 @@ export default function MenuUser() {
       <ZDivider />
 
       {itemsMenu.map(item => {
-        if (item.type === 'Exit') {
-          return (
-            <div
-              key={item.label}
-              className="item_menu"
-              onClick={() => {
-                logout()
-                window.location.reload()
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center'
-                }}
-              >
-                <i className={item.icon} />
-              </div>
-              <p>{item.label}</p>
-            </div>
-          )
-        }
         return (
           <div
             key={item.label}
             className="item_menu"
-            onClick={() => {
-              history.push(item.router)
-            }}
+            onClick={
+              item.type === 'Exit'
+                ? () => {
+                    logout()
+                    window.location.reload()
+                  }
+                : () => {
+                    history.push(item.router)
+                  }
+            }
           >
             <div
               style={{
