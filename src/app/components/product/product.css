@@ -50,7 +50,6 @@
 }
 
 .product-gallery img {
-
   width: 128px;
   border-radius: 0.75rem;
   object-fit: cover;
@@ -87,29 +86,24 @@
   gap: 1rem;
   font-family: 'Poppins Regular', sans-serif;
   padding: 16px 0;
-
 }
 
 .product-title {
   font-size: 1rem;
   font-weight: 400;
   font-family: 'Poppins Regular', sans-serif;
-
 }
 
 .product-price {
   font-size: 1rem;
   font-weight: 600;
   font-family: 'Poppins Regular', sans-serif;
-
 }
 
 .product-description {
   color: #555;
   font-family: 'Poppins Regular', sans-serif;
   font-weight: 400;
-
-
 }
 
 .product-location {
