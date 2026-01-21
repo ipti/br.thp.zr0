@@ -1,5 +1,5 @@
 import http from "@/service/axios";
-import { CreateAddressCustomerType } from "./type";
+import { CreateAddressCustomerType, UpdateDefaultAddressCustomerType } from "./type";
 
 export const requestGetAddressCustomer = () => {
      let path = "/user-bff/address-custumer";
@@ -22,6 +22,26 @@ export const requestCreateAddressCustomer = async (
       .post(
         "/address-customer",
         body,
+      )
+  };
+
+  export const requestUpdateDefaultAddressCustomer = async (
+    body: UpdateDefaultAddressCustomerType 
+  ) => {
+    return await http
+      .patch(
+        "/address-customer/default",
+        body,
+      )
+  };
+  
+
+  export const requestDeleteAddressCustomer = async (
+    id: number, costumerId: number
+  ) => {
+    return await http
+      .delete(
+        "/address-customer/"+ id + "/" + costumerId,
       )
   };
   
