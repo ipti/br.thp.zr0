@@ -6,6 +6,7 @@ import Product from './components/product/product'
 import SplitterHome from './components/splitter_home/splitter_home'
 import VideoComponet from './components/video/video'
 import { getProducts } from './middleware/producs_list'
+import Contact from './components/contact/contact'
 
 export const revalidate = 60
 
@@ -20,7 +21,7 @@ export default async function Home() {
       <VideoComponet />
       <Impact />
       <Product listProduct={product} />
-      {/* <Gallery /> */}
+      <Contact />
       <Footer />
     </div>
   )

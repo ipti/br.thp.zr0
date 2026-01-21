@@ -2,21 +2,23 @@ import './footer.css'
 import logo from '../../../assets/img/logo_white.png'
 import Image from 'next/image'
 import { ISocialLinks, ILinks } from './types'
+import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   const socialLinks: ISocialLinks[] = [
-    // { icon: Facebook, href: '#', label: 'Facebook' },
-    // { icon: Instagram, href: '#', label: 'Instagram' },
-    // { icon: Twitter, href: '#', label: 'Twitter' },
-    // { icon: Youtube, href: '#', label: 'YouTube' }
+    { icon: <Facebook />, href: '#', label: 'Facebook' },
+    { icon: <Instagram />, href: '#', label: 'Instagram' },
+    { icon: <Twitter />, href: '#', label: 'Twitter' },
+    { icon: <Youtube />, href: '#', label: 'YouTube' }
   ]
 
   const companyLinks: ILinks[] = [
-    { name: 'Sobre nós', href: '#' },
-    { name: 'Nossa história', href: '#' },
-    { name: 'Sustentabilidade', href: '#' }
+    { name: 'Sobre nós', href: '/about-us' },
+    { name: 'Nossa história', href: '/about-us#history' },
+    { name: 'Sustentabilidade', href: '/about-us#sustentability' },
+    { name: 'Contate-nos', href: '/contact' }
   ]
 
   const supportLinks: ILinks[] = [
@@ -27,10 +29,10 @@ export default function Footer() {
   ]
 
   const productLinks: ILinks[] = [
-    { name: 'Sofás', href: '#' },
-    { name: 'Poltronas', href: '#' },
-    { name: 'Mesas', href: '#' },
-    { name: 'Estantes', href: '#' }
+    { name: 'Sofás', href: '/product?category=sofas' },
+    { name: 'Poltronas', href: '/product?category=poltronas' },
+    { name: 'Mesas', href: '/product?category=mesas' },
+    { name: 'Estantes', href: '/product?category=estantes' }
   ]
 
   return (
@@ -49,22 +51,6 @@ export default function Footer() {
               ambiente.
             </p>
 
-            {/* Contact Info */}
-            {/* <div className="footer-contact">
-                            <div className="contact-item">
-                                <MapPin size={16} />
-                                <span>São Paulo, SP - Brasil</span>
-                            </div>
-                            <div className="contact-item">
-                                <Phone size={16} />
-                                <span>(11) 9999-9999</span>
-                            </div>
-                            <div className="contact-item">
-                                <Mail size={16} />
-                                <span>contato@zio.com.br</span>
-                            </div>
-                        </div> */}
-
             {/* Social Media */}
             <div className="footer-socials">
               {socialLinks?.map(social => (
@@ -73,7 +59,7 @@ export default function Footer() {
                   href={social.href}
                   aria-label={social.label}
                 >
-                  <social.icon size={18} />
+                  {social.icon}
                 </a>
               ))}
             </div>
@@ -124,15 +110,9 @@ export default function Footer() {
             © {currentYear} Zr0. Todos os direitos reservados.
           </div>
 
-          {/* Pagination Dots */}
-          <div className="footer-dots">
-            <div className="dot active"></div>
-            <div className="dot"></div>
-            <div className="dot"></div>
-            <div className="dot inactive"></div>
+          <div className="footer-made">
+            Feito com ❤️ em Santa Luzia do Itanhy
           </div>
-
-          <div className="footer-made">Feito com ❤️ no Brasil</div>
         </div>
       </div>
     </footer>

@@ -81,6 +81,7 @@
   background: transparent;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  width: max-content;
 }
 
 .section-sobre .btn-sobre:hover {
