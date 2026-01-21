@@ -25,7 +25,7 @@ export default function Shipping({ orderItems, disabled }: { orderItems: OrderIt
 
     const productClientController = ProductClientController({ setShipping, setShippingSelect });
 
-    const addressSelect = addressList?.customer.address_customer[0]
+    const addressSelect = addressList?.customer.address_customer.find(item => item.is_default)
 
     const handleShippingCalculate = (
         cep?: string,
