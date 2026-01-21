@@ -1,22 +1,29 @@
 'use client'
-import { ProductType } from '@/app/seller/product/type'
-import './product.css'
-import "../home.css"
-import { DetailsProduct } from './details_product/details_product'
 import { useState } from 'react'
+import { ProductList } from '@/app/seller/product/type'
+import './product.css'
+import '../home.css'
+import { DetailsProduct } from './details_product/details_product'
 
+type ProductProps = {
+  listProduct: ProductList
+}
+const Product: React.FC<ProductProps> = ({ listProduct }) => {
+  const [focusProduct, setFocusProduct] = useState(listProduct[0])
 
-export default function Product({ item }: { item: ProductType }) {
-  const [imageIndex, setImageIndex] = useState(0);
+  const handleNavigateToProducts = () => {
+    window.location.href = '/product'
+  }
+
   return (
-    <section className='product-section'>
+    <section className="product-section">
       <div className="product-container">
-
         {/* Cabeçalho */}
         <div className="product-header">
           <h2>Cada peça carrega uma história</h2>
           <p>
-            Produzido artesanalmente com plástico reciclado, cada móvel é único e feito com propósito.
+            Produzido artesanalmente com plástico reciclado, cada móvel é único
+            e feito com propósito.
           </p>
         </div>
 
@@ -24,25 +31,41 @@ export default function Product({ item }: { item: ProductType }) {
           {/* Imagem principal */}
           <div className="product-main-image">
             <img
-              src={item.product_image[imageIndex]?.img_url}
-              alt={item.name}
+              src={focusProduct.product_image[0].img_url}
+              alt={focusProduct.description}
             />
-            <DetailsProduct item={item} home />
+            <DetailsProduct item={focusProduct} home />
           </div>
 
           {/* Galeria lateral */}
           <div className="product-gallery">
-            {item.product_image.slice(0, 3).map((img, idx) => (
-              <img key={idx} src={img.img_url} onClick={() => setImageIndex(idx)} alt={`Produto ${idx}`} />
-            ))}
-            <button className="view-all" onClick={() => window.location.href = `/product`}>Ver todos os produtos →</button>
+            {listProduct.map((product, index) => {
+              if (product.uid !== focusProduct.uid) {
+                return (
+                  <img
+                    key={product.name}
+                    src={product.product_image[0].img_url}
+                    alt={`Produto ${product.name}`}
+                    onClick={() => setFocusProduct(listProduct[index])}
+                  />
+                )
+              }
+            })}
+            <button className="view-all" onClick={handleNavigateToProducts}>
+              Ver todos os produtos →
+            </button>
           </div>
-
+          <button
+            className="view-all-mobile"
+            onClick={handleNavigateToProducts}
+          >
+            Ver todos os produtos →
+          </button>
           {/* Detalhes */}
-
-
         </div>
       </div>
     </section>
   )
 }
+
+export default Product

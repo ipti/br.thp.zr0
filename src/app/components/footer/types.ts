@@ -4,7 +4,7 @@ export type ILinks = {
 }
 
 export type ISocialLinks = {
-  icon: React.ComponentType<{ size?: number }>
+  icon: React.ReactNode
   label: string
   href: string
 }

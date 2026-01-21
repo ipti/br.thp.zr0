@@ -1,18 +1,17 @@
-import Header from "@/components/header/header";
-import About from "./components/about/about";
-import Footer from "./components/footer/footer";
-import Gallery from "./components/gallery/gallery";
-import Impact from "./components/impact/impact";
-import Product from "./components/product/product";
-import SplitterHome from "./components/splitter_home/splitter_home";
-import VideoComponet from "./components/video/video";
-import { getProducts } from "./middleware/producs_list";
+import Header from '@/components/header/header'
+import About from './components/about/about'
+import Footer from './components/footer/footer'
+import Impact from './components/impact/impact'
+import Product from './components/product/product'
+import SplitterHome from './components/splitter_home/splitter_home'
+import VideoComponet from './components/video/video'
+import { getProducts } from './middleware/producs_list'
+import Contact from './components/contact/contact'
 
-export const revalidate = 60;
+export const revalidate = 60
 
 export default async function Home() {
-  const product = await getProducts();
-
+  const product = await getProducts()
 
   return (
     <div>
@@ -21,13 +20,9 @@ export default async function Home() {
       <About />
       <VideoComponet />
       <Impact />
-      {(product as any[])?.slice(0, 1).map((item: any, index: number) => (
-        <div key={index}>
-          <Product item={item} />
-        </div>
-      ))}
-      {/* <Gallery /> */}
+      <Product listProduct={product} />
+      <Contact />
       <Footer />
     </div>
-  );
+  )
 }

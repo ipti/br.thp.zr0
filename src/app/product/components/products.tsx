@@ -1,11 +1,9 @@
-import { getProducts } from '@/app/middleware/producs_list';
-import './product.css';
-import { ProductFilters } from './product_filter/product_filter';
-import ProductList from './product_list/product_list';
-export default async function Products() {
+import { getProducts } from '@/app/middleware/producs_list'
+import ProductList from './product_list/product_list'
 
-  const product = await getProducts();
-    
+import './product.css'
+export default async function Products() {
+  const product = await getProducts()
 
   return (
     <div>
@@ -19,11 +17,8 @@ export default async function Products() {
           mas também pelo seu compromisso com o meio ambiente.
         </p>
       </div>
-      {/* <ProductFilters categories={[]} selectedCategory='' searchTerm='' sortBy='' /> */}
-      {/* <p className='py-4'>
-        {product?.length} produtos encontrados
-      </p> */}
+
       <ProductList filteredAndSortedProducts={product} />
     </div>
-  );
+  )
 }

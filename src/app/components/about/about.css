@@ -1,91 +1,90 @@
 /* Container geral da seção */
 .section-sobre {
-    padding: 5rem 1rem;
+  padding: 5rem 1rem;
 }
 
 /* Centraliza e limita largura */
 .section-sobre .content {
-    /* equivalente ao lg:w-9 */
-    margin: 0 5rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  /* equivalente ao lg:w-9 */
+  margin: 0 5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 /* Grid base */
 .section-sobre .grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
 }
 
 /* Responsivo para duas colunas */
 @media (min-width: 768px) {
-    .section-sobre .grid {
-        grid-template-columns: 1fr 1fr;
-    }
+  .section-sobre .grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 /* Título */
 .section-sobre h2 {
-    font-size: 48px;
+  font-size: 48px;
 
-    /* equivalente a text-4xl */
-    @media (max-width: 600px) {
-        font-size: 36px;
-    }
-
+  /* equivalente a text-4xl */
+  @media (max-width: 600px) {
+    font-size: 36px;
+  }
 }
 
 /* Parágrafos */
 .section-sobre p {
-    /* equivalente a text-600 */
-    font-family: 'Poppins Regular', sans-serif;
-    font-weight: 400;
-    line-height: 2.3rem;
-    font-size: 22px;
-    /* equivalente a line-height-3 */
-    margin: 0;
+  /* equivalente a text-600 */
+  font-family: 'Poppins Regular', sans-serif;
+  font-weight: 400;
+  line-height: 2.3rem;
+  font-size: 22px;
+  /* equivalente a line-height-3 */
+  margin: 0;
 
-    @media (max-width: 600px) {
-        font-size: 18px;
-        line-height: 1.8rem;
-    }
-
+  @media (max-width: 600px) {
+    font-size: 18px;
+    line-height: 1.8rem;
+  }
 }
 
 /* Estado inicial da animação */
 .section-sobre h2,
 .section-sobre p {
-    opacity: 0; /* Elemento começa invisível */
-    transform: translateY(20px); /* Move para baixo fora da posição inicial */
-    transition: all 0.6s ease-out;
+  opacity: 0; /* Elemento começa invisível */
+  transform: translateY(20px); /* Move para baixo fora da posição inicial */
+  transition: all 0.6s ease-out;
 }
 
 /* Estado visível após aparecer na tela */
 .section-sobre h2.animate,
 .section-sobre p.animate {
-    opacity: 1; /* Elemento se torna visível */
-    transform: translateY(0); /* Movimento concluído */
+  opacity: 1; /* Elemento se torna visível */
+  transform: translateY(0); /* Movimento concluído */
 }
 
 /* Botão */
 .section-sobre .btn-sobre {
-    gap: 8px;
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 2rem;
-    border: 1px solid #000000;
-    font-family: 'Inter Medium', sans-serif;
-    /* border-400 */
-    color: #000000;
-    border-radius: 24px;
-    background: transparent;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  border: 1px solid #000000;
+  font-family: 'Inter Medium', sans-serif;
+  /* border-400 */
+  color: #000000;
+  border-radius: 24px;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: max-content;
 }
 
 .section-sobre .btn-sobre:hover {
-    background-color: #f9fafb;
-    /* surface-50 */
+  background-color: #f9fafb;
+  /* surface-50 */
 }

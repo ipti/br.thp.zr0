@@ -1,13 +1,32 @@
+.screen_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 2rem;
+  margin: 2rem 0;
+}
 .container_contact {
-    position: relative; /* garante que elementos absolutos fiquem dentro */
-    overflow: hidden;  
-    z-index: 1;
-
-    padding: 64px;
+  position: relative;
+  z-index: 1;
+  background-color: var(--primary-color);
+  padding: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  width: 80vw;
+  border-radius: 3rem;
 }
 
-.container_contact h1 {
-    font-family: 'hitv-demo', sans-serif;
-    font-size: 64px;
-    font-weight: 700;
+.product-header h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.product-header p {
+  color: #555;
+  margin-top: 0.5rem;
 }
