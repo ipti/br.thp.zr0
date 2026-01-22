@@ -64,7 +64,7 @@ export const DetailsProduct = ({
           </>
         )}
       </div>
-      {!home && (
+      {(!home && item?.quantity > 0)&& (
         <Shipping
           orderItems={[
             { productId: item?.uid?.toString() ?? '1', quantity: quantity }

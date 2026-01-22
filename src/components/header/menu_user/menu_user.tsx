@@ -5,6 +5,7 @@ import './menu_user.css'
 import ZDivider from '@/components/divider/divider'
 import { logout } from '@/service/cookies'
 import { useRouter } from 'next/navigation'
+import ZSkeleton from '@/components/skeleton/skeleton'
 
 type ItemsMenu = {
   router: string
@@ -15,7 +16,7 @@ type ItemsMenu = {
 export default function MenuUser() {
   const history = useRouter()
 
-  const { data: userRequest } = useFetchUserToken()
+  const { data: userRequest, isLoading } = useFetchUserToken()
 
   const user: User | undefined = userRequest
 
@@ -27,9 +28,21 @@ export default function MenuUser() {
       type: 'Normal'
     },
     {
+      icon: 'pi pi-id-card',
+      label: 'Meus Dados',
+      router: '/profile/your_information',
+      type: 'Normal'
+    },
+    {
       icon: 'pi pi-box',
-      label: 'Pedidos',
+      label: 'Meus pedidos',
       router: '/profile/order',
+      type: 'Normal'
+    },
+    {
+      icon: 'pi pi-map-marker',
+      label: 'Endereço',
+      router: '/profile/address',
       type: 'Normal'
     },
     {
@@ -48,10 +61,10 @@ export default function MenuUser() {
           history.push('/profile')
         }}
       >
-        <ZAvatar label={user?.name?.slice(0, 1)} shape="circle" size="large" />
+        {isLoading ? <><ZSkeleton shape="circle" size="3rem" className="mr-2"></ZSkeleton></> : <ZAvatar label={user?.name?.slice(0, 1)} shape="circle" size="large" />}
         <div className="flex flex-column">
-          <p>{user?.name}</p>
-          <p className="cursor-pointer mt-0">Meu perfil {'>'}</p>
+          {isLoading ? <> <ZSkeleton width="5rem" className="mb-2"></ZSkeleton></> :<p>{user?.name}</p>}
+          <p className="cursor-pointer mt-0">Minha conta {'>'}</p>
         </div>
       </div>
       <ZDivider />

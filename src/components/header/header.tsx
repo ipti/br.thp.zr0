@@ -2,7 +2,7 @@
 import { Providers } from '@/service/provider'
 import { useCartStore } from '@/service/store/cart_store'
 import Cookies from 'js-cookie'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import zioLogo from '../../assets/img/ZR0_logotipo.png'
 import './header.css'
@@ -13,6 +13,7 @@ import LoginModal from './login/login_modal'
 import { ZButton } from '../button/button'
 
 export default function Header() {
+  const pathname = usePathname()
   const useNavigate = useRouter()
   const [modalLogin, setModalLogin] = useState(false)
   const [menuUser, setMenuUser] = useState(false)
@@ -23,6 +24,8 @@ export default function Header() {
 
   const cart = useCartStore(state => state.cart)
 
+  const isProductPage = pathname === '/product'
+
   const total = cart.length
   return (
     <Providers>
@@ -30,7 +33,7 @@ export default function Header() {
         <div className="header-container">
           {/* Left - Navigation */}
           <div className="header-left">
-            {true && (
+            {!isProductPage && (
               <ZButton
                 // onClick={onNavigateToProducts}
                 onClick={() => useNavigate.push('/product')}
