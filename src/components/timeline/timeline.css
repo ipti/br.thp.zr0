@@ -1,0 +1,99 @@
+.z-timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.z-timeline--horizontal {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.z-timeline__item {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.z-timeline--horizontal .z-timeline__item {
+  flex: 1;
+  align-items: center;
+}
+
+.z-timeline__content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.z-timeline--horizontal .z-timeline__content {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.z-timeline__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  font-weight: bold;
+  color: white;
+  flex-shrink: 0;
+  font-size: 1.125rem;
+}
+
+.z-timeline__icon--completed {
+  opacity: 1;
+}
+
+.z-timeline__icon--current {
+  box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1);
+}
+
+.z-timeline__icon--pending {
+  opacity: 0.5;
+  background-color: #e5e7eb !important;
+  color: #6b7280;
+}
+
+.z-timeline__text {
+  padding-top: 0.25rem;
+}
+
+.z-timeline__label {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.z-timeline__description {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.z-timeline__connector {
+  width: 2px;
+  height: 2rem;
+  margin-left: 1.5rem;
+  margin-top: 0.25rem;
+}
+
+.z-timeline--horizontal .z-timeline__connector {
+  width: 100%;
+  height: 2px;
+  margin: 0;
+  margin-left: -0.5rem;
+  transform: translateY(-2.5rem);
+}
+
+.z-timeline__connector--completed {
+  background-color: #1e40af;
+}
+
+.z-timeline__connector--pending {
+  background-color: #e5e7eb;
+}

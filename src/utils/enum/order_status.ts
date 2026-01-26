@@ -4,5 +4,6 @@ export const orderStatus: any = {
     'IN_PRODUCTION': 'Em Produção',
     'SHIPPED': 'Enviado',
     'COMPLETED': 'Concluído',
-    'CANCELLED': 'Cancelado'
+    'CANCELLED': 'Cancelado',
+    'SOLITED_CANCELLATION': 'Cancelamento Solicitado'
 }

@@ -21,6 +21,12 @@ export default function MenuUser() {
   const user: User | undefined = userRequest
 
   const itemsMenu: ItemsMenu[] = [
+    ...(user?.role !== 'CUSTOMER' ? [{
+      icon: 'pi pi-objects-column',
+      label: 'Painel de gestão',
+      router: '/seller/home',
+      type: 'Normal'
+    } as const] : []),
     {
       icon: 'pi pi-shopping-cart',
       label: 'Carrinho',
@@ -63,7 +69,7 @@ export default function MenuUser() {
       >
         {isLoading ? <><ZSkeleton shape="circle" size="3rem" className="mr-2"></ZSkeleton></> : <ZAvatar label={user?.name?.slice(0, 1)} shape="circle" size="large" />}
         <div className="flex flex-column">
-          {isLoading ? <> <ZSkeleton width="5rem" className="mb-2"></ZSkeleton></> :<p>{user?.name}</p>}
+          {isLoading ? <> <ZSkeleton width="5rem" className="mb-2"></ZSkeleton></> : <p>{user?.name}</p>}
           <p className="cursor-pointer mt-0">Minha conta {'>'}</p>
         </div>
       </div>
@@ -77,12 +83,12 @@ export default function MenuUser() {
             onClick={
               item.type === 'Exit'
                 ? () => {
-                    logout()
-                    window.location.reload()
-                  }
+                  logout()
+                  window.location.reload()
+                }
                 : () => {
-                    history.push(item.router)
-                  }
+                  history.push(item.router)
+                }
             }
           >
             <div

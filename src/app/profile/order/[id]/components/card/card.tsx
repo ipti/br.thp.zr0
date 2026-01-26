@@ -1,17 +1,21 @@
 'use client'
-import React, { useState } from "react";
-import "./card.css";
+import { ZButton } from "@/components/button/button";
+import ZConfirmDialog from "@/components/confirm_dialog/confirm_dialog";
 import { orderStatus } from "@/utils/enum/order_status";
 import { paymentStatus } from "@/utils/enum/payment_status";
-import ZDropdown from "@/components/dropdown/dropdown";
-import { ZButton } from "@/components/button/button";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { OrderController } from "../../../service/controller";
+import "./card.css";
+import { Order } from "@/components/order/order";
 
 interface OrderProps {
     order: any;
 }
 
 const OrderCard: React.FC<OrderProps> = ({ order }) => {
+
+    const [canceled, setCanceled] = useState(false);
 
     const history = useRouter()
     const totalProducts = order.order_items.reduce(
@@ -23,124 +27,36 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
     const delivery = order.order_items[0]?.delivery_estimate;
 
     // estados locais para edição
-    const [status, setStatus] = useState(order.status);
     const [payStatus, setPayStatus] = useState(order.payment_status);
 
-
+    const controllerOrder = OrderController()
 
     if (!order) return <>Carregando...</>
 
+    const handleSave = () => {
+        controllerOrder.OrderUpdateAction(order.id, { status: 'SOLITED_CANCELLATION', payment_status: payStatus })
+        // aqui você pode chamar sua API (fetch/axios)
+    };
+
+
     return (
-        <div className="order-card">
-            <header className="order-header grid">
-                <p className="md: flex flex-row gap-1"><p style={{ fontWeight: 'bold' }}>Pedido</p> #{order.uid}</p>
-                <span className={`status ${status.toLowerCase()}`}>
-                    {orderStatus[status]}
-                </span>
-            </header>
+        <>
 
-            <section className="order-section">
-                <h3>Cliente</h3>
-                <p><strong>Nome:</strong> {order.user.name}</p>
-                <p><strong>Email:</strong> {order.user.email}</p>
-            </section>
-
-            <section className="order-section">
-                <h3>Oficina</h3>
-                <p><strong>Nome:</strong> {order.workshop.name}</p>
-                <p><strong>CNPJ:</strong> {order.workshop.cnpj}</p>
-                <p><strong>Endereço:</strong> {order.workshop.address}, {order.workshop.number} - {order.workshop.neighborhood}</p>
-                <p><strong>Cidade:</strong> {order.workshop.city.name} - {order.workshop.state.acronym}</p>
-            </section>
-
-            <section className="order-section">
-                <h3>Endereço de Entrega</h3>
-                <p>{order.order_delivery_address.address}, {order.order_delivery_address.number}</p>
-                <p>{order.order_delivery_address.neighborhood}</p>
-                <p>{order.order_delivery_address.city.name} / {order.order_delivery_address.state.acronym}</p>
-                <p>CEP: {order.order_delivery_address.cep}</p>
-            </section>
-
-            <section className="order-section">
-                <h3>Itens do Pedido ({totalProducts})</h3>
-                <ul>
-                    {order.order_items.map((item: any) => (
-                        <li key={item.id}>
-                            <div className="item-info">
-                                <strong>{item.product.name}</strong>
-                                <p>{item.product.description}</p>
-                            </div>
-                            <div className="item-details">
-                                <p>Qtd: {item.quantity}</p>
-                                <p>Preço Unitário: R$ {item.unit_price.toFixed(2)}</p>
-                                <p>Total: R$ {item.total_price.toFixed(2)}</p>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            </section>
-
-            <section className="order-section delivery">
-                <h3>Entrega</h3>
-                {delivery ? (
+            <div className="flex flex-row justify-content-end mb-5 gap-2">
+                {(payStatus === 'PENDING' || payStatus === 'FAILED') && !(order.status === 'SOLITED_CANCELLATION') &&
                     <>
-                        <p><strong>Transportadora:</strong> {delivery.carrier}</p>
-                        <p><strong>Serviço:</strong> {delivery.service}</p>
-                        <p><strong>Prazo:</strong> {delivery.deliveryTime} dias</p>
-                        <p><strong>Custo:</strong> R$ {delivery.cost.toFixed(2)}</p>
-                    </>
-                ) : (
-                    <p>Sem informações de entrega</p>
-                )}
-            </section>
-
-            <footer className="order-footer">
-                <p><strong>Total do Pedido:</strong> R$ {(order.total_amount + delivery.cost).toFixed(2)}</p>
-
-                <div className=" grid status-edit mt-4">
-                    <div className="col-6">
-
-                        <div className="flex flex-column gap-2">
-                            <label>Status do Pedido</label>
-                            <div>
-                                <span className={`status ${status.toLowerCase()}`}>
-                                    {orderStatus[status]}
-                                </span>
-                            </div>
-                            {/* <select >
-              {Object.keys(orderStatus).map((key) => (
-                <option key={key} value={key}>
-                  {orderStatus[key]}
-                </option>
-              ))}
-            </select> */}
-                        </div>
-                    </div>
-                    <div className="col-6">
-
-                        <div className="flex flex-column gap-2 ">
-                            <label>Status do Pagamento</label>
-                            <div>
-                                <span className={`status ${payStatus.toLowerCase()}`}>
-                                    {paymentStatus[payStatus]}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div className="p-4" />
-                {(payStatus === 'PENDING' || payStatus === 'FAILED') &&
-                    <>
-                        <div className="flex flex-row justify-content-center">
-                            <ZButton onClick={() => history.push('/payment?id=' + order.id)}>
-                                Realizar pagamento
-                            </ZButton>
-                        </div>
+                        <ZButton onClick={() => history.push('/payment?id=' + order.id)} icon="pi pi-credit-card" label="  " severity="success">
+                            Realizar pagamento
+                        </ZButton>
                     </>
                 }
-            </footer>
-        </div>
+                {
+                    (order.status === 'CONFIRMED' || order.status === 'PENDING') && <ZButton outlined onClick={() => { setCanceled(!canceled) }} label="Solicitar cancelamento" severity="danger" icon='pi pi-undo' />
+                }
+            </div>
+
+            <Order order={order} />
+        </>
     );
 };
 

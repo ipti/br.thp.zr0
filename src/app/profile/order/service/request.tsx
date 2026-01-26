@@ -29,3 +29,16 @@ export const requestOrderOne = (idOne?: string) => {
         });}
 };
 
+export const requestOrderUpdate = (idOne?: string, body: OrderUpdate ) => {
+    let path = "/orders/"+idOne;
+    if(idOne){return http
+        .patch(path, body)
+        .then((response) => response.data)
+        .catch((err) => {
+            if (err.response.status === 401) {
+                logout();
+                window.location.reload();
+            }
+            throw err;
+        });}
+};

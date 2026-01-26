@@ -158,3 +158,8 @@ export interface ProductImage {
 export interface Count {
   order_items: number
 }
+
+export interface OrderUpdate{
+    status: string,
+    payment_status: string
+}

@@ -46,6 +46,11 @@
   background: #f8d7da;
   color: #721c24;
 }
+.status.solited_cancellation {
+  background: #e99d04;
+  color: #3b341f;
+
+}
 
 .order-section {
   margin-bottom: 15px;

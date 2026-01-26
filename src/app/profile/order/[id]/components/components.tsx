@@ -3,6 +3,8 @@ import { useParams } from "next/navigation";
 import { useFetchRequestOrderOne } from "../../service/query";
 import { OrderOneType } from "../../service/types";
 import OrderCard from "./card/card";
+import { Button } from "primereact/button";
+import { ZButton } from "@/components/button/button";
 
 export function OrderOneComponents() {
     const params = useParams(); // retorna { id: "123" }
@@ -12,6 +14,7 @@ export function OrderOneComponents() {
     
     return(
         <div>
+        
            {order ? (
             <OrderCard order={order} />
            ) : (
