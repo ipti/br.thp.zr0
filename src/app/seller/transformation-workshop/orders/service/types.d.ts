@@ -122,3 +122,8 @@ export interface Product {
   width: number
   length: number
 }
+
+export interface RefundOrder {
+  amount: number;
+  idOrder: number
+}

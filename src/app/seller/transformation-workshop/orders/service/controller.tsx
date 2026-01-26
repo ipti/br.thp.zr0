@@ -1,7 +1,7 @@
 import queryClient from "@/service/react-query"
 import Swal from "sweetalert2"
-import { requestOrderUpdate } from "./request"
-import { OrderUpdate } from "./types"
+import { requestOrderUpdate, requestRefundOrderUpdate } from "./request"
+import { OrderUpdate, RefundOrder } from "./types"
 
 export function OrderController() {
 
@@ -23,9 +23,27 @@ export function OrderController() {
         })
     }
 
+     function RefundOrderUpdateAction(body: RefundOrder) {
+        requestRefundOrderUpdate(body).then(data => {
+            Swal.fire({
+                title: "Reembolso aplicado!",
+                icon: "success",
+
+            })
+            queryClient.refetchQueries('useRequestOrderOne')
+            queryClient.refetchQueries('useRequestOrderTransformationWorkshop')
+        }).catch(erros => {
+            Swal.fire({
+                title: erros.response.data.message,
+                icon: "error",
+
+            })
+        })
+    }
+
 
 
     return {
-        OrderUpdateAction
+        OrderUpdateAction, RefundOrderUpdateAction
     }
 }
