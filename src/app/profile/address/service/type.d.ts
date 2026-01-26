@@ -11,21 +11,29 @@ export interface CreateAddressCustomerType {
   customerId: number
 }
 
+export interface UpdateDefaultAddressCustomerType {
+  addressId: number
+  customerId: number
+}
+
 
 export type AddressList = {customer: {address_customer: Address[]}}
 
 export interface Address {
-  id: number
+   id: number
+  name: string
+  phone: string
   cep: string
   address: string
   number: string
   complement: string
   neighborhood: string
-  customer: Customer
-  state: State
+  is_default: boolean
+  state_fk: number
+  city_fk: number
+  customer_fk: number
   city: City
-  name: string
-  phone: string
+  state: State
 }
 
 export interface AddressCart extends Address {

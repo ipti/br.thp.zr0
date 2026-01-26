@@ -2,10 +2,10 @@ import { Address } from "@/app/profile/address/service/type";
 import "./card_address.css";
 import ZRadioButton from "@/components/radio_button/radio_button";
 import { useContext } from "react";
-import { CardContextType, CartContext } from "../../context/context";
 import ZCard from "@/components/card/card";
 import ZDivider from "@/components/divider/divider";
 import { FormikErrors } from "formik";
+import { useCartStepsStore } from "../../zustand/zustand";
 
 export default function CardAddress({
   item,
@@ -21,20 +21,19 @@ export default function CardAddress({
 }>>
   
 }) {
-  const { initialValue, setInitialValue } = useContext(
-    CartContext
-  ) as CardContextType;
+    const cartSteps = useCartStepsStore(state => state)
+
 
   return (
     <ZCard
-      style={{border: item.id === initialValue.address_selected && !isEdit 
+      style={{border: item.id === cartSteps.cartSteps.address_selected && !isEdit 
         ? '1px solid var(--primary-color' : ''}}
       onClick={() =>{
 
-        setInitialValue((prev) => ({
-          ...prev,
+        cartSteps.updateCartSteps({
+          ...cartSteps.cartSteps,
           address_selected: item.id,
-        }))
+        })
         if(setFieldValue) setFieldValue("address_selected", item.id)
       }
       }
@@ -45,7 +44,7 @@ export default function CardAddress({
             <div className="flex flex-column justify-content-center">
               <ZRadioButton
                 value={item.id}
-                checked={item.id === initialValue.address_selected}
+                checked={item.id === cartSteps.cartSteps.address_selected}
               />
             </div>
             <div className="p-2" />

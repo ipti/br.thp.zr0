@@ -1,75 +1,73 @@
-"use client";
+'use client'
 
-import { DetailsProduct } from "@/app/components/product/details_product/details_product";
-import {
-    ProductImage,
-    ProductOne,
-} from "@/app/seller/product/one/service/type";
-import useCreateArrayUpToNumber from "@/utils/hook/useCreateArrayUpToNumber";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useFetchrequestProductOneUid } from "../../service/query";
-import './product_one.css';
-import Shipping from "@/components/shipping/shipping";
+import { DetailsProduct } from '@/app/components/product/details_product/details_product'
+import { ProductImage, ProductOne } from '@/app/seller/product/one/service/type'
+import useCreateArrayUpToNumber from '@/utils/hook/useCreateArrayUpToNumber'
+import { useParams, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useFetchrequestProductOneUid } from '../../service/query'
+import './product_one.css'
+import Shipping from '@/components/shipping/shipping'
 
 export default function ProductOneComponent() {
-    const useNavigate = useRouter();
-    const [imageIndex, setImageIndex] = useState(0);
+  const useNavigate = useRouter()
+  const [imageIndex, setImageIndex] = useState(0)
 
+  const params = useParams() // retorna { id: "123" }
+  const id = params.id
 
+  const [image, setImage] = useState<ProductImage | undefined>()
+  const [loading, setLoading] = useState(true)
+  const { data: productOneRequest } = useFetchrequestProductOneUid(id)
 
-    const params = useParams(); // retorna { id: "123" }
-    const id = params.id;
+  const productOne: ProductOne | undefined = productOneRequest
 
-    const [image, setImage] = useState<ProductImage | undefined>();
-    const [loading, setLoading] = useState(true);
-    const { data: productOneRequest } = useFetchrequestProductOneUid(
-        id
-    );
+  useEffect(() => {
+    if (productOneRequest && loading) {
+      setImage(productOneRequest.product_image[0])
+      setLoading(false)
+    }
+  }, [productOneRequest, loading])
 
-    const productOne: ProductOne | undefined = productOneRequest;
+  //const arrayQuantity = useCreateArrayUpToNumber(productOne?.quantity ?? 1)
 
-    useEffect(() => {
-        if (productOneRequest && loading) {
-            setImage(productOneRequest.product_image[0]);
-            setLoading(false);
-        }
-    }, [productOneRequest, loading]);
+  return (
+    <div className={'container'}>
+      <div className={'wrapper'}>
+        {/* Breadcrumb */}
+        <div className={'breadcrumb'}>
+          <button onClick={() => useNavigate.push('/product')}>Produtos</button>
+          <i className="pi pi-angle-right" />
+          {/* <ChevronRight size={16} /> */}
+          <span>{productOne?.name}</span>
+        </div>
 
-    const arrayQuantity = useCreateArrayUpToNumber(productOne?.quantity ?? 1)
+        {/* Product Detail */}
+        <div className={'detailGrid'}>
+          <div className="flex flex-column">
+            <div className={'imageBox'}>
+              {productOne?.product_image[0].img_url && (
+                <img
+                  src={productOne?.product_image[imageIndex].img_url}
+                  alt={productOne?.name}
+                  className="imageProduct"
+                />
+              )}
+            </div>
+            <div className="p-2" />
+            <div className="product-gallery">
+              {productOne?.product_image.slice(0, 3).map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img.img_url}
+                  onClick={() => setImageIndex(idx)}
+                  alt={`Produto ${idx}`}
+                />
+              ))}
+            </div>
+          </div>
 
-    return (
-
-        <div className={"container"}>
-            <div className={"wrapper"}>
-                {/* Breadcrumb */}
-                <div className={"breadcrumb"}>
-                    <button onClick={() => useNavigate.push('/product')}>Produtos</button>
-                    <i className="pi pi-angle-right" />
-                    {/* <ChevronRight size={16} /> */}
-                    <span>{productOne?.name}</span>
-                </div>
-
-                {/* Product Detail */}
-                <div className={'detailGrid'}>
-                    <div className="flex flex-column">
-
-                        <div className={"imageBox"}>
-                            {productOne?.product_image[0].img_url && <img
-                                src={productOne?.product_image[imageIndex].img_url}
-                                alt={productOne?.name}
-                                className="imageProduct"
-                            />}
-                        </div>
-                        <div className="p-2" />
-                        <div className="product-gallery">
-                            {productOne?.product_image.slice(0, 3).map((img, idx) => (
-                                <img key={idx} src={img.img_url} onClick={() => setImageIndex(idx)} alt={`Produto ${idx}`} />
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* <div className={"info"}>
+          {/* <div className={"info"}>
                         <h1>{productOne?.name}</h1>
                         <p className={'price'}>R$ {productOne?.price.toFixed(2)}</p>
 
@@ -130,15 +128,14 @@ export default function ProductOneComponent() {
                            
                         </div>}
                     </div> */}
-                        <DetailsProduct item={productOne} />
-                </div>
+          <DetailsProduct item={productOne} />
+        </div>
 
+        {/* Divider */}
+        <div className={'divider'}></div>
 
-                {/* Divider */}
-                <div className={"divider"}></div>
-
-                {/* Related */}
-                {/* <div>
+        {/* Related */}
+        {/* <div>
           <h2 className={"relatedTitle"}>Outros produtos</h2>
           <div className={'relatedGrid'}>
             {relatedProducts.map((p) => (
@@ -160,7 +157,7 @@ export default function ProductOneComponent() {
             </div>
           </div>
         </div> */}
-            </div>
-        </div>
-    );
+      </div>
+    </div>
+  )
 }

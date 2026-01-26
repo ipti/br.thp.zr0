@@ -24,3 +24,11 @@
         font-size: 12px;
     }
  }
+
+ .p-tabmenu .p-tabmenu-nav .p-tabmenuitem {
+  width: 50%;
+ }
+
+ .p-tabmenu-nav a {
+  justify-content: center;
+ }

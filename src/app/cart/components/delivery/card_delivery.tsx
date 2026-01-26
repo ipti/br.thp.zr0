@@ -1,8 +1,12 @@
 import { ShippingGetType } from "@/app/product/service/type";
 import ZCard from "@/components/card/card";
 import ZRadioButton from "@/components/radio_button/radio_button";
+import { useCartStepsStore } from "../../zustand/zustand";
 
-export function CardDelivery({ shippingItem, shippingSelect, setShippingSelect, cartContext, handleSelectOptions }: { shippingItem: ShippingGetType, shippingSelect: any[], setShippingSelect: (value: any) => void, cartContext: any, handleSelectOptions: (value: any) => any[] }) {
+export function CardDelivery({ shippingItem, shippingSelect, setShippingSelect, handleSelectOptions }: { shippingItem: ShippingGetType, shippingSelect: any[], setShippingSelect: (value: any) => void, handleSelectOptions: (value: any) => any[] }) {
+    
+        const cartSteps = useCartStepsStore(state => state)
+    
     return (
         <div>
             <h2>{shippingItem.productName} - {shippingItem.workshopName} (Qtd- {shippingItem.quantity})</h2>
@@ -15,10 +19,10 @@ export function CardDelivery({ shippingItem, shippingSelect, setShippingSelect, 
                                 <ZCard onClick={(e) => {
                                     const newState = handleSelectOptions({ productId: shippingItem.productId, workshopId: shippingItem.workshopId, validOptions: item, productName: shippingItem.productName, workshopName: shippingItem.workshopName, quantity: shippingItem.quantity })
                                     setShippingSelect(newState)
-                                    cartContext?.setInitialValue((prev) => ({
-                                        ...prev,
+                                    cartSteps?.updateCartSteps({
+                                        ...cartSteps.cartSteps,
                                         deliverySelected: newState,
-                                    }));
+                                    });
                                 }} style={{cursor: 'pointer', border: !!shippingSelect?.find((select) => (select.productId === shippingItem.productId && select.workshopId === shippingItem.workshopId && select.validOptions.cost === item?.cost)) ? '1px solid var(--primary-color' : '' }}
                                 >
                                     <div className="flex flex-row justify-content-between m-1 p-3" >
@@ -29,10 +33,10 @@ export function CardDelivery({ shippingItem, shippingSelect, setShippingSelect, 
                                                 onChange={(e) => {
                                                     const newState = handleSelectOptions({ productId: shippingItem.productId, workshopId: shippingItem.workshopId, validOptions: item, productName: shippingItem.productName, workshopName: shippingItem.workshopName, quantity: shippingItem.quantity })
                                                     setShippingSelect(newState)
-                                                    cartContext?.setInitialValue((prev) => ({
-                                                        ...prev,
+                                                    cartSteps?.updateCartSteps({
+                                                        ...cartSteps.cartSteps,
                                                         deliverySelected: newState,
-                                                    }));
+                                                    });
                                                 }}
                                             />
                                             <div className="p-1" />

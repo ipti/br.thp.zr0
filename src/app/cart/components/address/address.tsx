@@ -8,9 +8,9 @@ import InputAddress from "@/components/inputs_address/inputs_address";
 import { Form, Formik } from "formik";
 import { useContext, useState } from "react";
 import CardAddress from "../card_address/card_address";
-import { CardContextType, CartContext } from "../../context/context";
 import * as Yup from "yup";
 import NotFoundAddress from "@/app/profile/address/components/not_found/not_found_address";
+import { useCartStepsStore } from "../../zustand/zustand";
 
 
 export default function Address({
@@ -19,11 +19,7 @@ export default function Address({
   handleActiveIndex: (i: number) => void;
 }) {
 
-  const { initialValue } = useContext(
-    CartContext
-  ) as CardContextType;
 
-  console.log("initialValue address", initialValue);
 
   const [visibleAddAddress, setVisibleAddAddress] = useState(false)
 
@@ -31,6 +27,9 @@ export default function Address({
   const { data: addressCustomerRequest } = useFetchRequestGetAddressCustomer()
 
   var addressList: AddressList | undefined = addressCustomerRequest
+
+    const cartSteps = useCartStepsStore(state => state)
+  
 
 const schema = Yup.object().shape({
     address_selected: Yup.string().required("Selecione um endereço"),
@@ -113,7 +112,7 @@ const schema = Yup.object().shape({
           <ZButton label="Adicionar endereço" onClick={() => setVisibleAddAddress(!visibleAddAddress)} />
         </div>
 
-        <Formik initialValues={{ address_selected: initialValue.address_selected }} validationSchema={schema} onSubmit={() => {  handleActiveIndex(2) }}>
+        <Formik initialValues={{ address_selected: cartSteps.cartSteps.address_selected }} validationSchema={schema} onSubmit={() => {  handleActiveIndex(2) }}>
           {({ setFieldValue, errors }) => {
             return (
               <Form>

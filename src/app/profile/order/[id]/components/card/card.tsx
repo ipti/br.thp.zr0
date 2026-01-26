@@ -26,7 +26,6 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
     const delivery = order.order_items[0]?.delivery_estimate;
 
     // estados locais para edição
-    const [status, setStatus] = useState(order.status);
     const [payStatus, setPayStatus] = useState(order.payment_status);
 
  const controllerOrder = OrderController()
@@ -38,26 +37,27 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
         // aqui você pode chamar sua API (fetch/axios)
     };
 
+
     return (
         <div className="order-card">
 
             <header className="order-header grid">
                 <p className="md: flex flex-row gap-1"><p style={{ fontWeight: 'bold' }}>Pedido</p> #{order.uid}</p>
-                <span className={`status ${status.toLowerCase()}`}>
-                    {orderStatus[status]}
+                <span className={`status ${order.status.toLowerCase()}`}>
+                    {orderStatus[order.status]}
                 </span>
             </header>
 
-            <div className="flex flex-row justify-content-start gap-2 mb-4">
-                {(payStatus === 'PENDING' || payStatus === 'FAILED') && !(status === 'SOLITED_CANCELLATION') &&
+            <div className="flex flex-row justify-content-end gap-2 mb-4">
+                {(payStatus === 'PENDING' || payStatus === 'FAILED') && !(order.status === 'SOLITED_CANCELLATION') &&
                     <>
                         <ZButton onClick={() => history.push('/payment?id=' + order.id)} icon="pi pi-credit-card" label="  " severity="success">
                             Realizar pagamento
                         </ZButton>
                     </>
-                }
+                }   
                 {
-                    status === 'CONFIRMED' || status === 'PENDING' &&  <ZButton onClick={() => {setCanceled(!canceled)}} label="Solicitar cancelamento" severity="danger" icon="pi pi-times-circle"/>
+                    (order.status === 'CONFIRMED' || order.status === 'PENDING') &&  <ZButton onClick={() => {setCanceled(!canceled)}} label="Solicitar cancelamento" severity="danger" icon="pi pi-times-circle"/>
                 }
                
 
@@ -127,8 +127,8 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
                         <div className="flex flex-column gap-2">
                             <label>Status do Pedido</label>
                             <div>
-                                <span className={`status ${status.toLowerCase()}`}>
-                                    {orderStatus[status]}
+                                <span className={`status ${order.status.toLowerCase()}`}>
+                                    {orderStatus[order.status]}
                                 </span>
                             </div>
                             {/* <select >

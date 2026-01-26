@@ -3,11 +3,11 @@ import { ZButton } from "@/components/button/button";
 import ZRadioButton from "@/components/radio_button/radio_button";
 import { useContext, useEffect, useState } from "react";
 import { useFetchAddressOneRequest } from "../../service/query";
-import { CartContext, DeliverySelectedType } from "../../context/context";
 import { ProductClientController } from "@/app/product/service/controller";
 import { Address } from "@/app/profile/address/service/type";
 import ZSkeleton from "@/components/skeleton/skeleton";
 import { CardDelivery } from "./card_delivery";
+import { DeliverySelectedType, useCartStepsStore } from "../../zustand/zustand";
 
 export default function Delivery({
   handleActiveIndex,
@@ -25,10 +25,10 @@ export default function Delivery({
     setShippingSelect,
   });
 
-  const cartContext = useContext(CartContext);
+    const cartSteps = useCartStepsStore(state => state)
 
   const { data, isLoading } = useFetchAddressOneRequest(
-    cartContext?.initialValue.address_selected ?? 0
+    cartSteps?.cartSteps.address_selected ?? 0
   );
 
   const handleShippingCalculate = (cep?: string) => {
@@ -37,7 +37,7 @@ export default function Delivery({
       productClientController.ShippingCalculateAction(
         {
           destinationZipCode: cep.replace(/[^a-zA-Z0-9 ]/g, ""),
-          orderItems: cartContext?.productSelected() ?? [],
+          orderItems: cartSteps.productSelected() ?? [],
         },
         setLoading
       );
@@ -53,7 +53,7 @@ export default function Delivery({
 
     if (shippingSelect?.find((item) => item.productId === data.productId && item.workshopId === data.workshopId)) {
       const t = shippingSelect?.filter((item) => !(item.productId === data.productId && item.workshopId === data.workshopId))
-      return ([...t, { productId: data.productId, workshopId: data.workshopId, validOptions: data.validOptions, productName: data.productName, workshopName: data.workshopName, quantity: data.quantity  }])
+      return ([...t, { productId: data.productId, workshopId: data.workshopId, validOptions: data.validOptions, productName: data.productName, workshopName: data.workshopName, quantity: data.quantity }])
     } else {
       return [...shippingSelect, { productId: data.productId, workshopId: data.workshopId, validOptions: data.validOptions, productName: data.productName, workshopName: data.workshopName, quantity: data.quantity }]
     }
@@ -66,6 +66,16 @@ export default function Delivery({
         <div className="p-3" style={{ borderRadius: "8px" }}>
           <h1>Frete</h1>
           <div className="p-1" />
+          <>
+            <h4>{address?.address} - {address?.city.name}/{address?.state.acronym}</h4>
+            <div className="flex flex-row gap-2">
+
+              <h4>CEP: {address?.cep}
+              </h4>
+              <div className="flex flex-column justify-content-center cursor-pointer">
+              </div>
+            </div>
+          </>
           <div className="gap-3">
             {loadingCep ? (
               <div className="flex flex-column gap-2">
@@ -77,7 +87,7 @@ export default function Delivery({
               <>
                 {shipping?.map((shippingItem, key) => {
                   return (<div key={key}>
-                    <CardDelivery cartContext={cartContext} handleSelectOptions={handleSelectOptions} setShippingSelect={setShippingSelect} shippingItem={shippingItem} shippingSelect={shippingSelect} />
+                    <CardDelivery handleSelectOptions={handleSelectOptions} setShippingSelect={setShippingSelect} shippingItem={shippingItem} shippingSelect={shippingSelect} />
                   </div>)
                 })}
               </>

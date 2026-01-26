@@ -60,17 +60,17 @@ export default function YourInformationComponents() {
         ? Yup.string().required("Razão social é obrigatória")
         : Yup.string().notRequired(),
 
-    cep: Yup.string().required("CEP é obrigatório"),
-    address: Yup.string().required("Endereço é obrigatório"),
-    number: Yup.string().required("Número é obrigatório"),
-    complement: Yup.string(),
-    neighborhood: Yup.string().required("Bairro é obrigatório"),
-    city: Yup.number()
-      .typeError("Cidade é obrigatória")
-      .required("Cidade é obrigatória"),
-    state: Yup.number()
-      .typeError("Estado é obrigatório")
-      .required("Estado é obrigatório"),
+    // cep: Yup.string().required("CEP é obrigatório"),
+    // address: Yup.string().required("Endereço é obrigatório"),
+    // number: Yup.string().required("Número é obrigatório"),
+    // complement: Yup.string(),
+    // neighborhood: Yup.string().required("Bairro é obrigatório"),
+    // city: Yup.number()
+    //   .typeError("Cidade é obrigatória")
+    //   .required("Cidade é obrigatória"),
+    // state: Yup.number()
+    //   .typeError("Estado é obrigatório")
+    //   .required("Estado é obrigatório"),
   });
 
 
@@ -295,11 +295,11 @@ export default function YourInformationComponents() {
                                     </>}
 
                                 </div>
-                                <h3>Endereço de cobrança</h3>
+                                {/* <h3>Endereço de cobrança</h3>
                                 <div className="p-2" />
                                 <div className="grid">
                                     <InputAddress errors={errors} handleChange={handleChange} setFieldValue={setFieldValue} touched={touched} values={values} />
-                                </div>
+                                </div> */}
                                 <div className="p-2" />
                                 <div className="flex flex-row justify-content-end">
                                     <ZButton className="col-12 md:col-4">Salvar</ZButton>

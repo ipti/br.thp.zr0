@@ -1,0 +1,7 @@
+.verify-cep {
+    text-decoration: underline;
+
+}
+.verify-cep:hover {
+    color:  var(--hover-primary-color);
+}

@@ -55,6 +55,7 @@
     text-align: right;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
+    display: flex;
   }
   .p-dialog .p-dialog-footer button {
     margin: 0 0.5rem 0 0;
