@@ -1,8 +1,7 @@
+import { OrderItem } from "@/app/order/service/types";
 import { orderStatus } from "@/utils/enum/order_status";
 import { TimelineItem, ZTimeline } from "../timeline/timeline";
-import './order.css'
-import { OrderItem } from "@/app/order/service/types";
-import { OrderlistType } from "@/app/seller/transformation-workshop/orders/service/types";
+import './order.css';
 
 export function Order({ order }: { order: any }) {
 
