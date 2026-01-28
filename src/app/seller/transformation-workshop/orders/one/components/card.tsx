@@ -40,7 +40,7 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
             </div>
             <Order order={order} />
             <ModalUpdateOrder visible={visible} onHide={() => setVisible(false)} />
-            <ZConfirmDialog visible={refundVisible} header={'Reembolse o pagamento'} reject={() => setRefundVisble(false)} accept={() => handleRefund()} />
+            <ZConfirmDialog visible={refundVisible} header={'Reembolse o pagamento'} message='Faça a solitição de reembolso' acceptLabel="Reembolsar" acceptClassName="severity" rejectLabel="Não" reject={() => setRefundVisble(false)} accept={() => handleRefund()} />
         </>
     );
 };

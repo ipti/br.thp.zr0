@@ -96,3 +96,7 @@
   padding-top: 10px;
   font-weight: bold;
 }
+
+.button-accept {
+  background-color: red
+}
