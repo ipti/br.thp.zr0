@@ -15,7 +15,7 @@ export default function Payment({
   const cartController = CartController()
 
   const getaAllOrdersInformations = async () => {
-    const ordersInformaiton = await cartController.GetOrder(orders)
+    const ordersInformaiton = await cartController.GetOrdersInformation(orders)
     setOrdersData(ordersInformaiton)
   }
 

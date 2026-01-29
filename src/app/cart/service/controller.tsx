@@ -142,7 +142,7 @@ export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
       })
   }
 
-  async function GetOrder(orders: { id: number; uid: string }[]) {
+  async function GetOrdersInformation(orders: { id: number; uid: string }[]) {
     const exit: any[] = []
 
     for (const item of orders) {
@@ -152,7 +152,7 @@ export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
         console.log({ data })
         exit.push(data)
       } catch {
-        exit.push({ error: true, id: item.id })
+        console.error({ error: true, order: item.id })
       }
     }
 
@@ -164,6 +164,6 @@ export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
     SignUpCartAction,
     CreateAddressCustomer,
     CreateOrder,
-    GetOrder
+    GetOrdersInformation
   }
 }
