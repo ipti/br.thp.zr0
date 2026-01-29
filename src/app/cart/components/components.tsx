@@ -49,7 +49,7 @@ export default function CartComponent() {
     },
     {
       label: 'Pagamento',
-      disabled: false
+      disabled: true
     }
   ]
 
