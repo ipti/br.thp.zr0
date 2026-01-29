@@ -43,7 +43,7 @@
 }
 
 .product-gallery img {
-  max-width: 64px;
+  width: 64px;
   height: 64px;
   border-radius: 0.75rem;
   object-fit: cover;
@@ -182,12 +182,14 @@
   border-radius: 1rem;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .relatedCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .relatedImage {
@@ -206,7 +208,9 @@
   justify-content: center;
   cursor: pointer;
   gap: 0.25rem;
-  transition: background 0.3s, transform 0.3s;
+  transition:
+    background 0.3s,
+    transform 0.3s;
 }
 
 .seeAll:hover {
@@ -220,29 +224,24 @@
   gap: 1rem;
   font-family: 'Poppins Regular', sans-serif;
   padding: 16px 0;
-
 }
 
 .product-title {
   font-size: 1rem;
   font-weight: 400;
   font-family: 'Poppins Regular', sans-serif;
-
 }
 
 .product-price {
   font-size: 1rem;
   font-weight: 600;
   font-family: 'Poppins Regular', sans-serif;
-
 }
 
 .product-description {
   color: #555;
   font-family: 'Poppins Regular', sans-serif;
   font-weight: 400;
-
-
 }
 
 .product-location {
