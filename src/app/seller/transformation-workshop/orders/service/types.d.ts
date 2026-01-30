@@ -1,22 +1,29 @@
+
+export interface OrderPagination {
+  data: OrderlistType[]
+  pagination: Pagination
+}
 export interface OrderlistType {
   id: number
   uid: string
-  user_fk: number
-  workshop_fk: number
+  transformation_workshop_fk: number
   status: string
   total_amount: number
   createdAt: string
   updatedAt: string
-  payment_status: string
-  payment_method: any
-  notes: string
-  order_items: OrderItem[]
+  order_fk: number
+  _count: Count
+  order_item: OrderItem[]
+  order: Order
   totalProducts: number
+}
+
+export interface Count {
+  order_item: number
 }
 
 export interface OrderItem {
   id: number
-  order_fk: number
   product_fk: number
   variant_fk: any
   quantity: number
@@ -25,6 +32,7 @@ export interface OrderItem {
   delivery_estimate: DeliveryEstimate
   createdAt: string
   updatedAt: string
+  order_service_fk: number
 }
 
 export interface DeliveryEstimate {
@@ -37,6 +45,16 @@ export interface DeliveryEstimate {
   deliveryTime: number
 }
 
+export interface Order {
+  payment_status: string
+}
+
+export interface Pagination {
+  page: number
+  limit: number
+  total: number
+  totalPages: number
+}
 
 export interface OrderOneType {
   id: number

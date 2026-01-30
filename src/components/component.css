@@ -5,4 +5,6 @@
 @import './password/password.css';
 @import './divider/divider.css';
 @import './data_table/data_table.css';
+@import './paginator/paginator.css';
 @import './input_group/input_group.css';
+@import './accordion/accordion.css';

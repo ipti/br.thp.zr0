@@ -15,7 +15,7 @@ export default function CardOrder({ item }: { item: Order }) {
       <div className="p-1" />
       <div className="flex flex-row justify-content-between">
         <div className="flex flex-row gap-2 align-items-center">
-          {item.order_items.slice(0, 3).map(order_item => {
+          {item.order_services[0]?.order_item?.slice(0, 3).map(order_item => {
             return (
               <img
                 key={order_item.product.id}
@@ -30,9 +30,9 @@ export default function CardOrder({ item }: { item: Order }) {
           <div className={`status ${item.payment_status.toLowerCase()}`}>
             <i className="pi pi-dollar" />
           </div>
-          <div className={`status ${item.status.toLowerCase()}`}>
+          {/* <div className={`status ${item.order_services.toLowerCase()}`}>
             Status: {orderStatus[item.status]}
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="p-1" />

@@ -1,15 +1,14 @@
 import { ZButton } from "@/components/button/button";
+import ZConfirmDialog from "@/components/confirm_dialog/confirm_dialog";
 import { Order } from "@/components/order/order";
-import { orderStatus } from "@/utils/enum/order_status";
 import React, { useState } from "react";
+import { OrderController } from "../../service/controller";
+import { OrderItem, OrderOneType } from "../../service/types";
 import "./card.css";
 import { ModalUpdateOrder } from "./modal_update_order/modal_update_order";
-import ZConfirmDialog from "@/components/confirm_dialog/confirm_dialog";
-import { OrderItem, OrderlistType } from "../../service/types";
-import { OrderController } from "../../service/controller";
 
 interface OrderProps {
-    order: OrderlistType;
+    order: OrderOneType;
 }
 
 const OrderCard: React.FC<OrderProps> = ({ order }) => {
@@ -36,7 +35,7 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
         <>
             <div className="flex flex-row justify-content-end mb-5 gap-2">
                 <ZButton label="Alterar Status" onClick={() => setVisible(order)} />
-                <ZButton label="Fazer reembolso" severity="danger" outlined icon='pi pi-undo' onClick={() => setRefundVisble(!refundVisible)} />
+                {/* <ZButton label="Fazer reembolso" severity="danger" outlined icon='pi pi-undo' onClick={() => setRefundVisble(!refundVisible)} /> */}
             </div>
             <Order order={order} />
             <ModalUpdateOrder visible={visible} onHide={() => setVisible(false)} />

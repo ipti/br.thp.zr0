@@ -3,12 +3,13 @@ import { useSearchParams } from "next/navigation";
 import { useFetchRequestOrderOne } from "../service/query"
 import { OrderOneType } from "../service/types";
 import OrderCard from "./components/card";
+import { getIdTw } from "@/service/cookies";
 
 export default function OrdersPage() {
   const searchParams = useSearchParams();
 
   const idOrder = searchParams.get("idOrder");
-    const {data: orderService} = useFetchRequestOrderOne(idOrder ?? undefined)
+    const {data: orderService} = useFetchRequestOrderOne(idOrder ?? undefined, getIdTw())
     const order: OrderOneType | undefined = orderService
     
     return(

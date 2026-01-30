@@ -27,42 +27,42 @@ const Product: React.FC<ProductProps> = ({ listProduct }) => {
           </p>
         </div>
 
-        <div className="product-content ">
-          {/* Imagem principal */}
-          <div className="product-main-image">
-            <img
-              src={focusProduct.product_image[0].img_url}
-              alt={focusProduct.description}
-            />
-            <DetailsProduct item={focusProduct} home />
-          </div>
+      {focusProduct && <div className="product-content ">
+        {/* Imagem principal */}
+        <div className="product-main-image">
+          <img
+            src={focusProduct?.product_image[0].img_url}
+            alt={focusProduct?.description}
+          />
+          <DetailsProduct item={focusProduct} home />
+        </div>
 
-          {/* Galeria lateral */}
-          <div className="product-gallery">
-            {listProduct.map((product, index) => {
-              if (product.uid !== focusProduct.uid) {
-                return (
-                  <img
-                    key={product.name}
-                    src={product.product_image[0].img_url}
-                    alt={`Produto ${product.name}`}
-                    onClick={() => setFocusProduct(listProduct[index])}
-                  />
-                )
-              }
-            })}
-            <button className="view-all" onClick={handleNavigateToProducts}>
-              Ver todos os produtos →
-            </button>
-          </div>
-          <button
-            className="view-all-mobile"
-            onClick={handleNavigateToProducts}
-          >
+        {/* Galeria lateral */}
+        <div className="product-gallery">
+          {listProduct.map((product, index) => {
+            if (product.uid !== focusProduct.uid) {
+              return (
+                <img
+                  key={product.name}
+                  src={product.product_image[0].img_url}
+                  alt={`Produto ${product.name}`}
+                  onClick={() => setFocusProduct(listProduct[index])}
+                />
+              )
+            }
+          })}
+          <button className="view-all" onClick={handleNavigateToProducts}>
             Ver todos os produtos →
           </button>
-          {/* Detalhes */}
         </div>
+        <button
+          className="view-all-mobile"
+          onClick={handleNavigateToProducts}
+        >
+          Ver todos os produtos →
+        </button>
+        {/* Detalhes */}
+      </div>}
       </div>
     </section>
   )

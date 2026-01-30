@@ -1,0 +1,73 @@
+.p-accordion .p-accordion-header .p-accordion-header-link {
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    background: #f8f9fa;
+    font-weight: 600;
+    border-radius: 3px;
+    transition: box-shadow 0.2s;
+  }
+  .p-accordion .p-accordion-header .p-accordion-header-link .p-accordion-toggle-icon {
+    margin-right: 0.5rem;
+  }
+  .p-accordion .p-accordion-header:not(.p-disabled) .p-accordion-header-link:focus-visible {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 0.2rem #a6d5fa;
+  }
+  .p-accordion .p-accordion-header:not(.p-highlight):not(.p-disabled):hover .p-accordion-header-link {
+    background: #e9ecef;
+    border-color: #dee2e6;
+    color: #495057;
+  }
+  .p-accordion .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link {
+    background: #f8f9fa;
+    border-color: #dee2e6;
+    color: #495057;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .p-accordion .p-accordion-header:not(.p-disabled).p-highlight:hover .p-accordion-header-link {
+    border-color: #dee2e6;
+    background: #e9ecef;
+    color: #495057;
+  }
+  .p-accordion .p-accordion-content {
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    background: #ffffff;
+    color: #495057;
+    border-top: 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+  .p-accordion .p-accordion-tab {
+    margin-bottom: 0;
+  }
+  .p-accordion .p-accordion-tab .p-accordion-header .p-accordion-header-link {
+    border-radius: 0;
+  }
+  .p-accordion .p-accordion-tab .p-accordion-content {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .p-accordion .p-accordion-tab:not(:first-child) .p-accordion-header .p-accordion-header-link {
+    border-top: 0 none;
+  }
+  .p-accordion .p-accordion-tab:not(:first-child) .p-accordion-header:not(.p-highlight):not(.p-disabled):hover .p-accordion-header-link, .p-accordion .p-accordion-tab:not(:first-child) .p-accordion-header:not(.p-disabled).p-highlight:hover .p-accordion-header-link {
+    border-top: 0 none;
+  }
+  .p-accordion .p-accordion-tab:first-child .p-accordion-header .p-accordion-header-link {
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+  }
+  .p-accordion .p-accordion-tab:last-child .p-accordion-header:not(.p-highlight) .p-accordion-header-link {
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+  .p-accordion .p-accordion-tab:last-child .p-accordion-header:not(.p-highlight) .p-accordion-content {
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }

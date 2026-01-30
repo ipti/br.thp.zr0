@@ -90,7 +90,7 @@ export default function Shipping({ orderItems, disabled }: { orderItems: OrderIt
                         );
                     }}
                 </Formik>}
-            {isLoadingCep ? <div className="flex flex-column gap-2 mt-1"> {skletonArray.map((item) => <ZSkeleton height="48px"/>)}</div>
+            {isLoadingCep ? <div className="flex flex-column gap-2 mt-1"> {skletonArray?.map((item) => <ZSkeleton height="48px"/>)}</div>
                 : <>
                     {shipping && <div className="" style={{ borderRadius: "8px" }}>
                         <div className="gap-3">

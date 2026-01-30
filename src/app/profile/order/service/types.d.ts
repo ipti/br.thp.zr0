@@ -42,17 +42,16 @@ export interface OrderOneType {
   id: number
   uid: string
   user_fk: number
-  workshop_fk: number
-  status: string
   total_amount: number
-  createdAt: string
-  updatedAt: string
+  notes: string
   payment_status: string
   payment_method: any
-  notes: string
+  payment_intent_id: string
+  createdAt: string
+  updatedAt: string
   user: User
-  workshop: Workshop
-  order_items: OrderItem[]
+  order_services: OrderService[]
+  order_delivery_address: OrderDeliveryAddress
 }
 
 export interface User {
@@ -68,24 +67,21 @@ export interface User {
   updatedAt: string
 }
 
-export interface Workshop {
+export interface OrderService {
   id: number
-  name: string
-  cnpj: string
-  cep: string
-  address: string
-  number: string
-  complement: string
-  neighborhood: string
+  uid: string
+  transformation_workshop_fk: number
+  status: string
+  total_amount: number
   createdAt: string
   updatedAt: string
-  state_fk: number
-  city_fk: number
+  order_fk: number
+  order_item: OrderItem[]
+  transformation_workshop: TransformationWorkshop
 }
 
 export interface OrderItem {
   id: number
-  order_fk: number
   product_fk: number
   variant_fk: any
   quantity: number
@@ -94,6 +90,7 @@ export interface OrderItem {
   delivery_estimate: DeliveryEstimate
   createdAt: string
   updatedAt: string
+  order_service_fk: number
   product: Product
   variant: any
 }
@@ -123,23 +120,119 @@ export interface Product {
   length: number
 }
 
+export interface TransformationWorkshop {
+  id: number
+  name: string
+  cnpj: string
+  cep: string
+  address: string
+  number: string
+  complement: string
+  neighborhood: string
+  createdAt: string
+  updatedAt: string
+  state_fk: number
+  city_fk: number
+  state: State
+  city: City
+}
+
+export interface State {
+  id: number
+  acronym: string
+  name: string
+}
+
+export interface City {
+  id: number
+  state_fk: number
+  name: string
+  cep_initial: string
+  cep_final: string
+  ddd1: number
+  ddd2: number
+}
+
+export interface OrderDeliveryAddress {
+  id: number
+  name: any
+  phone: any
+  cep: string
+  address: string
+  number: string
+  complement: string
+  neighborhood: string
+  state_fk: number
+  city_fk: number
+  order_fk: number
+  state: State2
+  city: City2
+}
+
+export interface State2 {
+  id: number
+  acronym: string
+  name: string
+}
+
+export interface City2 {
+  id: number
+  state_fk: number
+  name: string
+  cep_initial: string
+  cep_final: string
+  ddd1: number
+  ddd2: number
+}
+
+
 export interface OrderUser {
   order: Order[]
 }
-
 
 export interface Order {
   id: number
   uid: string
   createdAt: string
   payment_status: string
-  status: string
-  order_items: OrderItem[]
+  order_services: OrderService[]
   _count: Count
 }
 
+export interface OrderService {
+  id: number
+  uid: string
+  transformation_workshop_fk: number
+  status: string
+  total_amount: number
+  createdAt: string
+  updatedAt: string
+  order_fk: number
+  order_item: OrderItem[]
+}
+
 export interface OrderItem {
+  id: number
+  product_fk: number
+  variant_fk: any
+  quantity: number
+  unit_price: number
+  total_price: number
+  delivery_estimate: DeliveryEstimate
+  createdAt: string
+  updatedAt: string
+  order_service_fk: number
   product: Product
+}
+
+export interface DeliveryEstimate {
+  cost: number
+  error: any
+  carrier: string
+  service: string
+  tracking: boolean
+  serviceCode: string
+  deliveryTime: number
 }
 
 export interface Product {
@@ -154,6 +247,11 @@ export interface ProductImage {
   order: any
   product_fk: number
 }
+
+export interface Count {
+  order_services: number
+}
+
 
 export interface Count {
   order_items: number

@@ -2,8 +2,8 @@ import http from "@/service/axios";
 import { logout } from "@/service/cookies";
 import { OrderUpdate, RefundOrder } from "./types";
 
-export const requestOrderTransformationWorkshop = (idTw?: string) => {
-    let path = "/transformation-workshop-user-bff/order?id=" + idTw;
+export const requestOrderTransformationWorkshop = (idTw?: string, page: string, limit: string) => {
+    let path = "/transformation-workshop-user-bff/order?id=" + idTw + '&page=' + page + '&limit=' + limit;
     if (idTw) {
         return http
             .get(path)
@@ -18,8 +18,8 @@ export const requestOrderTransformationWorkshop = (idTw?: string) => {
     }
 };
 
-export const requestOrderOne = (idOne?: string) => {
-    let path = "/orders/" + idOne;
+export const requestOrderOne = (idOne?: string , idTw?: string) => {
+    let path = "/orders-bff/transformation-workshop-one" + '?idOrder=' + idOne + '&idTw=' + idTw;
     if (idOne) {
         return http
             .get(path)

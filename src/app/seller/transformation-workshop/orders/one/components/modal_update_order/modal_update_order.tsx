@@ -1,3 +1,4 @@
+import { OrderOneType } from "@/app/profile/order/service/types";
 import { ZButton } from "@/components/button/button";
 import ZDialog from "@/components/dialog/dialog";
 import ZDropdown from "@/components/dropdown/dropdown";
@@ -8,14 +9,15 @@ import { OrderController } from "../../../service/controller";
 
 export function ModalUpdateOrder({ visible, onHide }: { visible: any, onHide(): void }) {
 
-    const [status, setStatus] = useState(visible.status);
-    const [payStatus, setPayStatus] = useState(visible.payment_status);
+    const order : OrderOneType = visible
+    const [status, setStatus] = useState(visible ? order.order_services[0]?.status : '');
+    const [payStatus, setPayStatus] = useState(order.payment_status);
 
     const controllerOrder = OrderController()
 
    useEffect(() => {
-      setPayStatus(visible.payment_status)
-      setStatus(visible.status)
+      setPayStatus(order.payment_status)
+      setStatus(visible ?  order.order_services[0]?.status : '')
     }, [visible]);
 
     const handleSave = () => {
