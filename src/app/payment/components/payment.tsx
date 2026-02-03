@@ -32,15 +32,11 @@ export default function PaymentComponent() {
               <h2>
                 R${' '}
                 {(
-                  order.total_amount +
-                  (order.order_services?.reduce(
-                    (sum, item) => sum + (item.order_item.reduce((acc, it) => acc + it.delivery_estimate.cost, 0)),
-                    0
-                  ) ?? 0)
+                  order.total_amount 
                 ).toFixed(2)}
               </h2>
               <p>
-                Valor Total do Pedido
+                Valor Total
               </p>
             </div>
 
@@ -120,11 +116,7 @@ export default function PaymentComponent() {
                     <span className="total-value">
                       R${' '}
                       {(
-                        item.total_amount +
-                        (delivery?.reduce(
-                          (sum, item) => sum + item.delivery_estimate.cost,
-                          0
-                        ) ?? 0)
+                        item.total_amount
                       ).toFixed(2)}
                     </span>
                   </p>

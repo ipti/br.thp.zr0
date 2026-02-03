@@ -46,9 +46,12 @@ export default function ListPage() {
   return (
     <>
     <DataTable 
+    lazy
       editMode="row" 
       paginator 
       paginatorPosition="bottom" 
+      paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
+      currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} pedidos"
       header={header}  
       rows={limit} 
       first={(page - 1) * limit}
@@ -62,8 +65,8 @@ export default function ListPage() {
       selectionMode="single"
     >
       <Column
-        body={(e: TransformationWorkshopOrder) => {
-          return <>{e.uid}</>;
+        body={(e) => {
+          return <>{e.order.uid}</>;
         }}
         header="ID Pedido"
       ></Column>

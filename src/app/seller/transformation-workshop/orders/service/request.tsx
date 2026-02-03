@@ -34,9 +34,8 @@ export const requestOrderOne = (idOne?: string , idTw?: string) => {
     }
 };
 
-export const requestOrderUpdate = (idOne?: string, body: OrderUpdate) => {
-    let path = "/orders/" + idOne;
-    if (idOne) {
+export const requestOrderUpdate = (body: OrderUpdate) => {
+    let path = "/orders-bff/order-service-transformation-workshop"
         return http
             .patch(path, body)
             .then((response) => response.data)
@@ -47,7 +46,7 @@ export const requestOrderUpdate = (idOne?: string, body: OrderUpdate) => {
                 }
                 throw err;
             });
-    }
+    
 };
 
 export const requestRefundOrderUpdate = (body: RefundOrder) => {

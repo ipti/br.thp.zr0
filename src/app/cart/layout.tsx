@@ -13,12 +13,12 @@ export default function CartLayout({
       <div className="flex flex-column h-full w-full">
         <Header />
         <Providers>
-          <main className="h-full w-full overflow-auto p-4 md:p-8 ">
+          <main className="h-full w-full overflow-auto  ">
             <Suspense>{children}</Suspense>
+          {/* <Footer /> */}
           </main>
         </Providers>
       </div>
-      <Footer />
     </div>
   )
 }

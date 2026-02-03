@@ -5,8 +5,8 @@ import { OrderUpdate, RefundOrder } from "./types"
 
 export function OrderController() {
 
-    function OrderUpdateAction(body: OrderUpdate) {
-        requestOrderUpdate(body).then(data => {
+    function OrderUpdateAction(idOne?: string,body: OrderUpdate) {
+        requestOrderUpdate(idOne, body).then(data => {
             Swal.fire({
                 title: "Pedido atualizado!",
                 icon: "success",

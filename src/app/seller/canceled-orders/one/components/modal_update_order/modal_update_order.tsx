@@ -21,7 +21,7 @@ export function ModalUpdateOrder({ visible, onHide }: { visible: any, onHide(): 
     }, [visible]);
 
     const handleSave = () => {
-        controllerOrder.OrderUpdateAction({ status: status, payment_status: payStatus, id_order: order.id, id_order_service: order.order_services[0].id })
+        controllerOrder.OrderUpdateAction(order.id.toString(), { status: status, payment_status: payStatus})
         onHide()
         // aqui você pode chamar sua API (fetch/axios)
     };

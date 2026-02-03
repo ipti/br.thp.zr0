@@ -38,7 +38,7 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
                     </>
                 }
                 {
-                    (order.status === 'CONFIRMED' || order.status === 'PENDING') && <ZButton outlined onClick={() => { setCanceled(!canceled) }} label="Solicitar cancelamento" severity="danger" icon='pi pi-undo' />
+                   <ZButton outlined onClick={() => { setCanceled(!canceled) }} label="Solicitar cancelamento" severity="danger" icon='pi pi-undo' />
                 }
             </div>
             <Order order={order} />

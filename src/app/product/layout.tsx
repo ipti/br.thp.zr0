@@ -15,8 +15,8 @@ export default function ProductLayout({
         <Providers>
           <Suspense>{children}</Suspense>
         </Providers>
+        <Footer />
       </main>
-      <Footer />
     </div>
   )
 }

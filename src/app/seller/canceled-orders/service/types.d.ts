@@ -1,9 +1,19 @@
 
-export interface OrderPagination {
-  data: OrderlistType[]
+export interface OrderSolitedCancellation {
+  data: Order[]
   pagination: Pagination
 }
-export interface OrderlistType {
+
+export interface Order {
+  id: number
+  uid: string
+  createdAt: string
+  payment_status: string
+  total_amount: number
+  order_services: OrderService[]
+}
+
+export interface OrderService {
   id: number
   uid: string
   transformation_workshop_fk: number
@@ -14,8 +24,6 @@ export interface OrderlistType {
   order_fk: number
   _count: Count
   order_item: OrderItem[]
-  order: Order
-  totalProducts: number
 }
 
 export interface Count {
@@ -45,16 +53,13 @@ export interface DeliveryEstimate {
   deliveryTime: number
 }
 
-export interface Order {
-  payment_status: string
-}
-
 export interface Pagination {
   page: number
   limit: number
   total: number
   totalPages: number
 }
+
 
 export interface OrderOneType {
   id: number
@@ -147,8 +152,6 @@ export interface RefundOrder {
 }
 
 export interface OrderUpdate {
-    id_order_service: number;
-  id_order: number;
   status: string;
   payment_status: string;
 }

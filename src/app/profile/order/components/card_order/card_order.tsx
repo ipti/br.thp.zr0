@@ -11,7 +11,9 @@ export default function CardOrder({ item }: { item: Order }) {
       className="card_order"
       onClick={() => history.push(`/profile/order/${item.id.toString()}`)}
     >
-      <h4>#{item.uid}</h4>
+      <div className='flex flex-row'>
+        <h4>#{item.uid}</h4>
+      </div>
       <div className="p-1" />
       <div className="flex flex-row justify-content-between">
         <div className="flex flex-row gap-2 align-items-center">
@@ -26,19 +28,18 @@ export default function CardOrder({ item }: { item: Order }) {
             )
           })}
         </div>
-        <div className="flex flex-row gap-2 align-items-center">
-          <div className={`status ${item.payment_status.toLowerCase()}`}>
-            <i className="pi pi-dollar" />
+        <div className="flex flex-column gap-2">
+          <div className={`status ${item.payment_status.toLowerCase()} flex flex-row align-items-center gap-1`}>
+            <h2>
+              R${item.order_services.reduce((sum, os) => sum + os.total_amount, 0).toFixed(2)}
+            </h2>
           </div>
-          {/* <div className={`status ${item.order_services.toLowerCase()}`}>
-            Status: {orderStatus[item.status]}
-          </div> */}
+          <p>{formatDateToBR(item.createdAt)}</p>
         </div>
       </div>
       <div className="p-1" />
       <div className="flex flex-row justify-content-between">
-        <p>{formatDateToBR(item.createdAt)}</p>
-        <p>Quant. produtos: {item._count.order_items}</p>
+
       </div>
     </div>
   )

@@ -36,10 +36,7 @@ export function Order({ order }: { order: OrderOneType }) {
                             {orderStatus[onlyOrderOne.status]}
                         </span>
                         <div>
-                            <h1>R$ {(onlyOrderOne.total_amount + onlyOrderOne.order_item.reduce(
-                                (acc: number, item: OrderItem) => acc + item.delivery_estimate.cost,
-                                0
-                            )).toFixed(2)}</h1>
+                            <h1>R$ {(onlyOrderOne.total_amount).toFixed(2)}</h1>
                             <p>Total do Pedido </p>
                         </div>
                     </div>
@@ -148,10 +145,7 @@ export function Order({ order }: { order: OrderOneType }) {
                                             {orderStatus[item.status]}
                                         </span>
                                         <div>
-                                            <h1>R$ {(item.total_amount + item.order_item.reduce(
-                                                (acc: number, item: OrderItem) => acc + item.delivery_estimate.cost,
-                                                0
-                                            )).toFixed(2)}</h1>
+                                            <h1>R$ {(item.total_amount).toFixed(2)}</h1>
                                             <p>Total do Pedido </p>
                                         </div>
                                     </div>
