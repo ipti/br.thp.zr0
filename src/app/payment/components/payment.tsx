@@ -6,7 +6,7 @@ import {
   useFetchRequestOrderOne,
   useFetchRequestPaymentIntentOne
 } from '../service/query'
-import { OrderOneType } from '../service/types'
+import { OrderOneType, PaymentIntentLike } from '../service/types'
 import './payment.css'
 
 export default function PaymentComponent() {
@@ -15,6 +15,9 @@ export default function PaymentComponent() {
   const { data: orderService } = useFetchRequestOrderOne(id?.toString())
   const order: OrderOneType | undefined = orderService
   const { data: paymentService } = useFetchRequestPaymentIntentOne(order?.id)
+  const paymentIntent = paymentService as PaymentIntentLike | undefined
+  const pixInfo = paymentIntent?.next_action?.pix_display_qr_code
+  const boletoInfo = paymentIntent?.next_action?.boleto_display_details
 
 
   return (
@@ -129,8 +132,38 @@ export default function PaymentComponent() {
 
       {order && (
         <div>
+          {order.payment_method === 'PIX' && pixInfo ? (
+            <ZCard className="mb-3 p-3">
+              <h3>Pagamento via PIX</h3>
+              <p>Escaneie o QR Code ou copie o código abaixo.</p>
+              {pixInfo.image_url_png ? (
+                <img
+                  src={pixInfo.image_url_png}
+                  alt="QR Code PIX"
+                  style={{ maxWidth: 220, width: '100%' }}
+                />
+              ) : null}
+              {pixInfo.data ? (
+                <div className="mt-2">
+                  <textarea
+                    readOnly
+                    value={pixInfo.data}
+                    style={{ width: '100%', minHeight: 120 }}
+                  />
+                </div>
+              ) : null}
+            </ZCard>
+          ) : null}
+          {order.payment_method === 'BANK_SLIP' && boletoInfo?.hosted_voucher_url ? (
+            <ZCard className="mb-3 p-3">
+              <h3>Boleto gerado</h3>
+              <a href={boletoInfo.hosted_voucher_url} target="_blank">
+                Abrir boleto
+              </a>
+            </ZCard>
+          ) : null}
           <CheckoutComponent
-            clientSecret={paymentService?.client_secret ?? undefined}
+            clientSecret={paymentIntent?.client_secret ?? undefined}
           />
         </div>
       )}

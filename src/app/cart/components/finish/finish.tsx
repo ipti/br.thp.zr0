@@ -10,9 +10,12 @@ import { useState } from 'react'
 import Swal from 'sweetalert2'
 import { CartController } from '../../service/controller'
 import { useFetchAddressOneRequest } from '../../service/query'
+import { ValidateCouponRequest } from '../../service/request'
 import CardAddress from '../card_address/card_address'
 import CardPerson from '../card_person/card_person'
 import { useCartStepsStore } from '../../zustand/zustand'
+import ZInputText from '@/components/input/input'
+import ZDropdown from '@/components/dropdown/dropdown'
 
 export default function Finish({
   handleActiveIndex,
@@ -22,6 +25,12 @@ export default function Finish({
   handleSetOrders: (orders: { id: number; uid: string }[]) => void
 }) {
   const [isLoadingFinish, setIsLoadingFinish] = useState(false)
+  const [couponCode, setCouponCode] = useState('')
+  const [couponDiscount, setCouponDiscount] = useState(0)
+  const [couponApplied, setCouponApplied] = useState<string | null>(null)
+  const [paymentMethod, setPaymentMethod] = useState<
+    'PIX' | 'CREDIT_CARD' | 'BANK_SLIP'
+  >('PIX')
 
   const [checked] = useState(false)
 
@@ -75,6 +84,8 @@ export default function Finish({
           name: address?.name ?? '',
           phone: address?.phone ?? ''
         },
+        payment_method: paymentMethod,
+        coupon_code: couponApplied ?? undefined,
         userId: user?.id ?? 0,
         items:
           cartSteps?.cartSteps.deliverySelected?.map(item => {
@@ -86,6 +97,7 @@ export default function Finish({
             if (product) {
               return {
                 productId: item.productId,
+                variantId: product.variantId,
                 quantity: item.quantity,
                 delivery_estimate: item?.validOptions,
                 workshopId: item?.workshopId ?? 0
@@ -97,6 +109,36 @@ export default function Finish({
       handleReturn,
       handleSuccectAction
     )
+  }
+
+  const shippingTotal =
+    cartSteps?.cartSteps.deliverySelected?.reduce(
+      (sum, item) => sum + item.validOptions.cost,
+      0
+    ) ?? 0
+  const orderTotal = total + shippingTotal
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      return
+    }
+
+    try {
+      const result = await ValidateCouponRequest(couponCode.trim(), orderTotal)
+      setCouponDiscount(result.discount)
+      setCouponApplied(result.code)
+      Swal.fire({
+        icon: 'success',
+        text: `Cupom ${result.code} aplicado com sucesso!`
+      })
+    } catch (error: any) {
+      setCouponDiscount(0)
+      setCouponApplied(null)
+      Swal.fire({
+        icon: 'error',
+        text: error?.response?.data?.message ?? 'Não foi possível aplicar o cupom.'
+      })
+    }
   }
 
   return (
@@ -170,12 +212,49 @@ export default function Finish({
               ) : (
                 <h3>
                   R$
-                  {cartSteps?.cartSteps.deliverySelected
-                    ?.reduce((sum, item) => sum + item.validOptions.cost, 0)
-                    .toFixed(2)}
+                  {shippingTotal.toFixed(2)}
                 </h3>
               )}
             </div>
+            <div className="flex flex-column gap-2 mt-3">
+              <label>Cupom de desconto</label>
+              <div className="flex gap-2">
+                <ZInputText
+                  value={couponCode}
+                  onChange={e => setCouponCode(e.target.value)}
+                  placeholder="Digite seu cupom"
+                />
+                <ZButton
+                  type="button"
+                  label="Aplicar"
+                  onClick={() => {
+                    void handleApplyCoupon()
+                  }}
+                />
+              </div>
+              {couponApplied ? (
+                <p>Cupom ativo: {couponApplied} (-R$ {couponDiscount.toFixed(2)})</p>
+              ) : null}
+            </div>
+            <div className="flex flex-column gap-2 mt-3">
+              <label>Método de pagamento</label>
+              <ZDropdown
+                value={paymentMethod}
+                options={[
+                  { label: 'PIX', value: 'PIX' },
+                  { label: 'Cartão de crédito', value: 'CREDIT_CARD' },
+                  { label: 'Boleto', value: 'BANK_SLIP' }
+                ]}
+                onChange={e => setPaymentMethod(e.value)}
+                placeholder="Selecione"
+              />
+            </div>
+            {couponDiscount > 0 ? (
+              <div className="flex flex-row justify-content-between mt-3">
+                <h4>Desconto:</h4>
+                <h3>-R$ {couponDiscount.toFixed(2)}</h3>
+              </div>
+            ) : null}
 
             <ZDivider />
             <div className="flex flex-row justify-content-end">
@@ -183,11 +262,7 @@ export default function Finish({
                 R$
                 {
                   (
-                    total +
-                    (cartSteps?.cartSteps.deliverySelected?.reduce(
-                      (sum, item) => sum + item.validOptions.cost,
-                      0
-                    ) ?? 0)
+                    orderTotal - couponDiscount
                   ).toFixed(2) + ''
                   // (shippingSelect?.cost ?? 0)).toFixed(2)
                 }

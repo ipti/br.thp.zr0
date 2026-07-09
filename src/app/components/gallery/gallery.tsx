@@ -1,17 +1,17 @@
 import { ProductType } from "@/app/seller/product/type"
 import "./gallery.css"
 import http from "@/service/axios";
-import Image from "next/image";
 
 export default async function Gallery() {
 
     const product = await http.get("/product");
+    const products = product?.data?.data ?? product?.data ?? [];
 
     return (
         <section className="gallery-section">
             <div className="gallery-container">
                 <div className="gallery-grid">
-                    {product?.data?.map((item: ProductType, index) => {
+                    {products?.map((item: ProductType, index: number) => {
                         return (
                             <div key={index} >
                                 <div className="gallery-item">

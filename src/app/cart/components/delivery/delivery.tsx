@@ -1,13 +1,16 @@
-import { ShippingGetType, ValidOption } from "@/app/product/service/type";
+import { ShippingGetType } from "@/app/product/service/type";
 import { ZButton } from "@/components/button/button";
-import ZRadioButton from "@/components/radio_button/radio_button";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useFetchAddressOneRequest } from "../../service/query";
 import { ProductClientController } from "@/app/product/service/controller";
 import { Address } from "@/app/profile/address/service/type";
 import ZSkeleton from "@/components/skeleton/skeleton";
 import { CardDelivery } from "./card_delivery";
 import { DeliverySelectedType, useCartStepsStore } from "../../zustand/zustand";
+import { CartController } from "../../service/controller";
+import { useFetchUserToken } from "@/service/global_request/query";
+import { UserGlobal } from "@/service/global_request/type";
+import Swal from "sweetalert2";
 
 export default function Delivery({
   handleActiveIndex,
@@ -19,17 +22,21 @@ export default function Delivery({
     DeliverySelectedType[]
   >([]);
   const [loadingCep, setLoading] = useState(false);
+  const [isReserving, setIsReserving] = useState(false);
 
   const productClientController = ProductClientController({
     setShipping,
     setShippingSelect,
   });
+  const cartController = CartController();
 
-    const cartSteps = useCartStepsStore(state => state)
+  const cartSteps = useCartStepsStore(state => state)
+  const { data: userRequest } = useFetchUserToken();
 
-  const { data, isLoading } = useFetchAddressOneRequest(
+  const { data } = useFetchAddressOneRequest(
     cartSteps?.cartSteps.address_selected ?? 0
   );
+  const user: UserGlobal | undefined = userRequest;
 
   const handleShippingCalculate = (cep?: string) => {
     if (cep) {
@@ -49,6 +56,10 @@ export default function Delivery({
     if (address) handleShippingCalculate(address.cep);
   }, [address]);
 
+  useEffect(() => {
+    setShippingSelect(cartSteps.cartSteps.deliverySelected ?? []);
+  }, [cartSteps.cartSteps.deliverySelected]);
+
   const handleSelectOptions = (data: DeliverySelectedType) => {
 
     if (shippingSelect?.find((item) => item.productId === data.productId && item.workshopId === data.workshopId)) {
@@ -56,6 +67,45 @@ export default function Delivery({
       return ([...t, { productId: data.productId, workshopId: data.workshopId, validOptions: data.validOptions, productName: data.productName, workshopName: data.workshopName, quantity: data.quantity }])
     } else {
       return [...shippingSelect, { productId: data.productId, workshopId: data.workshopId, validOptions: data.validOptions, productName: data.productName, workshopName: data.workshopName, quantity: data.quantity }]
+    }
+  }
+
+  const handleReserveStock = async () => {
+    if (!user?.id) {
+      Swal.fire({
+        title: "Sessao expirada",
+        text: "Faça login novamente para continuar o checkout.",
+        icon: "warning",
+      });
+      return;
+    }
+
+    setIsReserving(true);
+    try {
+      await cartController.ReserveStock({
+        userId: user.id,
+        items: shippingSelect.map((item) => ({
+          productId: item.productId,
+          workshopId: item.workshopId,
+          quantity: item.quantity,
+        })),
+      });
+
+      cartSteps.updateCartSteps({
+        ...cartSteps.cartSteps,
+        deliverySelected: shippingSelect,
+      });
+      handleActiveIndex(3);
+    } catch (error: any) {
+      Swal.fire({
+        title: "Nao foi possivel reservar o estoque",
+        text:
+          error?.response?.data?.message ??
+          "Atualize o frete e tente novamente.",
+        icon: "error",
+      });
+    } finally {
+      setIsReserving(false);
     }
   }
 
@@ -107,8 +157,9 @@ export default function Delivery({
         <ZButton
           label="Continuar"
           disabled={shippingSelect.length !== shipping?.length}
+          loading={isReserving}
           onClick={() => {
-            handleActiveIndex(3);
+            void handleReserveStock();
           }}
         />
       </div>

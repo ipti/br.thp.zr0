@@ -73,6 +73,8 @@ export interface OrderService {
   transformation_workshop_fk: number
   status: string
   total_amount: number
+  tracking_code?: string
+  tracking_carrier?: string
   createdAt: string
   updatedAt: string
   order_fk: number

@@ -1,9 +1,10 @@
 import { getProducts } from '@/app/middleware/producs_list'
 import ProductList from './product_list/product_list'
+import SearchInput from './search_input'
 
 import './product.css'
-export default async function Products() {
-  const product = await getProducts()
+export default async function Products({ q }: { q?: string }) {
+  const product = await getProducts(q)
 
   return (
     <div>
@@ -16,6 +17,9 @@ export default async function Products() {
           emocionantes que não devem ser apenas pela sua excepcional artesania,
           mas também pelo seu compromisso com o meio ambiente.
         </p>
+        <div className="mt-4">
+          <SearchInput initialValue={q ?? ''} />
+        </div>
       </div>
 
       <ProductList filteredAndSortedProducts={product} />

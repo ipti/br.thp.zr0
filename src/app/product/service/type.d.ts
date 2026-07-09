@@ -2,18 +2,46 @@ export interface ShippingCalculateType {
     orderItems: OrderItems[]
     destinationZipCode: string
   }
-  
-  export interface OrderItems {
-    productId: string
-    quantity: number
+
+export interface ProductReviewUser {
+  id: number
+  name: string
+}
+
+export interface ProductReview {
+  id: number
+  rating: number
+  comment?: string
+  createdAt: string
+  user: ProductReviewUser
+}
+
+export interface ProductReviewResponse {
+  data: ProductReview[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
   }
+}
+
+export interface WishlistStatus {
+  wished: boolean
+}
   
-  export interface ShippingGetType {
+export interface OrderItems {
+  productId: string
+  variantId?: number
+  quantity: number
+}
+  
+export interface ShippingGetType {
   result: Result
   workshopId: number
   quantity: number
   workshopName: string
-  productId: number
+  productId: string
   productName: string
 }
 

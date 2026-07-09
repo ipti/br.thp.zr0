@@ -1,6 +1,7 @@
 'use client'
 
 import { DetailsProduct } from '@/app/components/product/details_product/details_product'
+import { ProductReviews } from '@/app/product/components/product_reviews'
 import { ProductImage, ProductOne } from '@/app/seller/product/one/service/type'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -67,6 +68,7 @@ export default function ProductOneComponent() {
 
           <DetailsProduct item={productOne} />
         </div>
+        {productOne?.uid ? <ProductReviews productUid={productOne.uid} /> : null}
 
         {/* Divider */}
         <div className={'divider'}></div>

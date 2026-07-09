@@ -28,6 +28,12 @@ export default function ProfileComponent() {
         icon: true,
         src: "pi pi-box",
         link: "/profile/order"
+    }, {
+        title: "Wishlist",
+        description: "Produtos salvos para ver depois.",
+        icon: true,
+        src: "pi pi-heart",
+        link: "/profile/wishlist"
     },]
 
     return (

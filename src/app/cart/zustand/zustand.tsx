@@ -9,6 +9,7 @@ export interface DeliverySelectedType {
   workshopId: number
   validOptions: ValidOption
   quantity: number
+  variantId?: number
 }
 
 export interface CartContextType {
@@ -53,7 +54,7 @@ export const useCartStepsStore = create<CartStore>((set, get) => ({
     const state = get()
     for (const i of currentCart) {
       if (state.cartSteps.product_selected?.find(props => props === i.id)) {
-        array.push({ productId: i.id, quantity: i.quantity })
+        array.push({ productId: i.id, variantId: i.variantId, quantity: i.quantity })
       }
     }
     return array

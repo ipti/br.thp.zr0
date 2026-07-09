@@ -12,16 +12,27 @@ export function ModalUpdateOrder({ visible, onHide }: { visible: any, onHide(): 
     const order : OrderOneType = visible
     const [status, setStatus] = useState(visible ? order.order_services[0]?.status : '');
     const [payStatus, setPayStatus] = useState(order.payment_status);
+    const [trackingCode, setTrackingCode] = useState(order.order_services[0]?.tracking_code ?? '');
+    const [trackingCarrier, setTrackingCarrier] = useState(order.order_services[0]?.tracking_carrier ?? '');
 
     const controllerOrder = OrderController()
 
    useEffect(() => {
       setPayStatus(order.payment_status)
       setStatus(visible ?  order.order_services[0]?.status : '')
+      setTrackingCode(order.order_services[0]?.tracking_code ?? '')
+      setTrackingCarrier(order.order_services[0]?.tracking_carrier ?? '')
     }, [visible]);
 
     const handleSave = () => {
-        controllerOrder.OrderUpdateAction({ status: status, payment_status: payStatus, id_order: order.id, id_order_service: order.order_services[0].id })
+        controllerOrder.OrderUpdateAction({
+            status: status,
+            payment_status: payStatus,
+            id_order: order.id,
+            id_order_service: order.order_services[0].id,
+            tracking_code: trackingCode,
+            tracking_carrier: trackingCarrier,
+        })
         onHide()
         // aqui você pode chamar sua API (fetch/axios)
     };
@@ -46,6 +57,14 @@ export function ModalUpdateOrder({ visible, onHide }: { visible: any, onHide(): 
                     <div className="flex flex-column gap-2 mt-4">
                         <label>Status do Pagamento</label>
                         <ZDropdown options={Object.keys(paymentStatus).map((item) => { return { name: paymentStatus[item], value: item } })} optionLabel="name" value={payStatus} onChange={(e) => setPayStatus(e.target.value)} />
+                    </div>
+                    <div className="flex flex-column gap-2 mt-4">
+                        <label>Codigo de rastreio</label>
+                        <input value={trackingCode} onChange={(e) => setTrackingCode(e.target.value)} className="p-2 border-round border-1 surface-border" />
+                    </div>
+                    <div className="flex flex-column gap-2 mt-4">
+                        <label>Transportadora</label>
+                        <input value={trackingCarrier} onChange={(e) => setTrackingCarrier(e.target.value)} className="p-2 border-round border-1 surface-border" />
                     </div>
                 </div>
                 <div className="flex flex-row justify-content-end mt-4">

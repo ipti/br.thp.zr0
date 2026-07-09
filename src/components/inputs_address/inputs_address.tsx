@@ -11,6 +11,8 @@ import ZInputMask from "../input_mask/input_mask";
 const InputAddressState = () => {
   const [state, setState] = useState<StateList | undefined>();
   const [stateId, setStateId] = useState<number | undefined>();
+  const [cepLoading, setCepLoading] = useState(false);
+  const [cepError, setCepError] = useState<string | null>(null);
 
   const { data: stateRequest } = useFetchRequestState();
 
@@ -21,32 +23,47 @@ const InputAddressState = () => {
   }, [stateRequest]);
 
   const dadosCep = async (value: string, setFieldValue: any) => {
-    if (value) {
-      const cep = value.replace(/[^a-zA-Z0-9 ]/g, "");
+    const cep = value.replace(/\D/g, "");
 
-      await axios
-        .get("https://viacep.com.br/ws/" + cep + "/json/")
-        .then((data) => {
-          const stateCep = state?.find(
-            (props) => props.acronym === data.data.uf
-          );
-          const cityCep = stateCep?.city.find(
-            (props) => props.name === data.data.localidade.toUpperCase()
-          );
+    if (cep.length !== 8) {
+      setCepError(null);
+      return;
+    }
 
-          setFieldValue("address", data.data.logradouro);
-          setFieldValue("neighborhood", data.data.bairro);
-          setFieldValue("complement", data.data.complemento);
-          setFieldValue("state", stateCep?.id);
-          setFieldValue("city", cityCep?.id);
-        })
-        .catch((error) => {
-          return error;
-        });
+    setCepLoading(true);
+    setCepError(null);
+
+    try {
+      const response = await axios.get("https://viacep.com.br/ws/" + cep + "/json/");
+      if (response.data?.erro) {
+        setCepError("CEP não encontrado.");
+        return;
+      }
+
+      const stateCep = state?.find(
+        (props) => props.acronym === response.data.uf
+      );
+      const cityCep = stateCep?.city.find(
+        (props) => props.name === response.data.localidade?.toUpperCase()
+      );
+
+      setFieldValue("address", response.data.logradouro ?? "");
+      setFieldValue("neighborhood", response.data.bairro ?? "");
+      setFieldValue("complement", response.data.complemento ?? "");
+      setFieldValue("state", stateCep?.id);
+      setFieldValue("city", cityCep?.id);
+
+      if (!stateCep || !cityCep) {
+        setCepError("CEP encontrado, mas não foi possível selecionar estado e cidade automaticamente.");
+      }
+    } catch {
+      setCepError("Não foi possível consultar o CEP agora.");
+    } finally {
+      setCepLoading(false);
     }
   };
 
-  return { dadosCep, state, setStateId, stateId };
+  return { dadosCep, state, setStateId, stateId, cepLoading, cepError, setCepError };
 };
 
 const InputAddress = ({
@@ -71,6 +88,14 @@ const InputAddress = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.state]);
 
+  useEffect(() => {
+    const cep = values.cep?.replace(/\D/g, "");
+    if (props.state?.length && cep?.length === 8 && !values.state) {
+      void props.dadosCep(values.cep, setFieldValue);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.state, values.cep]);
+
 
   return (
     <>
@@ -84,10 +109,17 @@ const InputAddress = ({
             placeholder="Cep"
             onChange={(e) => {
               setFieldValue("cep", e.target.value);
+              props.setCepError(null);
               props.dadosCep(e.target.value!, setFieldValue);
             }}
             name="cep"
           />
+          {props.cepLoading ? (
+            <div style={{ marginTop: "8px" }}>Consultando CEP...</div>
+          ) : null}
+          {props.cepError ? (
+            <div style={{ color: "red", marginTop: "8px" }}>{props.cepError}</div>
+          ) : null}
           {errors.cep && touched.cep ? (
             <div style={{ color: "red", marginTop: "8px" }}>{errors.cep}</div>
           ) : null}
@@ -175,7 +207,8 @@ const InputAddress = ({
                 optionValue="id"
                 onChange={(e) => {
                   setFieldValue("state", e.target.value);
-                  props.setStateId(e.target.value.id);
+                  props.setStateId(e.target.value);
+                  setFieldValue("city", undefined);
                 }}
                 options={props.state}
               />

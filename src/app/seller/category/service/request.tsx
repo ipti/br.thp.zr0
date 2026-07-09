@@ -6,7 +6,7 @@ export const requestCategory = () => {
     let path = "/category";
     return http
         .get(path)
-        .then((response) => response.data)
+        .then((response) => response.data.data ?? response.data)
         .catch((err) => {
             if (err.response.status === 401) {
                 logout();

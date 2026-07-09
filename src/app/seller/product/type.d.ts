@@ -6,6 +6,8 @@ export interface ProductType {
   name: string
   description: string
   price: number
+  averageRating?: number
+  reviewCount?: number
   category: Category
   product_image: ProductImage[]
 }

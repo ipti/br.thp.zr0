@@ -6,6 +6,7 @@ import Shipping from '@/components/shipping/shipping'
 import { useToast } from '@/components/toast/hook/useToast'
 import { useCartStore } from '@/service/store/cart_store'
 import { useState } from 'react'
+import { WishlistButton } from '@/app/product/components/wishlist_button'
 
 export const DetailsProduct = ({
   item,
@@ -25,10 +26,16 @@ export const DetailsProduct = ({
   return (
     <div className="product-details">
       <div className="flex flex-row justify-content-between align-items-center">
-        <h3 className="product-title">{item.name}</h3>
-        <p className="product-price">
-          R$ {item.price?.toLocaleString('pt-BR')}
-        </p>
+        <div>
+          <h3 className="product-title">{item.name}</h3>
+          <p>{(item.averageRating ?? 0).toFixed(1)} ★ ({item.reviewCount ?? 0} avaliações)</p>
+        </div>
+        <div className="flex align-items-center gap-2">
+          <WishlistButton productUid={item.uid} />
+          <p className="product-price">
+            R$ {item.price?.toLocaleString('pt-BR')}
+          </p>
+        </div>
       </div>
       <p className="product-description">{item.description}</p>
       <p className="product-location">

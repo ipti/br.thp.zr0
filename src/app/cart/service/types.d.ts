@@ -9,9 +9,21 @@ export interface LoginTypes {
 
 export interface CartItem {
   productId: string;
+  variantId?: number;
   quantity: number;
   delivery_estimate: Json
   workshopId: number
+}
+
+export interface StockReservationItem {
+  productId: string
+  workshopId: number
+  quantity: number
+}
+
+export interface CreateStockReservation {
+  userId: number
+  items: StockReservationItem[]
 }
 
 export interface CreateOrder {
@@ -19,6 +31,8 @@ export interface CreateOrder {
   items: CartItem[]
   observation: string
   address: Address
+  payment_method?: 'PIX' | 'CREDIT_CARD' | 'BANK_SLIP'
+  coupon_code?: string
 }
 
 export interface Address {
@@ -55,4 +69,13 @@ export interface CreateAdressCustomer {
   stateId: number
   cityId: number
   customerId: number
+}
+
+export interface CouponValidation {
+  id: number
+  code: string
+  discount_type: 'PERCENT' | 'FIXED'
+  discount_value: number
+  min_order_value?: number
+  discount: number
 }

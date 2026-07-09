@@ -42,6 +42,14 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
                 }
             </div>
             <Order order={order} />
+            {!!order.order_services?.[0]?.tracking_code && (
+                <div className="mt-4 p-3 border-round surface-100">
+                    <strong>Rastreio:</strong> {order.order_services[0].tracking_code}
+                    {order.order_services[0].tracking_carrier && (
+                        <p className="m-0 mt-2">Transportadora: {order.order_services[0].tracking_carrier}</p>
+                    )}
+                </div>
+            )}
                <ZConfirmDialog message="Deseja mesmo solicitar o cancelamento?" header="Confirmação" accept={() => handleSave()} acceptLabel="Sim" rejectLabel="Não" visible={canceled} onHide={() => setCanceled(false)} />
         </>
     );

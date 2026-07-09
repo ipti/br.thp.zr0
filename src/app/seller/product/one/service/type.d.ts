@@ -13,6 +13,18 @@ export interface ProductOne {
   product_image: ProductImage[]
   quantity: number
   uid: string
+  averageRating?: number
+  reviewCount?: number
+  product_review?: {
+    id: number
+    rating: number
+    comment?: string
+    createdAt: string
+    user: {
+      id: number
+      name: string
+    }
+  }[]
 }
 
 export interface ProductImage {

@@ -1,5 +1,8 @@
 'use client'
+import { GetMyCartRequest } from '@/app/auth/login/service/request'
 import ZSteps from '@/components/steps/steps'
+import { isAuthenticated } from '@/service/localstorage'
+import { useCartStore } from '@/service/store/cart_store'
 import { MenuItem } from 'primereact/menuitem'
 import { useEffect, useState } from 'react'
 import CartList from './cart_list/cart_list'
@@ -17,6 +20,7 @@ export default function CartComponent() {
 
   const [activeIndex, setActiveIndex] = useState(0)
   const [orders, setOrders] = useState<{ id: number; uid: string }[]>([])
+  const setCart = useCartStore(state => state.setCart)
 
   const handleActiveIndex = (i: number) => {
     setActiveIndex(i)
@@ -29,6 +33,25 @@ export default function CartComponent() {
   useEffect(() => {
     handleActiveIndex(parseInt(index ?? '0'))
   }, [index])
+
+  useEffect(() => {
+    if (!isAuthenticated()) return
+
+    GetMyCartRequest()
+      .then((response) => {
+        const items = (response.data?.items ?? []).map((item: any) => ({
+          id: item.product.uid,
+          cartItemId: item.id,
+          name: item.product.name,
+          price: item.product.price ?? 0,
+          quantity: item.quantity,
+          image: item.product.product_image?.[0]?.img_url ?? '',
+          variantId: item.variant_fk ?? undefined,
+        }))
+        setCart(items)
+      })
+      .catch(() => {})
+  }, [setCart])
 
   const items: MenuItem[] | undefined = [
     {

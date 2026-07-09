@@ -10,11 +10,13 @@ import {
   CreateAddressCustomerRequest,
   CreateOrderRequest,
   GetOrderRequest,
+  ReserveStockRequest,
   VerifyEmailRequest
 } from './request'
 import {
   CreateAdressCustomer,
   CreateOrder,
+  CreateStockReservation,
   LoginTypes,
   SignUpTypes,
   VerifyEmailReturn,
@@ -142,6 +144,11 @@ export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
       })
   }
 
+  async function ReserveStock(body: CreateStockReservation) {
+    const response = await ReserveStockRequest(body)
+    return response.data
+  }
+
   async function GetOrdersInformation(orders: { id: number; uid: string }[]) {
     const exit: any[] = []
 
@@ -163,6 +170,7 @@ export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
     LoginCartAction,
     SignUpCartAction,
     CreateAddressCustomer,
+    ReserveStock,
     CreateOrder,
     GetOrdersInformation
   }

@@ -151,4 +151,6 @@ export interface OrderUpdate {
   id_order: number;
   status: string;
   payment_status: string;
+  tracking_code?: string;
+  tracking_carrier?: string;
 }

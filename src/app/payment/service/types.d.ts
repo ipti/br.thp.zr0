@@ -14,6 +14,24 @@ export interface OrderOneType {
   order_delivery_address: OrderDeliveryAddress
 }
 
+export interface PaymentIntentLike {
+  id: string
+  client_secret?: string
+  payment_method_types?: string[]
+  next_action?: {
+    pix_display_qr_code?: {
+      data?: string
+      image_url_png?: string
+      hosted_instructions_url?: string
+      expires_at?: number
+    }
+    boleto_display_details?: {
+      hosted_voucher_url?: string
+      expires_at?: number
+    }
+  }
+}
+
 export interface User {
   id: number
   email: string
