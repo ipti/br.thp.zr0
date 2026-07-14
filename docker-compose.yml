@@ -17,4 +17,4 @@ services:
         - /app/node_modules
         - /app/.next
     ports:
-      - "${APP_PORT:-3000}:80"
+      - "${APP_PORT:-3000}:3000"
