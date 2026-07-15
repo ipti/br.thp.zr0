@@ -1,5 +1,4 @@
 'use client'
-import { Providers } from '@/service/provider'
 import { useCartStore } from '@/service/store/cart_store'
 import Cookies from 'js-cookie'
 import { usePathname, useRouter } from 'next/navigation'
@@ -28,7 +27,7 @@ export default function Header() {
 
   const total = cart.length
   return (
-    <Providers>
+    <>
       <header className="header">
         <div className="header-container">
           {/* Left - Navigation */}
@@ -94,6 +93,6 @@ export default function Header() {
         visible={modalLogin}
         onHide={() => setModalLogin(!modalLogin)}
       />
-    </Providers>
+    </>
   )
 }

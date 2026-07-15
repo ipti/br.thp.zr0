@@ -31,7 +31,7 @@ const Product: React.FC<ProductProps> = ({ listProduct }) => {
         {/* Imagem principal */}
         <div className="product-main-image">
           <img
-            src={focusProduct?.product_image[0].img_url}
+            src={focusProduct?.product_image[0]?.img_url}
             alt={focusProduct?.description}
           />
           <DetailsProduct item={focusProduct} home />
@@ -44,7 +44,7 @@ const Product: React.FC<ProductProps> = ({ listProduct }) => {
               return (
                 <img
                   key={product.name}
-                  src={product.product_image[0].img_url}
+                  src={product.product_image[0]?.img_url}
                   alt={`Produto ${product.name}`}
                   onClick={() => setFocusProduct(listProduct[index])}
                 />

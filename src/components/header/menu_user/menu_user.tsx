@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react'
 import { User } from '@/app/seller/user/type'
-import { useFetchUserToken } from '@/service/global_request/query'
+import { requestUserToken } from '@/service/global_request/request'
 import ZAvatar from '@/components/avatar/avatar'
 import './menu_user.css'
 import ZDivider from '@/components/divider/divider'
@@ -16,9 +17,23 @@ type ItemsMenu = {
 export default function MenuUser() {
   const history = useRouter()
 
-  const { data: userRequest, isLoading } = useFetchUserToken()
+  const [user, setUser] = useState<User | undefined>(undefined)
+  const [isLoading, setIsLoading] = useState(true)
 
-  const user: User | undefined = userRequest
+  useEffect(() => {
+    let active = true
+    requestUserToken()
+      .then(data => {
+        if (active) setUser(data)
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (active) setIsLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [])
 
   const itemsMenu: ItemsMenu[] = [
     ...(user?.role !== 'CUSTOMER' ? [{

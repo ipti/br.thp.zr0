@@ -5,20 +5,22 @@ import Cookies from 'js-cookie'
 import { useToast } from '@/components/toast/hook/useToast'
 import {
   AddWishlistRequest,
+  GetWishlistStatusRequest,
   RemoveWishlistRequest,
 } from '../service/request'
-import { useFetchWishlistStatus } from '../service/query'
 
 export function WishlistButton({ productUid }: { productUid: string }) {
   const isLoggedIn = !!Cookies.get('access_token')
   const { showToast } = useToast()
-  const { data, refetch } = useFetchWishlistStatus(productUid, isLoggedIn)
   const [wished, setWished] = useState(false)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    setWished(data?.wished ?? false)
-  }, [data])
+    if (!productUid || !isLoggedIn) return
+    GetWishlistStatusRequest(productUid)
+      .then(data => setWished(data?.wished ?? false))
+      .catch(() => {})
+  }, [productUid, isLoggedIn])
 
   const handleToggle = async (event?: MouseEvent<HTMLButtonElement>) => {
     event?.stopPropagation()
@@ -39,7 +41,6 @@ export function WishlistButton({ productUid }: { productUid: string }) {
         setWished(true)
         showToast('Adicionado à wishlist!', 'success')
       }
-      void refetch()
     } catch {
       showToast('Não foi possível atualizar a wishlist.', 'error')
     } finally {
