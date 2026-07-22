@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "route": "/",
+      "rewrite": "/api/ssr"
+    },
+    {
+      "route": "/product/*",
+      "rewrite": "/api/ssr"
+    }
+  ]
+}
