@@ -1,8 +1,7 @@
-"use client";
-import { useRouter } from "next/navigation";
-import "./product_card.css";
-import { ProductType } from "@/app/seller/product/type";
-import { WishlistButton } from "@/app/product/components/wishlist_button";
+import { WishlistButton } from '@/app/product/components/wishlist_button'
+import { ProductType } from '@/app/seller/product/type'
+import Link from 'next/link'
+import './product_card.css'
 
 interface ProductCardProps {
     product: ProductType
@@ -13,41 +12,41 @@ interface ProductCardProps {
 export const ProductCard = ({
     product
 }: ProductCardProps) => {
-    const useNavigate = useRouter();
-
     return (
-        <div
-            className="card"
-            onClick={() => useNavigate.push('/product/'+product.uid)}
-        >
+        <article className="card">
             <div className="flex justify-content-end p-2">
                 <WishlistButton productUid={product.uid} />
             </div>
-            <div className={"imageWrapper"}>
-                <img src={product.product_image[0].img_url} alt={product.name} className={"image"} />
-            </div>
-            <div className={"info"}>
-                <h3 className={"title"}>{product.name}</h3>
-                <p className={"price"}>R$ {product.price.toFixed(2)}</p>
-                <p>{(product.averageRating ?? 0).toFixed(1)} ★ ({product.reviewCount ?? 0})</p>
-            </div>
-            {/* <div className={"imageWrapper"}>
-        <img src={product.product_image[0].img_url} alt={product.name} className={"image"} />
-      </div>
-      <div className={"info"}>
-        <h3 className={"title"}>{product.name}</h3>
-        <p className={"price"}>R$ {product.price.toFixed(2)}</p>
-      </div>
-      <button
-        className="button"
-        onClick={(e) => {
-            console.log(e)
-        //   e.stopPropagation();
-        //   onNavigateToCart();
-        }}
-      >
-        Comprar
-      </button> */}
-        </div>
-    );
-};
+            <Link
+                href={`/product/${product.uid}`}
+                className="product-card-link"
+                aria-label={`Ver detalhes de ${product.name}`}
+            >
+                <div className="imageWrapper">
+                    {product.product_image[0]?.img_url ? (
+                        <img
+                            src={product.product_image[0].img_url}
+                            alt={product.name}
+                            className="image"
+                        />
+                    ) : null}
+                </div>
+                <div className="info">
+                    <div>
+                        <h3 className="title">{product.name}</h3>
+                        <p>
+                            {(product.averageRating ?? 0).toFixed(1)} ★ (
+                            {product.reviewCount ?? 0})
+                        </p>
+                    </div>
+                    <p className="price">
+                        {product.price.toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                        })}
+                    </p>
+                </div>
+            </Link>
+        </article>
+    )
+}

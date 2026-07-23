@@ -1,25 +1,23 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
 import 'primeflex/primeflex.css'
 import 'primeicons/primeicons.css'
 import '../components/component.css'
 import './globals.css'
 import Script from 'next/script'
 import { ToastProvider } from '@/components/toast/context'
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin']
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin']
-})
+import { getSiteUrl } from '@/service/server_api'
 
 export const metadata: Metadata = {
-  title: 'Zr0',
-  description: 'Transformando plástico em oportunidades'
+  metadataBase: new URL(getSiteUrl()),
+  title: {
+    default: 'ZR0',
+    template: '%s',
+  },
+  description: 'Transformando plástico em oportunidades',
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function RootLayout({
@@ -28,9 +26,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {/* <Header /> */}
+    <html lang="pt-BR">
+      <body>
         <Script id="chatwoot-script" strategy="afterInteractive">
           {`
         (function(d,t) {

@@ -5,17 +5,41 @@ import { ZButton } from '@/components/button/button'
 import Shipping from '@/components/shipping/shipping'
 import { useToast } from '@/components/toast/hook/useToast'
 import { useCartStore } from '@/service/store/cart_store'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { WishlistButton } from '@/app/product/components/wishlist_button'
+import { useRouter } from 'next/navigation'
+
+type DetailsProductItem = {
+  uid: string
+  name: string
+  description: string
+  price: number
+  quantity?: number
+  location?: string
+  averageRating?: number
+  reviewCount?: number
+  product_image: Array<{ img_url: string }>
+}
 
 export const DetailsProduct = ({
   item,
   home
 }: {
-  item: any
+  item: DetailsProductItem
   home?: boolean
 }) => {
   const [quantity, setQuantity] = useState(1)
+  const [isMobile, setIsMobile] = useState(false)
+  const router = useRouter()
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 599px)')
+    const updateViewport = () => setIsMobile(mediaQuery.matches)
+
+    updateViewport()
+    mediaQuery.addEventListener('change', updateViewport)
+    return () => mediaQuery.removeEventListener('change', updateViewport)
+  }, [])
 
   const handleQuantityChange = (change: number) => {
     setQuantity(prev => Math.max(1, prev + change))
@@ -71,7 +95,7 @@ export const DetailsProduct = ({
           </>
         )}
       </div>
-      {(!home && item?.quantity > 0)&& (
+      {!home && (item.quantity ?? 0) > 0 && (
         <Shipping
           orderItems={[
             { productId: item?.uid?.toString() ?? '1', quantity: quantity }
@@ -80,10 +104,10 @@ export const DetailsProduct = ({
         />
       )}
       <ZButton
-        icon={window?.innerWidth < 600 ? 'pi pi-cart-plus' : undefined}
+        icon={isMobile ? 'pi pi-cart-plus' : undefined}
         onClick={() => {
           if (home) {
-            window.location.href = `/product/${item?.uid.toString() ?? '2'}`
+            router.push(`/product/${item?.uid.toString() ?? ''}`)
           } else {
             useCartStore.getState().addItem({
               id: item?.uid.toString() ?? '2',
@@ -98,7 +122,7 @@ export const DetailsProduct = ({
         disabled={item?.quantity === 0}
         className="btn-buy"
       >
-        {window.innerWidth < 600
+        {isMobile
           ? ''
           : home
             ? 'Ver detalhes'

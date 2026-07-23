@@ -1,11 +1,12 @@
 import { ProductType } from "@/app/seller/product/type"
 import "./gallery.css"
-import http from "@/service/axios";
+import { fetchServerApi } from '@/service/server_api'
 
 export default async function Gallery() {
 
-    const product = await http.get("/product");
-    const products = product?.data?.data ?? product?.data ?? [];
+    const response = await fetchServerApi('/product', { cache: 'no-store' })
+    const payload = response.ok ? await response.json() : []
+    const products = payload?.data ?? payload ?? []
 
     return (
         <section className="gallery-section">

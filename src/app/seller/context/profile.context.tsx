@@ -1,37 +1,35 @@
-"use client";
+'use client'
 
-import { Permission, Profile } from "@/app/middleware/use_permission";
+import { Profile } from '@/app/middleware/use_permission'
 
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { createContext, ReactNode, useContext } from 'react'
 
 interface ProfileContextType {
-    profile: Profile | undefined
+  profile: Profile | undefined
 }
 
-export const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
+export const ProfileContext = createContext<ProfileContextType | undefined>(
+  undefined
+)
 
-export const ProfileProvider = ({ children, token }: { children: ReactNode; token: {
-    name: string;
-    value: string;
-} }) => {
-    const [profile, setProfile] = useState<Profile | undefined>(undefined);
-
-    useEffect(() => {
-        if (!token) return;
-
-        async function fetchProfile() {
-            const result = await Permission(token);
-            setProfile(result);
-        }
-
-        fetchProfile();
-    }, [token]);
-
-    return <ProfileContext.Provider value={{ profile }}>{children}</ProfileContext.Provider>;
-};
+export const ProfileProvider = ({
+  children,
+  profile,
+}: {
+  children: ReactNode
+  profile: Profile | undefined
+}) => {
+  return (
+    <ProfileContext.Provider value={{ profile }}>
+      {children}
+    </ProfileContext.Provider>
+  )
+}
 
 export const useProfile = () => {
-    const context = useContext(ProfileContext);
-    if (!context) <></>;
-    return context;
+  const context = useContext(ProfileContext)
+  if (!context) {
+    throw new Error('useProfile must be used inside ProfileProvider')
+  }
+  return context
 }

@@ -1,22 +1,3 @@
-import { apiUrl } from "@/service/url_api"
-
-
-export const Permission = async (token: { name: string, value: string }) => {
-
-    const res = await fetch(`${apiUrl}/user-bff/profile`, {
-        method: "GET", // Método da requisição (opcional; GET é o padrão)
-        cache: "no-store", // Força rodar em runtime, não no build
-        headers: {
-            "Authorization": `Bearer ${token.value}`, // Adiciona o token no cabeçalho
-            "Content-Type": "application/json"  // Define o content type
-        }
-    });
-
-    const profile: Profile | undefined = await res.json()
-
-    return profile
-}
-
 export interface Profile {
   id: number
   role: string
@@ -44,4 +25,3 @@ export interface Page {
   update: boolean
   delete: boolean
 }
-

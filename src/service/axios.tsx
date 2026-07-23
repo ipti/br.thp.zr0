@@ -1,17 +1,17 @@
-import axios from "axios";
-import Cookies from 'js-cookie';
-import { apiUrl } from "./url_api";
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import { apiUrl } from './url_api'
 
 const http = axios.create({
   baseURL: apiUrl,
-});
+})
 
 http.interceptors.request.use(async config => {
-  const token = Cookies.get('access_token');
-  if (!config.skipAuth && token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  const token = Cookies.get('access_token')
+  if (token && !config.headers.Authorization) {
+    config.headers.Authorization = `Bearer ${token}`
   }
-  return config;
-});
+  return config
+})
 
-export default http;
+export default http

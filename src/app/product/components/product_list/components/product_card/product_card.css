@@ -13,6 +13,13 @@
   /* box-shadow: 0 8px 20px rgba(0,0,0,0.15); */
 }
 
+.product-card-link {
+  color: inherit;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
 .imageWrapper {
   width: 100%;
   padding-top: 75%; /* Mantém proporção quadrada */
