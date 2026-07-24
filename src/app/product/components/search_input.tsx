@@ -16,6 +16,7 @@ export default function SearchInput({ initialValue }: { initialValue: string }) 
       } else {
         params.delete('q')
       }
+      params.delete('page')
 
       router.replace(`/product${params.toString() ? `?${params.toString()}` : ''}`)
     }, 300)

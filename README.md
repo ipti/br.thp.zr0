@@ -1,40 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ZR0 Frontend
 
-## Getting Started
+Frontend Next.js 15 (App Router) do sistema ZR0. Os dados e as regras de
+negócio permanecem na API NestJS em `../br.thp.zr0.api`.
 
-First, run the development server:
+## Server e Client Components
+
+- `/`, `/product` e `/product/[id]` são renderizadas no servidor para entregar
+  conteúdo completo no HTML inicial.
+- Busca e paginação de produtos usam parâmetros de URL e fazem a consulta no
+  servidor.
+- Galeria, wishlist, quantidade, frete, carrinho, login e telas autenticadas
+  continuam interativas no cliente.
+- O servidor Next acessa o Nest por `API_INTERNAL_URL`.
+- A URL canônica, o `robots.txt` e o `sitemap.xml` usam `SITE_URL`.
+- O navegador chama apenas `/api/*`; o route handler de proxy encaminha essas
+  chamadas para o Nest. Ele não contém regra de negócio nem acessa banco.
+
+Essa separação evita publicar hostnames internos do Docker, reduz diferenças de
+CORS entre ambientes e permite promover a mesma imagem entre ambientes
+alterando apenas `API_INTERNAL_URL` em runtime.
+
+## Desenvolvimento local
+
+Copie `.env.example` para `.env.local`, execute a API Nest em outra porta (o
+exemplo usa `3001`) e rode:
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+O site ficará disponível em [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Docker
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Somente o frontend, usando uma API já publicada:
 
-## Learn More
+```bash
+docker compose up --build
+```
 
-To learn more about Next.js, take a look at the following resources:
+Frontend, API Nest e MariaDB na mesma rede:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+docker compose -f docker-compose.full-stack.yml up --build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+O arquivo full-stack lê opcionalmente `../br.thp.zr0.api/.env` para os segredos
+exigidos pela API. Ele sobrescreve somente `DATABASE_URL`, `APP_PORT` e `SITE`
+para usar os serviços internos. As migrations são aplicadas no startup; o seed
+não é executado automaticamente para não duplicar dados em todo restart.
 
-## Deploy on Vercel
+Para popular um banco novo uma única vez:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+docker compose -f docker-compose.full-stack.yml run --rm api npm run seed
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Validação
 
-## Using PrimeReact with Sass
+```bash
+npm run build
+npm run lint
+docker compose config
+docker compose -f docker-compose.full-stack.yml config
+```
 
-You can consult the PrimeReact Sass theme at the following link: [PrimeReact Sass Theme](https://github.com/primefaces/primereact-sass-theme)
+O projeto ainda possui dívida anterior de TypeScript/ESLint fora das páginas
+públicas; por isso o `next.config.ts` mantém temporariamente a validação global
+desabilitada durante o build. Isso deve ser removido depois que os erros
+legados forem tratados.

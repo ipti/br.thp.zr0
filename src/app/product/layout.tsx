@@ -1,4 +1,3 @@
-import { Suspense } from 'react'
 import { Providers } from '../../service/provider'
 import Header from '@/components/header/header'
 import Footer from '../components/footer/footer'
@@ -13,7 +12,7 @@ export default function ProductLayout({
       <Header />
       <main className="h-full">
         <Providers>
-          <Suspense>{children}</Suspense>
+          {children}
         </Providers>
         <Footer />
       </main>

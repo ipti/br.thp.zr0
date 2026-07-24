@@ -5,27 +5,27 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { Providers } from "../../service/provider";
-import { Permission } from "../middleware/use_permission";
+import { getProfile } from '../middleware/profile_server'
 import { AccessPage } from "./components/access_page";
 import { ProfileProvider } from "./context/profile.context";
 
 export default async function Seller({ children }: { children: React.ReactNode }) {
 
 
-  const cookieStore = cookies();
-  const token = await cookieStore.get('access_token');
+  const cookieStore = await cookies()
+  const token = cookieStore.get('access_token')
 
   if (!token) {
     redirect('/auth/login'); // Redireciona para login se não houver token
   }
 
-  const profile = await Permission(token)
+  const profile = await getProfile(token.value)
 
 
   return (
     <SlideBarProvider>
       <Providers>
-        <ProfileProvider token={token}>
+        <ProfileProvider profile={profile}>
           <div className="h-full">
             {/* <HeaderSeller /> */}
             <div className="flex flex-row h-full">

@@ -1,71 +1,117 @@
-"use client";
+'use client'
 
-import ZInputText from '@/components/input/input';
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import type { Category } from '@/app/seller/product/type'
 import './product_filter.css'
-import { ZButton } from '@/components/button/button';
-import ZIconField from '@/components/icon_field/icon_field';
-import ZInputIcon from '@/components/input_icon/input_icon';
 
 interface ProductFiltersProps {
-  searchTerm: string;
-  selectedCategory: string;
-  sortBy: string;
-  categories: string[];
+  q: string
+  categoryId: string
+  sort: string
+  categories: Category[]
 }
 
+const sortOptions = [
+  { label: 'Relevancia', value: '' },
+  { label: 'Menor preco', value: 'price_asc' },
+  { label: 'Maior preco', value: 'price_desc' },
+  { label: 'A-Z', value: 'name_asc' },
+]
+
 export function ProductFilters({
-  searchTerm,
-  selectedCategory,
-  sortBy,
+  q,
+  categoryId,
+  sort,
   categories,
 }: ProductFiltersProps) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [search, setSearch] = useState(q)
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString())
+      if (search.trim()) {
+        params.set('q', search.trim())
+      } else {
+        params.delete('q')
+      }
+      params.delete('page')
+      router.replace(`/product?${params.toString()}`)
+    }, 300)
+
+    return () => clearTimeout(timeout)
+  }, [search, searchParams, router])
+
+  const handleCategory = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (value) {
+      params.set('categoryId', value)
+    } else {
+      params.delete('categoryId')
+    }
+    params.delete('page')
+    router.replace(`/product?${params.toString()}`)
+  }
+
+  const handleSort = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (value) {
+      params.set('sort', value)
+    } else {
+      params.delete('sort')
+    }
+    router.replace(`/product?${params.toString()}`)
+  }
+
   return (
     <div className="filters-container">
       <div className="filters-content">
         <div className="filters-wrapper">
-          {/* Search */}
           <div className="search-box">
-            <ZIconField iconPosition="left">
-              <ZInputIcon className='pi pi-search'  />
-              <ZInputText placeholder="Pesquisar" />
-            </ZIconField>
-            {/* <div className="p-inputgroup flex-1 align-items-center">
-              <ZButton icon="pi pi-search" className="p-button-warning" />
-            </div> */}
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Buscar produtos por nome ou descricao"
+              className="search-input"
+            />
           </div>
 
-          {/* Filters */}
           <div className="filters-right">
             <div className="filters-label">
-              <div className="pi pi-filter" />
+              <i className="pi pi-filter" />
               <span>Filtros:</span>
             </div>
 
             <select
-              value={selectedCategory}
-              // onChange={(e) => onCategoryChange(e.target.value)}
+              value={categoryId}
+              onChange={(e) => handleCategory(e.target.value)}
               className="filters-select"
             >
-              <option value="all">Todas</option>
+              <option value="">Todas as categorias</option>
               {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+                <option key={category.id} value={String(category.id)}>
+                  {category.name}
                 </option>
               ))}
             </select>
 
             <select
-              value={sortBy}
-              // onChange={(e) => onSortChange(e.target.value)}
+              value={sort}
+              onChange={(e) => handleSort(e.target.value)}
               className="filters-select"
             >
-              <option value="name">Nome</option>
-              <option value="price-asc">Menor preço</option>
-              <option value="price-desc">Maior preço</option>
+              {sortOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
             </select>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,0 +1,71 @@
+name: zro
+
+services:
+  db:
+    image: mariadb:11.4
+    environment:
+      MARIADB_DATABASE: zr0
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+    volumes:
+      - zro-db-data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'healthcheck.sh', '--connect', '--innodb_initialized']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  api:
+    image: zro-api
+    build:
+      context: ../br.thp.zr0.api
+      dockerfile: Dockerfile
+    env_file:
+      - path: ../br.thp.zr0.api/.env
+        required: false
+    environment:
+      APP_PORT: 3000
+      DATABASE_URL: mysql://root:${DB_ROOT_PASSWORD:-root}@db:3306/zr0
+      SITE: ${SITE_URL:-http://localhost:3000}
+    command: >
+      sh -c "npx prisma migrate deploy &&
+      exec node dist/src/main.js"
+    expose:
+      - '3000'
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://localhost:3000').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+
+  web:
+    image: zro-front
+    build:
+      context: .
+      target: production
+      args:
+        NEXT_PUBLIC_STRIPE_PUBLIC_KEY: ${NEXT_PUBLIC_STRIPE_PUBLIC_KEY:-}
+    environment:
+      API_INTERNAL_URL: http://api:3000
+      SITE_URL: ${SITE_URL:-http://localhost:3000}
+      PORT: 3000
+    ports:
+      - '${APP_PORT:-3000}:3000'
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  zro-db-data:

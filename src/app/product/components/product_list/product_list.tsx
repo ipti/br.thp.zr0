@@ -5,8 +5,7 @@ export default function ProductList({ filteredAndSortedProducts }: { filteredAnd
     return (
         <div className="grid mb-20">
             {filteredAndSortedProducts?.map((product, index) => {
-                const itemsPerRow = typeof window !== "undefined" && window.innerWidth >= 1024 ? 4 : 2;
-                const delay = (index % itemsPerRow) * 100; // em ms
+                const delay = (index % 4) * 100;
                 return (
                     <div
                         className="col-12 sm:col-6 lg:col-4 xl:col-3"

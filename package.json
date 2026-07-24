@@ -11,7 +11,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start -H 0.0.0.0 -p ${PORT:-3000}",
-    "lint": "next lint"
+    "lint": "eslint src middleware.ts next.config.ts"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^5.2.0",

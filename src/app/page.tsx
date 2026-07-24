@@ -7,7 +7,7 @@ import SplitterHome from './components/splitter_home/splitter_home'
 import VideoComponet from './components/video/video'
 import { getProducts } from './middleware/producs_list'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   const product = await getProducts()

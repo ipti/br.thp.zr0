@@ -1,13 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   GetProductReviewsRequest,
-  GetWishlistStatusRequest,
-  requestProductOneUid
+  GetWishlistStatusRequest
 } from "./request";
-
-export const useFetchrequestProductOneUid = (id: string | undefined) => {
-    return useQuery(["userequestProductOneUid", id], () => requestProductOneUid(id));
-};
 
 export const useFetchProductReviews = (id: string | undefined) => {
     return useQuery(["useFetchProductReviews", id], () => GetProductReviewsRequest(id!), {
