@@ -34,7 +34,7 @@ export default function Products({
   }
 
   return (
-    <div>
+    <div className="products-container">
       <div className="text-center mb-4">
         <h1 className="mb-6">Nossos Produtos</h1>
         <p className="text-gray-600 w-full lg:w-6 mx-auto leading-relaxed">

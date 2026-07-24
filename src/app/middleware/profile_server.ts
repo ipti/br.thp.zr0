@@ -15,6 +15,10 @@ export async function getProfile(
     },
   })
 
-  if (!response.ok) return undefined
-  return response.json()
+  if (!response.ok || response.status === 204) return undefined
+
+  const body = await response.text()
+  if (!body.trim()) return undefined
+
+  return JSON.parse(body) as Profile
 }

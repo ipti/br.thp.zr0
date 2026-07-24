@@ -3,7 +3,7 @@ import type { Category } from '@/app/seller/product/type'
 
 export async function getCategories(): Promise<Category[]> {
   try {
-    const res = await fetchServerApi('/category', {
+    const res = await fetchServerApi('/category?limit=100', {
       next: { revalidate: 300 },
       signal: AbortSignal.timeout(5000),
     })

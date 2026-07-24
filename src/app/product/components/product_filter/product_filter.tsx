@@ -1,8 +1,9 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import type { Category } from '@/app/seller/product/type'
+import ZDropdown from '@/components/dropdown/dropdown'
 import './product_filter.css'
 
 interface ProductFiltersProps {
@@ -28,8 +29,18 @@ export function ProductFilters({
   const router = useRouter()
   const searchParams = useSearchParams()
   const [search, setSearch] = useState(q)
+  const [isPending, startTransition] = useTransition()
+  const categoryOptions = [
+    { label: 'Todas as categorias', value: '' },
+    ...categories.map((category) => ({
+      label: category.name,
+      value: String(category.id),
+    })),
+  ]
 
   useEffect(() => {
+    if (search.trim() === q.trim()) return
+
     const timeout = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString())
       if (search.trim()) {
@@ -38,11 +49,13 @@ export function ProductFilters({
         params.delete('q')
       }
       params.delete('page')
-      router.replace(`/product?${params.toString()}`)
+      startTransition(() => {
+        router.replace(`/product?${params.toString()}`)
+      })
     }, 300)
 
     return () => clearTimeout(timeout)
-  }, [search, searchParams, router])
+  }, [q, search, searchParams, router])
 
   const handleCategory = (value: string) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -52,7 +65,9 @@ export function ProductFilters({
       params.delete('categoryId')
     }
     params.delete('page')
-    router.replace(`/product?${params.toString()}`)
+    startTransition(() => {
+      router.replace(`/product?${params.toString()}`)
+    })
   }
 
   const handleSort = (value: string) => {
@@ -62,11 +77,20 @@ export function ProductFilters({
     } else {
       params.delete('sort')
     }
-    router.replace(`/product?${params.toString()}`)
+    startTransition(() => {
+      router.replace(`/product?${params.toString()}`)
+    })
   }
 
   return (
     <div className="filters-container">
+      {isPending && (
+        <div className="filters-loading-overlay" role="status" aria-live="polite">
+          <span className="filters-loading-spinner" aria-hidden="true" />
+          <span>Carregando produtos...</span>
+        </div>
+      )}
+
       <div className="filters-content">
         <div className="filters-wrapper">
           <div className="search-box">
@@ -85,30 +109,25 @@ export function ProductFilters({
               <span>Filtros:</span>
             </div>
 
-            <select
+            <ZDropdown
               value={categoryId}
-              onChange={(e) => handleCategory(e.target.value)}
+              options={categoryOptions}
+              onChange={(e) => handleCategory(e.value)}
+              optionLabel="label"
+              optionValue="value"
+              disabled={isPending}
               className="filters-select"
-            >
-              <option value="">Todas as categorias</option>
-              {categories.map((category) => (
-                <option key={category.id} value={String(category.id)}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
+            />
 
-            <select
+            <ZDropdown
               value={sort}
-              onChange={(e) => handleSort(e.target.value)}
+              options={sortOptions}
+              onChange={(e) => handleSort(e.value)}
+              optionLabel="label"
+              optionValue="value"
+              disabled={isPending}
               className="filters-select"
-            >
-              {sortOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+            />
           </div>
         </div>
       </div>

@@ -1,3 +1,7 @@
+.products-container {
+  position: relative;
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
