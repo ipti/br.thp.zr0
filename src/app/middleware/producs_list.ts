@@ -20,10 +20,14 @@ export async function getProductsPage({
   q,
   page = 1,
   limit = 20,
+  categoryId,
+  sort,
 }: {
   q?: string
   page?: number
   limit?: number
+  categoryId?: string
+  sort?: string
 } = {}): Promise<ProductsPage> {
   const search = new URLSearchParams({
     page: String(page),
@@ -31,6 +35,8 @@ export async function getProductsPage({
   })
 
   if (q) search.set('q', q)
+  if (categoryId) search.set('categoryId', categoryId)
+  if (sort) search.set('sort', sort)
 
   try {
     const res = await fetchServerApi(`/product?${search.toString()}`, {

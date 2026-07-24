@@ -14,30 +14,38 @@ export const ProductCard = ({
 }: ProductCardProps) => {
     return (
         <article className="card">
-            <div className="flex justify-content-end p-2">
-                <WishlistButton productUid={product.uid} />
+            <div className="imageWrapper-container">
+                <Link
+                    href={`/product/${product.uid}`}
+                    className="product-card-link"
+                    aria-label={`Ver detalhes de ${product.name}`}
+                >
+                    <div className="imageWrapper">
+                        {product.product_image[0]?.img_url ? (
+                            <img
+                                src={product.product_image[0].img_url}
+                                alt={product.name}
+                                className="image"
+                            />
+                        ) : null}
+                    </div>
+                </Link>
+                <div className="wishlist-button-container">
+                    <WishlistButton productUid={product.uid} />
+                </div>
             </div>
+
             <Link
                 href={`/product/${product.uid}`}
                 className="product-card-link"
                 aria-label={`Ver detalhes de ${product.name}`}
             >
-                <div className="imageWrapper">
-                    {product.product_image[0]?.img_url ? (
-                        <img
-                            src={product.product_image[0].img_url}
-                            alt={product.name}
-                            className="image"
-                        />
-                    ) : null}
-                </div>
                 <div className="info">
-                    <div>
+                    <div className="info-header">
                         <h3 className="title">{product.name}</h3>
-                        <p>
-                            {(product.averageRating ?? 0).toFixed(1)} ★ (
-                            {product.reviewCount ?? 0})
-                        </p>
+                        <div className="rating">
+                            {(product.averageRating ?? 0).toFixed(1)} ★ ({product.reviewCount ?? 0})
+                        </div>
                     </div>
                     <p className="price">
                         {product.price.toLocaleString('pt-BR', {
