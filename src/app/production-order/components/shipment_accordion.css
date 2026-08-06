@@ -1,0 +1,14 @@
+.shipment-accordion-header {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.1rem;
+}
+
+.shipment-accordion-cost {
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.shipment-accordion-disclaimer {
+  color: #777;
+  font-size: 0.85rem;
+}

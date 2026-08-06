@@ -47,6 +47,7 @@ export interface OrderOneType {
   payment_status: string
   payment_method: any
   payment_intent_id: string
+  sale_type: 'PRONTA_ENTREGA' | 'ENCOMENDA'
   createdAt: string
   updatedAt: string
   user: User
@@ -75,6 +76,8 @@ export interface OrderService {
   total_amount: number
   tracking_code?: string
   tracking_carrier?: string
+  estimated_ready_at?: string
+  estimated_delivery_at?: string
   createdAt: string
   updatedAt: string
   order_fk: number
@@ -207,6 +210,8 @@ export interface OrderService {
   transformation_workshop_fk: number
   status: string
   total_amount: number
+  estimated_ready_at?: string
+  estimated_delivery_at?: string
   createdAt: string
   updatedAt: string
   order_fk: number

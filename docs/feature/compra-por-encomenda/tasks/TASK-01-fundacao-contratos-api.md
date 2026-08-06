@@ -3,9 +3,15 @@
 ## Metadados
 
 - **Prioridade:** P0
-- **Status:** Não iniciada
+- **Status:** Concluída
 - **Dependências:** Nenhuma
 - **Bloqueia:** TASK-02 a TASK-05
+
+## Nota de execução
+
+Implementado conforme especificado, em `src/app/production-order/` (novo diretório, isolado de `src/app/cart/`). Único ajuste em relação ao contrato original: `ReserveProductionOrderRequest`/`CreateProductionOrderRequest` ganharam tipos de retorno explícitos (`ReserveProductionOrderResult`, `CreateProductionOrderResult`, refletindo o shape real de `POST /production-order/reserve` e `POST /production-order` no backend) em vez de `any` — necessário para manter o controller sem `unknown`/`any` e sem regredir o lint, já que o padrão de referência (`ProductClientController`) tinha esse mesmo débito pré-existente que optei por não replicar.
+
+`npx tsc --noEmit` não reporta nenhum erro nos arquivos novos (os erros pré-existentes no restante do projeto são anteriores a esta task, confirmados via grep). ESLint limpo nos arquivos novos. `next build` passa sem erros. `git status` confirma que nenhum arquivo em `src/app/cart/**` foi tocado.
 
 > **Nota de escopo:** a versão anterior desta tarefa estendia o estado do carrinho existente (`useCartStepsStore`, `src/app/cart/zustand/zustand.tsx`) para guardar o plano de simulação. Isso foi descartado: o Pedido de Encomenda é uma **jornada completamente separada e desconectada** do carrinho de Pronta Entrega — precisa de sua própria store, seus próprios tipos e seus próprios arquivos de serviço, sem tocar em nenhum arquivo de `src/app/cart/`.
 

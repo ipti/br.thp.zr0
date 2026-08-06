@@ -39,3 +39,14 @@
   color: #3b341f;
 
 }
+
+.status.in_production {
+  background: #fde3d1;
+  color: #a3480a;
+}
+
+.order-estimated-dates {
+  margin-top: 1rem;
+  color: #555;
+  font-size: 0.9rem;
+}

@@ -97,11 +97,18 @@ export default function Delivery({
       });
       handleActiveIndex(3);
     } catch (error: any) {
+      const insufficientStock = error?.response?.status === 400;
+      const firstProductId = shippingSelect[0]?.productId;
+
       Swal.fire({
         title: "Nao foi possivel reservar o estoque",
-        text:
-          error?.response?.data?.message ??
-          "Atualize o frete e tente novamente.",
+        html: `
+          <p>${error?.response?.data?.message ?? "Atualize o frete e tente novamente."}</p>
+          ${insufficientStock && firstProductId
+            ? `<p><a href="/production-order?productId=${firstProductId}">Não encontrou a quantidade que precisa? Faça uma encomenda.</a></p>`
+            : ""
+          }
+        `,
         icon: "error",
       });
     } finally {

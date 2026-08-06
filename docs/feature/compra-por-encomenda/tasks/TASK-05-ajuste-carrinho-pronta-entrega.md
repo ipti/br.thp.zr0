@@ -3,9 +3,17 @@
 ## Metadados
 
 - **Prioridade:** P1
-- **Status:** Não iniciada
+- **Status:** Concluída
 - **Dependências:** TASK-01
 - **Bloqueia:** TASK-07
+
+## Nota de execução
+
+Confirmado que `delivery.tsx` não assume nada sobre a origem do estoque no backend — `ShippingCalculateAction`/`ReserveStock` só consomem o shape de resposta já existente, sem nenhuma referência a `transformation_workshop_product`/`inventory` no lado do cliente; nenhuma alteração de código foi necessária para a migração em si.
+
+Único ajuste real: no `catch` de `handleReserveStock` (erro de reserva de estoque, tipicamente HTTP 400 de estoque insuficiente), o `Swal.fire` passou a incluir, condicionalmente (`error.response.status === 400` e havendo item selecionado), um link `<a href="/production-order?productId=...">` para a jornada de Encomenda — usando o `productId` do primeiro item selecionado como melhor esforço (o erro do backend não indica qual item específico faltou estoque). É navegação pura via `href` (recarregamento de página), sem nenhum estado compartilhado entre carrinho e encomenda, conforme exigido.
+
+ESLint (`no-var`, `any`, `exhaustive-deps`) e `tsc --noEmit` continuam com exatamente os mesmos avisos/erros de antes da mudança (confirmado via `git stash`) — nenhum novo introduzido. `next build` passa sem erros novos.
 
 > **Nota de escopo:** a versão anterior desta tarefa ("Tela de pedido com múltiplas remessas e status de produção") assumia que um pedido podia misturar Pronta Entrega e Encomenda, exigindo timeline de 5 passos e datas estimadas dentro do mesmo pedido. Isso foi descartado e passou a ser tratado inteiramente pela TASK-04 (que cobre isso no nível do pedido de Encomenda). Esta tarefa foi redefinida com um escopo muito menor: o carrinho de Pronta Entrega **permanece estruturalmente como está hoje** — a única mudança é garantir que ele continue funcionando sem regressão depois que o backend migrar a fonte de estoque para `inventory`, e, opcionalmente, oferecer um atalho de navegação para a jornada de Encomenda quando o estoque não for suficiente.
 

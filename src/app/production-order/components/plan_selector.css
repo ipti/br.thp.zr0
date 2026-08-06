@@ -1,0 +1,52 @@
+.plan-selector {
+  margin-top: 1rem;
+}
+
+.plan-card {
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.plan-card--selected {
+  border-color: var(--color-secondary, #f07724);
+}
+
+.plan-selector--disabled .plan-card {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.plan-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.plan-card-title {
+  font-family: 'Libre Baskerville', serif;
+  margin: 0;
+}
+
+.plan-card-badge {
+  margin-left: auto;
+  background: var(--color-secondary, #f07724);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.15rem 0.6rem;
+  border-radius: 1rem;
+}
+
+.plan-card-cost {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0.25rem 0;
+}
+
+.plan-card-deadline,
+.plan-card-shipments {
+  margin: 0.15rem 0;
+  color: #555;
+}

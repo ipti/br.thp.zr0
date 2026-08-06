@@ -3,9 +3,17 @@
 ## Metadados
 
 - **Prioridade:** P0
-- **Status:** Não iniciada
+- **Status:** Concluída
 - **Dependências:** TASK-01
 - **Bloqueia:** TASK-03
+
+## Nota de execução
+
+Implementado conforme especificado, mantendo a rota `/production-order` (não `/encomenda`) como definida na TASK-01. `page.tsx` é um server component (mesmo padrão de `product/[id]/page.tsx`), que lê `?productId=` e busca o produto via `getProductByUid` (reaproveitado, sem duplicar a chamada), repassando para o orquestrador `ProductionOrderSteps` (client component) — assim o mesmo serviço de produto já usado na página de produto é reaproveitado sem precisar criar um endpoint de busca client-side novo.
+
+Passos 2/3 do `ZSteps` (`Simulação`/`Confirmação`) ficam com `disabled: true` e um placeholder de texto, para a TASK-03/04 substituírem. CTA "Comprar sob encomenda" adicionado em `details_product.tsx` como `ZButton` secundário (`severity="secondary"`, `text`), ao lado do CTA principal "Adicionar ao carrinho" — só aparece quando `!home` (mesma condição já usada para os outros controles de compra), preservando o CTA existente sem alterações.
+
+`npx tsc --noEmit`, ESLint e `next build` (rota `/production-order` aparece na saída do build) sem erros novos nos arquivos tocados. `git status` confirma que nenhum arquivo em `src/app/cart/**` foi alterado.
 
 > **Nota de escopo:** a versão anterior desta tarefa integrava a simulação como uma sub-etapa dentro de `Delivery` (`src/app/cart/components/delivery/delivery.tsx`), etapa "Entrega" do wizard de carrinho existente. Isso foi descartado: a jornada de Encomenda agora é uma **rota própria, fora do carrinho**, com seu próprio ponto de entrada a partir da página de produto.
 

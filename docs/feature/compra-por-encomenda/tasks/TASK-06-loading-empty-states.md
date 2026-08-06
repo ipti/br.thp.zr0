@@ -3,9 +3,19 @@
 ## Metadados
 
 - **Prioridade:** P1
-- **Status:** Não iniciada
+- **Status:** Concluída
 - **Dependências:** TASK-02, TASK-03
 - **Bloqueia:** TASK-07
+
+## Nota de execução
+
+`ZEmptyState` (`src/components/empty_state/`) criado como componente genérico (`icon`/`title`/`description`/`action?`), seguindo o tom minimalista já usado em `not_found_address.tsx`/`cart_list.tsx`. Usado em `simulation_step.tsx` para dois casos: `simulation.unavailable === true` (ícone de alerta, mensagem explícita "Sem capacidade de produção disponível") e falha ao carregar a simulação — nenhum dos dois usa `Swal.fire`, conforme exigido.
+
+`PlanSelectorSkeleton` e `ShipmentAccordionSkeleton` exportados de `plan_selector.tsx`/`shipment_accordion.tsx` (mesmos arquivos dos componentes reais, evitando duplicar layout em arquivos separados) — exibidos enquanto `POST /production-order/simulate` está em andamento, refletindo a mesma estrutura de 2 cards + accordion do resultado final, sem salto de altura perceptível.
+
+Loading ao trocar de modo: como os dois planos já vêm prontos na resposta (sem nova chamada de rede), a troca é síncrona — mas para evitar duplo clique durante a re-renderização do accordion, `handleSelectMode` ignora cliques repetidos enquanto `switchingMode` está ativo (janela curta de 150ms via `setTimeout`, suficiente para cobrir o intervalo entre o clique e o commit do novo estado), desabilitando visualmente `PlanSelector` (`disabled`, opacidade reduzida) e trocando o accordion por `ShipmentAccordionSkeleton` nesse intervalo.
+
+Nenhuma cor nova foi introduzida nos skeletons (reaproveitam `ZSkeleton`/`skeleton.css` sem alteração). Textos revisados em português, tom consistente com o restante do projeto. `npx tsc --noEmit`, ESLint (0 erros; mesmo warning pré-existente de padrão em `quantity_form.tsx`) e `next build` sem erros novos. `git status` confirma `src/app/cart/**` sem alteração nesta task.
 
 > **Nota de escopo:** a versão anterior desta tarefa cobria estados de loading dentro do wizard de carrinho existente (`delivery.tsx`, `payment.tsx`, `order/[id]`). Como a simulação de encomenda deixou de viver dentro do carrinho, o escopo desta tarefa passa a ser **a jornada de Encomenda** (`src/app/production-order/`), inteiramente nova. As correções pontuais de loading em `payment.tsx`/`order/[id]` (bugs pré-existentes, não específicos desta feature) deixam de fazer parte desta tarefa — podem ser reportadas separadamente se ainda forem relevantes, mas não bloqueiam esta entrega.
 

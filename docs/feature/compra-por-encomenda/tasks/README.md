@@ -11,12 +11,12 @@
 
 | Código | Tarefa | Prioridade | Dependência |
 |---|---|---:|---|
-| TASK-01 | Fundação: contratos da API de Encomenda e estado dedicado | P0 | Nenhuma |
-| TASK-02 | Nova jornada de Encomenda (rota e formulário de quantidade) | P0 | TASK-01 |
-| TASK-03 | Simulação custo x prazo com detalhamento por remessa/OT | P0 | TASK-02 |
-| TASK-04 | Acompanhamento do Pedido de Encomenda (status de produção) | P1 | TASK-03 |
-| TASK-05 | Ajuste do carrinho de Pronta Entrega para usar inventory | P1 | TASK-01 |
-| TASK-06 | Loading, skeleton e empty states da jornada de encomenda | P1 | TASK-03 |
+| TASK-01 | Fundação: contratos da API de Encomenda e estado dedicado | P0 | Nenhuma (**Concluída**) |
+| TASK-02 | Nova jornada de Encomenda (rota e formulário de quantidade) | P0 | TASK-01 (**Concluída**) |
+| TASK-03 | Simulação custo x prazo com detalhamento por remessa/OT | P0 | TASK-02 (**Concluída**) |
+| TASK-04 | Acompanhamento do Pedido de Encomenda (status de produção) | P1 | TASK-03 (**Concluída**) |
+| TASK-05 | Ajuste do carrinho de Pronta Entrega para usar inventory | P1 | TASK-01 (**Concluída**) |
+| TASK-06 | Loading, skeleton e empty states da jornada de encomenda | P1 | TASK-03 (**Concluída**) |
 | TASK-07 | Testes de integração dos dois fluxos separadamente | P0 | TASK-01 a TASK-06 |
 
 ## Fluxo de execução

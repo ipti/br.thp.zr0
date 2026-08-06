@@ -128,6 +128,18 @@ export const DetailsProduct = ({
             ? 'Ver detalhes'
             : 'Adicionar ao carrinho'}
       </ZButton>
+      {!home && (
+        <ZButton
+          severity="secondary"
+          text
+          className="btn-encomenda"
+          onClick={() => {
+            router.push(`/production-order?productId=${item?.uid ?? ''}`)
+          }}
+        >
+          Comprar sob encomenda
+        </ZButton>
+      )}
     </div>
   )
 }

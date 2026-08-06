@@ -1,0 +1,21 @@
+.quantity-form {
+  max-width: 480px;
+}
+
+.quantity-form-product {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.quantity-form-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.quantity-form-error {
+  max-width: 480px;
+}
