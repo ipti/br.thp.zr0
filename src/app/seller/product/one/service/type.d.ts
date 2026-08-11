@@ -13,6 +13,9 @@ export interface ProductOne {
   product_image: ProductImage[]
   quantity: number
   uid: string
+  location?: string
+  availableForOrder?: boolean
+  monthlyCapacity?: number
   averageRating?: number
   reviewCount?: number
   product_review?: {

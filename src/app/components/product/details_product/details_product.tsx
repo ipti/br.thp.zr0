@@ -16,6 +16,7 @@ type DetailsProductItem = {
   price: number
   quantity?: number
   location?: string
+  availableForOrder?: boolean
   averageRating?: number
   reviewCount?: number
   product_image: Array<{ img_url: string }>
@@ -62,9 +63,11 @@ export const DetailsProduct = ({
         </div>
       </div>
       <p className="product-description">{item.description}</p>
-      <p className="product-location">
-        Local de produção: {item.location || 'Santa Luzia do Itanhy'}
-      </p>
+      {item.location && (
+        <p className="product-location">
+          Local de produção: {item.location}
+        </p>
+      )}
       {/* Ações */}
 
       <div className="btn-wrapper">
@@ -128,7 +131,7 @@ export const DetailsProduct = ({
             ? 'Ver detalhes'
             : 'Adicionar ao carrinho'}
       </ZButton>
-      {!home && (
+      {!home && item.availableForOrder && (
         <ZButton
           severity="secondary"
           text

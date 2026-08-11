@@ -17,7 +17,7 @@
 | TASK-04 | Acompanhamento do Pedido de Encomenda (status de produção) | P1 | TASK-03 (**Concluída**) |
 | TASK-05 | Ajuste do carrinho de Pronta Entrega para usar inventory | P1 | TASK-01 (**Concluída**) |
 | TASK-06 | Loading, skeleton e empty states da jornada de encomenda | P1 | TASK-03 (**Concluída**) |
-| TASK-07 | Testes de integração dos dois fluxos separadamente | P0 | TASK-01 a TASK-06 |
+| TASK-07 | Testes de integração dos dois fluxos separadamente | P0 | TASK-01 a TASK-06 (**Concluída**) |
 
 ## Fluxo de execução
 
