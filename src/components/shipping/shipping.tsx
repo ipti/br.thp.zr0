@@ -15,17 +15,17 @@ export default function Shipping({ orderItems, disabled }: { orderItems: OrderIt
     const [shipping, setShipping] = useState<ShippingGetType[] | undefined>();
     const [isLoadingCep, setLoading] = useState(false)
     const [selectetInput, setSelectedInput] = useState<boolean | undefined>(false)
-    const [shippingSelect, setShippingSelect] = useState<ValidOption | undefined>()
-    const [cep, setCep] = useState<string | undefined>()
+    const [, setShippingSelect] = useState<ValidOption | undefined>()
+    const [, setCep] = useState<string | undefined>()
 
     const { data: addressCustomerRequest } = useFetchRequestGetAddressCustomer()
 
-    var addressList: AddressList | undefined = addressCustomerRequest
+    const addressList: AddressList | undefined = addressCustomerRequest
 
 
     const productClientController = ProductClientController({ setShipping, setShippingSelect });
 
-    const addressSelect = addressList?.customer.address_customer.find(item => item.is_default)
+    const addressSelect = addressList?.customer?.address_customer.find(item => item.is_default)
 
     const handleShippingCalculate = (
         cep?: string,
@@ -90,7 +90,7 @@ export default function Shipping({ orderItems, disabled }: { orderItems: OrderIt
                         );
                     }}
                 </Formik>}
-            {isLoadingCep ? <div className="flex flex-column gap-2 mt-1"> {skletonArray?.map((item) => <ZSkeleton height="48px"/>)}</div>
+            {isLoadingCep ? <div className="flex flex-column gap-2 mt-1"> {skletonArray.map((item) => <ZSkeleton key={item} height="48px"/>)}</div>
                 : <>
                     {shipping && <div className="" style={{ borderRadius: "8px" }}>
                         <div className="gap-3">

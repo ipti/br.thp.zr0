@@ -52,7 +52,11 @@ export default function PlanSelector({
   }
 
   return (
-    <div className={`grid plan-selector ${disabled ? 'plan-selector--disabled' : ''}`}>
+    <div
+      className={`grid plan-selector ${disabled ? 'plan-selector--disabled' : ''}`}
+      role="radiogroup"
+      aria-label="Opções de produção"
+    >
       {plans.map(({ mode, plan, badge }) => (
         <div className="col-12 md:col-6" key={mode}>
           <ZCard
@@ -66,17 +70,43 @@ export default function PlanSelector({
                 disabled={disabled}
                 onChange={() => handleSelect(mode)}
               />
-              <h2 className="plan-card-title">{SIMULATION_MODE_LABEL[mode]}</h2>
+              <div>
+                <span className="plan-card-kicker">Plano de produção</span>
+                <h2 className="plan-card-title">{SIMULATION_MODE_LABEL[mode]}</h2>
+              </div>
               <span className="plan-card-badge">{badge}</span>
             </div>
-            <p className="plan-card-cost">R$ {plan.totalCost.toFixed(2)}</p>
-            <p className="plan-card-deadline">
-              Entrega estimada até {formatMaxDeliveryAt(plan.maxDeliveryAt)}
-            </p>
-            <p className="plan-card-shipments">
-              {plan.shipments.length}{' '}
-              {plan.shipments.length === 1 ? 'remessa' : 'remessas'}
-            </p>
+            <div className="plan-card-price">
+              <span>Frete estimado total</span>
+              <strong>
+                {plan.totalCost.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })}
+              </strong>
+            </div>
+            <div className="plan-card-metrics">
+              <div>
+                <i className="pi pi-calendar" aria-hidden="true" />
+                <span>Entrega estimada</span>
+                <strong>{formatMaxDeliveryAt(plan.maxDeliveryAt)}</strong>
+              </div>
+              <div>
+                <i className="pi pi-truck" aria-hidden="true" />
+                <span>Distribuição</span>
+                <strong>
+                  {plan.shipments.length}{' '}
+                  {plan.shipments.length === 1 ? 'remessa' : 'remessas'}
+                </strong>
+              </div>
+            </div>
+            <div className="plan-card-select-label">
+              {selectedMode === mode ? (
+                <><i className="pi pi-check-circle" /> Plano selecionado</>
+              ) : (
+                'Selecionar este plano'
+              )}
+            </div>
           </ZCard>
         </div>
       ))}

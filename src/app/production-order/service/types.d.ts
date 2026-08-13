@@ -8,6 +8,7 @@ export type SimulationMode = 'COST' | 'DEADLINE'
 export interface SimulateProductionOrderPayload {
   productId: string
   quantity: number
+  destinationZipCode: string
 }
 
 export interface ProductionShipment {

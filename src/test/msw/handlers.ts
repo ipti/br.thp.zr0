@@ -49,7 +49,11 @@ export const handlers = [
 
   // Jornada de Encomenda (nova)
   http.post('/api/production-order/simulate', async ({ request }) => {
-    const body = (await request.json()) as { productId: string; quantity: number }
+    const body = (await request.json()) as {
+      productId: string
+      quantity: number
+      destinationZipCode: string
+    }
     if (body.productId !== SCHOOL_PRODUCT_UID) {
       return HttpResponse.json({ unavailable: true })
     }

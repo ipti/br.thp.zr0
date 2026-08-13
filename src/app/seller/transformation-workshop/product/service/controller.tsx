@@ -22,8 +22,9 @@ export function ProductTransfWorkshopController() {
         })
     }
 
-    function UpdateProductTransfWorkshopAction(id: number,body: UpdateProductTransfWorkType) {
-        requestUpdateProductTransformationWorkshop(id, body).then(data => {
+    function UpdateProductTransfWorkshopAction(body: UpdateProductTransfWorkType, delta: number) {
+        if (delta === 0) return
+        requestUpdateProductTransformationWorkshop(body, delta).then(data => {
             Swal.fire({
                 title: "Quantidade atualizada!",
                 icon: "success",

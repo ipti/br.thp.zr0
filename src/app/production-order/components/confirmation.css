@@ -1,0 +1,267 @@
+.confirmation-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.confirmation-title-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.confirmation-deadline {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.15rem 0.65rem;
+  min-width: 210px;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  background: #fff0e6;
+}
+
+.confirmation-deadline i {
+  grid-row: 1 / span 2;
+  align-self: center;
+  color: #d96115;
+}
+
+.confirmation-deadline span {
+  color: #7a5b48;
+  font-size: 0.75rem;
+}
+
+.confirmation-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+  gap: 1.5rem;
+}
+
+.confirmation-panel {
+  padding: 1.25rem;
+  border: 1px solid #e4e3de;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.confirmation-panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.confirmation-panel-title span {
+  color: #777;
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.confirmation-panel-title h3 {
+  margin: 0.2rem 0 0;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.15rem;
+}
+
+.confirmation-panel-title > i {
+  color: #dc6518;
+  font-size: 1.35rem;
+}
+
+.confirmation-product-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.9rem;
+  border-radius: 10px;
+  background: #f6f5f1;
+}
+
+.confirmation-product-row img {
+  width: 54px;
+  height: 54px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.confirmation-product-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.confirmation-product-row span {
+  color: #707070;
+  font-size: 0.82rem;
+}
+
+.confirmation-panel h4 {
+  margin: 1.35rem 0 0.75rem;
+}
+
+.confirmation-shipments {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.confirmation-shipments > div {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #efeee9;
+}
+
+.confirmation-shipment-number {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff0e6;
+  color: #c8570d;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.confirmation-shipments > div > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.confirmation-shipments > div > div span {
+  color: #727272;
+  font-size: 0.78rem;
+}
+
+.confirmation-totals {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #deddd8;
+}
+
+.confirmation-totals > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.confirmation-totals span {
+  color: #626262;
+}
+
+.confirmation-grand-total {
+  margin-top: 0.25rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid #deddd8;
+  font-size: 1.08rem;
+}
+
+.confirmation-grand-total strong {
+  color: #c8570d;
+  font-size: 1.25rem;
+}
+
+.confirmation-addresses {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.confirmation-address-card {
+  cursor: pointer;
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 1px #e3e2dd;
+}
+
+.confirmation-address-card--selected {
+  border-color: #f07724;
+  background: #fffaf6;
+  box-shadow: none;
+}
+
+.confirmation-address-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.confirmation-address-content p {
+  margin: 0.25rem 0;
+}
+
+.confirmation-address-content span {
+  color: #717171;
+  font-size: 0.8rem;
+}
+
+.confirmation-address-empty {
+  padding: 1.25rem;
+  border: 1px dashed #c9c7bf;
+  border-radius: 10px;
+  color: #666;
+  text-align: center;
+}
+
+.confirmation-address-empty i {
+  color: #d96115;
+  font-size: 1.4rem;
+}
+
+.confirmation-address-empty a {
+  color: #bd4d08;
+  font-weight: 650;
+  text-decoration: underline;
+}
+
+.confirmation-payment {
+  margin-top: 1.35rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid #ecece8;
+}
+
+.confirmation-payment label {
+  font-weight: 650;
+}
+
+.confirmation-payment p {
+  margin: 0.25rem 0 0.7rem;
+  color: #747474;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 850px) {
+  .confirmation-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .confirmation-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .confirmation-deadline {
+    width: 100%;
+  }
+
+  .confirmation-product-row,
+  .confirmation-shipments > div {
+    grid-template-columns: auto 1fr;
+  }
+
+  .confirmation-product-row > strong,
+  .confirmation-shipments > div > strong {
+    grid-column: 2;
+  }
+}

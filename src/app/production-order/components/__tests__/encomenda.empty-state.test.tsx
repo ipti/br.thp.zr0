@@ -46,7 +46,10 @@ describe('Jornada de Encomenda — produto sem capacidade de produção', () => 
     const input = screen.getByRole('spinbutton')
     await userEvent.clear(input)
     await userEvent.type(input, '5')
-    await userEvent.click(screen.getByRole('button', { name: 'Continuar' }))
+    await userEvent.type(screen.getByPlaceholderText('Digite o CEP'), '01000-000')
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Simular produção e entrega' })
+    )
 
     expect(
       await screen.findByText('Sem capacidade de produção disponível')

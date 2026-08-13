@@ -1,5 +1,4 @@
 "use client"
-import { ControllerYourInformation } from "@/app/profile/your_information/service/controller";
 import { ZButton } from "@/components/button/button";
 import ZDialog from "@/components/dialog/dialog";
 import ZInputText from "@/components/input/input";
@@ -12,9 +11,9 @@ import { useFetchUserToken } from "@/service/global_request/query";
 import { UserGlobal } from "@/service/global_request/type";
 
 
-export default function ModalAddressCustomer({ visible, onHide }: { visible: boolean, onHide: any }) {
+export default function ModalAddressCustomer({ visible, onHide }: { visible: boolean, onHide: () => void }) {
 
-    const { data: userRequest, isLoading } = useFetchUserToken()
+    const { data: userRequest } = useFetchUserToken()
 
     const user: UserGlobal | undefined = userRequest
 
@@ -58,7 +57,7 @@ export default function ModalAddressCustomer({ visible, onHide }: { visible: boo
             }} onSubmit={(values) => {
                 controllerAddressCustomer.CreateAddressCustomerAction({
                     address: values.address,
-                    cep: values.cep,
+                    cep: values.cep.replace(/\D/g, ""),
                     name: values.name,
                     neighborhood: values.neighborhood,
                     number: values.number,

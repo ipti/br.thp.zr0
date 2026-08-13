@@ -131,7 +131,7 @@ export const DetailsProduct = ({
             ? 'Ver detalhes'
             : 'Adicionar ao carrinho'}
       </ZButton>
-      {!home && item.availableForOrder && (
+      {!home && (
         <ZButton
           severity="secondary"
           text

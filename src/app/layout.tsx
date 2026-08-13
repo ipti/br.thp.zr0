@@ -6,6 +6,7 @@ import './globals.css'
 import Script from 'next/script'
 import { ToastProvider } from '@/components/toast/context'
 import { getSiteUrl } from '@/service/server_api'
+import { Providers } from '@/service/provider'
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
@@ -46,7 +47,9 @@ export default function RootLayout({
       `}
         </Script>
         <div className="h-full home-container">
-          <ToastProvider>{children}</ToastProvider>
+          <Providers>
+            <ToastProvider>{children}</ToastProvider>
+          </Providers>
         </div>
       </body>
     </html>

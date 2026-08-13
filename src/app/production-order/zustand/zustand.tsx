@@ -13,6 +13,7 @@ import {
 export interface ProductionOrderContextType {
   productId?: string
   desiredQuantity?: number
+  destinationZipCode?: string
   simulationMode?: SimulationMode
   simulation?: SimulateProductionOrderResponse
   shipmentsSelected?: ProductionShipment[]
@@ -20,7 +21,11 @@ export interface ProductionOrderContextType {
 
 export interface ProductionOrderStore {
   productionOrder: ProductionOrderContextType
-  setDesiredQuantity: (productId: string, quantity: number) => void
+  setDesiredQuantity: (
+    productId: string,
+    quantity: number,
+    destinationZipCode: string
+  ) => void
   setSimulation: (simulation: SimulateProductionOrderResponse) => void
   selectSimulationMode: (mode: SimulationMode) => void
   getSelectedPlan: () => ProductionOrderPlan | undefined
@@ -39,8 +44,13 @@ export const useProductionOrderStore = create<ProductionOrderStore>((set, get) =
       ? JSON.parse(localStorage.getItem(PRODUCTION_ORDER_KEY) || '{}')
       : {},
 
-  setDesiredQuantity: (productId: string, quantity: number) => {
-    const updated = { ...get().productionOrder, productId, desiredQuantity: quantity }
+  setDesiredQuantity: (productId, quantity, destinationZipCode) => {
+    const updated = {
+      ...get().productionOrder,
+      productId,
+      desiredQuantity: quantity,
+      destinationZipCode,
+    }
     persist(updated)
     set({ productionOrder: updated })
   },

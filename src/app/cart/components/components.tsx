@@ -2,7 +2,7 @@
 import { GetMyCartRequest } from '@/app/auth/login/service/request'
 import ZSteps from '@/components/steps/steps'
 import { isAuthenticated } from '@/service/localstorage'
-import { useCartStore } from '@/service/store/cart_store'
+import { mergeCartItems, useCartStore } from '@/service/store/cart_store'
 import { MenuItem } from 'primereact/menuitem'
 import { useEffect, useState } from 'react'
 import CartList from './cart_list/cart_list'
@@ -11,6 +11,18 @@ import Address from './address/address'
 import Finish from './finish/finish'
 import Delivery from './delivery/delivery'
 import Payment from './payment/payment'
+
+type ApiCartItem = {
+  id: number
+  quantity: number
+  variant_fk?: number | null
+  product: {
+    uid: string
+    name: string
+    price?: number
+    product_image?: { img_url?: string }[]
+  }
+}
 
 export default function CartComponent() {
   const history = useRouter()
@@ -39,7 +51,7 @@ export default function CartComponent() {
 
     GetMyCartRequest()
       .then((response) => {
-        const items = (response.data?.items ?? []).map((item: any) => ({
+        const items = (response.data?.items ?? []).map((item: ApiCartItem) => ({
           id: item.product.uid,
           cartItemId: item.id,
           name: item.product.name,
@@ -48,7 +60,8 @@ export default function CartComponent() {
           image: item.product.product_image?.[0]?.img_url ?? '',
           variantId: item.variant_fk ?? undefined,
         }))
-        setCart(items)
+        const localItems = useCartStore.getState().cart
+        setCart(mergeCartItems(localItems, items))
       })
       .catch(() => {})
   }, [setCart])

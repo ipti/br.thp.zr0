@@ -59,19 +59,49 @@ export default function ShipmentAccordion({
         <AccordionTab
           key={shipment.workshopId}
           header={() => (
-            <span className="shipment-accordion-header">
-              {shipment.workshopName} — {shipment.quantity} unidades
-            </span>
+            <div className="shipment-accordion-header">
+              <span className="shipment-accordion-index">
+                <i className="pi pi-building" aria-hidden="true" />
+              </span>
+              <span>
+                <strong>{shipment.workshopName}</strong>
+                <small>{shipment.quantity} unidades nesta remessa</small>
+              </span>
+              <span className="shipment-accordion-header-cost">
+                {shipment.freightCost.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })}
+              </span>
+            </div>
           )}
         >
-          <ZTimeline items={buildTimeline(shipment)} direction="vertical" />
-          <p className="shipment-accordion-cost">
-            Frete desta remessa: R$ {shipment.freightCost.toFixed(2)}
-            {shipment.service ? ` (${shipment.service})` : ''}
-          </p>
-          <p className="shipment-accordion-disclaimer">
-            Prazo estimado de produção, não é uma garantia contratual.
-          </p>
+          <div className="shipment-accordion-content">
+            <div className="shipment-accordion-logistics">
+              <div>
+                <span>Transportadora</span>
+                <strong>{shipment.carrier ?? 'A definir'}</strong>
+              </div>
+              <div>
+                <span>Serviço de entrega</span>
+                <strong>{shipment.service ?? 'A definir'}</strong>
+              </div>
+              <div>
+                <span>Frete da remessa</span>
+                <strong>
+                  {shipment.freightCost.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })}
+                </strong>
+              </div>
+            </div>
+            <ZTimeline items={buildTimeline(shipment)} direction="horizontal" />
+            <p className="shipment-accordion-disclaimer">
+              <i className="pi pi-info-circle" /> Datas estimadas com base na
+              capacidade atual da oficina e no serviço de entrega selecionado.
+            </p>
+          </div>
         </AccordionTab>
       ))}
     </Accordion>

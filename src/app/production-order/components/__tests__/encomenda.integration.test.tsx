@@ -34,12 +34,18 @@ async function fillQuantityAndSubmit(quantity: number) {
   const input = screen.getByRole('spinbutton')
   await userEvent.clear(input)
   await userEvent.type(input, String(quantity))
-  await userEvent.click(screen.getByRole('button', { name: 'Continuar' }))
+  const zipCode = screen.getByPlaceholderText('Digite o CEP')
+  await userEvent.clear(zipCode)
+  await userEvent.type(zipCode, '01000-000')
+  await userEvent.click(
+    screen.getByRole('button', { name: 'Simular produção e entrega' })
+  )
 }
 
 describe('Jornada de Encomenda — cenário motivador da escola', () => {
   beforeEach(() => {
     resetAllStores()
+    document.cookie = 'access_token=test-token; path=/'
     mockPush.mockClear()
   })
 
@@ -55,12 +61,15 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
 
       await userEvent.click(screen.getByText('Menor custo'))
 
-      expect(await screen.findByText(/OT A — \d+ unidades/)).toBeInTheDocument()
+      expect(await screen.findByText('OT A')).toBeInTheDocument()
+      expect(screen.getByText(/\d+ unidades nesta remessa/)).toBeInTheDocument()
 
       await userEvent.click(screen.getByRole('button', { name: 'Continuar' }))
 
-      expect(await screen.findByText('Resumo do Pedido de Encomenda')).toBeInTheDocument()
-      expect(screen.getByText('Modo escolhido: Menor custo')).toBeInTheDocument()
+      expect(
+        await screen.findByText('Revise e confirme sua encomenda')
+      ).toBeInTheDocument()
+      expect(screen.getByText('Menor custo')).toBeInTheDocument()
     }
   )
 
@@ -71,12 +80,15 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
 
     await userEvent.click(await screen.findByText('Menor prazo'))
 
-    expect(await screen.findByText(/OT A — \d+ unidades/)).toBeInTheDocument()
-    expect(screen.getByText(/OT B — \d+ unidades/)).toBeInTheDocument()
+    expect(await screen.findByText('OT A')).toBeInTheDocument()
+    expect(screen.getByText('OT B')).toBeInTheDocument()
 
     await userEvent.click(screen.getByRole('button', { name: 'Continuar' }))
 
-    expect(await screen.findByText('Modo escolhido: Menor prazo')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Revise e confirme sua encomenda')
+    ).toBeInTheDocument()
+    expect(screen.getByText('Menor prazo')).toBeInTheDocument()
   })
 
   it('confirma o pedido de ponta a ponta (reserve + create) e redireciona para /profile/order/[id]', async () => {
@@ -84,7 +96,7 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
 
     await fillQuantityAndSubmit(30)
     await userEvent.click(await screen.findByText('Menor custo'))
-    await screen.findByText(/OT A — \d+ unidades/)
+    await screen.findByText('OT A')
     await waitFor(() =>
       expect(screen.getByRole('button', { name: 'Continuar' })).toBeEnabled()
     )
@@ -93,7 +105,9 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     const addressCard = await screen.findByText(/Rua das Flores/)
     await userEvent.click(addressCard)
 
-    await userEvent.click(screen.getByRole('button', { name: 'Confirmar pedido' }))
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Confirmar encomenda' })
+    )
 
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith('/profile/order/101')

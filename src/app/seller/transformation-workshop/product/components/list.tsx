@@ -46,10 +46,15 @@ export default function ListPage() {
 
   const onRowEditComplete = (e: any) => {
     const rowData = e.newData
-    productTransfWorkshopController.UpdateProductTransfWorkshopAction(rowData.id, { quantity: rowData.quantity })
+    const oldData = e.data
+    const delta = (rowData.quantity ?? 0) - (oldData.quantity ?? 0)
+    productTransfWorkshopController.UpdateProductTransfWorkshopAction(
+      { product_fk: rowData.product_fk, tw_fk: rowData.transformation_workshop_fk, quantity: rowData.quantity },
+      delta
+    )
   };
   return (
-    <DataTable editMode="row" dataKey="id" onRowEditComplete={onRowEditComplete} value={data?.transformation_workshop_product} header={header}>
+    <DataTable editMode="row" dataKey={(row: any) => `${row.transformation_workshop_fk}-${row.product_fk}`} onRowEditComplete={onRowEditComplete} value={data?.inventory} header={header}>
       <Column header={"Imagem"} style={{ width: '10%' }} body={(e) =>
         <img style={{ height: "64px" }} src={e?.product?.product_image?.length > 0 ? e?.product?.product_image![0]?.img_url : null} alt="Imagem produto"></img>
       }></Column>

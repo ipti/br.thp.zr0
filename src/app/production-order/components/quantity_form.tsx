@@ -3,16 +3,22 @@
 'use client'
 import { ZButton } from '@/components/button/button'
 import ZInputNumber from '@/components/input_number/input_number'
+import ZInputMask from '@/components/input_mask/input_mask'
 import { ProductOne } from '@/app/seller/product/one/service/type'
+import { useFetchRequestGetAddressCustomer } from '@/app/profile/address/service/query'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { useProductionOrderStore } from '../zustand/zustand'
+import Link from 'next/link'
 import './quantity_form.css'
 
 const schema = Yup.object().shape({
   quantity: Yup.number()
     .min(1, 'A quantidade mínima é 1')
     .required('Informe a quantidade desejada'),
+  destinationZipCode: Yup.string()
+    .required('Informe o CEP de entrega')
+    .matches(/^\d{5}-?\d{3}$/, 'CEP deve conter 8 dígitos'),
 })
 
 export default function QuantityForm({
@@ -25,6 +31,13 @@ export default function QuantityForm({
   const setDesiredQuantity = useProductionOrderStore(
     state => state.setDesiredQuantity
   )
+  const savedZipCode = useProductionOrderStore(
+    state => state.productionOrder.destinationZipCode
+  )
+  const { data: addressList } = useFetchRequestGetAddressCustomer()
+  const defaultZipCode = addressList?.customer?.address_customer.find(
+    address => address.is_default
+  )?.cep
 
   if (!product) {
     return (
@@ -39,49 +52,147 @@ export default function QuantityForm({
   }
 
   return (
-    <div className="quantity-form">
-      <div className="quantity-form-product">
-        {product.product_image?.[0]?.img_url ? (
-          <img
-            src={product.product_image[0].img_url}
-            alt={product.name}
-            className="quantity-form-image"
-          />
-        ) : null}
-        <div>
-          <h3>{product.name}</h3>
-          <p>R$ {product.price?.toLocaleString('pt-BR')}</p>
-        </div>
+    <div className="production-order-quantity-step">
+      <div className="production-order-section-heading">
+        <h2>Defina sua encomenda</h2>
+        <p>
+          Informe quantas unidades precisa e o CEP onde deseja receber. Na
+          próxima etapa você poderá comparar as opções de produção.
+        </p>
       </div>
 
       <Formik
-        initialValues={{ quantity: 1 }}
+        initialValues={{
+          quantity: 1,
+          destinationZipCode: savedZipCode ?? defaultZipCode ?? '',
+        }}
+        enableReinitialize
         validationSchema={schema}
         onSubmit={values => {
-          setDesiredQuantity(product.uid, values.quantity)
+          setDesiredQuantity(
+            product.uid,
+            values.quantity,
+            values.destinationZipCode.replace(/\D/g, '')
+          )
           handleActiveIndex(1)
         }}
       >
         {({ values, errors, touched, setFieldValue }) => (
-          <Form>
-            <div className="flex flex-column mb-4">
-              <label className="mb-2">Quantidade desejada</label>
-              <ZInputNumber
-                name="quantity"
-                value={values.quantity}
-                onValueChange={e => setFieldValue('quantity', e.value ?? 1)}
-                min={1}
-                showButtons
-                invalid={!!(errors.quantity && touched.quantity)}
-              />
-              {errors.quantity && touched.quantity ? (
-                <>
-                  <div className="p-1" />
-                  <div style={{ color: 'red' }}>{errors.quantity}</div>
-                </>
-              ) : null}
+          <Form className="quantity-form-grid">
+            <article className="quantity-product-card">
+              <div className="quantity-product-media">
+                {product.product_image?.[0]?.img_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={product.product_image[0].img_url}
+                    alt={product.name}
+                    className="quantity-form-image"
+                  />
+                ) : (
+                  <div className="quantity-product-placeholder">
+                    <i className="pi pi-image" aria-hidden="true" />
+                  </div>
+                )}
+              </div>
+              <div className="quantity-product-content">
+                <span className="quantity-product-label">Produto escolhido</span>
+                <h3>{product.name}</h3>
+                <p className="quantity-product-description">
+                  {product.description}
+                </p>
+                <div className="quantity-product-price">
+                  <span>Preço unitário</span>
+                  <strong>
+                    {product.price.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })}
+                  </strong>
+                </div>
+                <ul className="quantity-product-benefits">
+                  <li><i className="pi pi-check-circle" /> Produção sob demanda</li>
+                  <li><i className="pi pi-map-marker" /> Oficinas comparadas por CEP</li>
+                  <li><i className="pi pi-calendar" /> Prazo calculado antes da confirmação</li>
+                </ul>
+              </div>
+            </article>
+
+            <div className="quantity-form-panel">
+              <div className="quantity-field">
+                <label htmlFor="production-order-quantity">
+                  Quantidade desejada
+                </label>
+                <small>Escolha uma ou mais unidades.</small>
+                <ZInputNumber
+                  inputId="production-order-quantity"
+                  name="quantity"
+                  value={values.quantity}
+                  onValueChange={e => setFieldValue('quantity', e.value ?? 1)}
+                  min={1}
+                  showButtons
+                  buttonLayout="horizontal"
+                  incrementButtonIcon="pi pi-plus"
+                  decrementButtonIcon="pi pi-minus"
+                  className="quantity-number-input"
+                  invalid={!!(errors.quantity && touched.quantity)}
+                />
+                {errors.quantity && touched.quantity ? (
+                  <div className="quantity-field-error">{errors.quantity}</div>
+                ) : null}
+              </div>
+
+              <div className="quantity-field">
+                <label htmlFor="production-order-zip-code">CEP de entrega</label>
+                <small>Usaremos o CEP para calcular frete e prazo.</small>
+                <ZInputMask
+                  id="production-order-zip-code"
+                  name="destinationZipCode"
+                  value={values.destinationZipCode}
+                  mask="99999-999"
+                  placeholder="Digite o CEP"
+                  className="quantity-zip-input"
+                  onChange={e =>
+                    setFieldValue('destinationZipCode', e.target.value ?? '')
+                  }
+                  invalid={
+                    !!(
+                      errors.destinationZipCode && touched.destinationZipCode
+                    )
+                  }
+                />
+                {defaultZipCode && values.destinationZipCode ? (
+                  <span className="quantity-default-address">
+                    <i className="pi pi-check-circle" /> Endereço padrão selecionado
+                  </span>
+                ) : null}
+                {errors.destinationZipCode && touched.destinationZipCode ? (
+                  <div className="quantity-field-error">
+                    {errors.destinationZipCode}
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="quantity-subtotal">
+                <span>Subtotal dos produtos</span>
+                <strong>
+                  {(product.price * values.quantity).toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })}
+                </strong>
+                <small>Frete será calculado na próxima etapa.</small>
+              </div>
+
+              <div className="production-order-actions quantity-form-actions">
+                <Link href={`/product/${product.uid}`}>Voltar ao produto</Link>
+                <ZButton
+                  type="submit"
+                  label="Simular produção e entrega"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                />
+              </div>
             </div>
-            <ZButton type="submit" label="Continuar" />
           </Form>
         )}
       </Formik>

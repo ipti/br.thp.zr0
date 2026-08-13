@@ -26,19 +26,28 @@ export default function SimulationStep({
   const [switchingMode, setSwitchingMode] = useState(false)
 
   useEffect(() => {
-    if (!productionOrder.productId || !productionOrder.desiredQuantity) return
+    if (
+      !productionOrder.productId ||
+      !productionOrder.desiredQuantity ||
+      !productionOrder.destinationZipCode
+    ) return
 
     setLoading(true)
     SimulateProductionOrderAction(
       {
         productId: productionOrder.productId,
         quantity: productionOrder.desiredQuantity,
+        destinationZipCode: productionOrder.destinationZipCode,
       },
       setSimulation,
       setLoading
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productionOrder.productId, productionOrder.desiredQuantity])
+  }, [
+    productionOrder.productId,
+    productionOrder.desiredQuantity,
+    productionOrder.destinationZipCode,
+  ])
 
   const handleSelectMode = (mode: SimulationMode) => {
     if (switchingMode) return
@@ -47,7 +56,11 @@ export default function SimulationStep({
     setTimeout(() => setSwitchingMode(false), 150)
   }
 
-  if (!productionOrder.productId || !productionOrder.desiredQuantity) {
+  if (
+    !productionOrder.productId ||
+    !productionOrder.desiredQuantity ||
+    !productionOrder.destinationZipCode
+  ) {
     return (
       <p>
         Informe a quantidade desejada no passo anterior antes de simular a
@@ -113,6 +126,19 @@ export default function SimulationStep({
 
   return (
     <div>
+      <div className="production-order-section-heading simulation-heading">
+        <div>
+          <h2>Compare as opções de produção</h2>
+          <p>
+            Selecione o plano que melhor equilibra frete e prazo para a sua
+            encomenda.
+          </p>
+        </div>
+        <div className="simulation-request-summary">
+          <span><i className="pi pi-box" /> {productionOrder.desiredQuantity} unidades</span>
+          <span><i className="pi pi-map-marker" /> CEP {productionOrder.destinationZipCode}</span>
+        </div>
+      </div>
       <PlanSelector
         costPlan={simulation.costPlan}
         deadlinePlan={simulation.deadlinePlan}
@@ -120,11 +146,22 @@ export default function SimulationStep({
         onSelect={handleSelectMode}
         disabled={switchingMode}
       />
-      <div className="p-3" />
+      <div className="simulation-detail-heading">
+        <div>
+          <span>Detalhamento do plano</span>
+          <h3>
+            {productionOrder.simulationMode
+              ? productionOrder.simulationMode === 'COST'
+                ? 'Menor custo'
+                : 'Menor prazo'
+              : 'Selecione uma opção acima'}
+          </h3>
+        </div>
+        <p>Veja onde cada parte da encomenda será produzida e entregue.</p>
+      </div>
       {switchingMode && <ShipmentAccordionSkeleton />}
       {!switchingMode && selectedPlan && <ShipmentAccordion plan={selectedPlan} />}
-      <div className="p-3" />
-      <div className="flex flex-row gap-2">
+      <div className="production-order-actions">
         <ZButton
           label="Voltar"
           severity="secondary"
@@ -133,6 +170,8 @@ export default function SimulationStep({
         />
         <ZButton
           label="Continuar"
+          icon="pi pi-arrow-right"
+          iconPos="right"
           disabled={!productionOrder.simulationMode || switchingMode}
           onClick={() => handleActiveIndex(2)}
         />

@@ -18,6 +18,26 @@ const CART_KEY = "cart_items";
 
 const isLoggedIn = () => !!Cookies.get("access_token");
 
+const isSameCartItem = (left: CartItem, right: CartItem) =>
+  left.id === right.id && (left.variantId ?? null) === (right.variantId ?? null);
+
+export const mergeCartItems = (
+  localItems: CartItem[],
+  apiItems: CartItem[],
+): CartItem[] => {
+  const merged = localItems.map((localItem) =>
+    apiItems.find((apiItem) => isSameCartItem(localItem, apiItem)) ?? localItem
+  );
+
+  for (const apiItem of apiItems) {
+    if (!merged.some((item) => isSameCartItem(item, apiItem))) {
+      merged.push(apiItem);
+    }
+  }
+
+  return merged;
+};
+
 export const useCartStore = create<CartState>((set) => ({
   cart: typeof window !== "undefined"
     ? JSON.parse(localStorage.getItem(CART_KEY) || "[]")
@@ -51,13 +71,18 @@ export const useCartStore = create<CartState>((set) => ({
       if (item.cartItemId === undefined && isLoggedIn()) {
         void http
           .get(`/product-bff/uid/${item.id}`)
-          .then((response) =>
-            http.post("/cart/items", {
-              productId: response.data.id,
+          .then((response) => {
+            const productId = response.data.id;
+            if (!Number.isInteger(productId)) {
+              throw new Error(`Produto ${item.id} retornou sem ID numérico`);
+            }
+
+            return http.post("/cart/items", {
+              productId,
               quantity: item.quantity,
               variantId: item.variantId,
-            }),
-          )
+            });
+          })
           .then((response) => {
             const apiItem = response.data;
             set((currentState) => {
