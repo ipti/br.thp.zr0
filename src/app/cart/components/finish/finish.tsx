@@ -16,6 +16,8 @@ import CardPerson from '../card_person/card_person'
 import { useCartStepsStore } from '../../zustand/zustand'
 import ZInputText from '@/components/input/input'
 import ZDropdown from '@/components/dropdown/dropdown'
+import { formatCurrency, getCartSubtotal, getSelectedCartItems } from '../../utils'
+import { isAxiosError } from 'axios'
 
 export default function Finish({
   handleActiveIndex,
@@ -48,14 +50,8 @@ export default function Finish({
 
   const user: UserGlobal | undefined = userRequest
 
-  const total = cart.reduce(
-    (sum, item) =>
-      sum +
-      (cartSteps?.cartSteps.product_selected?.find(props => props === item.id)
-        ? item.price * item.quantity
-        : 0),
-    0
-  )
+  const selectedItems = getSelectedCartItems(cart, cartSteps.cartSteps.product_selected)
+  const total = getCartSubtotal(cart, cartSteps.cartSteps.product_selected)
 
   const address: Address | undefined = data
 
@@ -88,21 +84,18 @@ export default function Finish({
         coupon_code: couponApplied ?? undefined,
         userId: user?.id ?? 0,
         items:
-          cartSteps?.cartSteps.deliverySelected?.map(item => {
-            const product = cart.find(cartItem =>
-              cartSteps?.cartSteps.product_selected?.find(
-                prop => prop === cartItem.id
-              )
-            )
+          cartSteps?.cartSteps.deliverySelected?.flatMap(item => {
+            const product = cart.find(cartItem => cartItem.id === item.productId)
             if (product) {
-              return {
+              return [{
                 productId: item.productId,
                 variantId: product.variantId,
                 quantity: item.quantity,
                 delivery_estimate: item?.validOptions,
                 workshopId: item?.workshopId ?? 0
-              }
+              }]
             }
+            return []
           }) || [],
         observation: ''
       },
@@ -131,22 +124,26 @@ export default function Finish({
         icon: 'success',
         text: `Cupom ${result.code} aplicado com sucesso!`
       })
-    } catch (error: any) {
+    } catch (error: unknown) {
       setCouponDiscount(0)
       setCouponApplied(null)
       Swal.fire({
         icon: 'error',
-        text: error?.response?.data?.message ?? 'Não foi possível aplicar o cupom.'
+        text: isAxiosError<{ message?: string }>(error)
+          ? error.response?.data?.message ?? 'Não foi possível aplicar o cupom.'
+          : 'Não foi possível aplicar o cupom.'
       })
     }
   }
 
   return (
-    <div>
-      <h1>Revise e confirme</h1>
-      <div className="p-2" />
-      <p>Confirme os detalhes do seu pedido antes de finalizar.</p>
-      <div className="p-2" />
+    <div className="checkout-stage">
+      <div className="checkout-stage-heading">
+        <div>
+          <h2>Revise e confirme</h2>
+          <p>Confira os dados antes de criar o pedido.</p>
+        </div>
+      </div>
       <div className="grid">
         <div className="col-12 md:col-8">
           {!isLoading && <CardPerson item={user!} cep={address?.cep} isEdit />}
@@ -157,14 +154,12 @@ export default function Finish({
           <div className="p-2" />
           <h4>Produtos selecionados</h4>
           <div className="p-2" />
-          {cart.map(item => {
-            const isSelect = !!cartSteps?.cartSteps.product_selected?.find(
-              prop => prop === item.id
-            )
+          {selectedItems.map(item => {
             return (
               <div key={item.id} className="card_list_item">
                 <div className="flex flex-row align-items-center w-full gap-4 flex-wrap md:flex-nowrap">
                   <div style={{ position: 'relative' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={item.image}
                       alt={item.name}
@@ -180,11 +175,11 @@ export default function Finish({
                         <div className="p-1" />
                         <div className="flex flex-row">
                           <p className="text-sm m-0 text-600">
-                            R${item.price.toFixed(2)} x {item.quantity}
+                            {formatCurrency(item.price)} × {item.quantity}
                           </p>
                           <p className="text-sm text-pink-600 font-bold ml-1">
                             {' '}
-                            R${(item.price * item.quantity).toFixed(2)}
+                            {formatCurrency(item.price * item.quantity)}
                           </p>
                         </div>
                       </div>
@@ -201,7 +196,7 @@ export default function Finish({
         <div className="col-12 md:col-4">
           <div className="card_total">
             <div className="flex flex-row justify-content-between mb-1">
-              <h4>Subtotal:</h4> <h3>R${total.toFixed(2)}</h3>
+              <h4>Subtotal:</h4> <h3>{formatCurrency(total)}</h3>
             </div>
             <div className="flex flex-row justify-content-between">
               <h4>Frete:</h4>{' '}
@@ -211,8 +206,7 @@ export default function Finish({
                 </div>
               ) : (
                 <h3>
-                  R$
-                  {shippingTotal.toFixed(2)}
+                  {formatCurrency(shippingTotal)}
                 </h3>
               )}
             </div>
@@ -252,20 +246,14 @@ export default function Finish({
             {couponDiscount > 0 ? (
               <div className="flex flex-row justify-content-between mt-3">
                 <h4>Desconto:</h4>
-                <h3>-R$ {couponDiscount.toFixed(2)}</h3>
+                <h3>−{formatCurrency(couponDiscount)}</h3>
               </div>
             ) : null}
 
             <ZDivider />
             <div className="flex flex-row justify-content-end">
               <h1>
-                R$
-                {
-                  (
-                    orderTotal - couponDiscount
-                  ).toFixed(2) + ''
-                  // (shippingSelect?.cost ?? 0)).toFixed(2)
-                }
+                {formatCurrency(orderTotal - couponDiscount)}
               </h1>
             </div>
             <div className="p-2" />
@@ -292,7 +280,7 @@ export default function Finish({
             })}
             <div className="p-3" />
             <ZButton
-              label="Conitnuar e finalizar pedido"
+              label="Finalizar pedido"
               style={{ width: '100%' }}
               loading={isLoadingFinish}
               onClick={() => {

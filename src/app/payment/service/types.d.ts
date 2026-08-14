@@ -16,6 +16,7 @@ export interface OrderOneType {
 
 export interface PaymentIntentLike {
   id: string
+  status?: string
   client_secret?: string
   payment_method_types?: string[]
   next_action?: {

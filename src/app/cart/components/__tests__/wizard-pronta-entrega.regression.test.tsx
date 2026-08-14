@@ -44,10 +44,24 @@ describe('Carrinho de Pronta Entrega — regressão', () => {
     expect(screen.queryByText('Seu carrinho está vazio.')).not.toBeInTheDocument()
   })
 
-  it('a jornada de Encomenda não é acionada nem referenciada pelo carrinho', () => {
+  it('oferece a jornada de Encomenda para cada produto do carrinho', async () => {
+    useCartStore.getState().setCart([
+      {
+        id: 'chair-uid-escola',
+        name: 'Cadeira Escolar',
+        price: 15,
+        quantity: 30,
+        image: 'https://example.com/cadeira.png',
+      },
+    ])
+
     renderWithProviders(<CartComponent />)
 
-    expect(screen.queryByText('Comprar sob encomenda')).not.toBeInTheDocument()
-    expect(screen.queryByText('Sob encomenda')).not.toBeInTheDocument()
+    expect(
+      await screen.findByRole('link', { name: /encomendar este produto separadamente/i })
+    ).toHaveAttribute(
+      'href',
+      '/production-order?productId=chair-uid-escola'
+    )
   })
 })

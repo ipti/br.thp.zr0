@@ -1,7 +1,12 @@
 'use client'
+
+import { formatCurrency } from '@/app/cart/utils'
 import ZCard from '@/components/card/card'
 import CheckoutComponent from '@/components/payment/payment'
-import { useParams, useSearchParams } from 'next/navigation'
+import ZSkeleton from '@/components/skeleton/skeleton'
+import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import {
   useFetchRequestOrderOne,
   useFetchRequestPaymentIntentOne
@@ -12,161 +17,162 @@ import './payment.css'
 export default function PaymentComponent() {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
-  const { data: orderService } = useFetchRequestOrderOne(id?.toString())
-  const order: OrderOneType | undefined = orderService
-  const { data: paymentService } = useFetchRequestPaymentIntentOne(order?.id)
+  const [copyFeedback, setCopyFeedback] = useState('')
+  const {
+    data: orderService,
+    isLoading: isLoadingOrder,
+    isError: isOrderError
+  } = useFetchRequestOrderOne(id ?? undefined)
+  const order = orderService as OrderOneType | undefined
+  const canPay = order?.payment_status === 'PENDING' || order?.payment_status === 'FAILED'
+  const {
+    data: paymentService,
+    isLoading: isLoadingPayment,
+    isError: isPaymentError,
+    refetch: refetchPayment
+  } = useFetchRequestPaymentIntentOne(order?.id, canPay)
   const paymentIntent = paymentService as PaymentIntentLike | undefined
   const pixInfo = paymentIntent?.next_action?.pix_display_qr_code
   const boletoInfo = paymentIntent?.next_action?.boleto_display_details
 
+  const copyPixCode = async () => {
+    if (!pixInfo?.data) return
+    try {
+      await navigator.clipboard.writeText(pixInfo.data)
+      setCopyFeedback('Código PIX copiado.')
+    } catch {
+      setCopyFeedback('Não foi possível copiar automaticamente. Selecione o código e copie manualmente.')
+    }
+  }
+
+  if (!id) {
+    return <div className="payment-state error" role="alert">Pedido não informado.</div>
+  }
+
+  if (isLoadingOrder) {
+    return <ZSkeleton width="100%" height="18rem" />
+  }
+
+  if (isOrderError || !order) {
+    return (
+      <div className="payment-state error" role="alert">
+        Não foi possível carregar este pedido. Verifique se ele pertence à sua conta.
+      </div>
+    )
+  }
 
   return (
-    <div className="grid payment-container  ">
-      {order && (
-        <div className="card">
-          {/* Itens */}
-          <div className='flex flex-column md:flex-row justify-content-between gap-2'>
-            <div>
-              <h1>
-                Detalhes de pagamento
-              </h1>
-            </div>
-            <div>
-              <h2>
-                R${' '}
-                {(
-                  order.total_amount 
-                ).toFixed(2)}
-              </h2>
-              <p>
-                Valor Total
-              </p>
-            </div>
-
-          </div>
-          {order?.order_services?.map((item) => {
-
-            const delivery = item?.order_item
-            const totalProducts = item?.order_item.reduce(
-              (acc: number, item: any) => acc + item.quantity,
-              0
-            )
-            return (
-              <>
-
-                <section className='mt-2'>
-                  <h3>Itens do Pedido ({totalProducts})</h3>
-
-                  <div>
-                    {item.order_item.map((item: any) => (
-                      <div key={item.id} className="item-box grid">
-                        <div>
-                          <strong className="product-name">
-                            {item.product.name}
-                          </strong>
-                          <p className="sub">Qtd: {item.quantity}</p>
-                        </div>
-
-                        <div className="right">
-                          <p>
-                            Preço Unitário:{' '}
-                            <strong>R$ {item.unit_price.toFixed(2)}</strong>
-                          </p>
-                          <p>
-                            Total: <strong>R$ {item.total_price.toFixed(2)}</strong>
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                {/* Delivery */}
-                <section className="delivery-section">
-                  <h3>Entrega</h3>
-
-                  {delivery ? (
-                    <div className="delivery-box">
-                      {delivery.map(item => (
-                        <div key={item.id}>
-                          <p>
-                            <strong>Transportadora:</strong>{' '}
-                            {item.delivery_estimate.carrier}
-                          </p>
-                          <p>
-                            <strong>Serviço:</strong> {item.delivery_estimate.service}
-                          </p>
-                          <p>
-                            <strong>Prazo:</strong>{' '}
-                            {item.delivery_estimate.deliveryTime} dias
-                          </p>
-                          <p>
-                            <strong>Custo:</strong> R${' '}
-                            {item.delivery_estimate.cost.toFixed(2)}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p>Sem informações de entrega</p>
-                  )}
-                </section>
-
-                {/* Total */}
-                <footer className="total-order-box">
-                  <p>
-                    Total do Pedido:
-                    <span className="total-value">
-                      R${' '}
-                      {(
-                        item.total_amount
-                      ).toFixed(2)}
-                    </span>
-                  </p>
-                </footer>
-              </>
-            )
-          })}
-        </div>
-      )}
-
-      {order && (
+    <main className="payment-page">
+      <header className="payment-heading">
         <div>
-          {order.payment_method === 'PIX' && pixInfo ? (
-            <ZCard className="mb-3 p-3">
-              <h3>Pagamento via PIX</h3>
-              <p>Escaneie o QR Code ou copie o código abaixo.</p>
-              {pixInfo.image_url_png ? (
-                <img
-                  src={pixInfo.image_url_png}
-                  alt="QR Code PIX"
-                  style={{ maxWidth: 220, width: '100%' }}
-                />
-              ) : null}
-              {pixInfo.data ? (
-                <div className="mt-2">
-                  <textarea
-                    readOnly
-                    value={pixInfo.data}
-                    style={{ width: '100%', minHeight: 120 }}
-                  />
-                </div>
-              ) : null}
-            </ZCard>
-          ) : null}
-          {order.payment_method === 'BANK_SLIP' && boletoInfo?.hosted_voucher_url ? (
-            <ZCard className="mb-3 p-3">
-              <h3>Boleto gerado</h3>
-              <a href={boletoInfo.hosted_voucher_url} target="_blank">
-                Abrir boleto
-              </a>
-            </ZCard>
-          ) : null}
-          <CheckoutComponent
-            clientSecret={paymentIntent?.client_secret ?? undefined}
-          />
+          <span>Pedido {order.uid}</span>
+          <h1>Pagamento</h1>
+          <p>Confira o pedido e conclua o pagamento com segurança.</p>
+        </div>
+        <div className="payment-heading-total">
+          <strong>{formatCurrency(order.total_amount)}</strong>
+          <span>Valor total</span>
+        </div>
+      </header>
+
+      {order.payment_status === 'PAID' && (
+        <div className="payment-state success" role="status">
+          <i className="pi pi-check-circle" aria-hidden="true" />
+          <div><strong>Pagamento confirmado</strong><p>Seu pedido já está pago.</p></div>
+          <Link href={`/profile/order/${order.id}`}>Ver pedido</Link>
         </div>
       )}
-    </div>
+
+      {order.payment_status === 'REFUNDED' && (
+        <div className="payment-state info" role="status">
+          Este pedido foi reembolsado e não aceita um novo pagamento.
+        </div>
+      )}
+
+      <div className="payment-layout">
+        <section className="payment-order-card" aria-labelledby="payment-order-title">
+          <h2 id="payment-order-title">Resumo do pedido</h2>
+          {order.order_services?.map(service => (
+            <div className="payment-shipment" key={service.id}>
+              <h3>Remessa {service.uid}</h3>
+              {service.order_item.map(item => (
+                <div key={item.id} className="payment-item">
+                  <div>
+                    <strong>{item.product.name}</strong>
+                    <span>{item.quantity} {item.quantity === 1 ? 'unidade' : 'unidades'}</span>
+                  </div>
+                  <div className="payment-item-values">
+                    <span>{formatCurrency(item.unit_price)} cada</span>
+                    <strong>{formatCurrency(item.total_price)}</strong>
+                  </div>
+                </div>
+              ))}
+              <div className="payment-shipping-details">
+                {service.order_item.map(item => (
+                  <p key={`delivery-${item.id}`}>
+                    <i className="pi pi-truck" aria-hidden="true" />
+                    {item.delivery_estimate.carrier} · {item.delivery_estimate.service} · {item.delivery_estimate.deliveryTime} dias úteis · {formatCurrency(item.delivery_estimate.cost)}
+                  </p>
+                ))}
+              </div>
+              <div className="payment-shipment-total">
+                <span>Total da remessa</span>
+                <strong>{formatCurrency(service.total_amount)}</strong>
+              </div>
+            </div>
+          ))}
+        </section>
+
+        {canPay && (
+          <aside className="payment-action-column" aria-label="Realizar pagamento">
+            {isLoadingPayment && <ZSkeleton width="100%" height="14rem" />}
+            {isPaymentError && (
+              <div className="payment-state error" role="alert">
+                Não foi possível iniciar o pagamento. Tente novamente em alguns instantes.
+              </div>
+            )}
+
+            {order.payment_method === 'PIX' && pixInfo && (
+              <ZCard className="payment-instructions">
+                <h2>Pagamento via PIX</h2>
+                <p>Escaneie o QR Code ou copie o código.</p>
+                {pixInfo.image_url_png && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={pixInfo.image_url_png} alt="QR Code PIX do pedido" className="payment-pix-qr" />
+                )}
+                {pixInfo.data && (
+                  <>
+                    <label htmlFor="pix-code">Código PIX copia e cola</label>
+                    <textarea id="pix-code" readOnly value={pixInfo.data} />
+                    <button type="button" className="payment-copy-button" onClick={() => void copyPixCode()}>
+                      <i className="pi pi-copy" aria-hidden="true" /> Copiar código PIX
+                    </button>
+                    {copyFeedback && <p role="status" aria-live="polite">{copyFeedback}</p>}
+                  </>
+                )}
+              </ZCard>
+            )}
+
+            {order.payment_method === 'BANK_SLIP' && boletoInfo?.hosted_voucher_url && (
+              <ZCard className="payment-instructions">
+                <h2>Boleto gerado</h2>
+                <p>O pagamento pode levar até três dias úteis para ser compensado.</p>
+                <a href={boletoInfo.hosted_voucher_url} target="_blank" rel="noopener noreferrer">
+                  Abrir boleto <i className="pi pi-external-link" aria-hidden="true" />
+                </a>
+              </ZCard>
+            )}
+
+            {!isPaymentError && paymentIntent?.client_secret && (
+              <CheckoutComponent
+                clientSecret={paymentIntent.client_secret}
+                orderId={order.id}
+                onConfirmed={async () => refetchPayment()}
+              />
+            )}
+          </aside>
+        )}
+      </div>
+    </main>
   )
 }

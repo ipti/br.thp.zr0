@@ -72,6 +72,245 @@
   background: #fde3d1;
   color: #a3480a;
 }
+
+.order-reviews {
+  margin-top: 2rem;
+  overflow: hidden;
+  border: 1px solid #e4e4e7;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.order-reviews-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e4e4e7;
+  background: linear-gradient(135deg, #fafafa, #f3f8f5);
+}
+
+.order-reviews-header > i {
+  color: #24704a;
+  font-size: 2rem;
+}
+
+.order-reviews-header span {
+  color: #24704a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.order-reviews h2 {
+  margin: 0.25rem 0 0;
+  color: #18181b;
+  font-size: 1.4rem;
+}
+
+.order-reviews-header p,
+.order-reviews-locked p,
+.order-review-success p {
+  margin: 0.4rem 0 0;
+  color: #63636b;
+  line-height: 1.5;
+}
+
+.order-reviews-products {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.order-review-product {
+  padding: 1.25rem;
+  border: 1px solid #e4e4e7;
+  border-radius: 14px;
+}
+
+.order-review-product-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.order-review-product-heading > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.order-review-product-heading span:not(.order-review-product-icon) {
+  color: #24704a;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.order-review-product-heading span i {
+  margin-right: 0.3rem;
+}
+
+.order-review-product-icon,
+.order-reviews-lock {
+  display: grid;
+  flex: 0 0 auto;
+  width: 2.8rem;
+  height: 2.8rem;
+  place-items: center;
+  border-radius: 50%;
+  background: #f1f4f2;
+  color: #24704a;
+}
+
+.order-review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding-top: 1.15rem;
+}
+
+.order-review-form fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.order-review-form legend,
+.order-review-form > label {
+  margin-bottom: 0.55rem;
+  color: #27272a;
+  font-weight: 600;
+}
+
+.order-review-form > label span {
+  color: #71717a;
+  font-size: 0.82rem;
+  font-weight: 400;
+}
+
+.order-review-stars {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.order-review-stars button {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.order-review-stars button:hover,
+.order-review-stars button:focus-visible {
+  background: #fff7e8;
+  outline: 2px solid #c27600;
+  outline-offset: 1px;
+}
+
+.order-review-stars button.selected {
+  color: #e49313;
+}
+
+.order-review-stars button i {
+  font-size: 1.5rem;
+}
+
+.order-review-stars > span {
+  margin-left: 0.65rem;
+  color: #71717a;
+  font-size: 0.82rem;
+}
+
+.order-review-form textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.order-review-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.order-review-form-footer > span {
+  color: #71717a;
+  font-size: 0.78rem;
+}
+
+.order-review-success {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: #eef8f1;
+}
+
+.order-review-success > i {
+  color: #24704a;
+  font-size: 1.3rem;
+}
+
+.order-review-success > div {
+  flex: 1;
+}
+
+.order-review-success button {
+  border: 0;
+  background: transparent;
+  color: #174d34;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.order-reviews-locked {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: #fafafa;
+}
+
+.order-reviews-locked .order-reviews-lock {
+  background: #eee;
+  color: #666;
+}
+
+@media (max-width: 600px) {
+  .order-reviews-header,
+  .order-review-form-footer,
+  .order-review-success {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .order-reviews-header > i {
+    display: none;
+  }
+
+  .order-review-stars {
+    flex-wrap: wrap;
+  }
+
+  .order-review-stars > span {
+    width: 100%;
+    margin: 0.35rem 0 0;
+  }
+}
 .order-section {
   margin-bottom: 15px;
 }

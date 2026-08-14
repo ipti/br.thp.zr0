@@ -19,6 +19,13 @@ export interface CartContextType {
   deliverySelected?: DeliverySelectedType[] | undefined
 }
 
+export const initialCartSteps: CartContextType = {
+  cep: '',
+  address_selected: undefined,
+  product_selected: undefined,
+  deliverySelected: undefined
+}
+
 export interface CartStore {
   cartSteps: CartContextType
   loadCart: () => void
@@ -39,13 +46,13 @@ const CART_KEY = 'cart_state'
 export const useCartStepsStore = create<CartStore>((set, get) => ({
   cartSteps:
     typeof window !== 'undefined'
-      ? JSON.parse(localStorage.getItem(CART_KEY) || '[]')
-      : [],
+      ? { ...initialCartSteps, ...JSON.parse(localStorage.getItem(CART_KEY) || '{}') }
+      : initialCartSteps,
 
   loadCart: () => {
     const stored = localStorage.getItem(CART_KEY)
-    const parsed = stored ? JSON.parse(stored) : []
-    set({ cartSteps: parsed })
+    const parsed = stored ? JSON.parse(stored) : {}
+    set({ cartSteps: { ...initialCartSteps, ...parsed } })
   },
 
   productSelected: (): OrderItems[] => {

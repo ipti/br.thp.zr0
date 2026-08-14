@@ -6,7 +6,21 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins Regular', sans-serif;
+}
+
+.payment-form-description {
+  margin-top: 0.35rem;
+  color: #5f6672;
+  font-size: 0.9rem;
+}
+
+.payment-element-wrapper {
+  margin: 1.25rem 0;
+}
+
+.payment-submit {
+  width: 100%;
 }
 
 /* Título do formulário */
@@ -94,4 +108,10 @@
   background-color: #ffe6e6;
   color: #e53e3e;
   border: 1px solid #e53e3e;
+}
+
+.form-message.info {
+  background-color: #f2f7fc;
+  color: #173f68;
+  border: 1px solid #93b4d8;
 }

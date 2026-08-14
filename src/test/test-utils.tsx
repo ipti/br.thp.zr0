@@ -2,7 +2,7 @@ import { ReactElement, ReactNode } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useCartStore } from '@/service/store/cart_store'
-import { useCartStepsStore } from '@/app/cart/zustand/zustand'
+import { initialCartSteps, useCartStepsStore } from '@/app/cart/zustand/zustand'
 import { useProductionOrderStore } from '@/app/production-order/zustand/zustand'
 
 function AllProviders({ children }: { children: ReactNode }) {
@@ -30,7 +30,7 @@ export function resetAllStores() {
   localStorage.clear()
   useCartStore.setState({ cart: [] })
   useCartStepsStore.setState({
-    cartSteps: { cep: '', address_selected: undefined, product_selected: undefined },
+    cartSteps: initialCartSteps,
   })
   useProductionOrderStore.setState({ productionOrder: {} })
 }

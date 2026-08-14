@@ -11,8 +11,8 @@ export default async function Layout({
     children: React.ReactNode;
 }>) {
 
-    const cookieStore = cookies();
-    const token = await cookieStore.get('access_token');
+    const cookieStore = await cookies();
+    const token = cookieStore.get('access_token');
 
     if (!token) {
         redirect('/auth/login'); // Redireciona para login se não houver token

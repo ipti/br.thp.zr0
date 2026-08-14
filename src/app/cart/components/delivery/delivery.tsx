@@ -11,6 +11,8 @@ import { CartController } from "../../service/controller";
 import { useFetchUserToken } from "@/service/global_request/query";
 import { UserGlobal } from "@/service/global_request/type";
 import Swal from "sweetalert2";
+import Link from "next/link";
+import { isAxiosError } from 'axios';
 
 export default function Delivery({
   handleActiveIndex,
@@ -23,6 +25,7 @@ export default function Delivery({
   >([]);
   const [loadingCep, setLoading] = useState(false);
   const [isReserving, setIsReserving] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const productClientController = ProductClientController({
     setShipping,
@@ -51,9 +54,11 @@ export default function Delivery({
     }
   };
 
-  var address: Address | undefined = data;
+  const address: Address | undefined = data;
   useEffect(() => {
     if (address) handleShippingCalculate(address.cep);
+    // Recalcular apenas quando o endereço muda; a função usa o estado atual da store.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
   useEffect(() => {
@@ -71,6 +76,7 @@ export default function Delivery({
   }
 
   const handleReserveStock = async () => {
+    setErrorMessage(null);
     if (!user?.id) {
       Swal.fire({
         title: "Sessao expirada",
@@ -96,21 +102,11 @@ export default function Delivery({
         deliverySelected: shippingSelect,
       });
       handleActiveIndex(3);
-    } catch (error: any) {
-      const insufficientStock = error?.response?.status === 400;
-      const firstProductId = shippingSelect[0]?.productId;
-
-      Swal.fire({
-        title: "Nao foi possivel reservar o estoque",
-        html: `
-          <p>${error?.response?.data?.message ?? "Atualize o frete e tente novamente."}</p>
-          ${insufficientStock && firstProductId
-            ? `<p><a href="/production-order?productId=${firstProductId}">Não encontrou a quantidade que precisa? Faça uma encomenda.</a></p>`
-            : ""
-          }
-        `,
-        icon: "error",
-      });
+    } catch (error: unknown) {
+      const message = isAxiosError<{ message?: string }>(error)
+        ? error.response?.data?.message
+        : undefined
+      setErrorMessage(message ?? "Não foi possível reservar o estoque. Atualize a entrega e tente novamente.");
     } finally {
       setIsReserving(false);
     }
@@ -118,22 +114,32 @@ export default function Delivery({
 
 
   return (
-    <div>
+    <div className="checkout-stage">
       {(
-        <div className="p-3" style={{ borderRadius: "8px" }}>
-          <h1>Frete</h1>
-          <div className="p-1" />
+        <div>
+          <div className="checkout-stage-heading">
+            <div>
+              <h2>Escolha a entrega</h2>
+              <p>Selecione uma opção para cada remessa do pedido.</p>
+            </div>
+          </div>
           <>
-            <h4>{address?.address} - {address?.city.name}/{address?.state.acronym}</h4>
-            <div className="flex flex-row gap-2">
-
-              <h4>CEP: {address?.cep}
-              </h4>
-              <div className="flex flex-column justify-content-center cursor-pointer">
-              </div>
+            <div className="delivery-address">
+              <i className="pi pi-map-marker" aria-hidden="true" />
+              <span>{address?.address} · {address?.city.name}/{address?.state.acronym} · CEP {address?.cep}</span>
             </div>
           </>
-          <div className="gap-3">
+          {errorMessage && (
+            <div className="checkout-inline-error" role="alert">
+              <span>{errorMessage}</span>
+              {shippingSelect[0]?.productId && (
+                <Link href={`/production-order?productId=${encodeURIComponent(shippingSelect[0].productId)}`}>
+                  Encomendar separadamente
+                </Link>
+              )}
+            </div>
+          )}
+          <div className="delivery-options" role="radiogroup" aria-label="Opções de entrega">
             {loadingCep ? (
               <div className="flex flex-column gap-2">
                 <ZSkeleton height="32px" />
@@ -153,7 +159,7 @@ export default function Delivery({
           </div>
         </div>
       )}
-      <div className="mt-4 flex flex-row justify-content-end gap-1">
+      <div className="checkout-actions">
         <ZButton
           label="Voltar"
           security="secondary"
@@ -162,7 +168,7 @@ export default function Delivery({
           }}
         />
         <ZButton
-          label="Continuar"
+          label="Continuar para revisão"
           disabled={shippingSelect.length !== shipping?.length}
           loading={isReserving}
           onClick={() => {

@@ -2,35 +2,47 @@ import { ShippingGetType } from "@/app/product/service/type";
 import ZCard from "@/components/card/card";
 import ZRadioButton from "@/components/radio_button/radio_button";
 import { useCartStepsStore } from "../../zustand/zustand";
+import { formatCurrency } from '../../utils';
+import { DeliverySelectedType } from '../../zustand/zustand';
+import { Dispatch, SetStateAction } from 'react';
 
-export function CardDelivery({ shippingItem, shippingSelect, setShippingSelect, handleSelectOptions }: { shippingItem: ShippingGetType, shippingSelect: any[], setShippingSelect: (value: any) => void, handleSelectOptions: (value: any) => any[] }) {
+export function CardDelivery({ shippingItem, shippingSelect, setShippingSelect, handleSelectOptions }: { shippingItem: ShippingGetType, shippingSelect: DeliverySelectedType[], setShippingSelect: Dispatch<SetStateAction<DeliverySelectedType[]>>, handleSelectOptions: (value: DeliverySelectedType) => DeliverySelectedType[] }) {
     
         const cartSteps = useCartStepsStore(state => state)
     
     return (
         <div>
-            <h2>{shippingItem.productName} - {shippingItem.workshopName} (Qtd- {shippingItem.quantity})</h2>
-            <h3></h3>
+            <div className="delivery-group-heading">
+              <h3>{shippingItem.productName}</h3>
+              <p>{shippingItem.workshopName} · {shippingItem.quantity} {shippingItem.quantity === 1 ? 'unidade' : 'unidades'}</p>
+            </div>
             {shippingItem.result?.validOptions?.map(
                 (item, index) => {
                     return (
                         <div key={index} className="my-2">
                             {
-                                <ZCard onClick={(e) => {
+                                <ZCard className={`checkout-selectable-card${!!shippingSelect?.find((select) => (select.productId === shippingItem.productId && select.workshopId === shippingItem.workshopId && select.validOptions.cost === item?.cost)) ? ' is-selected' : ''}`} role="radio" aria-checked={!!shippingSelect?.find((select) => (select.productId === shippingItem.productId && select.workshopId === shippingItem.workshopId && select.validOptions.cost === item?.cost))} tabIndex={0} onClick={() => {
                                     const newState = handleSelectOptions({ productId: shippingItem.productId, workshopId: shippingItem.workshopId, validOptions: item, productName: shippingItem.productName, workshopName: shippingItem.workshopName, quantity: shippingItem.quantity })
                                     setShippingSelect(newState)
                                     cartSteps?.updateCartSteps({
                                         ...cartSteps.cartSteps,
                                         deliverySelected: newState,
                                     });
-                                }} style={{cursor: 'pointer', border: !!shippingSelect?.find((select) => (select.productId === shippingItem.productId && select.workshopId === shippingItem.workshopId && select.validOptions.cost === item?.cost)) ? '1px solid var(--primary-color' : '' }}
+                                }} onKeyDown={event => {
+                                  if (event.key === 'Enter' || event.key === ' ') {
+                                    event.preventDefault()
+                                    const newState = handleSelectOptions({ productId: shippingItem.productId, workshopId: shippingItem.workshopId, validOptions: item, productName: shippingItem.productName, workshopName: shippingItem.workshopName, quantity: shippingItem.quantity })
+                                    setShippingSelect(newState)
+                                    cartSteps.updateCartSteps({ ...cartSteps.cartSteps, deliverySelected: newState })
+                                  }
+                                }}
                                 >
                                     <div className="flex flex-row justify-content-between m-1 p-3" >
                                         <div className="flex flex-row align-items-center">
                                             <ZRadioButton
                                                 value={item}
                                                 checked={!!shippingSelect?.find((select) => (select.productId === shippingItem.productId && select.workshopId === shippingItem.workshopId && select.validOptions.cost === item?.cost))}
-                                                onChange={(e) => {
+                                                onChange={() => {
                                                     const newState = handleSelectOptions({ productId: shippingItem.productId, workshopId: shippingItem.workshopId, validOptions: item, productName: shippingItem.productName, workshopName: shippingItem.workshopName, quantity: shippingItem.quantity })
                                                     setShippingSelect(newState)
                                                     cartSteps?.updateCartSteps({
@@ -43,8 +55,8 @@ export function CardDelivery({ shippingItem, shippingSelect, setShippingSelect, 
                                             <h1>{item.carrier} ({item.service})</h1>
                                         </div>
                                         <div>
-                                            <h2>R${item.cost.toFixed(2)}</h2>
-                                            <p>{item.deliveryTime} Dias úteis</p>
+                                            <h4>{formatCurrency(item.cost)}</h4>
+                                            <p>Entrega estimada em {item.deliveryTime} dias úteis</p>
                                         </div>
                                     </div>
                                 </ZCard>

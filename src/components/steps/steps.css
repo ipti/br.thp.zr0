@@ -24,12 +24,13 @@
     box-shadow: 0 0 0 0.2rem #a6d5fa;
   }
   .p-steps .p-steps-item.p-highlight .p-steps-number {
-    background: #e3f2fd;
-    color: #495057;
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: var(--primary-color-text);
   }
     .p-steps .p-steps-item.p-highlight .p-steps-title {
       font-weight: 600;
-      color: #495057;
+      color: var(--foreground);
     }
     .p-steps .p-steps-item:before {
       content: " ";

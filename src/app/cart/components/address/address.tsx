@@ -1,159 +1,80 @@
-import ModalAddressCustomer from "@/app/profile/address/components/modal_add_addresss/modal_add_address";
-import { useFetchRequestGetAddressCustomer } from "@/app/profile/address/service/query";
-import { AddressList } from "@/app/profile/address/service/type";
-import { ZButton } from "@/components/button/button";
-import ZInputText from "@/components/input/input";
-import ZInputMask from "@/components/input_mask/input_mask";
-import InputAddress from "@/components/inputs_address/inputs_address";
-import { Form, Formik } from "formik";
-import { useContext, useState } from "react";
-import CardAddress from "../card_address/card_address";
-import * as Yup from "yup";
-import NotFoundAddress from "@/app/profile/address/components/not_found/not_found_address";
-import { useCartStepsStore } from "../../zustand/zustand";
+import ModalAddressCustomer from '@/app/profile/address/components/modal_add_addresss/modal_add_address'
+import NotFoundAddress from '@/app/profile/address/components/not_found/not_found_address'
+import { useFetchRequestGetAddressCustomer } from '@/app/profile/address/service/query'
+import { AddressList } from '@/app/profile/address/service/type'
+import { ZButton } from '@/components/button/button'
+import { Form, Formik } from 'formik'
+import { useState } from 'react'
+import * as Yup from 'yup'
+import { useCartStepsStore } from '../../zustand/zustand'
+import CardAddress from '../card_address/card_address'
 
+const schema = Yup.object({
+  address_selected: Yup.number().required('Selecione um endereço para continuar.')
+})
 
 export default function Address({
-  handleActiveIndex,
+  handleActiveIndex
 }: {
-  handleActiveIndex: (i: number) => void;
+  handleActiveIndex: (i: number) => void
 }) {
-
-
-
   const [visibleAddAddress, setVisibleAddAddress] = useState(false)
-
-
   const { data: addressCustomerRequest } = useFetchRequestGetAddressCustomer()
+  const addressList: AddressList | undefined = addressCustomerRequest
+  const cartSteps = useCartStepsStore(state => state)
 
-  var addressList: AddressList | undefined = addressCustomerRequest
-
-    const cartSteps = useCartStepsStore(state => state)
-  
-
-const schema = Yup.object().shape({
-    address_selected: Yup.string().required("Selecione um endereço"),
-  });
-
-  function addingAddress() {
-    return (
-      <div className="w-8 md:w-7">
-        <div className="p-3" />
-        <h2>Novo endereço</h2>
-        <div className="p-3" />
-        <h2>Quem irá receber?</h2>
-        <div className="p-3" />
-        <Formik initialValues={{ name: "", phone: "" }} onSubmit={() => { }}>
-          {({ values, handleChange, errors, touched, setFieldValue }) => {
-            return (
-              <Form>
-                <div className="mb-4">
-                  <div className="flex flex-column ">
-                    <label className="mb-2">Nome</label>
-                    <ZInputText
-                      name="name"
-                      value={values.name}
-                      onChange={handleChange}
-                      placeholder="Digite o seu name"
-                      invalid={!!(errors.name && touched.name)}
-                    ></ZInputText>
-                    {errors.name && touched.name ? (
-                      <>
-                        <div className="p-1" />
-                        <div style={{ color: "red" }}>{errors.name}</div>
-                      </>
-                    ) : null}{" "}
-                  </div>
-                </div>
-                <div className="mb-4">
-                  <div className="flex flex-column ">
-                    <label className="mb-2">Telefone</label>
-                    <ZInputMask
-                      name="phone"
-                      value={values.phone}
-                      onChange={handleChange}
-                      mask="(99) 9 9999-9999"
-                      placeholder="Digite o seu telefone"
-                      invalid={!!(errors.phone && touched.phone)}
-                    ></ZInputMask>
-                    {errors.phone && touched.phone ? (
-                      <>
-                        <div className="p-1" />
-                        <div style={{ color: "red" }}>{errors.phone}</div>
-                      </>
-                    ) : null}{" "}
-                  </div>
-                </div>
-                <h2>Complete as informações do Endereço</h2>
-                <div className="p-3" />
-                <div className="grid">
-                  <InputAddress
-                    errors={errors}
-                    handleChange={handleChange}
-                    setFieldValue={setFieldValue}
-                    touched={touched}
-                    values={values}
-                  />
-                </div>
-                <div className="flex flex-row justify-content-end">
-                  <ZButton label="Salvar e continuar" />
-                </div>
-              </Form>
-            );
-          }}
-        </Formik>
-      </div>
-    );
-  }
   return (
-    <div>
-      <div>
-        <div className="m-4 flex flex-row justify-content-end">
-          <ZButton label="Adicionar endereço" onClick={() => setVisibleAddAddress(!visibleAddAddress)} />
+    <div className="checkout-stage">
+      <div className="checkout-stage-heading">
+        <div>
+          <h2>Onde você quer receber?</h2>
+          <p>Selecione um endereço cadastrado ou adicione um novo.</p>
         </div>
-
-        <Formik initialValues={{ address_selected: cartSteps.cartSteps.address_selected }} validationSchema={schema} onSubmit={() => {  handleActiveIndex(2) }}>
-          {({ setFieldValue, errors }) => {
-            return (
-              <Form>
-                {errors.address_selected && (
-                  <>
-                    <div style={{ color: "red" }}>{errors.address_selected}</div>
-                  </>
-                )}
-                <div className="p-2" />
-                {addressList?.customer?.address_customer.length === 0 && <NotFoundAddress />}
-                <div className="grid">
-
-                {addressList?.customer?.address_customer?.map((item) => {
-                  return (
-                    <div key={item.id} className="col-12 md:col-6">
-                      <CardAddress item={item} setFieldValue={setFieldValue} />
-                    </div>
-                  )
-                })}
-                </div>
-                <div className="mt-4 flex flex-row justify-content-end gap-1">
-                  <ZButton
-                    label="Voltar"
-                    security="secondary"
-                    type="button"
-                    onClick={() => {
-                      handleActiveIndex(0);
-                    }}
-                  />
-                  <ZButton label="Continuar"
-                    // disabled={!initialValue.address_selected}
-                    />
-                </div>
-              </Form>
-            );
-          }}
-        </Formik>
-
-        {/* {addingAddress()} */}
-        <ModalAddressCustomer visible={visibleAddAddress} onHide={() => setVisibleAddAddress(!visibleAddAddress)} />
+        <ZButton
+          label="Adicionar endereço"
+          icon="pi pi-plus"
+          outlined
+          type="button"
+          onClick={() => setVisibleAddAddress(true)}
+        />
       </div>
+
+      <Formik
+        enableReinitialize
+        initialValues={{ address_selected: cartSteps.cartSteps.address_selected }}
+        validationSchema={schema}
+        onSubmit={() => handleActiveIndex(2)}
+      >
+        {({ setFieldValue, errors, submitCount }) => (
+          <Form>
+            {errors.address_selected && submitCount > 0 && (
+              <div className="checkout-inline-error" role="alert">
+                {errors.address_selected}
+              </div>
+            )}
+
+            {addressList?.customer?.address_customer.length === 0 && <NotFoundAddress />}
+            <div className="checkout-card-grid" role="radiogroup" aria-label="Endereços de entrega">
+              {addressList?.customer?.address_customer?.map(item => (
+                <CardAddress
+                  key={item.id}
+                  item={item}
+                  setFieldValue={(field, value) => {
+                    void setFieldValue(field, value)
+                  }}
+                />
+              ))}
+            </div>
+
+            <div className="checkout-actions">
+              <ZButton label="Voltar" security="secondary" type="button" onClick={() => handleActiveIndex(0)} />
+              <ZButton label="Continuar para entrega" />
+            </div>
+          </Form>
+        )}
+      </Formik>
+
+      <ModalAddressCustomer visible={visibleAddAddress} onHide={() => setVisibleAddAddress(false)} />
     </div>
-  );
+  )
 }
