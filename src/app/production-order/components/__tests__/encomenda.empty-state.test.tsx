@@ -28,6 +28,7 @@ const PRODUCT: ProductOne = {
 describe('Jornada de Encomenda — produto sem capacidade de produção', () => {
   beforeEach(() => {
     resetAllStores()
+    document.cookie = 'access_token=test-token; path=/'
   })
 
   it('renderiza ZEmptyState quando a simulação retorna unavailable=true, sem travar a navegação', async () => {

@@ -2,6 +2,7 @@
 // Isolado de src/app/cart/ — nunca importar useCartStore/useCartStepsStore aqui.
 'use client'
 import { ZButton } from '@/components/button/button'
+import LoginModal from '@/components/header/login/login_modal'
 import ZInputNumber from '@/components/input_number/input_number'
 import ZInputMask from '@/components/input_mask/input_mask'
 import { ProductOne } from '@/app/seller/product/one/service/type'
@@ -10,6 +11,8 @@ import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { useProductionOrderStore } from '../zustand/zustand'
 import Link from 'next/link'
+import Cookies from 'js-cookie'
+import { useEffect, useState } from 'react'
 import './quantity_form.css'
 
 const schema = Yup.object().shape({
@@ -28,16 +31,22 @@ export default function QuantityForm({
   product: ProductOne | null
   handleActiveIndex: (i: number) => void
 }) {
+  const [loginModalVisible, setLoginModalVisible] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
   const setDesiredQuantity = useProductionOrderStore(
     state => state.setDesiredQuantity
   )
-  const savedZipCode = useProductionOrderStore(
-    state => state.productionOrder.destinationZipCode
+  const savedOrder = useProductionOrderStore(
+    state => state.productionOrder
   )
   const { data: addressList } = useFetchRequestGetAddressCustomer()
   const defaultZipCode = addressList?.customer?.address_customer.find(
     address => address.is_default
   )?.cep
+
+  useEffect(() => {
+    setIsAuthenticated(Boolean(Cookies.get('access_token')))
+  }, [])
 
   if (!product) {
     return (
@@ -63,8 +72,12 @@ export default function QuantityForm({
 
       <Formik
         initialValues={{
-          quantity: 1,
-          destinationZipCode: savedZipCode ?? defaultZipCode ?? '',
+          quantity:
+            savedOrder.productId === product.uid
+              ? savedOrder.desiredQuantity ?? 1
+              : 1,
+          destinationZipCode:
+            savedOrder.destinationZipCode ?? defaultZipCode ?? '',
         }}
         enableReinitialize
         validationSchema={schema}
@@ -74,6 +87,13 @@ export default function QuantityForm({
             values.quantity,
             values.destinationZipCode.replace(/\D/g, '')
           )
+
+          if (!Cookies.get('access_token')) {
+            setIsAuthenticated(false)
+            setLoginModalVisible(true)
+            return
+          }
+
           handleActiveIndex(1)
         }}
       >
@@ -187,15 +207,36 @@ export default function QuantityForm({
                 <Link href={`/product/${product.uid}`}>Voltar ao produto</Link>
                 <ZButton
                   type="submit"
-                  label="Simular produção e entrega"
-                  icon="pi pi-arrow-right"
+                  label={
+                    isAuthenticated === false
+                      ? 'Entrar para simular'
+                      : 'Simular produção e entrega'
+                  }
+                  icon={
+                    isAuthenticated === false
+                      ? 'pi pi-lock'
+                      : 'pi pi-arrow-right'
+                  }
                   iconPos="right"
                 />
               </div>
+              {isAuthenticated === false && (
+                <p className="quantity-auth-notice" role="note">
+                  <i className="pi pi-info-circle" aria-hidden="true" />
+                  Entre na sua conta para consultar oficinas, frete e prazo de
+                  produção.
+                </p>
+              )}
             </div>
           </Form>
         )}
       </Formik>
+      {loginModalVisible && (
+        <LoginModal
+          visible
+          onHide={() => setLoginModalVisible(false)}
+        />
+      )}
     </div>
   )
 }
