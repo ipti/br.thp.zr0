@@ -3,6 +3,7 @@ import NotFoundAddress from '@/app/profile/address/components/not_found/not_foun
 import { useFetchRequestGetAddressCustomer } from '@/app/profile/address/service/query'
 import { AddressList } from '@/app/profile/address/service/type'
 import { ZButton } from '@/components/button/button'
+import ZSkeleton from '@/components/skeleton/skeleton'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import * as Yup from 'yup'
@@ -19,7 +20,12 @@ export default function Address({
   handleActiveIndex: (i: number) => void
 }) {
   const [visibleAddAddress, setVisibleAddAddress] = useState(false)
-  const { data: addressCustomerRequest } = useFetchRequestGetAddressCustomer()
+  const {
+    data: addressCustomerRequest,
+    isLoading,
+    isError,
+    refetch
+  } = useFetchRequestGetAddressCustomer()
   const addressList: AddressList | undefined = addressCustomerRequest
   const cartSteps = useCartStepsStore(state => state)
 
@@ -27,7 +33,7 @@ export default function Address({
     <div className="checkout-stage">
       <div className="checkout-stage-heading">
         <div>
-          <h2>Onde você quer receber?</h2>
+          <h2 data-checkout-heading tabIndex={-1}>Onde você quer receber?</h2>
           <p>Selecione um endereço cadastrado ou adicione um novo.</p>
         </div>
         <ZButton
@@ -48,27 +54,59 @@ export default function Address({
         {({ setFieldValue, errors, submitCount }) => (
           <Form>
             {errors.address_selected && submitCount > 0 && (
-              <div className="checkout-inline-error" role="alert">
+              <div
+                className="checkout-inline-error"
+                role="alert"
+                tabIndex={-1}
+                ref={element => element?.focus()}
+              >
                 {errors.address_selected}
               </div>
             )}
 
-            {addressList?.customer?.address_customer.length === 0 && <NotFoundAddress />}
-            <div className="checkout-card-grid" role="radiogroup" aria-label="Endereços de entrega">
-              {addressList?.customer?.address_customer?.map(item => (
-                <CardAddress
-                  key={item.id}
-                  item={item}
-                  setFieldValue={(field, value) => {
-                    void setFieldValue(field, value)
-                  }}
+            {isLoading ? (
+              <div className="checkout-card-grid" aria-label="Carregando endereços">
+                <ZSkeleton height="150px" />
+                <ZSkeleton height="150px" />
+              </div>
+            ) : null}
+
+            {isError ? (
+              <div className="checkout-inline-error" role="alert">
+                <span>Não foi possível carregar seus endereços.</span>
+                <ZButton
+                  type="button"
+                  label="Tentar novamente"
+                  outlined
+                  onClick={() => void refetch()}
                 />
-              ))}
-            </div>
+              </div>
+            ) : null}
+
+            {!isLoading && !isError && addressList?.customer?.address_customer.length === 0 ? (
+              <NotFoundAddress />
+            ) : null}
+
+            {!isLoading && !isError ? (
+              <div className="checkout-card-grid" role="radiogroup" aria-label="Endereços de entrega">
+                {addressList?.customer?.address_customer?.map(item => (
+                  <CardAddress
+                    key={item.id}
+                    item={item}
+                    setFieldValue={(field, value) => {
+                      void setFieldValue(field, value)
+                    }}
+                  />
+                ))}
+              </div>
+            ) : null}
 
             <div className="checkout-actions">
               <ZButton label="Voltar" security="secondary" type="button" onClick={() => handleActiveIndex(0)} />
-              <ZButton label="Continuar para entrega" />
+              <ZButton
+                label="Continuar para entrega"
+                disabled={isLoading || isError || !addressList?.customer?.address_customer.length}
+              />
             </div>
           </Form>
         )}

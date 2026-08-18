@@ -61,6 +61,8 @@ export default function CartComponent() {
 
   const handleSetOrders = (newOrders: { id: number; uid: string }[]) => {
     setOrders(newOrders)
+    setActiveIndex(4)
+    history.push('/cart?index=4')
   }
 
   useEffect(() => {
@@ -71,7 +73,23 @@ export default function CartComponent() {
   }, [history, index, lastAllowedStep])
 
   useEffect(() => {
-    contentRef.current?.focus()
+    const content = contentRef.current
+    if (!content) return
+
+    const focusHeading = () => {
+      const heading = content.querySelector<HTMLElement>('[data-checkout-heading]')
+      if (!heading) return false
+      heading.focus()
+      return true
+    }
+
+    if (focusHeading()) return
+
+    const observer = new MutationObserver(() => {
+      if (focusHeading()) observer.disconnect()
+    })
+    observer.observe(content, { childList: true, subtree: true })
+    return () => observer.disconnect()
   }, [activeIndex])
 
   useEffect(() => {
@@ -101,7 +119,7 @@ export default function CartComponent() {
   }))
 
   return (
-    <main className="checkout-shell">
+    <div className="checkout-shell">
       <header className="checkout-heading">
         <div>
           <span className="checkout-eyebrow">Compra segura</span>
@@ -137,6 +155,6 @@ export default function CartComponent() {
           <Payment handleActiveIndex={handleActiveIndex} orders={orders} />
         )}
       </section>
-    </main>
+    </div>
   )
 }

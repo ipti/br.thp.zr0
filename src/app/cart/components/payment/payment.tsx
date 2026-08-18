@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function Payment({
+  handleActiveIndex,
   orders
 }: {
   handleActiveIndex: (i: number) => void
@@ -19,8 +20,17 @@ export default function Payment({
 
   if (orders.length === 0) {
     return (
-      <div className="checkout-inline-error" role="alert">
-        Não foi possível identificar o pedido para pagamento.
+      <div className="checkout-stage">
+        <div className="checkout-stage-heading">
+          <div>
+            <h2 data-checkout-heading tabIndex={-1}>Pedido não identificado</h2>
+            <p>Não encontramos um pedido criado nesta sessão.</p>
+          </div>
+        </div>
+        <div className="checkout-inline-error" role="alert">
+          <span>Volte à revisão e tente finalizar novamente.</span>
+          <ZButton type="button" label="Voltar à revisão" outlined onClick={() => handleActiveIndex(3)} />
+        </div>
       </div>
     )
   }
@@ -30,7 +40,7 @@ export default function Payment({
       <div className="checkout-stage">
         <div className="checkout-stage-heading">
           <div>
-            <h2>Preparando pagamento</h2>
+            <h2 data-checkout-heading tabIndex={-1}>Preparando pagamento</h2>
             <p>Você será direcionado para o ambiente seguro de pagamento.</p>
           </div>
         </div>
@@ -43,7 +53,7 @@ export default function Payment({
     <div className="checkout-stage">
       <div className="checkout-stage-heading">
         <div>
-          <h2>Escolha um pedido para pagar</h2>
+          <h2 data-checkout-heading tabIndex={-1}>Escolha um pedido para pagar</h2>
           <p>Cada pedido possui uma transação independente.</p>
         </div>
       </div>

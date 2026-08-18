@@ -84,7 +84,7 @@
 
 .quantity button:focus-visible,
 .cart-item-production-order-link:focus-visible {
-  outline: 3px solid rgba(240, 119, 36, 0.35);
+  outline: 3px solid #a74400;
   outline-offset: 2px;
 }
 
@@ -102,6 +102,28 @@
 .cart-item-stock {
   display: block;
   margin-top: 0.35rem;
+}
+
+.cart-item-stock-error {
+  display: grid;
+  gap: 0.25rem;
+  max-width: 28rem;
+  margin-top: 0.5rem;
+  color: #8b1a1a;
+  font-size: 0.85rem;
+}
+
+.cart-item-stock-error button {
+  width: fit-content;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
 }
 
 .cart-item-price {

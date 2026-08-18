@@ -25,6 +25,11 @@
   font-size: clamp(1.5rem, 3vw, 2rem);
 }
 
+.payment-heading h1:focus-visible {
+  outline: 3px solid #a74400;
+  outline-offset: 4px;
+}
+
 .payment-heading p,
 .payment-heading-total span,
 .payment-item span {
@@ -162,7 +167,10 @@
 .payment-state.success { border-color: #86c89b; background: #f2fbf5; color: #14532d; }
 .payment-state.info { border-color: #93b4d8; background: #f2f7fc; color: #173f68; }
 .payment-state.error { border-color: #ef9a9a; background: #fff5f5; color: #8b1a1a; }
-.payment-state a { margin-left: auto; font-weight: 700; text-decoration: underline; }
+.payment-state > a,
+.payment-state-actions { margin-left: auto; }
+.payment-state a { font-weight: 700; text-decoration: underline; }
+.payment-state-actions { display: flex; flex-wrap: wrap; gap: 1rem; }
 
 @media (max-width: 800px) {
   .payment-layout { grid-template-columns: 1fr; }
@@ -173,4 +181,6 @@
   .payment-heading { align-items: flex-start; flex-direction: column; }
   .payment-heading-total, .payment-item-values { text-align: left; }
   .payment-item { flex-direction: column; }
+  .payment-state { align-items: flex-start; flex-direction: column; }
+  .payment-state > a, .payment-state-actions { margin-left: 0; }
 }

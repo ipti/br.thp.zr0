@@ -3,12 +3,58 @@
 }
 
 .card-style p {
-    font-size: 12px;
+    font-size: 0.875rem;
     color: var(--text-color);
 }
 
-.text-blue p {
+.checkout-person-details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.875rem 1.25rem;
+    margin: 1rem 0 0;
+}
+
+.checkout-person-details div {
+    min-width: 0;
+}
+
+.checkout-person-details dt {
+    color: #5f6672;
+    font-size: 0.8rem;
+}
+
+.checkout-person-details dd {
+    margin: 0.2rem 0 0;
+    overflow-wrap: anywhere;
+    font-weight: 600;
+}
+
+@media (max-width: 560px) {
+    .card-style {
+        padding: 18px;
+    }
+
+    .checkout-person-details {
+        grid-template-columns: 1fr;
+    }
+}
+
+.checkout-card-action a,
+.checkout-card-action button {
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
     color: var(--primary-color);
-    font-weight: 700;
     cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.checkout-card-action a:focus-visible,
+.checkout-card-action button:focus-visible {
+    outline: 3px solid #a74400;
+    outline-offset: 3px;
 }

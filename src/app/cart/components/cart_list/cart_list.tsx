@@ -7,7 +7,7 @@ import { useCartStore } from '@/service/store/cart_store'
 import { CartItem } from '@/service/store/type'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { formatCurrency, getCartSubtotal, sanitizeSelectedIds } from '../../utils'
 import { useCartStepsStore } from '../../zustand/zustand'
 import './cart_list.css'
@@ -22,6 +22,7 @@ export default function CartList({
   const [hydrated, setHydrated] = useState(false)
   const [token, setToken] = useState<string | undefined>()
   const [removedItem, setRemovedItem] = useState<CartItem | null>(null)
+  const [availabilityById, setAvailabilityById] = useState<Record<string, boolean>>({})
 
   const cart = useCartStore(state => state.cart)
   const addItem = useCartStore(state => state.addItem)
@@ -53,6 +54,13 @@ export default function CartList({
   const selectedCount = selectedIds.length
   const total = getCartSubtotal(cart, selectedIds)
   const allSelected = cart.length > 0 && selectedCount === cart.length
+  const hasInvalidSelectedItem = selectedIds.some(id => availabilityById[id] !== true)
+
+  const handleAvailabilityChange = useCallback((id: string, isValid: boolean) => {
+    setAvailabilityById(current => current[id] === isValid
+      ? current
+      : { ...current, [id]: isValid })
+  }, [])
 
   const handleSelectAll = () => {
     cartSteps.updateCartSteps({
@@ -84,7 +92,7 @@ export default function CartList({
     <div className="cart-page">
       <div className="cart-title-row">
         <div>
-          <h2>Seu carrinho</h2>
+          <h2 data-checkout-heading tabIndex={-1}>Seu carrinho</h2>
           <p>Selecione os itens de pronta entrega que deseja comprar.</p>
         </div>
         {cart.length > 0 && (
@@ -125,6 +133,7 @@ export default function CartList({
                   item={item}
                   key={`${item.id}-${item.variantId ?? 'default'}`}
                   onRemove={setRemovedItem}
+                  onAvailabilityChange={handleAvailabilityChange}
                 />
               ))}
             </div>
@@ -148,7 +157,7 @@ export default function CartList({
             <ZButton
               label="Continuar para endereço"
               style={{ width: '100%' }}
-              disabled={cart.length === 0 || selectedCount === 0}
+              disabled={cart.length === 0 || selectedCount === 0 || hasInvalidSelectedItem}
               onClick={() => token ? handleActiveIndex(1) : setModalLogin(true)}
             />
             {selectedCount === 0 && cart.length > 0 && (
@@ -156,6 +165,11 @@ export default function CartList({
                 Selecione ao menos um item para continuar.
               </p>
             )}
+            {selectedCount > 0 && hasInvalidSelectedItem ? (
+              <p className="cart-summary-hint" role="status">
+                Aguarde a validação ou ajuste os itens com estoque alterado.
+              </p>
+            ) : null}
           </div>
         </aside>
       </div>

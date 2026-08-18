@@ -9,58 +9,59 @@ export default function CardAddress({
   item,
   isView,
   isEdit,
-  setFieldValue
+  setFieldValue,
+  onEdit
 }: {
   item: Address;
   isView?: boolean;
   isEdit?: boolean;
   setFieldValue?: (field: string, value: number) => void
+  onEdit?: () => void
   
 }) {
     const cartSteps = useCartStepsStore(state => state)
 
 
+  const selectAddress = () => {
+    if (isView) return
+    cartSteps.updateCartSteps({
+      ...cartSteps.cartSteps,
+      address_selected: item.id,
+      deliverySelected: undefined,
+    })
+    if (setFieldValue) setFieldValue('address_selected', item.id)
+  }
+
+  const addressLabelId = `checkout-address-${item.id}`
+
   return (
     <ZCard
-      className={`checkout-selectable-card${item.id === cartSteps.cartSteps.address_selected && !isEdit ? ' is-selected' : ''}`}
-      role={!isView ? 'radio' : undefined}
-      aria-checked={!isView ? item.id === cartSteps.cartSteps.address_selected : undefined}
-      tabIndex={!isView ? 0 : undefined}
-      onClick={() =>{
-
-        cartSteps.updateCartSteps({
-          ...cartSteps.cartSteps,
-          address_selected: item.id,
-          deliverySelected: undefined,
-        })
-        if(setFieldValue) setFieldValue("address_selected", item.id)
-      }
-      }
-      onKeyDown={event => {
-        if (!isView && (event.key === 'Enter' || event.key === ' ')) {
-          event.preventDefault()
-          cartSteps.updateCartSteps({ ...cartSteps.cartSteps, address_selected: item.id, deliverySelected: undefined })
-          if (setFieldValue) void setFieldValue('address_selected', item.id)
-        }
-      }}
+      className={isView
+        ? 'checkout-review-card'
+        : `checkout-selectable-card${item.id === cartSteps.cartSteps.address_selected ? ' is-selected' : ''}`}
+      onClick={selectAddress}
     >
       <div className=" card-style flex flex-row">
         {!isView && (
           <>
             <div className="flex flex-column justify-content-center">
               <ZRadioButton
+                inputId={`address-radio-${item.id}`}
+                name="delivery-address"
                 value={item.id}
                 checked={item.id === cartSteps.cartSteps.address_selected}
+                aria-labelledby={addressLabelId}
+                onChange={selectAddress}
               />
             </div>
             <div className="p-2" />
           </>
         )}
 
-        <div className="flex flex-column">
-          <h5>
+        <div className="flex flex-column" id={addressLabelId}>
+          <strong>
             {item?.address}, {item?.number}
-          </h5>
+          </strong>
           <div className="p-1" />
           <p>
             {item?.cep} - {item?.city?.name} - {item?.state?.acronym}
@@ -75,10 +76,10 @@ export default function CardAddress({
       {isEdit && (
         <>
           <ZDivider />
-          <div className="card-style">
-            <div className="text-blue">
-              <p>Modificar endereço de entrega</p>
-            </div>
+          <div className="card-style checkout-card-action">
+            <button type="button" onClick={onEdit}>
+              Modificar endereço de entrega
+            </button>
           </div>
         </>
       )}

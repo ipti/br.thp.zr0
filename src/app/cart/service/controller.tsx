@@ -116,7 +116,8 @@ export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
   function CreateOrder(
     body: CreateOrder,
     handleReturn?: (value: any) => void,
-    successAction?: (orders: any) => void
+    successAction?: (orders: { id: number; uid: string }[]) => void,
+    errorAction?: (message: string) => void
   ) {
     CreateOrderRequest(body)
       .then(data => {
@@ -128,19 +129,18 @@ export function CartController(setErros?: Dispatch<SetStateAction<string>>) {
           removeItem(i.productId)
         }
 
-        Swal.fire({
-          text: 'Pedido realizado com sucesso!',
-          icon: 'success'
-        })
-        successAction(data.data.orders)
+        successAction?.(data.data.orders)
       })
       .catch(erros => {
-        handleReturn && handleReturn(erros.response.data)
-        console.log(erros.response.data.message)
-        Swal.fire({
-          text: erros.response.data.message,
-          icon: 'error'
-        })
+        const responseData = erros?.response?.data
+        const message = responseData?.message ?? 'Não foi possível finalizar o pedido. Tente novamente.'
+        handleReturn?.(responseData)
+        console.log(message)
+        if (errorAction) {
+          errorAction(message)
+        } else {
+          Swal.fire({ text: message, icon: 'error' })
+        }
       })
   }
 

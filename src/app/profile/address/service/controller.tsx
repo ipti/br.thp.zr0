@@ -1,38 +1,38 @@
-import Swal from "sweetalert2";
 import { requestCreateAddressCustomer, requestDeleteAddressCustomer, requestUpdateDefaultAddressCustomer } from "./request";
 import { CreateAddressCustomerType, UpdateDefaultAddressCustomerType } from "./type";
 import { logout } from "@/service/cookies";
 import queryClient from "@/service/react-query";
 import { useToast } from "@/components/toast/hook/useToast";
+import { isAxiosError } from "axios";
 
 export const ControllerAddressCustomer = () => {
 
   const toast = useToast()
 
     
-      function CreateAddressCustomerAction(body: CreateAddressCustomerType) {
-        requestCreateAddressCustomer(body)
-          .then((data) => {
-           queryClient.refetchQueries("requestCreateAddressCustomer")
-          })
-          .catch((erros) => {
-            console.log(erros)
-            Swal.fire({
-              title: erros.response.data.message,
-              icon: "error",
-            });
-            if (erros.response.status === 401) {
-              logout();
-              window.location.reload();
-            }
-            throw erros;
-          });
+      async function CreateAddressCustomerAction(body: CreateAddressCustomerType) {
+        try {
+          const data = await requestCreateAddressCustomer(body)
+          await queryClient.invalidateQueries(["useFetchRequestGetAddressCustomer"])
+          toast.showToast('Endereço adicionado com sucesso!', 'success')
+          return data
+        } catch (error: unknown) {
+          const message = isAxiosError<{ message?: string }>(error)
+            ? error.response?.data?.message ?? 'Não foi possível adicionar o endereço.'
+            : 'Não foi possível adicionar o endereço.'
+          toast.showToast(message, 'error')
+          if (isAxiosError(error) && error.response?.status === 401) {
+            logout()
+            window.location.reload()
+          }
+          throw error
+        }
       }
 
       function UpdateDefaultAddressCustomerAction(body: UpdateDefaultAddressCustomerType) {
         requestUpdateDefaultAddressCustomer(body)
-          .then((data) => {
-           queryClient.refetchQueries("requestCreateAddressCustomer")
+          .then(() => {
+           void queryClient.invalidateQueries(["useFetchRequestGetAddressCustomer"])
            toast.showToast('Endereço definido como padrão!', "success")
           })
           .catch((erros) => {
@@ -49,9 +49,9 @@ export const ControllerAddressCustomer = () => {
 
       function DeleteAddressCustomerAction(id: number, costumerId: number) {
         requestDeleteAddressCustomer(id, costumerId)
-          .then((data) => {
+          .then(() => {
              toast.showToast('Endereço excluído com sucesso!', "success")
-           queryClient.refetchQueries("requestCreateAddressCustomer")
+           void queryClient.invalidateQueries(["useFetchRequestGetAddressCustomer"])
           })
           .catch((erros) => {
             console.log(erros)

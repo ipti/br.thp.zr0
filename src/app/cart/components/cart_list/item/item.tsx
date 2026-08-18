@@ -6,21 +6,36 @@ import ZCheckbox from '@/components/checkbox/checkbox'
 import { useCartStore } from '@/service/store/cart_store'
 import { CartItem } from '@/service/store/type'
 import Link from 'next/link'
+import { useEffect } from 'react'
 import './item.css'
 
 export default function Item({
   item,
-  onRemove
+  onRemove,
+  onAvailabilityChange
 }: {
   item: CartItem
   onRemove: (item: CartItem) => void
+  onAvailabilityChange: (id: string, isValid: boolean) => void
 }) {
   const cartSteps = useCartStepsStore(state => state)
   const isSelected = !!cartSteps.cartSteps.product_selected?.includes(item.id)
   const removeItem = useCartStore(state => state.removeItem)
   const updateItem = useCartStore(state => state.updateQuantity)
-  const { data: quantityFetch, isLoading } = useFetchProductOneQuantity(item.id)
+  const {
+    data: quantityFetch,
+    isLoading,
+    isError,
+    refetch
+  } = useFetchProductOneQuantity(item.id)
   const availability: { quantity: number } | undefined = quantityFetch
+
+  useEffect(() => {
+    onAvailabilityChange(
+      item.id,
+      !isLoading && !isError && Boolean(availability && availability.quantity >= item.quantity)
+    )
+  }, [availability, isError, isLoading, item.id, item.quantity, onAvailabilityChange])
 
   const updateDependentState = (productSelected?: string[]) => {
     cartSteps.updateCartSteps({
@@ -104,6 +119,17 @@ export default function Item({
             {availability && (
               <span className="cart-item-stock">Máximo disponível: {availability.quantity}</span>
             )}
+            {isError ? (
+              <div className="cart-item-stock-error" role="alert">
+                <span>Não foi possível verificar o estoque.</span>
+                <button type="button" onClick={() => void refetch()}>Tentar novamente</button>
+              </div>
+            ) : null}
+            {availability && availability.quantity < item.quantity ? (
+              <div className="cart-item-stock-error" role="alert">
+                O estoque mudou para {availability.quantity} unidades. Reduza a quantidade para continuar.
+              </div>
+            ) : null}
           </div>
 
           <div className="cart-item-price">
