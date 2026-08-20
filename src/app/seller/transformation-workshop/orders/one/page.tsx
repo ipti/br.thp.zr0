@@ -1,7 +1,7 @@
 'use client'
 import { useSearchParams } from "next/navigation";
 import { useFetchRequestOrderOne } from "../service/query"
-import { OrderOneType } from "../service/types";
+import { OrderOneType } from "@/app/profile/order/service/types";
 import OrderCard from "./components/card";
 import { getIdTw } from "@/service/cookies";
 

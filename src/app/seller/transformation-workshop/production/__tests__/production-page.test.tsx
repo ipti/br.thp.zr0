@@ -1,9 +1,29 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { axe, toHaveNoViolations } from 'jest-axe'
-import ProductionPage from '../page'
+import ProductionPage, { isEligibleProduction } from '../page'
+import { ProductionItem } from '../service/types'
 
 expect.extend(toHaveNoViolations)
+
+describe('regra de entrada na fila', () => {
+  const item = (paymentStatus: string, serviceStatus = 'CONFIRMED') => ({
+    production_status: 'QUEUED',
+    order_item: {
+      order_service: {
+        status: serviceStatus,
+        order: { payment_status: paymentStatus },
+      },
+    },
+  }) as ProductionItem
+
+  it('aceita somente pedidos pagos e sem cancelamento', () => {
+    expect(isEligibleProduction(item('PAID'))).toBe(true)
+    expect(isEligibleProduction(item('PENDING'))).toBe(false)
+    expect(isEligibleProduction(item('PAID', 'CANCELLED'))).toBe(false)
+    expect(isEligibleProduction(item('PAID', 'SOLITED_CANCELLATION'))).toBe(false)
+  })
+})
 
 jest.mock('@/service/cookies', () => ({ getIdTw: () => '7' }))
 jest.mock('@tanstack/react-query', () => ({
@@ -32,6 +52,7 @@ jest.mock('@tanstack/react-query', () => ({
                     id: 4,
                     uid: 'ZR-202608-XYZ',
                     sale_type: 'ENCOMENDA',
+                    payment_status: 'PAID',
                     createdAt: '2026-08-10T12:00:00.000Z',
                     user: { id: 5, name: 'Escola Municipal' },
                   },

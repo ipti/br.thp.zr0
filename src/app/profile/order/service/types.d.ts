@@ -199,7 +199,10 @@ export interface Order {
   id: number
   uid: string
   createdAt: string
+  total_amount: number
   payment_status: string
+  payment_method?: string | null
+  sale_type: 'PRONTA_ENTREGA' | 'ENCOMENDA'
   order_services: OrderService[]
   _count: Count
 }
@@ -216,6 +219,10 @@ export interface OrderService {
   updatedAt: string
   order_fk: number
   order_item: OrderItem[]
+  transformation_workshop?: {
+    id: number
+    name: string
+  } | null
 }
 
 export interface OrderItem {
@@ -225,7 +232,7 @@ export interface OrderItem {
   quantity: number
   unit_price: number
   total_price: number
-  delivery_estimate: DeliveryEstimate
+  delivery_estimate: DeliveryEstimate | null
   createdAt: string
   updatedAt: string
   order_service_fk: number

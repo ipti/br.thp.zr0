@@ -28,6 +28,7 @@ export interface ProductionItem {
         id: number
         uid: string
         sale_type: string
+        payment_status: string
         createdAt: string
         user: { id: number; name: string }
       } | null

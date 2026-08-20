@@ -40,6 +40,11 @@ export interface ReserveProductionOrderShipment {
   quantity: number
 }
 
+export interface CreateProductionOrderShipment
+  extends ReserveProductionOrderShipment {
+  estimatedDeliveryAt?: string
+}
+
 export interface ReserveProductionOrderPayload {
   userId: number
   productId: string
@@ -47,7 +52,9 @@ export interface ReserveProductionOrderPayload {
   shipments: ReserveProductionOrderShipment[]
 }
 
-export interface CreateProductionOrderPayload extends ReserveProductionOrderPayload {
+export interface CreateProductionOrderPayload
+  extends Omit<ReserveProductionOrderPayload, 'shipments'> {
+  shipments: CreateProductionOrderShipment[]
   address: Address
   paymentMethod?: 'PIX' | 'CREDIT_CARD' | 'BANK_SLIP'
 }
@@ -62,6 +69,10 @@ export interface ReserveProductionOrderResult {
 }
 
 export interface CreateProductionOrderResult {
-  message: string
-  orders: { id: number; uid: string }[]
+  message?: string
+  orders?: { id: number; uid: string }[]
+  // Compatibilidade temporária com versões anteriores da API, que retornavam
+  // o pedido diretamente em vez do envelope `orders`.
+  id?: number
+  uid?: string
 }

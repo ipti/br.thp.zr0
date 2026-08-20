@@ -15,6 +15,14 @@ import {
 import { OrderOneType, PaymentIntentLike } from '../service/types'
 import './payment.css'
 
+const formatDate = (value?: string | null) => {
+  if (!value) return null
+  const date = new Date(value)
+  return Number.isNaN(date.getTime())
+    ? null
+    : new Intl.DateTimeFormat('pt-BR').format(date)
+}
+
 export default function PaymentComponent() {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
@@ -146,12 +154,46 @@ export default function PaymentComponent() {
                 </div>
               ))}
               <div className="payment-shipping-details">
-                {service.order_item.map(item => (
-                  <p key={`delivery-${item.id}`}>
-                    <i className="pi pi-truck" aria-hidden="true" />
-                    {item.delivery_estimate.carrier} · {item.delivery_estimate.service} · {item.delivery_estimate.deliveryTime} dias úteis · {formatCurrency(item.delivery_estimate.cost)}
+                {service.order_item.some(item => item.delivery_estimate) ? (
+                  service.order_item.map(item => {
+                    const delivery = item.delivery_estimate
+                    if (!delivery) return null
+
+                    return (
+                      <p key={`delivery-${item.id}`}>
+                        <i className="pi pi-truck" aria-hidden="true" />
+                        <span>
+                          {delivery.carrier || 'Transportadora'} ·{' '}
+                          {delivery.service || 'Serviço de entrega'}
+                          {Number.isFinite(delivery.deliveryTime)
+                            ? ` · ${delivery.deliveryTime} dias úteis`
+                            : ''}
+                          {Number.isFinite(delivery.cost)
+                            ? ` · ${formatCurrency(delivery.cost)}`
+                            : ''}
+                        </span>
+                      </p>
+                    )
+                  })
+                ) : order.sale_type === 'ENCOMENDA' ? (
+                  <p>
+                    <i className="pi pi-cog" aria-hidden="true" />
+                    <span>
+                      Produção sob encomenda
+                      {formatDate(service.estimated_ready_at)
+                        ? ` · pronta em ${formatDate(service.estimated_ready_at)}`
+                        : ''}
+                      {formatDate(service.estimated_delivery_at)
+                        ? ` · entrega estimada em ${formatDate(service.estimated_delivery_at)}`
+                        : ''}
+                    </span>
                   </p>
-                ))}
+                ) : (
+                  <p>
+                    <i className="pi pi-info-circle" aria-hidden="true" />
+                    <span>Informações de entrega não disponíveis.</span>
+                  </p>
+                )}
               </div>
               <div className="payment-shipment-total">
                 <span>Total da remessa</span>

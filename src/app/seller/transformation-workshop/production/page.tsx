@@ -55,6 +55,18 @@ function ProgressBar({ item }: { item: ProductionItem }) {
   )
 }
 
+export function isEligibleProduction(item: ProductionItem) {
+  if (item.production_status === 'CANCELLED') return false
+
+  const orderService = item.order_item?.order_service
+  if (!orderService) return true
+
+  return (
+    orderService.order?.payment_status === 'PAID' &&
+    !['CANCELLED', 'SOLITED_CANCELLATION'].includes(orderService.status)
+  )
+}
+
 export default function ProductionPage() {
   const workshopId = getIdTw()
   const [statusFilter, setStatusFilter] = useState<'ALL' | ProductionStatus>('ALL')
@@ -78,7 +90,10 @@ export default function ProductionPage() {
     { enabled: Boolean(workshopId) },
   )
 
-  const productions = useMemo(() => productionQuery.data?.data ?? [], [productionQuery.data])
+  const productions = useMemo(
+    () => (productionQuery.data?.data ?? []).filter(isEligibleProduction),
+    [productionQuery.data],
+  )
   const capacities = useMemo(() => capacityQuery.data?.data ?? [], [capacityQuery.data])
   const activeCapacities = capacities.filter(item => item.active)
 
@@ -349,7 +364,7 @@ function CapacityRow({ capacity, saving, onSave }: { capacity: ProductionCapacit
 
   return <article className="capacity-row">
     <div><strong>{capacity.product.name}</strong><span>{active ? 'Recebendo novas encomendas' : 'Capacidade pausada'}</span></div>
-    <label><span>Unidades por mês</span><ZInputNumber inputId={`capacity-${capacity.product_fk}`} min={1} value={monthly} useGrouping={false} maxFractionDigits={0} onValueChange={event => setMonthly(event.value ?? 1)} className="capacity-number" /></label>
+    <label className="capacity-field"><span>Unidades por mês</span><ZInputNumber inputId={`capacity-${capacity.product_fk}`} min={1} value={monthly} useGrouping={false} maxFractionDigits={0} onValueChange={event => setMonthly(event.value ?? 1)} className="capacity-number" /></label>
     <div className="capacity-switch"><ZCheckbox inputId={`capacity-active-${capacity.product_fk}`} checked={active} onChange={event => setActive(Boolean(event.checked))} /><label htmlFor={`capacity-active-${capacity.product_fk}`}>Ativa</label></div>
     <ZButton label="Salvar" outlined loading={saving && dirty} disabled={!dirty || monthly < 1 || saving} onClick={() => onSave(capacity, monthly, active)} />
   </article>
