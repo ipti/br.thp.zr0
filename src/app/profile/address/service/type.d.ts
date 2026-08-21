@@ -17,7 +17,7 @@ export interface UpdateDefaultAddressCustomerType {
 }
 
 
-export type AddressList = {customer: {address_customer: Address[]}}
+export type AddressList = {customer: {address_customer: Address[]} | null}
 
 export interface Address {
    id: number

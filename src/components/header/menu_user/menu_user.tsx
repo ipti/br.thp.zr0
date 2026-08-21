@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react'
-import { User } from '@/app/seller/user/type'
-import { requestUserToken } from '@/service/global_request/request'
 import ZAvatar from '@/components/avatar/avatar'
 import './menu_user.css'
 import ZDivider from '@/components/divider/divider'
 import { logout } from '@/service/cookies'
 import { useRouter } from 'next/navigation'
 import ZSkeleton from '@/components/skeleton/skeleton'
+import { useFetchUserToken } from '@/service/global_request/query'
 
 type ItemsMenu = {
   router: string
@@ -16,24 +14,7 @@ type ItemsMenu = {
 }
 export default function MenuUser() {
   const history = useRouter()
-
-  const [user, setUser] = useState<User | undefined>(undefined)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    let active = true
-    requestUserToken()
-      .then(data => {
-        if (active) setUser(data)
-      })
-      .catch(() => {})
-      .finally(() => {
-        if (active) setIsLoading(false)
-      })
-    return () => {
-      active = false
-    }
-  }, [])
+  const { data: user, isLoading } = useFetchUserToken()
 
   const itemsMenu: ItemsMenu[] = [
     ...(user?.role !== 'CUSTOMER' ? [{
@@ -84,7 +65,7 @@ export default function MenuUser() {
       >
         {isLoading ? <><ZSkeleton shape="circle" size="3rem" className="mr-2"></ZSkeleton></> : <ZAvatar label={user?.name?.slice(0, 1)} shape="circle" size="large" />}
         <div className="flex flex-column">
-          {isLoading ? <> <ZSkeleton width="5rem" className="mb-2"></ZSkeleton></> : <p>{user?.name}</p>}
+          {isLoading ? <> <ZSkeleton width="5rem" className="mb-2"></ZSkeleton></> : <p>{user?.name ?? 'Minha conta'}</p>}
           <p className="cursor-pointer mt-0">Minha conta {'>'}</p>
         </div>
       </div>

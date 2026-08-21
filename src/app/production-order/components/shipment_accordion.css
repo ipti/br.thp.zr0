@@ -1,0 +1,129 @@
+.shipment-accordion-header {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.shipment-accordion-index {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: #fff0e6;
+  color: #d96115;
+}
+
+.shipment-accordion-header > span:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.shipment-accordion-header strong {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1rem;
+}
+
+.shipment-accordion-header small {
+  color: #707070;
+  font-size: 0.78rem;
+}
+
+.shipment-accordion-header-cost {
+  font-weight: 700;
+}
+
+.shipment-accordion-content {
+  padding: 0.5rem 0;
+}
+
+.shipment-accordion-logistics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.shipment-accordion-logistics > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.8rem;
+  border-radius: 9px;
+  background: #f6f5f1;
+}
+
+.shipment-accordion-logistics span {
+  color: #757575;
+  font-size: 0.75rem;
+}
+
+.shipment-accordion-logistics strong {
+  font-size: 0.9rem;
+}
+
+.shipment-accordion-cost {
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.shipment-accordion-disclaimer {
+  margin: 1.25rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid #ecece8;
+  color: #6e6e6e;
+  font-size: 0.85rem;
+}
+
+.shipment-accordion-disclaimer i {
+  margin-right: 0.35rem;
+  color: #d96115;
+}
+
+.production-order-page .p-accordion .p-accordion-header .p-accordion-header-link {
+  padding: 1rem 1.15rem;
+  background: #fcfcfa;
+}
+
+.production-order-page .p-accordion .p-accordion-content {
+  padding: 1.25rem;
+}
+
+@media (max-width: 700px) {
+  .shipment-accordion-logistics {
+    grid-template-columns: 1fr;
+  }
+
+  .shipment-accordion-header-cost {
+    display: none;
+  }
+
+  .shipment-accordion-header {
+    grid-template-columns: auto 1fr;
+  }
+
+  .shipment-accordion-content .z-timeline--horizontal {
+    flex-direction: column;
+  }
+
+  .shipment-accordion-content .z-timeline--horizontal .z-timeline__item {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .shipment-accordion-content .z-timeline--horizontal .z-timeline__content {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .shipment-accordion-content .z-timeline--horizontal .z-timeline__connector {
+    width: 2px;
+    height: 2rem;
+    margin: 0.25rem 0 0 1.5rem;
+    transform: none;
+  }
+}

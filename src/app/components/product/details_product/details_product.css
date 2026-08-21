@@ -88,6 +88,13 @@
   background: #333;
 }
 
+.btn-encomenda {
+  margin-left: 0.75rem;
+  color: #f07724;
+  font-weight: 600;
+  font-family: 'Poppins Regular', sans-serif;
+}
+
 .quantity-control {
   display: flex;
   align-items: center;

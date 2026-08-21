@@ -9,6 +9,18 @@ import Cookies from 'js-cookie';
 import { PerfisEnum } from "@/utils/enum/perfis"
 import { useCartStore } from "@/service/store/cart_store"
 
+type ApiCartItem = {
+    id: number
+    quantity: number
+    variant_fk?: number | null
+    product: {
+        uid: string
+        name: string
+        price?: number
+        product_image?: { img_url?: string }[]
+    }
+}
+
 export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
 
     const exp90 = new Date()
@@ -22,15 +34,19 @@ export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
 
         for (const item of localCart) {
             const productResponse = await GetProductByUidRequest(item.id)
+            const productId = productResponse.data.id
+            if (!Number.isInteger(productId)) {
+                throw new Error(`Produto ${item.id} retornou sem ID numérico`)
+            }
             await AddCartItemRequest({
-                productId: productResponse.data.id,
+                productId,
                 quantity: item.quantity,
                 variantId: item.variantId,
             })
         }
 
         const apiCart = await GetMyCartRequest()
-        const syncedItems = (apiCart.data?.items ?? []).map((item: any) => ({
+        const syncedItems = (apiCart.data?.items ?? []).map((item: ApiCartItem) => ({
             id: item.product.uid,
             cartItemId: item.id,
             name: item.product.name,
@@ -49,7 +65,7 @@ export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
             Cookies.set('access_token', data.data.access_token, { expires: exp90 })
             login(data.data.access_token);
             await syncLocalCartToApi()
-            handleReturn && handleReturn()
+            handleReturn?.()
             if (data.data.userRegistered.role === PerfisEnum.CUSTOMER) {
                 history.history.push("/")
             } else {
@@ -58,7 +74,7 @@ export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
             // window.location.reload()
             // history.history.push("/")
         }).catch(erros => {
-            handleReturn && handleReturn()
+            handleReturn?.()
             console.log(erros.response.data.message)
             setErros(erros.response.data.message)
         })
@@ -67,7 +83,7 @@ export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
     function LoginModalAction(body: LoginTypes, handleReturn?: () => void) {
         LoginRequest(body).then(async data => {
             setErros("")
-            handleReturn && handleReturn()
+            handleReturn?.()
             Cookies.set('access_token', data.data.access_token, { expires: exp90 })
             login(data.data.access_token);
             await syncLocalCartToApi()
@@ -75,7 +91,7 @@ export function LoginController(setErros: Dispatch<SetStateAction<string>>) {
             // history.history.push("/")
         }).catch(erros => {
             console.log(erros.response.data.message)
-            handleReturn && handleReturn()
+            handleReturn?.()
             setErros(erros.response.data.message)
         })
     }

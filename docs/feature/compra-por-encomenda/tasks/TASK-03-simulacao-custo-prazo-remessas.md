@@ -3,9 +3,19 @@
 ## Metadados
 
 - **Prioridade:** P0
-- **Status:** Não iniciada
+- **Status:** Concluída
 - **Dependências:** TASK-02
 - **Bloqueia:** TASK-04, TASK-06
+
+## Nota de execução
+
+Implementado conforme especificado. `simulation_step.tsx` chama `SimulateProductionOrder` (via `ProductionOrderController` da TASK-01) em um `useEffect` disparado por `productId`/`desiredQuantity`, grava o resultado com `setSimulation`, e trata os três estados (loading, `unavailable: true`, e sucesso) sem depender de nova chamada de rede ao trocar de modo — os dois planos (`costPlan`/`deadlinePlan`) já vêm juntos na resposta e ficam só na store.
+
+`plan_selector.tsx`: dois `ZCard` lado a lado (`col-12 md:col-6`) com `ZRadioButton`, badge "Mais barato"/"Mais rápido" em `var(--color-secondary)`, clique no card inteiro ou no radio seleciona o modo (chama `selectSimulationMode` da store).
+
+`shipment_accordion.tsx`: `header` implementado como render-prop (`() => (...)`), não string, preservando a tipografia Libre Baskerville conforme a mitigação do documento — diferente do padrão usado em `components/order/order.tsx` (que usa string), aqui optei pelo render-prop por ser o comportamento explicitamente pedido nesta task. `key={plan.mode}` no `Accordion` garante reset do estado de aba expandida ao trocar de modo (remonta o componente), evitando o risco descrito no passo 6.
+
+`npx tsc --noEmit`, ESLint (0 erros; 1 warning pré-existente de padrão — `no-img-element`, mesmo já usado em `product_one.tsx`) e `next build` (rota `/production-order` compila, agora com 8.88 kB) sem erros novos. `git status` confirma `src/app/cart/**` sem nenhuma alteração.
 
 > **Nota de escopo:** as versões anteriores desta tarefa (antigas TASK-02 "tela de simulação" e TASK-03 "detalhamento por remessa") viviam dentro da etapa Entrega do carrinho e assumiam remessas mistas (`PRONTA_ENTREGA`/`ENCOMENDA`) no mesmo plano. As duas foram fundidas em uma só, porque agora fazem parte do mesmo passo 2 da jornada de Encomenda (`ProductionOrderSteps`, TASK-02) — e todas as remessas exibidas aqui são, por definição, `ENCOMENDA`.
 

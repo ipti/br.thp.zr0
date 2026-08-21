@@ -1,83 +1,180 @@
-"use client";
-import { ZButton } from "@/components/button/button";
-import LoginModal from "@/components/header/login/login_modal";
-import Shipping from "@/components/shipping/shipping";
-import ZSkeleton from "@/components/skeleton/skeleton";
-import { useCartStore } from "@/service/store/cart_store";
-import Cookies from 'js-cookie';
-import { useEffect, useState } from "react";
-import { useCartStepsStore } from "../../zustand/zustand";
-import "./cart_list.css";
-import Item from "./item/item";
+'use client'
 
+import { ZButton } from '@/components/button/button'
+import LoginModal from '@/components/header/login/login_modal'
+import ZSkeleton from '@/components/skeleton/skeleton'
+import { useCartStore } from '@/service/store/cart_store'
+import { CartItem } from '@/service/store/type'
+import Cookies from 'js-cookie'
+import Link from 'next/link'
+import { useCallback, useEffect, useState } from 'react'
+import { formatCurrency, getCartSubtotal, sanitizeSelectedIds } from '../../utils'
+import { useCartStepsStore } from '../../zustand/zustand'
+import './cart_list.css'
+import Item from './item/item'
 
-
-export default function CartList({ handleActiveIndex }: { handleActiveIndex: (i: number) => void }) {
+export default function CartList({
+  handleActiveIndex
+}: {
+  handleActiveIndex: (i: number) => void
+}) {
   const [modalLogin, setModalLogin] = useState(false)
-  const [hydrated, setHydrated] = useState(false);
-  const [token, setToken] = useState<string | undefined>(undefined);
+  const [hydrated, setHydrated] = useState(false)
+  const [token, setToken] = useState<string | undefined>()
+  const [removedItem, setRemovedItem] = useState<CartItem | null>(null)
+  const [availabilityById, setAvailabilityById] = useState<Record<string, boolean>>({})
 
-  useEffect(() => {
-    setHydrated(true);
-    setToken(Cookies.get("access_token"));
-  }, []);
-
-
-
-  const cart = useCartStore((state) => state.cart);
+  const cart = useCartStore(state => state.cart)
+  const addItem = useCartStore(state => state.addItem)
   const cartSteps = useCartStepsStore(state => state)
 
   useEffect(() => {
-    cartSteps.updateCartSteps({...cartSteps.cartSteps,product_selected: cart.map(item => { return item.id }) })
+    setHydrated(true)
+    setToken(Cookies.get('access_token'))
   }, [])
 
-  const total = cart.reduce(
-    (sum, item) => sum + (cartSteps.cartSteps.product_selected?.find(props => props === item.id) ? item.price * item.quantity : 0),
-    0
-  );
+  useEffect(() => {
+    const currentSelection = cartSteps.cartSteps.product_selected
+    if (cart.length === 0 && currentSelection === undefined) return
 
+    const nextSelection = currentSelection === undefined
+      ? cart.map(item => item.id)
+      : sanitizeSelectedIds(cart, currentSelection)
+
+    if (JSON.stringify(currentSelection) !== JSON.stringify(nextSelection)) {
+      cartSteps.updateCartSteps({
+        ...cartSteps.cartSteps,
+        product_selected: nextSelection,
+        deliverySelected: undefined
+      })
+    }
+  }, [cart, cartSteps])
+
+  const selectedIds = cartSteps.cartSteps.product_selected ?? []
+  const selectedCount = selectedIds.length
+  const total = getCartSubtotal(cart, selectedIds)
+  const allSelected = cart.length > 0 && selectedCount === cart.length
+  const hasInvalidSelectedItem = selectedIds.some(id => availabilityById[id] !== true)
+
+  const handleAvailabilityChange = useCallback((id: string, isValid: boolean) => {
+    setAvailabilityById(current => current[id] === isValid
+      ? current
+      : { ...current, [id]: isValid })
+  }, [])
+
+  const handleSelectAll = () => {
+    cartSteps.updateCartSteps({
+      ...cartSteps.cartSteps,
+      product_selected: allSelected ? [] : cart.map(item => item.id),
+      deliverySelected: undefined
+    })
+  }
+
+  const handleUndoRemove = () => {
+    if (!removedItem) return
+    addItem(removedItem)
+    cartSteps.updateCartSteps({
+      ...cartSteps.cartSteps,
+      product_selected: [
+        ...(cartSteps.cartSteps.product_selected ?? []),
+        removedItem.id
+      ],
+      deliverySelected: undefined
+    })
+    setRemovedItem(null)
+  }
 
   if (!hydrated) {
-    return <div className="p-4"><ZSkeleton width="100%" /></div>;
+    return <div className="p-4"><ZSkeleton width="100%" height="12rem" /></div>
   }
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Seu Carrinho</h2>
-      <div className="grid">
-        <div className="col-12 md:col-8">
-          {hydrated && cart?.length === 0 ? (
-            <p>Seu carrinho está vazio.</p>
+    <div className="cart-page">
+      <div className="cart-title-row">
+        <div>
+          <h2 data-checkout-heading tabIndex={-1}>Seu carrinho</h2>
+          <p>Selecione os itens de pronta entrega que deseja comprar.</p>
+        </div>
+        {cart.length > 0 && (
+          <label className="cart-select-all">
+            <input
+              type="checkbox"
+              checked={allSelected}
+              ref={input => {
+                if (input) input.indeterminate = selectedCount > 0 && !allSelected
+              }}
+              onChange={handleSelectAll}
+            />
+            Selecionar todos ({cart.length})
+          </label>
+        )}
+      </div>
+
+      {removedItem && (
+        <div className="cart-feedback" role="status">
+          <span>{removedItem.name} foi removido.</span>
+          <button type="button" onClick={handleUndoRemove}>Desfazer</button>
+        </div>
+      )}
+
+      <div className="cart-layout">
+        <div className="cart-items-column">
+          {cart.length === 0 ? (
+            <div className="cart-empty-state">
+              <i className="pi pi-shopping-cart" aria-hidden="true" />
+              <h3>Seu carrinho está vazio.</h3>
+              <p>Explore nossos produtos disponíveis para pronta entrega.</p>
+              <Link href="/product" className="cart-secondary-action">Ver produtos</Link>
+            </div>
           ) : (
-            <>
-              <div className="flex flex-column gap-4">
-                {hydrated && cart?.map((item, index) => {
-                  return item ? (
-                    <Item item={item} key={index} />
-                  ) : (<div key={index}></div>);
-                })}
-              </div>
-            </>
+            <div className="flex flex-column gap-3">
+              {cart.map(item => (
+                <Item
+                  item={item}
+                  key={`${item.id}-${item.variantId ?? 'default'}`}
+                  onRemove={setRemovedItem}
+                  onAvailabilityChange={handleAvailabilityChange}
+                />
+              ))}
+            </div>
           )}
         </div>
-        <div className="col-12 md:col-4">
-          <div className="card_total">
-            <h1 className="mb-3">Resumo do pedido</h1>
-            <div className="flex flex-row justify-content-between mb-1"><h4>Valor total dos produtos:</h4> <h2>R${total.toFixed(2)}</h2></div>
-            {/* <div className="flex flex-row justify-content-between"><h4>Frete:</h4> {isLoadingCep ? <div className="flex flex-column justify-content-center"><ZSkeleton width="64px" /></div> : <h3>R${shippingSelect?.cost?.toFixed(2)}</h3>}</div> */}
-            {/* <ZDivider />
-            <div className="flex flex-row justify-content-end">
-              <h1>R${(total + (shippingSelect?.cost ?? 0)).toFixed(2)}</h1>
-            </div>
-            <div className="p-2" /> */}
-          {(token && cart.length > 0) && <Shipping orderItems={cartSteps?.productSelected() ?? []} cart={cart} />}
-           <div className="p-3" />
-           <ZButton label="Continuar" style={{ width: "100%" }} onClick={() => { token ? handleActiveIndex(1) : setModalLogin(!modalLogin) }} />
-          </div>
-        </div>
-      </div>
-      <LoginModal visible={modalLogin} onHide={() => setModalLogin(!modalLogin)} />
 
+        <aside className="cart-summary" aria-label="Resumo do pedido">
+          <div className="card_total">
+            <h2>Resumo do pedido</h2>
+            <p className="cart-summary-count">
+              {selectedCount} {selectedCount === 1 ? 'item selecionado' : 'itens selecionados'}
+            </p>
+            <dl className="cart-totals">
+              <div><dt>Subtotal</dt><dd>{formatCurrency(total)}</dd></div>
+              <div><dt>Frete</dt><dd className="cart-muted">Calculado na entrega</dd></div>
+            </dl>
+            <div className="cart-summary-total" aria-live="polite">
+              <span>Total parcial</span>
+              <strong>{formatCurrency(total)}</strong>
+            </div>
+            <ZButton
+              label="Continuar para endereço"
+              style={{ width: '100%' }}
+              disabled={cart.length === 0 || selectedCount === 0 || hasInvalidSelectedItem}
+              onClick={() => token ? handleActiveIndex(1) : setModalLogin(true)}
+            />
+            {selectedCount === 0 && cart.length > 0 && (
+              <p className="cart-summary-hint" role="status">
+                Selecione ao menos um item para continuar.
+              </p>
+            )}
+            {selectedCount > 0 && hasInvalidSelectedItem ? (
+              <p className="cart-summary-hint" role="status">
+                Aguarde a validação ou ajuste os itens com estoque alterado.
+              </p>
+            ) : null}
+          </div>
+        </aside>
+      </div>
+
+      <LoginModal visible={modalLogin} onHide={() => setModalLogin(false)} />
     </div>
-  );
+  )
 }

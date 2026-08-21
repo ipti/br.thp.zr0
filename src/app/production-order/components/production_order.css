@@ -1,0 +1,161 @@
+.production-order-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f7f7f5;
+}
+
+.production-order-layout > main {
+  flex: 1;
+}
+
+.production-order-page {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 4rem;
+  color: #202124;
+}
+
+.production-order-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.production-order-breadcrumb a:hover {
+  color: #f07724;
+}
+
+.production-order-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 1.75rem;
+}
+
+.production-order-eyebrow {
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  color: #c8570d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.production-order-heading h1 {
+  margin: 0;
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.2;
+}
+
+.production-order-heading p {
+  max-width: 700px;
+  margin: 0.75rem 0 0;
+  color: #60646c;
+  line-height: 1.6;
+}
+
+.production-order-heading-icon {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff0e6;
+  color: #d85f12;
+  font-size: 1.6rem;
+}
+
+.production-order-wizard {
+  overflow: hidden;
+  border: 1px solid #e2e2de;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 14px 35px rgba(30, 25, 20, 0.07);
+}
+
+.production-order-steps {
+  padding: 1.35rem 2rem 1.15rem;
+  border-bottom: 1px solid #ecece8;
+  background: #fcfcfa;
+}
+
+.production-order-step-content {
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.production-order-page .p-steps-item.p-highlight .p-steps-number {
+  border-color: #f07724;
+  background: #f07724;
+  color: #fff;
+}
+
+.production-order-page .p-steps-item.p-highlight .p-steps-title {
+  color: #252525;
+}
+
+.production-order-page .p-steps-item:before {
+  border-color: #deded9;
+}
+
+.production-order-section-heading {
+  margin-bottom: 1.5rem;
+}
+
+.production-order-section-heading h2 {
+  margin: 0;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.45rem;
+}
+
+.production-order-section-heading p {
+  max-width: 760px;
+  margin: 0.5rem 0 0;
+  color: #686868;
+  line-height: 1.55;
+}
+
+.production-order-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #ecece8;
+}
+
+@media (max-width: 640px) {
+  .production-order-page {
+    width: min(100% - 1rem, 1120px);
+    padding-top: 1rem;
+  }
+
+  .production-order-heading-icon {
+    display: none;
+  }
+
+  .production-order-steps {
+    padding: 1rem 0.5rem 0.8rem;
+  }
+
+  .production-order-page .p-steps-title {
+    font-size: 0.78rem;
+  }
+
+  .production-order-actions {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .production-order-actions .p-button {
+    width: 100%;
+  }
+}

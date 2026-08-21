@@ -1,22 +1,39 @@
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import CheckoutForm from './checkout_form/checkout_form';
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || 'pk_test_51SKe0fCVVfLcoFZkhiKhG7TTkIsLGGK4Vxfe5gf3to40eG1HybS4Kodur0O3LJ9TJGA2iUhtiJQecPrTJN4fHh1X00PYI0sh23');
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+import CheckoutForm from './checkout_form/checkout_form'
 
+const stripePublicKey = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY
+const stripePromise = stripePublicKey ? loadStripe(stripePublicKey) : null
 
-const CheckoutComponent = ({clientSecret}: {clientSecret: string}) => {
-
-    console.log('stripe:',process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || '')
-   
-    const appearance: { theme: 'stripe' } = { theme: 'stripe' };
-    const options = { clientSecret, appearance };
+export default function CheckoutComponent({
+  clientSecret,
+  orderId,
+  onConfirmed
+}: {
+  clientSecret?: string
+  orderId: number
+  onConfirmed?: () => Promise<unknown>
+}) {
+  if (!stripePublicKey) {
     return (
-        <div>
-            {clientSecret && <Elements stripe={stripePromise} options={options}>
-                {<CheckoutForm clientSecret={clientSecret} />}
-            </Elements>}
-        </div>
-    );
-};
+      <div className="checkout-inline-error" role="alert">
+        O pagamento está temporariamente indisponível. Tente novamente mais tarde.
+      </div>
+    )
+  }
 
-export default CheckoutComponent;
+  if (!clientSecret) return null
+
+  return (
+    <Elements
+      stripe={stripePromise}
+      options={{ clientSecret, appearance: { theme: 'stripe' } }}
+    >
+      <CheckoutForm
+        clientSecret={clientSecret}
+        orderId={orderId}
+        onConfirmed={onConfirmed}
+      />
+    </Elements>
+  )
+}

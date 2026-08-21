@@ -3,9 +3,21 @@
 ## Metadados
 
 - **Prioridade:** P1
-- **Status:** Não iniciada
+- **Status:** Concluída
 - **Dependências:** TASK-03
 - **Bloqueia:** TASK-07
+
+## Nota de execução
+
+Implementado conforme especificado. `ZSaleTypeBadge` (`src/components/badge/sale_type_badge.tsx`) criado sobre `ZBadge`, com as duas variantes simétricas (`ENCOMENDA` laranja `var(--color-secondary)`, `PRONTA_ENTREGA` neutra), inserida uma única vez no cabeçalho "Cliente" de `order.tsx` — antes dividida por `order_service`, agora no nível do pedido, refletindo `order.sale_type` (`OrderOneType` ganhou o campo).
+
+A lógica de timeline foi extraída para uma função pura `buildOrderTimeline(paymentStatus, itemStatus, isEncomenda)`, reaproveitada tanto no branch de remessa única (`OrderOne`) quanto no `Accordion` de múltiplas remessas — evita duplicar a inserção do passo "Em produção" (mapeado a `IN_PRODUCTION`, cor própria via `--color-secondary`, nunca reaproveitando o verde de "pago") nos dois lugares. Datas estimadas (`estimated_ready_at`/`estimated_delivery_at`, via `formatDateToBR`) aparecem logo abaixo da timeline, só quando `order.sale_type === 'ENCOMENDA'` e a data existe — pedidos de Pronta Entrega não exibem essa seção, por não terem essas propriedades preenchidas.
+
+`estimated_ready_at`/`estimated_delivery_at` foram adicionados às duas declarações de `OrderService` em `types.d.ts` (o arquivo já duplicava a interface por declaration merging, mesmo padrão apontado no risco do documento).
+
+Tela de confirmação (`src/app/production-order/components/confirmation.tsx`, wired em `components.tsx` no índice 2, substituindo o placeholder da TASK-02/03): além do resumo com a badge (pedido pelo `Objetivo` desta task), a implementação foi além do mínimo e já conecta o fluxo real de finalização — seleção de endereço com estado local próprio (nunca reaproveitando `CardAddress`/`useCartStepsStore` do carrinho, que têm acoplamento direto ao estado do carrinho e violariam o isolamento), método de pagamento, e a chamada `Reserve` → `Create` (TASK-01) com redirecionamento para `/profile/order/[id]` ao final. Isso foi necessário porque a task, ao pedir uma "tela de confirmação... antes do redirecionamento", pressupõe que o redirecionamento de fato aconteça — não haveria como demonstrar/validar o resumo sem completar o fluxo até criar o pedido.
+
+Lint: 0 erros/warnings nos arquivos novos (1 warning pré-existente de padrão `no-img-element`, igual ao já usado em `product_one.tsx`); os 18 erros de `no-explicit-any`/`no-unused-vars` reportados em `order.tsx`/`types.d.ts` são débito pré-existente em linhas não tocadas por esta task (confirmado via `git diff --unified=0`). `npx tsc --noEmit` sem erros novos. `next build` passa, rota `/production-order` cresce para 9.63 kB (wizard completo). `git status` confirma `src/app/cart/**` sem nenhuma alteração.
 
 > **Nota de escopo:** a versão anterior desta tarefa criava um badge de tipo de venda por *remessa* (`order_service`/`order_item`), porque um pedido podia misturar Pronta Entrega e Encomenda. Isso foi descartado: `sale_type` agora vive no **pedido inteiro** (`order.sale_type`), então a distinção visual passa a ser feita **uma vez, no cabeçalho do pedido** — muito mais simples do que o desenho anterior.
 

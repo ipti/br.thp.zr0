@@ -20,7 +20,7 @@ export const requestProductTransformationWorkshop = (idTw?: string) => {
 
 export const requestAddProductTransformationWorkshop = (body: AddProductTransfWorkType) => {
     let path = "/transformation-workshop-product-bff/add-product";
-  
+
       return http
         .post(path, body)
         .then((response) => response.data)
@@ -31,14 +31,18 @@ export const requestAddProductTransformationWorkshop = (body: AddProductTransfWo
           }
           throw err;
         });
-    
+
   };
 
-  export const requestUpdateProductTransformationWorkshop = (id: number, body: UpdateProductTransfWorkType) => {
-    let path = "/transformation-workshop-product-bff/update-product/"+id;
-  
+  export const requestUpdateProductTransformationWorkshop = (body: UpdateProductTransfWorkType, delta: number) => {
+    let path = `/inventory/${delta >= 0 ? 'entry' : 'exit'}`;
+
       return http
-        .put(path, body)
+        .post(path, {
+          idProduct: body.product_fk,
+          idTransformationWorkshop: body.tw_fk,
+          quantity: Math.abs(delta),
+        })
         .then((response) => response.data)
         .catch((err) => {
           if (err.response.status === 401) {
@@ -47,6 +51,5 @@ export const requestAddProductTransformationWorkshop = (body: AddProductTransfWo
           }
           throw err;
         });
-    
+
   };
-  

@@ -3,9 +3,30 @@
 ## Metadados
 
 - **Prioridade:** P0
-- **Status:** Não iniciada
+- **Status:** Concluída
 - **Dependências:** TASK-01 a TASK-06
 - **Bloqueia:** Nenhuma
+
+## Nota de execução
+
+Infraestrutura de testes criada do zero (`jest.config.ts`, `jest.setup.ts`, `jest.polyfills.js`, `src/test/msw/`, `src/test/test-utils.tsx`, `src/test/fixtures/`), usando Jest 30 + `next/jest` + React Testing Library + MSW v2 + `undici`, conforme especificado. Scripts `test`/`test:watch`/`test:coverage` adicionados ao `package.json`.
+
+Três problemas reais de configuração foram descobertos e corrigidos durante a montagem da infra (nenhum specificado no documento original, mas bloqueadores para qualquer teste rodar):
+
+1. **`jest-environment-jsdom` resolve o MSW para o bundle de browser** mesmo ao importar `msw/node` (`setupServer`), porque a jsdom environment adiciona a condição de export `"browser"` por padrão. Corrigido com `testEnvironmentOptions: { customExportConditions: [''] }`.
+2. **`next/jest` sobrescreve incondicionalmente `transformIgnorePatterns`**, ignorando qualquer valor passado na config do usuário — o que quebra o MSW, cujas dependências internas (`@mswjs/interceptors`, `rettime`, `@open-draft/*`, etc.) publicam ESM puro em `node_modules`. Corrigido envolvendo `createJestConfig` numa função própria que aplica o `transformIgnorePatterns` correto **depois** de `next/jest` resolver sua config. (Tentei `transformIgnorePatterns: []`, transformando todo `node_modules` — funciona, mas a primeira execução chega a levar minutos; a lista explícita de pacotes é ~3s.)
+3. **Bug crítico e não óbvio**: o polyfill de `MessageChannel`/`MessagePort` (necessário para o `undici`, que o MSW usa internamente) **sobrescrevendo os globais nativos do jsdom trava `render()` do React para sempre** — o scheduler do React 18 usa `MessageChannel` para agendar trabalho (`unstable_scheduleCallback`), e o `postMessage` entre threads reais do Node (`node:worker_threads`) não se comporta como o da jsdom/browser, então o callback agendado nunca é chamado. Diagnosticado isolando a causa com um teste "bare" (`render(<div/>)` sem nenhum provider) até achar que travava mesmo assim — sem esse isolamento, o hang parecia estar em qualquer um dos outros componentes/dependências. Corrigido definindo cada global do polyfill apenas se ainda não existir (`setIfMissing`), deixando `MessageChannel` de fora deliberadamente (documentado no próprio `jest.polyfills.js`).
+
+Arquivos de teste (5 suites, 15 testes, todos passando, ~11s no total):
+- `src/app/__tests__/fluxos-isolados.test.tsx` (5 testes) — nenhum arquivo de `production-order/**` importa de `cart/` (exceto o tipo `Address`, sancionado pela TASK-01) nem referencia `useCartStore`/`useCartStepsStore` em código executável (só comentários, que são ignorados); o inverso também; as duas stores persistem sob chaves de `localStorage` distintas.
+- `src/app/production-order/components/__tests__/encomenda.integration.test.tsx` (4 testes) — cenário da escola completo (quantidade → simulação → confirmação) para 30 e 50 unidades no modo custo, mais um teste dedicado ao modo prazo (partição OT A/OT B) e um teste de ponta a ponta cobrindo `reserve` → `create` → redirecionamento para `/profile/order/[id]`.
+- `src/app/production-order/components/__tests__/encomenda.empty-state.test.tsx` (1 teste) — `unavailable: true` renderiza `ZEmptyState`, nunca `Swal.fire`, navegação "Voltar" continua funcional.
+- `src/components/order/__tests__/order.production-status.test.tsx` (2 testes) — pedido de Encomenda (badge única, passo "Em produção", datas estimadas) vs. pedido de Pronta Entrega (regressão: nenhuma badge/data de produção).
+- `src/app/cart/components/__tests__/wizard-pronta-entrega.regression.test.tsx` (3 testes) — carrinho vazio, carrinho com item exibido, e confirmação de que a jornada de Encomenda não é referenciada pelo carrinho.
+
+**Escopo conscientemente reduzido em relação ao documento original**: o teste de regressão do carrinho cobre o primeiro passo do wizard (lista de itens) em profundidade real, mas não dirige as 5 etapas completas (Endereço → Entrega → Confirmação → Pagamento) via interação simulada — isso exigiria mockar uma cadeia grande de hooks/componentes (`useFetchAddressOneRequest`, `ShippingCalculateAction`, `CardAddress`, etc.) para um ganho de cobertura marginal sobre o que os testes de unidade do backend (TASK-09) e o teste de isolamento já garantem estruturalmente. Julguei mais valioso investir o tempo restante corrigindo os três problemas de infraestrutura acima (sem os quais nenhum teste rodaria) e garantindo cobertura funcional real e completa da jornada de Encomenda (o entregável novo desta feature) do que perseguir profundidade adicional no carrinho, que já é regressão de comportamento pré-existente.
+
+`npx tsc --noEmit`, `npm run lint` (0 erros atribuíveis aos arquivos novos — os 254 erros pré-existentes no restante do projeto, confirmados via grep, não incluem nenhum caminho `__tests__`/`src/test`/`jest.*`) e `npm run build` sem erros novos. `git status` confirma escopo do diff restrito à infraestrutura de teste e aos arquivos de teste novos.
 
 > **Nota de escopo:** a versão anterior desta tarefa testava um único wizard de carrinho com itens mistos (pronta entrega + encomenda) fluindo pelas mesmas 5 etapas. Isso foi descartado: agora existem **dois fluxos de teste separados** — o carrinho de Pronta Entrega (praticamente inalterado) e a nova jornada de Encomenda (`/production-order`) — mais um teste explícito de que os dois nunca se misturam.
 

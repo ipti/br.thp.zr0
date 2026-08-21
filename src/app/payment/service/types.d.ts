@@ -9,6 +9,7 @@ export interface OrderOneType {
   payment_intent_id: string
   createdAt: string
   updatedAt: string
+  sale_type: 'PRONTA_ENTREGA' | 'ENCOMENDA'
   user: User
   order_services: OrderService[]
   order_delivery_address: OrderDeliveryAddress
@@ -16,6 +17,7 @@ export interface OrderOneType {
 
 export interface PaymentIntentLike {
   id: string
+  status?: string
   client_secret?: string
   payment_method_types?: string[]
   next_action?: {
@@ -54,6 +56,8 @@ export interface OrderService {
   createdAt: string
   updatedAt: string
   order_fk: number
+  estimated_ready_at?: string | null
+  estimated_delivery_at?: string | null
   order_item: OrderItem[]
   transformation_workshop: TransformationWorkshop
 }
@@ -65,7 +69,7 @@ export interface OrderItem {
   quantity: number
   unit_price: number
   total_price: number
-  delivery_estimate: DeliveryEstimate
+  delivery_estimate: DeliveryEstimate | null
   createdAt: string
   updatedAt: string
   order_service_fk: number

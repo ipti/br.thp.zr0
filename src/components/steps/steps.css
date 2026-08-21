@@ -19,17 +19,18 @@
     color: #6c757d;
   }
   .p-steps .p-steps-item .p-menuitem-link:not(.p-disabled):focus-visible {
-    outline: 0 none;
-    outline-offset: 0;
-    box-shadow: 0 0 0 0.2rem #a6d5fa;
+    outline: 3px solid #a74400;
+    outline-offset: 3px;
+    box-shadow: none;
   }
   .p-steps .p-steps-item.p-highlight .p-steps-number {
-    background: #e3f2fd;
-    color: #495057;
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: var(--primary-color-text);
   }
     .p-steps .p-steps-item.p-highlight .p-steps-title {
       font-weight: 600;
-      color: #495057;
+      color: var(--foreground);
     }
     .p-steps .p-steps-item:before {
       content: " ";

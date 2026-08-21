@@ -1,88 +1,151 @@
-import { useFetchProductOneQuantity } from "@/app/cart/service/query";
-import { useCartStepsStore } from "@/app/cart/zustand/zustand";
-import { ZButton } from "@/components/button/button";
-import ZCheckbox from "@/components/checkbox/checkbox";
-import { useCartStore } from "@/service/store/cart_store";
-import { CartItem } from "@/service/store/type";
-import { useState } from "react";
-import './item.css';
+import { useFetchProductOneQuantity } from '@/app/cart/service/query'
+import { useCartStepsStore } from '@/app/cart/zustand/zustand'
+import { formatCurrency } from '@/app/cart/utils'
+import { ZButton } from '@/components/button/button'
+import ZCheckbox from '@/components/checkbox/checkbox'
+import { useCartStore } from '@/service/store/cart_store'
+import { CartItem } from '@/service/store/type'
+import Link from 'next/link'
+import { useEffect } from 'react'
+import './item.css'
 
-export default function Item({ item }: { item: CartItem }) {
-      const cartSteps = useCartStepsStore(state => state)
-    
-    const [quantity, setQuantity] = useState(item.quantity)
-    const isSelect = !!cartSteps.cartSteps?.product_selected?.find(prop => prop === item.id)
-    const removeItem = useCartStore((state) => state.removeItem);
-    const updateItem = useCartStore((state) => state.updateQuantity)
+export default function Item({
+  item,
+  onRemove,
+  onAvailabilityChange
+}: {
+  item: CartItem
+  onRemove: (item: CartItem) => void
+  onAvailabilityChange: (id: string, isValid: boolean) => void
+}) {
+  const cartSteps = useCartStepsStore(state => state)
+  const isSelected = !!cartSteps.cartSteps.product_selected?.includes(item.id)
+  const removeItem = useCartStore(state => state.removeItem)
+  const updateItem = useCartStore(state => state.updateQuantity)
+  const {
+    data: quantityFetch,
+    isLoading,
+    isError,
+    refetch
+  } = useFetchProductOneQuantity(item.id)
+  const availability: { quantity: number } | undefined = quantityFetch
 
-    const handleQuantityChange = (change: number) => {
-        setQuantity(prev => Math.max(1, prev + change))
-        updateItem(item.id, Math.max(1, quantity + change))
-    }
-
-
-    const { data: quantityFetch } = useFetchProductOneQuantity(item.id)
-
-    var quantityProduct: { quantity: number } | undefined = quantityFetch
-    return (
-        <div
-            className="card_list_item"
-        >
-            <div className="flex flex-column justify-content-center">
-                <ZCheckbox value={item.id} className="mr-4" onChange={() => {
-                    if (isSelect) {
-                        cartSteps.updateCartSteps({ ...cartSteps.cartSteps, product_selected: cartSteps.cartSteps.product_selected?.filter(props => props !== item.id) })
-                    } else {
-                        // cartContext?.initialValue.product_selected?.push(item.id)
-                        cartSteps.updateCartSteps({ ...cartSteps.cartSteps, product_selected: cartSteps.cartSteps.product_selected?.concat(item.id) })
-                        // cartContext?.setInitialValue(prev => ({...prev, product_selected: prev.product_selected?.push(props => props !== item.id)}))
-                    }
-                }} checked={isSelect} />
-            </div>
-            <div className="flex flex-row align-items-center w-full gap-4 flex-wrap md:flex-nowrap">
-                <div style={{ position: "relative", }}>
-                    <img
-                        src={item.image}
-                        alt={item.name}
-                        width={100}
-                        height={100}
-                        className="border-round object-contain"
-                    />
-                </div>
-                <div className="flex-1 min-w-min">
-                    <div className="flex justify-content-between align-items-start flex-wrap">
-                        <div>
-                            <h3 className="m-0">{item.name}</h3>
-                            <div className="p-1" />
-                            <div className="flex flex-row">
-                                <p className="text-sm m-0 text-600">
-                                    R${item.price.toFixed(2)} x {item.quantity}
-                                </p>
-                                <p className="text-sm text-pink-600 font-bold ml-1">
-                                    {" "} R${(item.price * item.quantity).toFixed(2)}
-                                </p>
-                            </div>
-                        </div>
-                        <ZButton
-                            icon="pi pi-times"
-                            className="p-button-text p-button-sm p-button-danger"
-                            onClick={() => removeItem(item.id)}
-                        />
-                    </div>
-                    <div className={"quantity"}>
-                        <button
-                            onClick={() => handleQuantityChange(-1)}
-                            disabled={quantity <= 1}
-                        >
-                            -
-                        </button>
-                        <span>{quantity}</span>
-                        <button disabled={!((quantityProduct?.quantity ?? 0) > quantity)} onClick={() => handleQuantityChange(1)}>
-                            +
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+  useEffect(() => {
+    onAvailabilityChange(
+      item.id,
+      !isLoading && !isError && Boolean(availability && availability.quantity >= item.quantity)
     )
+  }, [availability, isError, isLoading, item.id, item.quantity, onAvailabilityChange])
+
+  const updateDependentState = (productSelected?: string[]) => {
+    cartSteps.updateCartSteps({
+      ...cartSteps.cartSteps,
+      ...(productSelected ? { product_selected: productSelected } : {}),
+      deliverySelected: undefined
+    })
+  }
+
+  const handleQuantityChange = (change: number) => {
+    updateItem(item.id, Math.max(1, item.quantity + change))
+    updateDependentState()
+  }
+
+  const handleSelection = () => {
+    const selected = cartSteps.cartSteps.product_selected ?? []
+    updateDependentState(
+      isSelected
+        ? selected.filter(id => id !== item.id)
+        : [...selected, item.id]
+    )
+  }
+
+  return (
+    <article className={`card_list_item${isSelected ? ' is-selected' : ''}`}>
+      <div className="cart-item-checkbox">
+        <ZCheckbox
+          inputId={`cart-item-${item.id}`}
+          value={item.id}
+          checked={isSelected}
+          aria-label={`Selecionar ${item.name}`}
+          onChange={handleSelection}
+        />
+      </div>
+
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={item.image}
+        alt={item.name}
+        width={112}
+        height={112}
+        className="cart-item-image"
+      />
+
+      <div className="cart-item-content">
+        <div className="cart-item-header">
+          <div>
+            <h3>{item.name}</h3>
+            <p>{formatCurrency(item.price)} por unidade</p>
+          </div>
+          <ZButton
+            icon="pi pi-trash"
+            aria-label={`Remover ${item.name} do carrinho`}
+            tooltip="Remover"
+            className="p-button-text p-button-sm p-button-danger"
+            onClick={() => {
+              removeItem(item.id)
+              onRemove(item)
+            }}
+          />
+        </div>
+
+        <div className="cart-item-controls">
+          <div>
+            <span className="cart-item-control-label">Quantidade</span>
+            <div className="quantity" role="group" aria-label={`Quantidade de ${item.name}`}>
+              <button
+                type="button"
+                aria-label={`Diminuir quantidade de ${item.name}`}
+                onClick={() => handleQuantityChange(-1)}
+                disabled={item.quantity <= 1}
+              >−</button>
+              <span aria-live="polite">{item.quantity}</span>
+              <button
+                type="button"
+                aria-label={`Aumentar quantidade de ${item.name}`}
+                disabled={isLoading || !((availability?.quantity ?? 0) > item.quantity)}
+                onClick={() => handleQuantityChange(1)}
+              >+</button>
+            </div>
+            {availability && (
+              <span className="cart-item-stock">Máximo disponível: {availability.quantity}</span>
+            )}
+            {isError ? (
+              <div className="cart-item-stock-error" role="alert">
+                <span>Não foi possível verificar o estoque.</span>
+                <button type="button" onClick={() => void refetch()}>Tentar novamente</button>
+              </div>
+            ) : null}
+            {availability && availability.quantity < item.quantity ? (
+              <div className="cart-item-stock-error" role="alert">
+                O estoque mudou para {availability.quantity} unidades. Reduza a quantidade para continuar.
+              </div>
+            ) : null}
+          </div>
+
+          <div className="cart-item-price">
+            <span>Total do item</span>
+            <strong>{formatCurrency(item.price * item.quantity)}</strong>
+          </div>
+        </div>
+
+        <Link
+          href={`/production-order?productId=${encodeURIComponent(item.id)}`}
+          className="cart-item-production-order-link"
+        >
+          Encomendar este produto separadamente
+          <i className="pi pi-external-link" aria-hidden="true" />
+        </Link>
+      </div>
+    </article>
+  )
 }

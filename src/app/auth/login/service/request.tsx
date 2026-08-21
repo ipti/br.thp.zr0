@@ -25,5 +25,5 @@ export const AddCartItemRequest = async (body: {
 };
 
 export const GetProductByUidRequest = async (uid: string) => {
-  return await http.get(`/product-bff/uid/${uid}`);
+  return await http.get<{ id: number }>(`/product-bff/uid/${uid}`);
 };

@@ -7,6 +7,17 @@ import ZInputText from "../input/input";
 import ZDropdown from "../dropdown/dropdown";
 import { useFetchRequestState } from "./query";
 import ZInputMask from "../input_mask/input_mask";
+import { FormikProps } from "formik";
+
+export type AddressFormValues = {
+  cep: string
+  address: string
+  number: string
+  neighborhood: string
+  complement: string
+  state?: number
+  city?: number
+}
 
 const InputAddressState = () => {
   const [state, setState] = useState<StateList | undefined>();
@@ -22,7 +33,10 @@ const InputAddressState = () => {
     }
   }, [stateRequest]);
 
-  const dadosCep = async (value: string, setFieldValue: any) => {
+  const dadosCep = async (
+    value: string,
+    setFieldValue: FormikProps<AddressFormValues>['setFieldValue']
+  ) => {
     const cep = value.replace(/\D/g, "");
 
     if (cep.length !== 8) {
@@ -73,11 +87,11 @@ const InputAddress = ({
   values,
   setFieldValue,
 }: {
-  values: any;
-  handleChange: any;
-  errors: any;
-  touched: any;
-  setFieldValue: any;
+  values: AddressFormValues;
+  handleChange: FormikProps<AddressFormValues>['handleChange'];
+  errors: FormikProps<AddressFormValues>['errors'];
+  touched: FormikProps<AddressFormValues>['touched'];
+  setFieldValue: FormikProps<AddressFormValues>['setFieldValue'];
 }) => {
   const props = InputAddressState();
 
@@ -101,10 +115,11 @@ const InputAddress = ({
     <>
       <div className="mb-4 col-12 md:col-6">
         <div className="flex flex-column">
-          <label>CEP </label>
+          <label htmlFor="address-cep">CEP</label>
           <div className="p-2" />
           <ZInputMask
             value={values.cep}
+            id="address-cep"
             mask="99999-999"
             placeholder="Cep"
             onChange={(e) => {
@@ -113,30 +128,31 @@ const InputAddress = ({
               props.dadosCep(e.target.value!, setFieldValue);
             }}
             name="cep"
+            aria-describedby="address-cep-feedback"
+            invalid={Boolean((errors.cep && touched.cep) || props.cepError)}
           />
-          {props.cepLoading ? (
-            <div style={{ marginTop: "8px" }}>Consultando CEP...</div>
-          ) : null}
-          {props.cepError ? (
-            <div style={{ color: "red", marginTop: "8px" }}>{props.cepError}</div>
-          ) : null}
-          {errors.cep && touched.cep ? (
-            <div style={{ color: "red", marginTop: "8px" }}>{errors.cep}</div>
-          ) : null}
+          <div id="address-cep-feedback" aria-live="polite">
+            {props.cepLoading ? <div style={{ marginTop: "8px" }}>Consultando CEP...</div> : null}
+            {props.cepError ? <div role="alert" style={{ color: "#8b1a1a", marginTop: "8px" }}>{props.cepError}</div> : null}
+            {errors.cep && touched.cep ? <div role="alert" style={{ color: "#8b1a1a", marginTop: "8px" }}>{errors.cep}</div> : null}
+          </div>
         </div>
       </div>
       <div className="mb-4 col-12 md:col-6">
         <div className="flex flex-column">
-          <label>Endereço </label>
+          <label htmlFor="address-street">Endereço</label>
           <div className="p-2" />
           <ZInputText
             value={values.address}
+            id="address-street"
             placeholder="Endereço"
             onChange={handleChange}
             name="address"
+            aria-describedby={errors.address ? 'address-street-error' : undefined}
+            invalid={Boolean(errors.address)}
           />
           {errors.address ? (
-            <div style={{ color: "red", marginTop: "8px" }}>
+            <div id="address-street-error" role="alert" style={{ color: "#8b1a1a", marginTop: "8px" }}>
               {errors.address}
             </div>
           ) : null}
@@ -144,16 +160,19 @@ const InputAddress = ({
       </div>
        <div className="mb-4 col-12 md:col-6">
         <div className="flex flex-column">
-          <label>Número </label>
+          <label htmlFor="address-number">Número</label>
           <div className="p-2" />
           <ZInputText
             value={values.number}
+            id="address-number"
             placeholder="Número"
             onChange={handleChange}
             name="number"
+            aria-describedby={errors.number ? 'address-number-error' : undefined}
+            invalid={Boolean(errors.number)}
           />
           {errors.number ? (
-            <div style={{ color: "red", marginTop: "8px" }}>
+            <div id="address-number-error" role="alert" style={{ color: "#8b1a1a", marginTop: "8px" }}>
               {errors.number}
             </div>
           ) : null}
@@ -161,16 +180,19 @@ const InputAddress = ({
       </div>
       <div className="mb-4 col-12 md:col-6">
         <div className="flex flex-column">
-          <label>Bairro/Povoado </label>
+          <label htmlFor="address-neighborhood">Bairro/Povoado</label>
           <div className="p-2" />
           <ZInputText
             value={values.neighborhood}
+            id="address-neighborhood"
             placeholder="Bairro/Povoado"
             onChange={handleChange}
             name="neighborhood"
+            aria-describedby={errors.neighborhood ? 'address-neighborhood-error' : undefined}
+            invalid={Boolean(errors.neighborhood)}
           />
           {errors.neighborhood ? (
-            <div style={{ color: "red", marginTop: "8px" }}>
+            <div id="address-neighborhood-error" role="alert" style={{ color: "#8b1a1a", marginTop: "8px" }}>
               {errors.neighborhood}
             </div>
           ) : null}
@@ -178,16 +200,19 @@ const InputAddress = ({
       </div>
       <div className="mb-4 col-12 md:col-6">
         <div className="flex flex-column">
-          <label>Complemento </label>
+          <label htmlFor="address-complement">Complemento</label>
           <div className="p-2" />
           <ZInputText
             value={values.complement}
+            id="address-complement"
             placeholder="Complemento"
             onChange={handleChange}
             name="complement"
+            aria-describedby={errors.complement ? 'address-complement-error' : undefined}
+            invalid={Boolean(errors.complement)}
           />
           {errors.complement && touched.complement ? (
-            <div style={{ color: "red", marginTop: "8px" }}>
+            <div id="address-complement-error" role="alert" style={{ color: "#8b1a1a", marginTop: "8px" }}>
               {errors.complement}
             </div>
           ) : null}
@@ -197,10 +222,11 @@ const InputAddress = ({
         <>
           <div className="mb-4 col-12 md:col-6">
             <div className="flex flex-column">
-              <label>Estado *</label>
+              <label htmlFor="address-state">Estado *</label>
               <div className="p-2" />
               <ZDropdown
                 value={values.state}
+                inputId="address-state"
                 placeholder="Estado"
                 name="state"
                 optionLabel="name"
@@ -211,9 +237,11 @@ const InputAddress = ({
                   setFieldValue("city", undefined);
                 }}
                 options={props.state}
+                aria-describedby={errors.state ? 'address-state-error' : undefined}
+                invalid={Boolean(errors.state)}
               />
               {errors.state ? (
-                <div style={{ color: "red", marginTop: "8px" }}>
+                <div id="address-state-error" role="alert" style={{ color: "#8b1a1a", marginTop: "8px" }}>
                   {errors.state}
                 </div>
               ) : null}
@@ -222,10 +250,11 @@ const InputAddress = ({
           {props.stateId && (
             <div className="mb-4 col-12 md:col-6">
               <div className="flex flex-column">
-                <label>Cidade *</label>
+                <label htmlFor="address-city">Cidade *</label>
                 <div className="p-2" />
                 <ZDropdown
                   value={values.city}
+                  inputId="address-city"
                   placeholder="Cidade"
                   name="city"
                   optionLabel="name"
@@ -234,9 +263,11 @@ const InputAddress = ({
                   options={
                     props.state.find((item) => item.id === props.stateId)?.city
                   }
+                  aria-describedby={errors.city ? 'address-city-error' : undefined}
+                  invalid={Boolean(errors.city)}
                 />
                 {errors.city ? (
-                  <div style={{ color: "red", marginTop: "8px" }}>
+                  <div id="address-city-error" role="alert" style={{ color: "#8b1a1a", marginTop: "8px" }}>
                     {errors.city}
                   </div>
                 ) : null}

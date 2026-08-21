@@ -7,7 +7,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { TransformationWorkshopOrder } from "../../one/service/type";
-import { ProductTransfWorkshopController } from "../../product/service/controller";
 import { useFetchRequestOrderTransformationWorkshop } from "../service/query";
 import { OrderPagination } from "../service/types";
 import { useState } from "react";
@@ -16,7 +15,6 @@ export default function ListPage() {
   const searchParams = useSearchParams();
 
   const idOt = searchParams.get("idOt");
-  const productTransfWorkshopController = ProductTransfWorkshopController();
   const [page, setPage] = useState(1)
   const [limit, setLimite] = useState(10)
 
@@ -32,11 +30,6 @@ export default function ListPage() {
           <span className="text-xl text-900 font-bold">Pedidos</span>
         </div>
       );
-
-  const onRowEditComplete = (e: any) => {
-    const rowData = e.newData
-    productTransfWorkshopController.UpdateProductTransfWorkshopAction(rowData.id, { quantity: rowData.quantity })
-  };
 
   const onPageChange = (e: any) => {
     setPage(e.page + 1);
@@ -58,9 +51,8 @@ export default function ListPage() {
       totalRecords={order?.pagination.total}
       onPage={onPageChange}
       rowsPerPageOptions={[5, 10, 25, 50]} 
-      dataKey="id" 
-      onRowEditComplete={onRowEditComplete} 
-      value={order?.data} 
+      dataKey="id"
+      value={order?.data}
       onSelectionChange={(e) => history.push("/seller/transformation-workshop/orders/one?idOrder="+e.value.order_fk)} 
       selectionMode="single"
     >

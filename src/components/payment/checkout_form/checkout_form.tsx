@@ -1,88 +1,103 @@
-// CheckoutForm.tsx
-import React, { useState } from 'react';
-import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
-import './checkout_form.css';
-import { ZButton } from '@/components/button/button';
+import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
+import { FormEvent, useState } from 'react'
+import { ZButton } from '@/components/button/button'
+import './checkout_form.css'
 
-const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [message, setMessage] = useState('');
+type PaymentMessage = {
+  kind: 'success' | 'info' | 'error'
+  text: string
+}
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setMessage('');
+export default function CheckoutForm({
+  clientSecret,
+  orderId,
+  onConfirmed
+}: {
+  clientSecret: string
+  orderId: number
+  onConfirmed?: () => Promise<unknown>
+}) {
+  const stripe = useStripe()
+  const elements = useElements()
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [message, setMessage] = useState<PaymentMessage | null>(null)
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault()
+    setMessage(null)
+
     if (!stripe || !elements) {
-      setMessage('Stripe ainda não carregado.');
-      return;
+      setMessage({ kind: 'error', text: 'O formulário de pagamento ainda está carregando.' })
+      return
     }
 
-    setIsProcessing(true);
-
-    // confirmPayment usará o PaymentElement (já ligado ao clientSecret via Elements)
-    const result = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        // Se você quiser redirecionar após 3DS ou método que requer redirecionamento:
-        return_url: `${window.location.origin}/profile/order`,
-        payment_method_data: {
-          billing_details: {}
-        },
-        receipt_email: 'jonnyzico10@gmail.com'
-      },
-      // redirect: 'if_required' // opcional: evita redirecionamento se não for necessário
-    });
-
-    setIsProcessing(false);
-
-    // resultado: se houver erro, result.error estará preenchido
-    if (result.error) {
-      setMessage(result.error.message ?? 'Erro ao processar o pagamento.');
-      return;
-    }
-
-    // Se não houver erro e não houve redirecionamento, podemos checar o PaymentIntent
-    // Usamos stripe.retrievePaymentIntent(clientSecret) para obter o status atual
+    setIsProcessing(true)
     try {
-      // @ts-ignore - stripe.retrievePaymentIntent existe em stripe-js (v3). Se sua versão não tiver, pule essa chamada.
-      const pi = await (stripe as any).retrievePaymentIntent(clientSecret);
-      const status = pi?.paymentIntent?.status ?? pi?.status ?? null;
+      const result = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/profile/order/${orderId}?payment=return`
+        },
+        redirect: 'if_required'
+      })
+
+      if (result.error) {
+        setMessage({
+          kind: 'error',
+          text: result.error.message ?? 'Não foi possível processar o pagamento.'
+        })
+        return
+      }
+
+      await onConfirmed?.()
+      const retrieved = await stripe.retrievePaymentIntent(clientSecret)
+      const status = retrieved.paymentIntent?.status
 
       if (status === 'succeeded') {
-        setMessage('Pagamento realizado com sucesso!');
-        // atualizar pedido no seu backend, mostrar recibo, etc.
+        setMessage({ kind: 'success', text: 'Pagamento confirmado com sucesso.' })
       } else if (status === 'processing') {
-        setMessage('Pagamento processando. Aguardando confirmação.');
+        setMessage({ kind: 'info', text: 'Pagamento em processamento. A confirmação pode levar alguns minutos.' })
+      } else if (status === 'requires_action') {
+        setMessage({ kind: 'info', text: 'Use as instruções exibidas para concluir o pagamento.' })
       } else {
-        setMessage(`Status do pagamento: ${status}`);
+        setMessage({ kind: 'info', text: 'Pagamento enviado. Aguardando confirmação.' })
       }
-    } catch (err) {
-      // Se retrievePaymentIntent não estiver disponível na sua versão do stripe-js,
-      // você pode confiar no webhook do backend para confirmar o pagamento,
-      // ou redirecionar via return_url e checar o backend.
-      console.warn('Não foi possível recuperar PaymentIntent no cliente:', err);
-      setMessage('Pagamento enviado — aguarde confirmação (verifique seu e-mail).');
+    } catch {
+      setMessage({
+        kind: 'error',
+        text: 'Não foi possível concluir o pagamento. Verifique sua conexão e tente novamente.'
+      })
+    } finally {
+      setIsProcessing(false)
     }
-  };
+  }
 
   return (
     <div className="form-container">
-      <h2>Pagamento Seguro</h2>
+      <h2>Pagamento seguro</h2>
+      <p className="payment-form-description">Seus dados são processados de forma segura pela Stripe.</p>
       <form onSubmit={handleSubmit}>
-        <div style={{ margin: '20px 0' }}>
+        <div className="payment-element-wrapper">
           <PaymentElement />
         </div>
-        <div className='flex flex-row justify-content-center'>
-          <ZButton type="submit" disabled={!stripe || isProcessing}>
-            {isProcessing ? 'Processando...' : 'Pagar Agora'}
-          </ZButton>
-        </div>
+        <ZButton
+          type="submit"
+          label={isProcessing ? 'Processando…' : 'Pagar agora'}
+          loading={isProcessing}
+          disabled={!stripe || !elements || isProcessing}
+          className="payment-submit"
+        />
       </form>
 
-      {message && <div className={`form-message ${message.includes('sucesso') ? 'success' : 'error'}`}>{message}</div>}
+      {message && (
+        <div
+          className={`form-message ${message.kind}`}
+          role={message.kind === 'error' ? 'alert' : 'status'}
+          aria-live={message.kind === 'error' ? 'assertive' : 'polite'}
+        >
+          {message.text}
+        </div>
+      )}
     </div>
-  );
-};
-
-export default CheckoutForm;
+  )
+}

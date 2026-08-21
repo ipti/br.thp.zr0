@@ -1,0 +1,5 @@
+/*
+ * Entrada de estilo própria da revisão de encomenda. O nome separado evita
+ * que o HMR reutilize o chunk antigo de confirmation.css durante o desenvolvimento.
+ */
+@import './confirmation.css';

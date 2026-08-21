@@ -9,6 +9,6 @@ export const useFetchRequestOrderOne = (idOrder?: string) => {
     return useQuery(["useRequestOrderOne", idOrder], () => requestOrderOne(idOrder), {enabled: !!idOrder});
 };
 
-export const useFetchRequestPaymentIntentOne = (idOrder?: number) => {
-    return useQuery(["useRequestPaymentIntentOne", idOrder], () => requestPaymentIntentOne(idOrder), {enabled: !!idOrder});
+export const useFetchRequestPaymentIntentOne = (idOrder?: number, enabled = true) => {
+    return useQuery(["useRequestPaymentIntentOne", idOrder], () => requestPaymentIntentOne(idOrder), {enabled: !!idOrder && enabled});
 };

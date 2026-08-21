@@ -10,16 +10,23 @@ import { Popover } from 'react-tiny-popover'
 import MenuUser from './menu_user/menu_user'
 import LoginModal from './login/login_modal'
 import { ZButton } from '../button/button'
+import { useFetchUserToken } from '@/service/global_request/query'
 
 export default function Header() {
   const pathname = usePathname()
   const useNavigate = useRouter()
   const [modalLogin, setModalLogin] = useState(false)
   const [menuUser, setMenuUser] = useState(false)
-  const token = Cookies.get('access_token')
+  const [hasToken, setHasToken] = useState(false)
 
   const [hydrated, setHydrated] = useState(false)
-  useEffect(() => setHydrated(true), [])
+  useEffect(() => {
+    setHasToken(Boolean(Cookies.get('access_token')))
+    setHydrated(true)
+  }, [])
+
+  const { data: user } = useFetchUserToken(hasToken)
+  const accountLabel = user?.name?.trim() || 'Minha conta'
 
   const cart = useCartStore(state => state.cart)
 
@@ -45,35 +52,46 @@ export default function Header() {
 
           {/* Center - Logo */}
           <div className="header-logo">
-            {true ? (
-              <button
-                className="logo-button"
-                onClick={() => useNavigate.push('/')}
-              >
-                <Image height={48} src={zioLogo} alt="ZIo" />
-              </button>
-            ) : (
-              <img src={zioLogo} alt="ZIo" />
-            )}
+            <button
+              className="logo-button"
+              onClick={() => useNavigate.push('/')}
+            >
+              <Image height={48} src={zioLogo} alt="ZR0" />
+            </button>
           </div>
           <div className="header-right">
             <Popover
               isOpen={menuUser}
               transform={{ top: 30 }}
               transformMode="relative"
-              onClickOutside={() => setMenuUser(!menuUser)}
+              onClickOutside={() => setMenuUser(false)}
               positions={['bottom']}
               containerStyle={{ zIndex: 1000 }}
               content={<MenuUser />}
             >
-              <div
-                className="cart-button"
-                onClick={() =>
-                  token ? setMenuUser(!menuUser) : setModalLogin(!modalLogin)
-                }
+              <button
+                type="button"
+                className="cart-button account-button"
+                aria-label={hasToken ? 'Abrir minha conta' : 'Entrar na conta'}
+                aria-expanded={hasToken ? menuUser : undefined}
+                onClick={() => {
+                  if (hasToken) {
+                    setMenuUser(current => !current)
+                    return
+                  }
+                  setModalLogin(true)
+                }}
               >
                 <i className="cart-icon pi pi-user cursor-pointer" />
-              </div>
+                {hydrated && (
+                  <span
+                    className="account-text"
+                    title={hasToken ? accountLabel : undefined}
+                  >
+                    {hasToken ? accountLabel : 'Entrar'}
+                  </span>
+                )}
+              </button>
             </Popover>
             {hydrated && (
               <button
@@ -91,7 +109,7 @@ export default function Header() {
       </header>
       <LoginModal
         visible={modalLogin}
-        onHide={() => setModalLogin(!modalLogin)}
+        onHide={() => setModalLogin(false)}
       />
     </>
   )

@@ -38,7 +38,14 @@ export default function TransformationWorkshopOneComponent() {
   return (
     <div>
 
-      <TitlePage title={'Informações da oficina'} />
+      <div className="flex flex-column md:flex-row justify-content-between align-items-start md:align-items-center gap-3 mb-4">
+        <TitlePage title={'Informações da oficina'} />
+        <Button
+          label="Gerenciar produção"
+          icon="pi pi-cog"
+          onClick={() => history.push('/seller/transformation-workshop/production')}
+        />
+      </div>
 
 
       <div className="mb-4">

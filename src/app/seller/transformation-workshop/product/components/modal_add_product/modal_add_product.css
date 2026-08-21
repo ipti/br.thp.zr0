@@ -1,0 +1,94 @@
+.add-product-dialog {
+  width: min(92vw, 36rem);
+}
+
+.add-product-form {
+  display: grid;
+  gap: 1.3rem;
+}
+
+.add-product-intro {
+  margin: 0;
+  color: #667085;
+  line-height: 1.5;
+}
+
+.add-product-field {
+  display: grid;
+  gap: .45rem;
+}
+
+.add-product-field > label {
+  color: #273142;
+  font-weight: 650;
+}
+
+.add-product-field > small {
+  color: #667085;
+  line-height: 1.4;
+}
+
+.add-product-field .p-dropdown,
+.add-product-field .p-inputnumber {
+  width: 100%;
+}
+
+.add-product-field .p-inputnumber-input {
+  width: 100%;
+  text-align: center;
+}
+
+.add-product-option {
+  display: grid;
+  gap: .15rem;
+  padding: .15rem 0;
+}
+
+.add-product-option small {
+  overflow: hidden;
+  max-width: 28rem;
+  color: #667085;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.add-product-error {
+  color: #b42318 !important;
+  font-weight: 600;
+}
+
+.add-product-empty,
+.add-product-submit-error {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .8rem;
+  border-radius: .65rem;
+}
+
+.add-product-empty {
+  background: #eff8f2;
+  color: #176b3a;
+}
+
+.add-product-submit-error {
+  background: #fff1f1;
+  color: #9b1c1c;
+}
+
+.add-product-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: .6rem;
+  padding-top: .35rem;
+}
+
+@media (max-width: 600px) {
+  .add-product-actions {
+    flex-direction: column-reverse;
+  }
+
+  .add-product-actions .p-button {
+    width: 100%;
+  }
+}

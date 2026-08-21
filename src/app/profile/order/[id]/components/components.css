@@ -1,0 +1,8 @@
+.order-created-message {
+  display: flex;
+  width: min(100%, 72rem);
+  margin: 0 auto 1.25rem;
+  padding: 1rem;
+  justify-content: flex-start;
+  border-radius: .75rem;
+}

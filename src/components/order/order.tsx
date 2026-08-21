@@ -4,6 +4,36 @@ import { TimelineItem, ZTimeline } from "../timeline/timeline";
 import './order.css';
 import { OrderOneType } from "@/app/profile/order/service/types";
 import { Accordion, AccordionTab } from "primereact/accordion";
+import { ZSaleTypeBadge } from "../badge/sale_type_badge";
+import { formatDateToBR } from "@/utils/hook/format_data";
+
+function buildOrderTimeline(
+    paymentStatus: string,
+    itemStatus: string,
+    isEncomenda: boolean,
+): TimelineItem[] {
+    const timeline: TimelineItem[] = [
+        { label: 'Pedido efeturado', id: 1, icon: <i className="pi pi-cart-arrow-down" />, status: 'completed' },
+        { label: 'Pedido pago', id: 2, icon: <i className="pi pi-truck" />, status: ['PAID'].includes(paymentStatus) ? 'completed' : 'pending' },
+    ]
+
+    if (isEncomenda) {
+        timeline.push({
+            label: 'Em produção',
+            id: 'in_production',
+            icon: <i className="pi pi-cog" />,
+            status: ['IN_PRODUCTION', 'SHIPPED', 'COMPLETED'].includes(itemStatus) ? 'completed' : 'pending',
+            color: 'var(--color-secondary, #f07724)',
+        })
+    }
+
+    timeline.push(
+        { label: 'Pedido Enviado', id: 3, icon: <i className="pi pi-wallet" />, status: ['SHIPPED', 'COMPLETED'].includes(itemStatus) ? 'completed' : 'pending' },
+        { label: 'Pedido finalizado', id: 4, icon: <i className="pi pi-check-circle" />, status: ['COMPLETED'].includes(itemStatus) ? 'completed' : 'pending' },
+    )
+
+    return timeline
+}
 
 export function Order({ order }: { order: OrderOneType }) {
 
@@ -12,12 +42,13 @@ export function Order({ order }: { order: OrderOneType }) {
 
     if (!order) return <></>
 
+    const isEncomenda = order.sale_type === 'ENCOMENDA'
     const onlyOrderOne = order.order_services[0]
 
     function OrderOne() {
 
 
-        const timeline: TimelineItem[] = [{ label: 'Pedido efeturado', id: 1, icon: <i className="pi pi-cart-arrow-down" />, status: 'completed' }, { label: 'Pedido pago', id: 2, icon: <i className="pi pi-truck" />, status: ['PAID'].includes(order.payment_status) ? 'completed' : 'pending' }, { label: 'Pedido Enviado', id: 3, icon: <i className="pi pi-wallet" />, status: ['SHIPPED', 'COMPLETED'].includes(onlyOrderOne.status) ? 'completed' : 'pending' }, { label: 'Pedido finalizado', id: 4, icon: <i className="pi pi-check-circle" />, status: ['COMPLETED'].includes(onlyOrderOne.status) ? 'completed' : 'pending' }]
+        const timeline = buildOrderTimeline(order.payment_status, onlyOrderOne.status, isEncomenda)
 
         const timelineCancelled: TimelineItem[] = [{ label: 'Pedido efeturado', id: 1, icon: <i className="pi pi-cart-arrow-down" />, status: 'completed' }, { label: 'Pedido Cancelado', id: 2, icon: <i className="pi pi-times" />, status: ['CANCELLED'].includes(onlyOrderOne.status) ? 'completed' : 'pending', color: 'red' },]
         const delivery = onlyOrderOne?.order_item[0]?.delivery_estimate;
@@ -41,6 +72,16 @@ export function Order({ order }: { order: OrderOneType }) {
                         </div>
                     </div>
                     <ZTimeline items={onlyOrderOne.status === 'CANCELLED' ? timelineCancelled : timeline} direction={innerWidth > 600 ? "horizontal" : 'vertical'} />
+                    {isEncomenda && (onlyOrderOne.estimated_ready_at || onlyOrderOne.estimated_delivery_at) && (
+                        <div className="order-estimated-dates">
+                            {onlyOrderOne.estimated_ready_at && (
+                                <p>Produção estimada: {formatDateToBR(onlyOrderOne.estimated_ready_at)}</p>
+                            )}
+                            {onlyOrderOne.estimated_delivery_at && (
+                                <p>Entrega estimada: {formatDateToBR(onlyOrderOne.estimated_delivery_at)}</p>
+                            )}
+                        </div>
+                    )}
                 </div>
                 <div className="p-3"></div>
                 <div className="z-order-card">
@@ -107,7 +148,10 @@ export function Order({ order }: { order: OrderOneType }) {
         <div>
             <div className="z-order-card">
                 <section className="order-section">
-                    <h3><i className="pi pi-user mr-1"></i>Cliente</h3>
+                    <div className="flex flex-row justify-content-between align-items-center">
+                        <h3><i className="pi pi-user mr-1"></i>Cliente</h3>
+                        <ZSaleTypeBadge saleType={order.sale_type} />
+                    </div>
                     <p><strong>{order.user.name}</strong> </p>
                     <p>{order.user.email}</p>
                 </section>
@@ -127,7 +171,7 @@ export function Order({ order }: { order: OrderOneType }) {
                 <Accordion activeIndex={0}>
                     {order.order_services.map((item) => {
 
-                        const timeline: TimelineItem[] = [{ label: 'Pedido efeturado', id: 1, icon: <i className="pi pi-cart-arrow-down" />, status: 'completed' }, { label: 'Pedido pago', id: 2, icon: <i className="pi pi-truck" />, status: ['PAID'].includes(order.payment_status) ? 'completed' : 'pending' }, { label: 'Pedido Enviado', id: 3, icon: <i className="pi pi-wallet" />, status: ['SHIPPED', 'COMPLETED'].includes(item.status) ? 'completed' : 'pending' }, { label: 'Pedido finalizado', id: 4, icon: <i className="pi pi-check-circle" />, status: ['COMPLETED'].includes(item.status) ? 'completed' : 'pending' }]
+                        const timeline = buildOrderTimeline(order.payment_status, item.status, isEncomenda)
 
                         const timelineCancelled: TimelineItem[] = [{ label: 'Pedido efeturado', id: 1, icon: <i className="pi pi-cart-arrow-down" />, status: 'completed' }, { label: 'Pedido Cancelado', id: 2, icon: <i className="pi pi-times" />, status: ['CANCELLED'].includes(item.status) ? 'completed' : 'pending', color: 'red' },]
                         const delivery = item?.order_item[0]?.delivery_estimate;
@@ -150,6 +194,16 @@ export function Order({ order }: { order: OrderOneType }) {
                                         </div>
                                     </div>
                                     <ZTimeline items={item.status === 'CANCELLED' ? timelineCancelled : timeline} direction={innerWidth > 600 ? "horizontal" : 'vertical'} />
+                                    {isEncomenda && (item.estimated_ready_at || item.estimated_delivery_at) && (
+                                        <div className="order-estimated-dates">
+                                            {item.estimated_ready_at && (
+                                                <p>Produção estimada: {formatDateToBR(item.estimated_ready_at)}</p>
+                                            )}
+                                            {item.estimated_delivery_at && (
+                                                <p>Entrega estimada: {formatDateToBR(item.estimated_delivery_at)}</p>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="p-3"></div>
                                 <div className="z-order-card">

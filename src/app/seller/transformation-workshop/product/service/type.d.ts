@@ -5,8 +5,9 @@ export interface AddProductTransfWorkType {
   }
 
   export interface UpdateProductTransfWorkType {
- 
+    product_fk: number
+    tw_fk: number
     quantity: number
   }
-  
+
   
