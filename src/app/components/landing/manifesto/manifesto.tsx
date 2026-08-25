@@ -1,11 +1,55 @@
+import pingos from '@/assets/img/home/pingos.svg'
 import '../landing.css'
 import './manifesto.css'
 
 export default function Manifesto() {
   return (
-    <section className="landing-section landing-manifesto">
+    <section
+      className="landing-section landing-manifesto"
+      aria-labelledby="landing-manifesto-title"
+    >
+      <div className="landing-manifesto__decor" aria-hidden="true">
+        <svg
+          className="landing-manifesto__pingos"
+          viewBox="0 0 1920 1980"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <defs>
+            <filter
+              id="landing-manifesto-palette"
+              x="0"
+              y="0"
+              width="1920"
+              height="1980"
+              filterUnits="userSpaceOnUse"
+              colorInterpolationFilters="sRGB"
+            >
+              <feColorMatrix
+                type="matrix"
+                values="0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0 0 0 1 0"
+              />
+              <feComponentTransfer>
+                <feFuncR type="linear" slope="0.781" intercept="0.257" />
+                <feFuncG type="linear" slope="0.469" intercept="0.431" />
+                <feFuncB type="linear" slope="0.541" intercept="0.247" />
+              </feComponentTransfer>
+            </filter>
+          </defs>
+          <image
+            href={pingos.src}
+            width="1920"
+            height="1980"
+            preserveAspectRatio="none"
+            filter="url(#landing-manifesto-palette)"
+          />
+        </svg>
+      </div>
+
       <div className="landing-content landing-manifesto__inner">
-        <h2 className="landing-manifesto__title">Um novo jeito de enxergar os resíduos</h2>
+        <h2 id="landing-manifesto-title" className="landing-manifesto__title">
+          Um novo jeito de enxergar os resíduos.
+        </h2>
 
         <div className="landing-manifesto__body">
           <p>

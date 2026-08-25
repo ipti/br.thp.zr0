@@ -59,7 +59,7 @@
 :root {
   --home-max-width: 1200px;
   --home-gutter: clamp(1rem, 4vw, 5rem);
-  --home-section-space: clamp(3.5rem, 8vw, 7rem);
+  --home-section-space: clamp(3.5rem, 4vw, 7rem);
   --header-height: 75px; /* medido via getBoundingClientRect() em src/components/header/header.tsx, não deduzível só pelo CSS */
 }
 
@@ -86,6 +86,13 @@
   font-family: 'Libre Baskerville';
   src: url('../assets/font/LibreBaskerville-Regular.ttf') format('truetype');
   font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Hurme Geometric Sans 1';
+  src: url('../assets/font/HurmeGeometricSans1.otf') format('opentype');
+  font-weight: 400;
   font-style: normal;
 }
 

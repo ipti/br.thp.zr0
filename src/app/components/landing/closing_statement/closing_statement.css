@@ -1,3 +1,88 @@
 .landing-closing-statement {
-  padding: 2rem 1rem;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+}
+
+.landing-closing-statement__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(18rem, 1.1fr);
+  align-items: end;
+  gap: clamp(2.5rem, 7vw, 6rem);
+  max-width: 58rem;
+}
+
+.landing-closing-statement__content {
+  padding-bottom: clamp(0.5rem, 2vw, 1.5rem);
+}
+
+.landing-closing-statement__title,
+.landing-closing-statement__copy {
+  font-family: 'Poppins Regular', sans-serif;
+  font-size: clamp(0.9rem, 0.76rem + 0.28vw, 1.05rem);
+  line-height: 1.6;
+}
+
+.landing-closing-statement__title {
+  max-width: 35ch;
+  margin-bottom: 0.9rem;
+  color: #202522;
+  font-weight: 700;
+}
+
+.landing-closing-statement__copy {
+  max-width: 39ch;
+  color: #27302b;
+}
+
+.landing-closing-statement__signature {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.landing-closing-statement__logo {
+  display: block;
+  width: clamp(4.25rem, 7vw, 5.75rem);
+  height: auto;
+  margin-bottom: 0.35rem;
+}
+
+.landing-closing-statement__signature p {
+  color: #47504b;
+  font-family: 'Poppins Regular', sans-serif;
+  font-size: clamp(0.66rem, 0.6rem + 0.14vw, 0.75rem);
+  line-height: 1.4;
+}
+
+.landing-closing-statement__figure {
+  margin: 0;
+}
+
+.landing-closing-statement__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 699px) {
+  .landing-closing-statement__inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .landing-closing-statement__content {
+    width: min(100%, 32rem);
+    margin-inline: auto;
+    padding-bottom: 0;
+  }
+
+  .landing-closing-statement__figure {
+    width: min(100%, 34rem);
+    margin-inline: auto;
+  }
+}
+
+@media (min-width: 700px) {
+  .landing-closing-statement__figure {
+    margin-right: clamp(-2rem, -3vw, -0.5rem);
+  }
 }

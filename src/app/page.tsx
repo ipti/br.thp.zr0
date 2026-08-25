@@ -31,7 +31,7 @@ export default async function Home() {
           <WorkshopShowcase />
           <HowItWorks />
           <Presence />
-          <ProductsShowcase />
+          <ProductsShowcase products={product} />
           <ClosingStatement />
         </>
       ) : (

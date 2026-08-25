@@ -1,3 +1,131 @@
 .landing-workshop-showcase {
-  padding: 2rem 1rem;
+  overflow: hidden;
+  background: #f8f8f8;
+  padding-top: 0;
+}
+
+.landing-workshop-showcase__card {
+  width: min(calc(100% - (2 * var(--home-gutter))), 60rem);
+  margin-inline: auto;
+  padding-block: clamp(2rem, 5vw, 4rem);
+  border-radius: clamp(1rem, 2vw, 1.75rem);
+  background: #f3f3f0;
+}
+
+.landing-workshop-showcase__header,
+.landing-workshop-showcase__body {
+  width: min(calc(100% - (2 * var(--home-gutter))), 45rem);
+  margin-inline: auto;
+}
+
+.landing-workshop-showcase__header {
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.landing-workshop-showcase__eyebrow {
+  margin-bottom: 0.5rem;
+  color: #165b50;
+  font-family: 'Poppins Regular', sans-serif;
+  font-size: clamp(0.68rem, 0.6rem + 0.18vw, 0.8rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.landing-workshop-showcase__title {
+  color: #10594f;
+  font-family: 'Hurme Geometric Sans 1', Arial, Helvetica, sans-serif;
+  font-size: clamp(2rem, 3.4vw, 3.15rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+
+.landing-workshop-showcase__title span {
+  display: block;
+}
+
+.landing-workshop-showcase__gallery {
+  display: grid;
+  grid-template-columns: 163fr repeat(3, 453fr) 166fr;
+  gap: clamp(0.5rem, 1vw, 1rem);
+  width: 100vw;
+  height: clamp(8rem, 24vw, 16rem);
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  margin-left: calc(50% - 50vw);
+}
+
+.landing-workshop-showcase__media {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  border-radius: clamp(0.5rem, 1vw, 0.9rem);
+  background: #deded8;
+}
+
+.landing-workshop-showcase__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.landing-workshop-showcase__image--community-left {
+  object-position: 15% center;
+}
+
+.landing-workshop-showcase__image--residue-right {
+  object-position: 80% center;
+}
+
+.landing-workshop-showcase__image--washing,
+.landing-workshop-showcase__image--cutting,
+.landing-workshop-showcase__image--pressing {
+  object-position: center;
+}
+
+.landing-workshop-showcase__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  color: #202522;
+}
+
+.landing-workshop-showcase__body p {
+  font-family: 'Poppins Regular', sans-serif;
+  font-size: clamp(0.9rem, 0.75rem + 0.35vw, 1.05rem);
+  line-height: 1.6;
+}
+
+.landing-workshop-showcase__lead {
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+}
+
+@media (max-width: 599px) {
+  .landing-workshop-showcase__card {
+    width: calc(100% - 2rem);
+  }
+
+  .landing-workshop-showcase__header,
+  .landing-workshop-showcase__body {
+    width: calc(100% - 2.5rem);
+  }
+
+  .landing-workshop-showcase__title {
+    font-size: clamp(1.45rem, 6vw, 1.75rem);
+  }
+
+  .landing-workshop-showcase__gallery {
+    grid-auto-columns: 46vw;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    height: 46vw;
+    overflow: hidden;
+  }
+
+  .landing-workshop-showcase__body p {
+    font-size: 0.9rem;
+  }
 }

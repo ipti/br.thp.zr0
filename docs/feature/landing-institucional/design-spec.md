@@ -22,8 +22,9 @@ landing nova.
   `scroll-margin-top` para não ficar atrás do header sticky em navegação por âncora).
 - **Cores das manchas decorativas**: `--landing-blob-green: #8b9a72`, `--landing-blob-tan:
   #d9c9a8` (também em `landing.css`).
-- **Tipografia**: títulos grandes em `'Libre Baskerville', serif` (bold); corpo de texto em
-  `'Poppins Regular', sans-serif`. Ambas já declaradas via `@font-face` em `globals.css`.
+- **Tipografia**: títulos das seções em `'Libre Baskerville', serif` (bold); título do Hero em
+  `'Hurme Geometric Sans 1', sans-serif` (bold); corpo de texto em `'Poppins Regular',
+  sans-serif`. Todas declaradas via `@font-face` em `globals.css`.
 - **Estrutura de pasta**: uma pasta por componente em `src/app/components/landing/<nome>/`, com
   `<nome>.tsx` + `<nome>.css` (import direto, sem CSS modules), seguindo o padrão do resto do
   projeto.
@@ -65,7 +66,8 @@ criando o efeito de colagem assimétrica visto no print. Nenhum CTA/botão dentr
 
 - Título único: "LIXO É UMA INVENÇÃO HUMANA", 2 linhas ("LIXO É UMA" / "INVENÇÃO HUMANA" no
   print).
-- **Caixa alta** no print. Fonte serifada bold, cor quase preta.
+- **Caixa alta** no print. Fonte geométrica sans-serif bold (`'Hurme Geometric Sans 1'`), cor
+  quase preta, com entrelinha compacta.
 - Sem eyebrow (rótulo pequeno acima do título), sem parágrafo de apoio, sem CTA — só o `<h1>`.
 
 ### Imagens
@@ -107,8 +109,11 @@ criando o efeito de colagem assimétrica visto no print. Nenhum CTA/botão dentr
 
 **Status:** 🟢 Implementado, alinhado ao print.
 
-- Fundo branco, coluna única (sem eyebrow, sem imagem).
-- Título serifado bold ("Um novo jeito de enxergar os resíduos"), caixa alta via
+- Fundo `#f8f8f8`, coluna única (sem eyebrow e sem imagem de conteúdo), com formas orgânicas
+  decorativas parcialmente cortadas nas laterais.
+- As formas decorativas usam o asset oficial `src/assets/img/home/pingos.svg`, com a paleta
+  normalizada para o verde `#8b9a72` e o bege `#d9c9a8` já definidos na landing.
+- Título geométrico sans-serif bold ("Um novo jeito de enxergar os resíduos."), caixa alta via
   `text-transform: uppercase` em `manifesto.css`.
 - Corpo: parágrafo introdutório + 4 linhas "Valor para..." + 2 parágrafos de fechamento sobre a
   origem da ZR0 — sem marcadores/bullets, cada linha é um `<p>` próprio.
@@ -117,66 +122,96 @@ criando o efeito de colagem assimétrica visto no print. Nenhum CTA/botão dentr
 
 ---
 
-## 3. Oficina de Transformação — pendente
+## 3. Oficina de Transformação
 
-**Status:** ⚪ Placeholder (`<section><h2>Oficina de Transformação</h2></section>`).
-
-Observações preliminares do print, a confirmar quando esta seção for medida de verdade:
+**Status:** 🟢 Implementado e alinhado à composição do print.
 
 - Eyebrow pequeno em caps ("OFICINA DE TRANSFORMAÇÃO") acima do título — padrão que Hero/
   Manifesto não usam.
-- Título grande em 2 linhas: "ONDE OS RESÍDUOS GANHAM UM NOVO DESTINO. E AS PESSOAS TAMBÉM."
+- Título geométrico grande em 3 linhas fixas: "ONDE OS RESÍDUOS" / "GANHAM UM NOVO DESTINO." /
+  "E AS PESSOAS TAMBÉM."
 - Faixa horizontal de ~5 fotos documentais (pessoas/processo/materiais) — fotos retangulares
   comuns, não recortes com fundo transparente como as do Hero.
+- Sequência oficial da faixa: recorte lateral, lavagem dos resíduos, corte da placa, operação da
+  máquina e recorte lateral. As imagens externas mantêm a largura estreita original; as três cenas
+  centrais têm maior destaque.
 - Bloco de texto corrido abaixo da faixa de fotos, coluna única, mesmo tratamento do Manifesto.
-- Fundo branco.
+- Card central em cinza muito claro, com cantos arredondados, sobre fundo `#f8f8f8`, em
+  continuidade com o Manifesto. A faixa de fotos
+  extrapola horizontalmente o card e ocupa toda a largura da viewport.
 
 ---
 
-## 4. Como Funciona — pendente
+## 4. Como Funciona
 
-**Status:** ⚪ Placeholder.
+**Status:** 🟢 Implementado e alinhado à composição do print.
 
-- Título + subtítulo.
-- Grid 2×3 de 6 itens (Coleta, Capacitação, Produção / Design, Comercialização, Escala), cada um
-  com ícone circular de linha + título + descrição curta — precisa de ícones SVG próprios (linha
-  fina, dentro de um círculo), nenhum existe hoje no projeto.
-- Fundo branco.
+- Título "COMO FUNCIONA" + subtítulo "TUDO COMEÇA COM AQUILO QUE MUITOS DEIXAM PARA TRÁS.".
+- Grid 3×2 de 6 etapas: Coleta, Capacitação, Produção / Design, Comercialização e Escala.
+- Cada card usa fundo cinza muito claro, cantos arredondados, ícone linear verde, título em caixa
+  alta e descrição centralizada.
+- Fundo `#f8f8f8` em continuidade com as seções anteriores e coluna central responsiva; o grid
+  passa para 2 colunas abaixo de 700px e para 1
+  coluna abaixo de 400px.
 
----
+### Gap de conteúdo ainda aberto
 
-## 5. Onde Estamos — pendente
-
-**Status:** ⚪ Placeholder. Seção mais complexa das que faltam.
-
-- **Única seção com inversão de cor**: fundo verde escuro, texto branco.
-- Título + parágrafos sobre a origem em Pedra Furada / Santa Luzia do Itanhy (SE).
-- Linha de 4 números de impacto (toneladas processadas, cooperativas criadas, artesãs formadas —
-  os dois últimos rótulos aparecem iguais no print, "ARTESÃS FORMADAS" duas vezes; possível erro
-  do mockup, confirmar copy real antes de implementar).
-- **Mapa do Brasil ilustrado** com estados destacados em laranja (Maranhão, Ceará, Rio Grande do
-  Norte, Sergipe, Bahia) contra o restante em verde — não existe asset de mapa nem SVG no projeto
-  hoje; vai precisar ser criado ou obtido do zero.
+- Os SVGs proprietários do design oficial não estão disponíveis. A implementação usa equivalentes
+  do `lucide-react` com traço fino e `aria-hidden`, prontos para substituição futura sem alterar a
+  estrutura dos cards.
 
 ---
 
-## 6. Produtos — pendente
+## 5. Onde Estamos
 
-**Status:** ⚪ Placeholder.
+**Status:** 🟢 Implementado e alinhado à composição do print.
 
-- Título + parágrafo (mesmo tratamento textual das demais seções).
-- Grid de 4 cards de produto (foto quadrada + nome + preço).
-- Link "VER TODOS →" alinhado à direita — CTA secundário (link, não botão preenchido).
-- Fundo branco.
+- Fundo verde-acinzentado claro com a textura granilite da landing sobreposta; título e texto em
+  tons escuros. A descrição anterior de fundo verde escuro foi corrigida após comparação com o
+  design oficial.
+- Título + três parágrafos sobre a origem em Pedra Furada / Santa Luzia do Itanhy (SE).
+- Título e texto compartilham o mesmo eixo esquerdo do Manifesto e da Oficina; métricas e mapa
+  permanecem centralizados abaixo dessa coluna.
+- Linha responsiva de 4 números de impacto: toneladas processadas, cooperativas criadas e dois
+  indicadores de artesãs formadas, preservando temporariamente os placeholders do mockup.
+- Mapa responsivo construído com a malha oficial das Unidades da Federação fornecida pela API do
+  IBGE e armazenada localmente em `src/assets/img/home/brazil_presence_map.svg`.
+- Maranhão, Ceará, Rio Grande do Norte, Bahia e Sergipe aparecem destacados em laranja; os demais
+  estados permanecem verdes. O SVG é renderizado diretamente, sem legendas externas, camadas,
+  perspectiva ou efeitos adicionais.
+
+### Gaps de conteúdo ainda abertos
+
+- Substituir `XXXX`, `XX`, `XXX` e `XXX` pelos indicadores reais.
+- Confirmar se os dois últimos rótulos devem mesmo repetir "ARTESÃS FORMADAS", como aparece no
+  mockup, ou se o quarto indicador terá outro nome.
 
 ---
 
-## 7. Fechamento (Closing Statement) — pendente
+## 6. Produtos — implementado
 
-**Status:** ⚪ Placeholder.
+**Status:** 🟢 Implementado conforme o layout de referência.
 
-- Texto de posicionamento de marca ao lado de uma foto de grupo/comunidade (diferente das fotos-
-  produto usadas nas demais seções).
-- Logo + tagline "Do descarte à permanência." — possivelmente já é o topo do `Footer` reaproveitado,
-  não uma seção própria; o corte do print não deixa claro o limite entre os dois. A confirmar
-  quando esta seção for trabalhada.
+- Chamada institucional em verde, seguida de dois parágrafos introdutórios.
+- Grid com os 4 primeiros produtos retornados pela API (foto quadrada, nome e preço).
+- Cards completos direcionam à página de detalhe de cada produto.
+- Link "VER TODOS →" alinhado à direita e direcionado ao catálogo.
+- Fundo branco com formas orgânicas decorativas nas bordas.
+- Em telas menores que 600 px, o catálogo passa de 4 para 2 colunas.
+
+---
+
+## 7. Fechamento (Closing Statement) — implementado
+
+**Status:** 🟢 Implementado conforme a composição final do layout de referência.
+
+- Texto de posicionamento da marca à esquerda e imagem comunitária à direita.
+- Assinatura com logotipo ZR0 e tagline "Do descarte à permanência.".
+- Fundo branco e largura central alinhada às demais seções da landing.
+- Em telas menores que 700 px, conteúdo e imagem passam a ocupar uma única coluna.
+
+### Gap de conteúdo ainda aberto
+
+- A foto exata do grupo adulto exibida no design oficial não está disponível no repositório. A
+  implementação reutiliza temporariamente `src/assets/img/about.png`, preservando o tema
+  comunitário e o recorte orgânico da referência.
