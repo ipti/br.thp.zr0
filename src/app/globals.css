@@ -55,6 +55,14 @@
     --primary-900: #024955;
 }
 
+/* Tokens de layout da Home/Landing (docs/feature/home-redesign) */
+:root {
+  --home-max-width: 1200px;
+  --home-gutter: clamp(1rem, 4vw, 5rem);
+  --home-section-space: clamp(3.5rem, 8vw, 7rem);
+  --header-height: 75px; /* medido via getBoundingClientRect() em src/components/header/header.tsx, não deduzível só pelo CSS */
+}
+
 /* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

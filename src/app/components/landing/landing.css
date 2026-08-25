@@ -1,0 +1,14 @@
+:root {
+  --landing-blob-green: #8b9a72;
+  --landing-blob-tan: #d9c9a8;
+}
+
+.landing-content {
+  width: min(100% - (2 * var(--home-gutter)), var(--home-max-width));
+  margin-inline: auto;
+}
+
+.landing-section {
+  padding-block: var(--home-section-space);
+  scroll-margin-top: var(--header-height);
+}
