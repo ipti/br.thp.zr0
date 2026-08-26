@@ -178,6 +178,10 @@
 }
 
 @media (max-width: 599px) {
+  .landing-products-showcase__pingos {
+    opacity: 0.22;
+  }
+
   .landing-products-showcase__intro {
     margin-bottom: 3rem;
   }
