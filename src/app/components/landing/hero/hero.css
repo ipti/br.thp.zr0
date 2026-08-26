@@ -1,0 +1,132 @@
+.landing-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: clamp(164px, 34vw, 650px);
+  background-color: #ede7da;
+  background-image: url('../../../../assets/img/home/hero/hero_texture.png');
+  background-position: center;
+  background-size: cover;
+}
+
+.landing-hero__blobs {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.landing-hero__blob {
+  position: absolute;
+  opacity: 0.4;
+}
+
+.landing-hero__blob--green {
+  width: clamp(72px, 15vw, 280px);
+  aspect-ratio: 200 / 160;
+  top: 10%;
+  left: 5%;
+  fill: var(--landing-blob-green);
+}
+
+.landing-hero__blob--tan {
+  width: clamp(58px, 12vw, 220px);
+  aspect-ratio: 200 / 160;
+  right: 8%;
+  bottom: 5%;
+  fill: var(--landing-blob-tan);
+  transform: scaleX(-1);
+}
+
+.landing-hero__grid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 30fr) minmax(0, 43fr) minmax(0, 27fr);
+  align-items: end;
+  width: 100%;
+  max-width: 1920px;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
+.landing-hero__text {
+  grid-column: 2;
+  align-self: center;
+  text-align: center;
+  transform: translate(-20%, 12%);
+}
+
+.landing-hero__media {
+  position: relative;
+  min-width: 0;
+}
+
+.landing-hero__media--person {
+  grid-column: 1;
+  grid-row: 1;
+  width: 165%;
+  justify-self: start;
+  transform: none;
+}
+
+.landing-hero__media--product {
+  grid-column: 3;
+  grid-row: 1;
+  width: 115%;
+  justify-self: end;
+  transform: none;
+}
+
+.landing-hero__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.landing-hero__title {
+  /* max-width: 14ch; */
+  margin-inline: auto;
+  color: #111;
+  font-family: 'Hurme Geometric Sans 1', Arial, Helvetica, sans-serif;
+  font-size: clamp(1.02rem, 4.25vw, 5.1rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+@media (max-width: 599px) {
+  .landing-hero {
+    min-height: clamp(156px, 43vw, 210px);
+  }
+
+  .landing-hero__grid {
+    grid-template-columns: minmax(0, 28fr) minmax(0, 48fr) minmax(0, 24fr);
+    padding-inline: 0;
+  }
+
+  .landing-hero__text {
+    transform: translate(-6%, 8%);
+  }
+
+  .landing-hero__media--person {
+    width: 185%;
+    transform: none;
+  }
+
+  .landing-hero__media--product {
+    width: 128%;
+    justify-self: end;
+    transform: none;
+  }
+
+  .landing-hero__title {
+    max-width: 17ch;
+    font-size: clamp(0.95rem, 4.7vw, 1.25rem);
+    letter-spacing: -0.04em;
+  }
+}
