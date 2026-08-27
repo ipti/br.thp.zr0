@@ -55,6 +55,7 @@ export default function WorkshopShowcase() {
           className="landing-workshop-showcase__gallery"
           role="list"
           aria-label="Registros das Oficinas de Transformação"
+          tabIndex={0}
         >
           {workshopImages.map((image) => (
             <figure className="landing-workshop-showcase__media" role="listitem" key={image.alt}>
