@@ -1,5 +1,6 @@
 import type { ProductList } from '@/app/seller/product/type'
 import Link from 'next/link'
+import pingos from '@/assets/img/home/pingos.svg'
 import './products_showcase.css'
 
 type ProductsShowcaseProps = {
@@ -21,18 +22,43 @@ export default function ProductsShowcase({
       className="landing-products-showcase landing-section"
       aria-labelledby="landing-products-title"
     >
-      <span
-        className="landing-products-showcase__shape landing-products-showcase__shape--top"
-        aria-hidden="true"
-      />
-      <span
-        className="landing-products-showcase__shape landing-products-showcase__shape--middle"
-        aria-hidden="true"
-      />
-      <span
-        className="landing-products-showcase__shape landing-products-showcase__shape--bottom"
-        aria-hidden="true"
-      />
+      <div className="landing-products-showcase__decor" aria-hidden="true">
+        <svg
+          className="landing-products-showcase__pingos"
+          viewBox="0 0 1920 1980"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <defs>
+            <filter
+              id="landing-products-showcase-palette"
+              x="0"
+              y="0"
+              width="1920"
+              height="1980"
+              filterUnits="userSpaceOnUse"
+              colorInterpolationFilters="sRGB"
+            >
+              <feColorMatrix
+                type="matrix"
+                values="0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0 0 0 1 0"
+              />
+              <feComponentTransfer>
+                <feFuncR type="linear" slope="0.781" intercept="0.257" />
+                <feFuncG type="linear" slope="0.469" intercept="0.431" />
+                <feFuncB type="linear" slope="0.541" intercept="0.247" />
+              </feComponentTransfer>
+            </filter>
+          </defs>
+          <image
+            href={pingos.src}
+            width="1920"
+            height="1980"
+            preserveAspectRatio="none"
+            filter="url(#landing-products-showcase-palette)"
+          />
+        </svg>
+      </div>
 
       <div className="landing-products-showcase__inner landing-content">
         <div className="landing-products-showcase__intro">

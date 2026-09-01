@@ -57,6 +57,10 @@
 }
 
 @media (max-width: 599px) {
+  .landing-manifesto__pingos {
+    opacity: 0.22;
+  }
+
   .landing-manifesto__title {
     font-size: clamp(1.75rem, 8.2vw, 2.2rem);
   }

@@ -106,26 +106,67 @@
 @media (max-width: 599px) {
   .landing-workshop-showcase__card {
     width: calc(100% - 2rem);
+    padding-block: 2.25rem;
   }
 
   .landing-workshop-showcase__header,
   .landing-workshop-showcase__body {
-    width: calc(100% - 2.5rem);
+    width: calc(100% - 2rem);
+  }
+
+  .landing-workshop-showcase__header {
+    margin-bottom: 1.75rem;
+  }
+
+  .landing-workshop-showcase__eyebrow {
+    margin-bottom: 0.65rem;
+    font-size: 0.7rem;
   }
 
   .landing-workshop-showcase__title {
-    font-size: clamp(1.45rem, 6vw, 1.75rem);
+    font-size: clamp(1.65rem, 7.2vw, 2rem);
+    line-height: 1.03;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .landing-workshop-showcase__title span {
+    display: inline;
+  }
+
+  .landing-workshop-showcase__title span:not(:last-child)::after {
+    content: ' ';
   }
 
   .landing-workshop-showcase__gallery {
-    grid-auto-columns: 46vw;
+    grid-auto-columns: clamp(11rem, 72vw, 17rem);
     grid-template-columns: none;
     grid-auto-flow: column;
-    height: 46vw;
-    overflow: hidden;
+    gap: 0.75rem;
+    height: clamp(11rem, 72vw, 17rem);
+    margin-bottom: 2.25rem;
+    padding-inline: 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    scroll-padding-inline: 1rem;
+    scroll-snap-type: inline mandatory;
+    scrollbar-color: #8b9a72 transparent;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .landing-workshop-showcase__gallery:focus-visible {
+    outline: 2px solid #10594f;
+    outline-offset: 3px;
+  }
+
+  .landing-workshop-showcase__media {
+    scroll-snap-align: start;
   }
 
   .landing-workshop-showcase__body p {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    line-height: 1.65;
   }
 }
