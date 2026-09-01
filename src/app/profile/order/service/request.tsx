@@ -1,44 +1,33 @@
-import http from "@/service/axios";
-import { logout } from "@/service/cookies";
+import http from '@/service/axios'
+import { logout } from '@/service/cookies'
+import type { OrderUpdate } from './types'
 
-export const requestOrderUser = () => {
-    let path = "/user-bff/order";
-    return http
-        .get(path)
-        .then((response) => response.data)
-        .catch((err) => {
-            if (err.response.status === 401) {
-                logout();
-                window.location.reload();
-            }
-            throw err;
-        });
-};
+function handleUnauthorized(error: unknown) {
+  const status = (error as { response?: { status?: number } }).response?.status
+  if (status === 401) {
+    logout()
+    window.location.reload()
+  }
+  throw error
+}
 
-export const requestOrderOne = (idOne?: string) => {
-    let path = "/orders/"+idOne;
-    if(idOne){return http
-        .get(path)
-        .then((response) => response.data)
-        .catch((err) => {
-            if (err.response.status === 401) {
-                logout();
-                window.location.reload();
-            }
-            throw err;
-        });}
-};
+export const requestOrderUser = () =>
+  http
+    .get('/user-bff/order')
+    .then(response => response.data)
+    .catch(handleUnauthorized)
 
-export const requestOrderUpdate = (idOne?: string, body: OrderUpdate ) => {
-    let path = "/orders/"+idOne;
-    if(idOne){return http
-        .patch(path, body)
-        .then((response) => response.data)
-        .catch((err) => {
-            if (err.response.status === 401) {
-                logout();
-                window.location.reload();
-            }
-            throw err;
-        });}
-};
+export const requestOrderOne = (id?: string) => {
+  if (!id) return undefined
+
+  return http
+    .get(`/orders/${id}`)
+    .then(response => response.data)
+    .catch(handleUnauthorized)
+}
+
+export const requestOrderUpdate = (id: string, body: OrderUpdate) =>
+  http
+    .patch(`/orders/${id}`, body)
+    .then(response => response.data)
+    .catch(handleUnauthorized)

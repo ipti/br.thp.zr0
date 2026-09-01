@@ -1,5 +1,7 @@
 .orders-page {
   display: flex;
+  width: min(100%, 74rem);
+  margin-inline: auto;
   flex-direction: column;
   gap: 1.5rem;
   padding-bottom: 2rem;
@@ -45,16 +47,13 @@
 
 .orders-page__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-@media (max-width: 1200px) {
-  .orders-page__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 28rem), 1fr));
+  align-items: stretch;
+  gap: 1.25rem;
 }
 
 @media (max-width: 760px) {
   .orders-page__toolbar { grid-template-columns: 1fr; }
   .orders-page__count { justify-self: start; }
-  .orders-page__grid { grid-template-columns: 1fr; }
+  .orders-page__grid { grid-template-columns: minmax(0, 1fr); }
 }

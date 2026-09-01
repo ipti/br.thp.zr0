@@ -273,5 +273,5 @@ export interface Count {
 
 export interface OrderUpdate{
     status: string,
-    payment_status: string
+    payment_status?: string
 }

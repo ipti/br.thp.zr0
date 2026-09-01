@@ -18,8 +18,10 @@ export interface ZTimelineProps {
 export function ZTimeline({ items, direction = 'vertical', activeStep = 0 }: ZTimelineProps) {
     return (
         <div className={`z-timeline z-timeline--${direction}`}>
-            {items.map((item, index) => (
-                <div key={item.id} className="z-timeline__item">
+            {items.map((item, index) => {
+                const connectorCompleted = item.status === 'completed' || (!item.status && index < activeStep)
+
+                return <div key={item.id} className="z-timeline__item">
                     <div className="z-timeline__content">
                         <div
                             className={`z-timeline__icon z-timeline__icon--${item.status || (index <= activeStep ? 'completed' : 'pending')}`}
@@ -35,14 +37,14 @@ export function ZTimeline({ items, direction = 'vertical', activeStep = 0 }: ZTi
                         </div>
                     </div>
                     <div
-                        className={`z-timeline__connector z-timeline__connector--${index < activeStep ? 'completed' : 'pending'}`}
+                        className={`z-timeline__connector z-timeline__connector--${connectorCompleted ? 'completed' : 'pending'}`}
                         style={{
-                            backgroundColor: index < activeStep ? (items[index].color || '#1e40af') : '#e5e7eb'
+                            backgroundColor: connectorCompleted ? (items[index].color || '#1e40af') : '#e5e7eb'
                         }}
                     />
 
                 </div>
-            ))}
+            })}
         </div>
     )
 }

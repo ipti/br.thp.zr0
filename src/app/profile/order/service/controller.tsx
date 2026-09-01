@@ -6,17 +6,17 @@ import { OrderUpdate } from "./types"
 export function OrderController() {
 
     function OrderUpdateAction(id: string, body: OrderUpdate) {
-        requestOrderUpdate(id, body).then(data => {
+        return requestOrderUpdate(id, body).then(() => {
             Swal.fire({
                 title: "Pedido atualizado!",
                 icon: "success",
 
             })
-            queryClient.refetchQueries('useRequestOrderOne')
-            queryClient.refetchQueries('useRequestOrderTransformationWorkshop')
+            queryClient.refetchQueries(['useRequestOrderOne'])
+            queryClient.refetchQueries(['useRequestOrderTransformationWorkshop'])
         }).catch(erros => {
             Swal.fire({
-                title: erros.response.data.message,
+                title: erros.response?.data?.message ?? 'Não foi possível atualizar o pedido.',
                 icon: "error",
 
             })

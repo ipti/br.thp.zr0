@@ -1,4 +1,3 @@
-import { OrderItem } from "@/app/order/service/types";
 import { orderStatus } from "@/utils/enum/order_status";
 import { TimelineItem, ZTimeline } from "../timeline/timeline";
 import './order.css';
@@ -13,8 +12,8 @@ function buildOrderTimeline(
     isEncomenda: boolean,
 ): TimelineItem[] {
     const timeline: TimelineItem[] = [
-        { label: 'Pedido efeturado', id: 1, icon: <i className="pi pi-cart-arrow-down" />, status: 'completed' },
-        { label: 'Pedido pago', id: 2, icon: <i className="pi pi-truck" />, status: ['PAID'].includes(paymentStatus) ? 'completed' : 'pending' },
+        { label: 'Pedido realizado', id: 1, icon: <i className="pi pi-shopping-bag" />, status: 'completed' },
+        { label: 'Pagamento confirmado', id: 2, icon: <i className="pi pi-credit-card" />, status: ['PAID'].includes(paymentStatus) ? 'completed' : 'pending' },
     ]
 
     if (isEncomenda) {
@@ -28,8 +27,8 @@ function buildOrderTimeline(
     }
 
     timeline.push(
-        { label: 'Pedido Enviado', id: 3, icon: <i className="pi pi-wallet" />, status: ['SHIPPED', 'COMPLETED'].includes(itemStatus) ? 'completed' : 'pending' },
-        { label: 'Pedido finalizado', id: 4, icon: <i className="pi pi-check-circle" />, status: ['COMPLETED'].includes(itemStatus) ? 'completed' : 'pending' },
+        { label: 'Pedido enviado', id: 3, icon: <i className="pi pi-truck" />, status: ['SHIPPED', 'COMPLETED'].includes(itemStatus) ? 'completed' : 'pending' },
+        { label: 'Pedido entregue', id: 4, icon: <i className="pi pi-check-circle" />, status: ['COMPLETED'].includes(itemStatus) ? 'completed' : 'pending' },
     )
 
     return timeline
@@ -50,10 +49,10 @@ export function Order({ order }: { order: OrderOneType }) {
 
         const timeline = buildOrderTimeline(order.payment_status, onlyOrderOne.status, isEncomenda)
 
-        const timelineCancelled: TimelineItem[] = [{ label: 'Pedido efeturado', id: 1, icon: <i className="pi pi-cart-arrow-down" />, status: 'completed' }, { label: 'Pedido Cancelado', id: 2, icon: <i className="pi pi-times" />, status: ['CANCELLED'].includes(onlyOrderOne.status) ? 'completed' : 'pending', color: 'red' },]
+        const timelineCancelled: TimelineItem[] = [{ label: 'Pedido realizado', id: 1, icon: <i className="pi pi-shopping-bag" />, status: 'completed' }, { label: 'Pedido cancelado', id: 2, icon: <i className="pi pi-times" />, status: ['CANCELLED'].includes(onlyOrderOne.status) ? 'completed' : 'pending', color: 'red' },]
         const delivery = onlyOrderOne?.order_item[0]?.delivery_estimate;
         const totalProducts = onlyOrderOne?.order_item.reduce(
-            (acc: number, item: any) => acc + item.quantity,
+            (acc, item) => acc + item.quantity,
             0
         );
 
@@ -121,16 +120,16 @@ export function Order({ order }: { order: OrderOneType }) {
                             <section className="order-section">
                                 <h3>Itens do Pedido ({totalProducts})</h3>
                                 <ul>
-                                    {item.order_item.map((item: any) => (
-                                        <li key={item.id}>
+                                    {item.order_item.map(orderItem => (
+                                        <li key={orderItem.id}>
                                             <div className="item-info">
-                                                <strong>{item.product.name}</strong>
-                                                <p>{item.product.description}</p>
+                                                <strong>{orderItem.product.name}</strong>
+                                                <p>{orderItem.product.description}</p>
                                             </div>
                                             <div className="item-details">
-                                                <p>Qtd: {item.quantity}</p>
-                                                <p>Preço Unitário: R$ {item.unit_price.toFixed(2)}</p>
-                                                <p>Total: R$ {item.total_price.toFixed(2)}</p>
+                                                <p>Qtd: {orderItem.quantity}</p>
+                                                <p>Preço Unitário: R$ {orderItem.unit_price.toFixed(2)}</p>
+                                                <p>Total: R$ {orderItem.total_price.toFixed(2)}</p>
                                             </div>
                                         </li>
                                     ))}
@@ -173,10 +172,10 @@ export function Order({ order }: { order: OrderOneType }) {
 
                         const timeline = buildOrderTimeline(order.payment_status, item.status, isEncomenda)
 
-                        const timelineCancelled: TimelineItem[] = [{ label: 'Pedido efeturado', id: 1, icon: <i className="pi pi-cart-arrow-down" />, status: 'completed' }, { label: 'Pedido Cancelado', id: 2, icon: <i className="pi pi-times" />, status: ['CANCELLED'].includes(item.status) ? 'completed' : 'pending', color: 'red' },]
+                        const timelineCancelled: TimelineItem[] = [{ label: 'Pedido realizado', id: 1, icon: <i className="pi pi-shopping-bag" />, status: 'completed' }, { label: 'Pedido cancelado', id: 2, icon: <i className="pi pi-times" />, status: ['CANCELLED'].includes(item.status) ? 'completed' : 'pending', color: 'red' },]
                         const delivery = item?.order_item[0]?.delivery_estimate;
                         const totalProducts = item?.order_item.reduce(
-                            (acc: number, item: any) => acc + item.quantity,
+                            (acc, orderItem) => acc + orderItem.quantity,
                             0
                         );
                         return (
@@ -232,16 +231,16 @@ export function Order({ order }: { order: OrderOneType }) {
                                     <section className="order-section">
                                         <h3>Itens do Pedido ({totalProducts})</h3>
                                         <ul>
-                                            {item.order_item.map((item: any) => (
-                                                <li key={item.id}>
+                                            {item.order_item.map(orderItem => (
+                                                <li key={orderItem.id}>
                                                     <div className="item-info">
-                                                        <strong>{item.product.name}</strong>
-                                                        <p>{item.product.description}</p>
+                                                        <strong>{orderItem.product.name}</strong>
+                                                        <p>{orderItem.product.description}</p>
                                                     </div>
                                                     <div className="item-details">
-                                                        <p>Qtd: {item.quantity}</p>
-                                                        <p>Preço Unitário: R$ {item.unit_price.toFixed(2)}</p>
-                                                        <p>Total: R$ {item.total_price.toFixed(2)}</p>
+                                                        <p>Qtd: {orderItem.quantity}</p>
+                                                        <p>Preço Unitário: R$ {orderItem.unit_price.toFixed(2)}</p>
+                                                        <p>Total: R$ {orderItem.total_price.toFixed(2)}</p>
                                                     </div>
                                                 </li>
                                             ))}
