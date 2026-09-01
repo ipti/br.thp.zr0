@@ -17,6 +17,7 @@ import './order.css'
 const PAYMENT_OPTIONS = [
   { label: 'Todos os pagamentos', value: 'ALL' },
   { label: 'Pagamento pendente', value: 'PENDING' },
+  { label: 'Pagamento em processamento', value: 'PROCESSING' },
   { label: 'Pagamento aprovado', value: 'PAID' },
   { label: 'Falha no pagamento', value: 'FAILED' },
   { label: 'Pagamento estornado', value: 'REFUNDED' },

@@ -248,7 +248,7 @@ export default function PaymentComponent() {
               <CheckoutComponent
                 clientSecret={paymentIntent.client_secret}
                 orderId={order.id}
-                onConfirmed={async () => refetchPayment()}
+                onConfirmed={async () => refetchOrder()}
               />
             )}
           </aside>

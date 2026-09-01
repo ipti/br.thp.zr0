@@ -25,9 +25,8 @@
   font-size: clamp(1.5rem, 3vw, 2rem);
 }
 
-.payment-heading h1:focus-visible {
-  outline: 3px solid #a74400;
-  outline-offset: 4px;
+.payment-heading h1:focus {
+  outline: none;
 }
 
 .payment-heading p,

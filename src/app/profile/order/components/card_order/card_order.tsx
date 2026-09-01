@@ -7,7 +7,8 @@ import './card_order.css'
 
 const PAYMENT_STATUS: Record<string, { label: string; icon: string; tone: string }> = {
   PENDING: { label: 'Pagamento pendente', icon: 'pi pi-clock', tone: 'warning' },
-  PAID: { label: 'Pagamento aprovado', icon: 'pi pi-check-circle', tone: 'success' },
+  PROCESSING: { label: 'Pagamento em processamento', icon: 'pi pi-spin pi-spinner', tone: 'info' },
+  PAID: { label: 'Pagamento confirmado', icon: 'pi pi-check-circle', tone: 'success' },
   FAILED: { label: 'Falha no pagamento', icon: 'pi pi-exclamation-circle', tone: 'danger' },
   REFUNDED: { label: 'Pagamento estornado', icon: 'pi pi-replay', tone: 'neutral' },
 }
@@ -25,11 +26,12 @@ const ORDER_STATUS: Record<string, string> = {
 function getCurrentOrderStatus(services: OrderService[]) {
   const statuses = services.map(service => service.status)
   if (statuses.includes('SOLITED_CANCELLATION')) return 'SOLITED_CANCELLATION'
-  if (statuses.includes('CANCELLED')) return 'CANCELLED'
+  if (statuses.length > 0 && statuses.every(status => status === 'CANCELLED')) return 'CANCELLED'
   if (statuses.length > 0 && statuses.every(status => status === 'COMPLETED')) return 'COMPLETED'
+  if (statuses.includes('PENDING')) return 'PENDING'
+  if (statuses.includes('CONFIRMED')) return 'CONFIRMED'
   if (statuses.includes('IN_PRODUCTION')) return 'IN_PRODUCTION'
   if (statuses.includes('SHIPPED')) return 'SHIPPED'
-  if (statuses.includes('CONFIRMED')) return 'CONFIRMED'
   return 'PENDING'
 }
 
@@ -90,6 +92,7 @@ export default function CardOrder({ item }: { item: Order }) {
           {products.slice(0, 3).map(orderItem => {
             const image = orderItem.product.product_image?.[0]?.img_url
             return image ? (
+              // eslint-disable-next-line @next/next/no-img-element
               <img key={orderItem.product.id} src={image} alt="" className="order-card__image" />
             ) : (
               <span className="order-card__image order-card__image--fallback" key={orderItem.product.id}>
@@ -102,9 +105,9 @@ export default function CardOrder({ item }: { item: Order }) {
           )}
         </div>
         <div className="order-card__product-copy">
-          <strong>{firstProduct ?? 'Itens do pedido'}</strong>
+          <strong>{firstProduct ?? 'Produtos não informados'}</strong>
           <span>
-            {quantity || 0} {quantity === 1 ? 'unidade' : 'unidades'}
+            {products.length === 0 ? 'Consulte os detalhes do pedido' : `${quantity} ${quantity === 1 ? 'unidade' : 'unidades'}`}
             {remainingProducts > 0 && ` · +${remainingProducts} ${remainingProducts === 1 ? 'produto' : 'produtos'}`}
           </span>
         </div>
