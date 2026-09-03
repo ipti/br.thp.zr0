@@ -4,12 +4,13 @@ import { renderWithProviders, resetAllStores } from '@/test/test-utils'
 import { useCartStore } from '@/service/store/cart_store'
 import { useCartStepsStore } from '@/app/cart/zustand/zustand'
 import { axe, toHaveNoViolations } from 'jest-axe'
-import { screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Finish from '../finish/finish'
 import CardAddress from '../card_address/card_address'
 import { CardDelivery } from '../delivery/card_delivery'
 import CartComponent from '../components'
+import { CREATED_ORDER_SESSION_KEY } from '@/app/profile/order/constants'
 
 expect.extend(toHaveNoViolations)
 
@@ -39,10 +40,17 @@ const user = {
 } as UserGlobal
 
 const mockCreateOrder = jest.fn()
+const mockPush = jest.fn()
+const mockReplace = jest.fn()
+let mockSearchParams = new URLSearchParams()
 
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({ push: jest.fn(), replace: jest.fn() }),
-  useSearchParams: () => new URLSearchParams()
+  useRouter: () => ({ push: mockPush, replace: mockReplace }),
+  useSearchParams: () => mockSearchParams
+}))
+
+jest.mock('@/app/auth/login/service/request', () => ({
+  GetMyCartRequest: () => Promise.resolve({ data: { items: [] } })
 }))
 
 jest.mock('@/service/global_request/query', () => ({
@@ -50,7 +58,13 @@ jest.mock('@/service/global_request/query', () => ({
 }))
 
 jest.mock('@/app/cart/service/query', () => ({
-  useFetchAddressOneRequest: () => ({ data: address, isLoading: false })
+  useFetchAddressOneRequest: () => ({ data: address, isLoading: false }),
+  useFetchProductOneQuantity: () => ({
+    data: { quantity: 10 },
+    isLoading: false,
+    isError: false,
+    refetch: jest.fn()
+  })
 }))
 
 jest.mock('@/app/cart/service/controller', () => ({
@@ -60,6 +74,11 @@ jest.mock('@/app/cart/service/controller', () => ({
 describe('acessibilidade do checkout', () => {
   beforeEach(() => {
     mockCreateOrder.mockClear()
+    mockPush.mockClear()
+    mockReplace.mockClear()
+    mockSearchParams = new URLSearchParams()
+    sessionStorage.clear()
+    localStorage.removeItem('token-zr0')
     resetAllStores()
     useCartStore.getState().setCart([{
       id: 'chair',
@@ -144,6 +163,23 @@ describe('acessibilidade do checkout', () => {
     const finishButton = screen.getByRole('button', { name: 'Finalizar pedido' })
     await userEvent.dblClick(finishButton)
     expect(mockCreateOrder).toHaveBeenCalledTimes(1)
+  })
+
+  it('redireciona a pronta entrega para o detalhe com aviso de pagamento', async () => {
+    localStorage.setItem('token-zr0', 'test-token')
+    mockSearchParams = new URLSearchParams('index=3')
+    renderWithProviders(<CartComponent />)
+
+    await screen.findByRole('heading', { name: 'Revise e confirme' })
+    await userEvent.click(screen.getByRole('button', { name: 'Finalizar pedido' }))
+
+    const successAction = mockCreateOrder.mock.calls[0][2] as (
+      orders: { id: number; uid: string }[]
+    ) => void
+    act(() => successAction([{ id: 34, uid: 'ZR-34' }]))
+
+    expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('34')
+    expect(mockPush).toHaveBeenCalledWith('/profile/order/34')
   })
 
   it('expõe cada opção de entrega como um único rádio nomeado', async () => {

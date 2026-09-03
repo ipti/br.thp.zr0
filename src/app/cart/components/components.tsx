@@ -10,9 +10,9 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Address from './address/address'
 import Finish from './finish/finish'
 import Delivery from './delivery/delivery'
-import Payment from './payment/payment'
 import { clampCheckoutStep, getLastAllowedStep } from '../utils'
 import { useCartStepsStore } from '../zustand/zustand'
+import { CREATED_ORDER_SESSION_KEY } from '@/app/profile/order/constants'
 import './components.css'
 
 type ApiCartItem = {
@@ -34,7 +34,6 @@ export default function CartComponent() {
   const index = searchParams.get('index')
 
   const [activeIndex, setActiveIndex] = useState(0)
-  const [orders, setOrders] = useState<{ id: number; uid: string }[]>([])
   const contentRef = useRef<HTMLElement>(null)
   const setCart = useCartStore(state => state.setCart)
   const cart = useCartStore(state => state.cart)
@@ -44,25 +43,25 @@ export default function CartComponent() {
   const lastAllowedStep = getLastAllowedStep({
     authenticated,
     cart,
-    progress: cartSteps,
-    hasOrders: orders.length > 0
+    progress: cartSteps
   })
 
   const handleActiveIndex = (i: number) => {
     const nextStep = clampCheckoutStep(i, getLastAllowedStep({
       authenticated: isAuthenticated(),
       cart: useCartStore.getState().cart,
-      progress: useCartStepsStore.getState().cartSteps,
-      hasOrders: orders.length > 0
+      progress: useCartStepsStore.getState().cartSteps
     }))
     setActiveIndex(nextStep)
     history.push('/cart?index=' + nextStep)
   }
 
   const handleSetOrders = (newOrders: { id: number; uid: string }[]) => {
-    setOrders(newOrders)
-    setActiveIndex(4)
-    history.push('/cart?index=4')
+    const order = newOrders[0]
+    if (!order) return
+
+    sessionStorage.setItem(CREATED_ORDER_SESSION_KEY, String(order.id))
+    history.push(`/profile/order/${order.id}`)
   }
 
   useEffect(() => {
@@ -112,7 +111,7 @@ export default function CartComponent() {
       .catch(() => {})
   }, [setCart])
 
-  const labels = ['Carrinho', 'Endereço', 'Entrega', 'Revisão', 'Pagamento']
+  const labels = ['Carrinho', 'Endereço', 'Entrega', 'Revisão']
   const items: MenuItem[] = labels.map((label, stepIndex) => ({
     label,
     disabled: stepIndex > lastAllowedStep
@@ -150,9 +149,6 @@ export default function CartComponent() {
             handleActiveIndex={handleActiveIndex}
             handleSetOrders={handleSetOrders}
           />
-        )}
-        {activeIndex === 4 && (
-          <Payment handleActiveIndex={handleActiveIndex} orders={orders} />
         )}
       </section>
     </div>

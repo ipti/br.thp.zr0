@@ -19,6 +19,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { SIMULATION_MODE_LABEL } from '../service/constants'
+import { CREATED_ORDER_SESSION_KEY } from '@/app/profile/order/constants'
 import { ProductionOrderController } from '../service/controller'
 import { useProductionOrderStore } from '../zustand/zustand'
 import './confirmation_review.css'
@@ -218,7 +219,7 @@ export default function Confirmation({
               )
               return
             }
-            sessionStorage.setItem('production-order-created', String(order.id))
+            sessionStorage.setItem(CREATED_ORDER_SESSION_KEY, String(order.id))
             reset()
             router.push(`/profile/order/${order.id}`)
           },

@@ -27,21 +27,19 @@ describe('cart checkout utils', () => {
       authenticated: true,
       cart,
       progress: { product_selected: ['chair'] },
-      hasOrders: false
     })
 
     expect(lastAllowed).toBe(1)
     expect(clampCheckoutStep(4, lastAllowed)).toBe(1)
   })
 
-  it('libera pagamento somente depois que o pedido foi criado', () => {
+  it('libera a revisão quando endereço e entrega foram preenchidos', () => {
     const progress = {
       product_selected: ['chair'],
       address_selected: 10,
       deliverySelected: [{}]
     }
 
-    expect(getLastAllowedStep({ authenticated: true, cart, progress, hasOrders: false })).toBe(3)
-    expect(getLastAllowedStep({ authenticated: true, cart, progress, hasOrders: true })).toBe(4)
+    expect(getLastAllowedStep({ authenticated: true, cart, progress })).toBe(3)
   })
 })
