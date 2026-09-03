@@ -7,6 +7,7 @@ import { renderWithProviders, resetAllStores } from '@/test/test-utils'
 import { ProductOne } from '@/app/seller/product/one/service/type'
 import ProductionOrderSteps from '../components'
 import { SCHOOL_PRODUCT_UID } from '@/test/fixtures/compra-por-encomenda'
+import { CREATED_ORDER_SESSION_KEY } from '@/app/profile/order/constants'
 
 const mockPush = jest.fn()
 jest.mock('next/navigation', () => ({
@@ -112,5 +113,6 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith('/profile/order/101')
     })
+    expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('101')
   })
 })

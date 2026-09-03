@@ -7,6 +7,7 @@ import OrderCard from "./card/card";
 import ZMessage from "@/components/message/message";
 import { ZButton } from "@/components/button/button";
 import ZSkeleton from "@/components/skeleton/skeleton";
+import { CREATED_ORDER_SESSION_KEY } from "../../constants";
 import "./components.css";
 
 export function OrderOneComponents() {
@@ -25,8 +26,10 @@ export function OrderOneComponents() {
       const currentId = id?.toString()
       if (!currentId) return
 
-      const createdOrderId = sessionStorage.getItem('production-order-created')
+      const createdOrderId = sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)
+        ?? sessionStorage.getItem('production-order-created')
       if (createdOrderId === currentId) {
+        sessionStorage.removeItem(CREATED_ORDER_SESSION_KEY)
         sessionStorage.removeItem('production-order-created')
         setOrderCreated(true)
       }
@@ -34,10 +37,10 @@ export function OrderOneComponents() {
     
     return(
         <div>
-           {orderCreated ? (
+           {orderCreated && order && ['PENDING', 'FAILED'].includes(order.payment_status) ? (
             <ZMessage
               severity="success"
-              text="Pedido realizado com sucesso! Agora você pode efetuar o pagamento."
+              text="Pedido criado com sucesso! Falta uma etapa: realize o pagamento para confirmar sua compra."
               className="order-created-message"
             />
            ) : null}

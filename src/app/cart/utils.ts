@@ -1,6 +1,6 @@
 import { CartItem } from '@/service/store/type'
 
-export type CheckoutStep = 0 | 1 | 2 | 3 | 4
+export type CheckoutStep = 0 | 1 | 2 | 3
 
 export interface CheckoutProgress {
   address_selected?: number
@@ -39,13 +39,11 @@ export const sanitizeSelectedIds = (
 export const getLastAllowedStep = ({
   authenticated,
   cart,
-  progress,
-  hasOrders
+  progress
 }: {
   authenticated: boolean
   cart: CartItem[]
   progress: CheckoutProgress
-  hasOrders: boolean
 }): CheckoutStep => {
   const selectedItems = getSelectedCartItems(cart, progress.product_selected)
 
@@ -57,8 +55,7 @@ export const getLastAllowedStep = ({
   ) {
     return 2
   }
-  if (!hasOrders) return 3
-  return 4
+  return 3
 }
 
 export const clampCheckoutStep = (
