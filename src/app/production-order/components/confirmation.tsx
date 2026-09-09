@@ -221,7 +221,7 @@ export default function Confirmation({
             }
             sessionStorage.setItem(CREATED_ORDER_SESSION_KEY, String(order.id))
             reset()
-            router.push(`/profile/order/${order.id}`)
+            router.push(`/payment?id=${order.id}`)
           },
           setLoading,
           handleSubmissionError,

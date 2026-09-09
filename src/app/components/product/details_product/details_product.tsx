@@ -71,31 +71,22 @@ export const DetailsProduct = ({
       {/* Ações */}
 
       <div className="btn-wrapper">
-        {!home && (
-          <>
-            {item?.quantity === 0 ? (
-              <div className="gap-2 flex flex-row">
-                <i className="pi pi-ban flex flex-column justify-content-center"></i>
-                <p>Sem estoque</p>
-              </div>
-            ) : (
-              <div className={'quantity'}>
-                <button
-                  onClick={() => handleQuantityChange(-1)}
-                  disabled={quantity <= 1}
-                >
-                  -
-                </button>
-                <span>{quantity}</span>
-                <button
-                  disabled={!((item?.quantity ?? 0) > quantity)}
-                  onClick={() => handleQuantityChange(1)}
-                >
-                  +
-                </button>
-              </div>
-            )}
-          </>
+        {!home && item?.quantity !== 0 && (
+          <div className={'quantity'}>
+            <button
+              onClick={() => handleQuantityChange(-1)}
+              disabled={quantity <= 1}
+            >
+              -
+            </button>
+            <span>{quantity}</span>
+            <button
+              disabled={!((item?.quantity ?? 0) > quantity)}
+              onClick={() => handleQuantityChange(1)}
+            >
+              +
+            </button>
+          </div>
         )}
       </div>
       {!home && (item.quantity ?? 0) > 0 && (
@@ -123,13 +114,15 @@ export const DetailsProduct = ({
           }
         }}
         disabled={item?.quantity === 0}
-        className="btn-buy"
+        className={`btn-buy${!home && item?.quantity === 0 ? ' btn-buy--disabled' : ''}`}
       >
-        {isMobile
-          ? ''
-          : home
-            ? 'Ver detalhes'
-            : 'Adicionar ao carrinho'}
+        {!home && item?.quantity === 0
+          ? 'Indisponível'
+          : isMobile
+            ? ''
+            : home
+              ? 'Ver detalhes'
+              : 'Adicionar ao carrinho'}
       </ZButton>
       {!home && (
         <ZButton

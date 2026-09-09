@@ -165,7 +165,7 @@ describe('acessibilidade do checkout', () => {
     expect(mockCreateOrder).toHaveBeenCalledTimes(1)
   })
 
-  it('redireciona a pronta entrega para o detalhe com aviso de pagamento', async () => {
+  it('redireciona a pronta entrega para o pagamento do pedido criado', async () => {
     localStorage.setItem('token-zr0', 'test-token')
     mockSearchParams = new URLSearchParams('index=3')
     renderWithProviders(<CartComponent />)
@@ -179,7 +179,30 @@ describe('acessibilidade do checkout', () => {
     act(() => successAction([{ id: 34, uid: 'ZR-34' }]))
 
     expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('34')
-    expect(mockPush).toHaveBeenCalledWith('/profile/order/34')
+    expect(mockPush).toHaveBeenCalledWith('/payment?id=34')
+  })
+
+  it('não volta para o carrinho quando o pedido esvazia o carrinho antes do redirecionamento', async () => {
+    localStorage.setItem('token-zr0', 'test-token')
+    mockSearchParams = new URLSearchParams('index=3')
+    renderWithProviders(<CartComponent />)
+
+    await screen.findByRole('heading', { name: 'Revise e confirme' })
+    await userEvent.click(screen.getByRole('button', { name: 'Finalizar pedido' }))
+
+    const successAction = mockCreateOrder.mock.calls[0][2] as (
+      orders: { id: number; uid: string }[]
+    ) => void
+
+    // Reproduz a ordem real do controller: o item comprado sai do carrinho
+    // antes do callback de sucesso navegar para o pagamento.
+    act(() => {
+      useCartStore.getState().removeItem('chair')
+      successAction([{ id: 34, uid: 'ZR-34' }])
+    })
+
+    expect(mockPush).toHaveBeenCalledWith('/payment?id=34')
+    expect(mockReplace).not.toHaveBeenCalledWith('/cart?index=0')
   })
 
   it('expõe cada opção de entrega como um único rádio nomeado', async () => {

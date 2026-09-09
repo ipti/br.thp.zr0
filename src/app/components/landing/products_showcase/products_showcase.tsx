@@ -91,6 +91,7 @@ export default function ProductsShowcase({
             <ul className="landing-products-showcase__grid">
               {featuredProducts.map((product) => {
                 const imageUrl = product.product_image?.[0]?.img_url
+                const outOfStock = typeof product.quantity === 'number' && product.quantity <= 0
 
                 return (
                   <li key={product.uid} className="landing-products-showcase__item">
@@ -99,6 +100,11 @@ export default function ProductsShowcase({
                       className="landing-products-showcase__card"
                     >
                       <span className="landing-products-showcase__media">
+                        {outOfStock && (
+                          <span className="landing-products-showcase__badge">
+                            Indisponível · só sob encomenda
+                          </span>
+                        )}
                         {imageUrl ? (
                           <img
                             className="landing-products-showcase__image"

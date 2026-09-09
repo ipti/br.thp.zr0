@@ -272,6 +272,7 @@ export interface Count {
 }
 
 export interface OrderUpdate{
-    status: string,
-    payment_status?: string
+    status?: string,
+    payment_status?: string,
+    payment_method?: 'PIX' | 'CREDIT_CARD' | 'BANK_SLIP'
 }
