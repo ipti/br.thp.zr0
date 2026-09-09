@@ -83,11 +83,18 @@ export default function PaymentComponent() {
 
   return (
     <main className="payment-page">
+      <Link href={`/profile/order/${order.id}`} className="payment-back-link">
+        <i className="pi pi-arrow-left" aria-hidden="true" /> Voltar para o pedido
+      </Link>
+
       <header className="payment-heading">
         <div>
           <span>Pedido {order.uid}</span>
           <h1 ref={headingRef} tabIndex={-1}>Pagamento</h1>
           <p>Confira o pedido e conclua o pagamento com segurança.</p>
+          <div className="payment-heading-links">
+            <Link href="/profile/order">Ver meus pedidos</Link>
+          </div>
         </div>
         <div className="payment-heading-total">
           <strong>{formatCurrency(order.total_amount)}</strong>

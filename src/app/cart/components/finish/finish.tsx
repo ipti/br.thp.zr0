@@ -331,12 +331,12 @@ export default function Finish({
               <strong>{formatCurrency(orderTotal - couponDiscount)}</strong>
             </div>
 
-            <p className="checkout-confirmation-note">
+            <p className="checkout-confirmation-note ">
               Ao finalizar, você confirma que revisou os produtos, o endereço, a entrega e a forma de pagamento.
             </p>
             <ZButton
               label="Finalizar pedido"
-              style={{ width: '100%' }}
+              style={{ width: '100%', marginTop: '1rem' }}
               loading={isLoadingFinish}
               disabled={isLoadingReview || isLoadingFinish}
               onClick={handleCreateOrder}

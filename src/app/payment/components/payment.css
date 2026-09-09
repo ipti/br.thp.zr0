@@ -35,6 +35,33 @@
   color: #5f6672;
 }
 
+.payment-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #5f6672;
+}
+
+.payment-back-link:hover {
+  text-decoration: underline;
+}
+
+.payment-heading-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.payment-heading-links a {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
 .payment-heading-total {
   display: grid;
   text-align: right;

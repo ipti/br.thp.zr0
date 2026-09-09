@@ -394,6 +394,62 @@
 .order-summary-card__list dd { margin: 0; font-size: 0.85rem; font-weight: 700; text-align: right; }
 .order-summary-card__button { width: 100%; margin-top: 1rem; }
 
+.order-summary-card__payment-method-row dd {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+}
+
+.order-summary-card__change-payment {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #f07724;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.order-summary-card__payment-options {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+  padding: 0.75rem 0 0;
+  border: none;
+  border-top: 1px solid #e5e9e6;
+}
+
+.order-summary-card__payment-options legend {
+  padding: 0 0 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #202623;
+}
+
+.order-summary-card__payment-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid #e5e9e6;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.order-summary-card__payment-option.is-selected {
+  border-color: #f07724;
+  background: rgba(240, 119, 36, 0.06);
+}
+
+.order-summary-card__payment-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 .order-summary-card__title {
   display: flex;
   align-items: center;

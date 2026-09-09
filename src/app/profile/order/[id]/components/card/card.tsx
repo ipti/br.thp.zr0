@@ -4,11 +4,20 @@ import { useRouter } from 'next/navigation'
 import React, { useMemo, useState } from 'react'
 import { ZButton } from '@/components/button/button'
 import ZConfirmDialog from '@/components/confirm_dialog/confirm_dialog'
+import ZRadioButton from '@/components/radio_button/radio_button'
 import { ZSaleTypeBadge } from '@/components/badge/sale_type_badge'
 import type { OrderOneType, OrderService } from '../../../service/types'
 import { OrderController } from '../../../service/controller'
 import { OrderReviews } from './order_reviews'
 import './card.css'
+
+type PaymentMethodOption = 'PIX' | 'CREDIT_CARD' | 'BANK_SLIP'
+
+const PAYMENT_METHOD_OPTIONS: Array<{ value: PaymentMethodOption; label: string }> = [
+  { value: 'PIX', label: 'PIX' },
+  { value: 'CREDIT_CARD', label: 'Cartão de crédito' },
+  { value: 'BANK_SLIP', label: 'Boleto bancário' }
+]
 
 interface OrderProps {
   order: OrderOneType
@@ -185,6 +194,11 @@ function ShipmentCard({ service, index }: { service: OrderService; index: number
 
 const OrderCard: React.FC<OrderProps> = ({ order }) => {
   const [cancelDialogVisible, setCancelDialogVisible] = useState(false)
+  const [editingPayment, setEditingPayment] = useState(false)
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodOption>(
+    (order.payment_method as PaymentMethodOption) ?? 'PIX'
+  )
+  const [isSavingPaymentMethod, setIsSavingPaymentMethod] = useState(false)
   const router = useRouter()
   const controllerOrder = OrderController()
   const currentStatus = useMemo(() => getCurrentStatus(order.order_services ?? []), [order.order_services])
@@ -193,6 +207,21 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
   const blockedStatuses = ['SOLITED_CANCELLATION', 'CANCELLED']
   const canPay = ['PENDING', 'FAILED'].includes(order.payment_status) && !order.order_services.some(service => blockedStatuses.includes(service.status))
   const canCancel = order.order_services.length > 0 && order.order_services.every(service => ['PENDING', 'CONFIRMED', 'IN_PRODUCTION'].includes(service.status))
+  const canChangePaymentMethod = canPay
+
+  const handleSavePaymentMethod = async () => {
+    if (selectedPaymentMethod === order.payment_method) {
+      setEditingPayment(false)
+      return
+    }
+
+    setIsSavingPaymentMethod(true)
+    await controllerOrder.OrderUpdateAction(String(order.id), {
+      payment_method: selectedPaymentMethod
+    })
+    setIsSavingPaymentMethod(false)
+    setEditingPayment(false)
+  }
 
   const handleCancel = () => {
     controllerOrder.OrderUpdateAction(String(order.id), {
@@ -240,9 +269,63 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
               <div><h2>{payment.label}</h2><p>{payment.description}</p></div>
             </div>
             <dl className="order-summary-card__list">
-              <div><dt>Forma de pagamento</dt><dd>{PAYMENT_METHOD[order.payment_method] ?? 'Não informada'}</dd></div>
+              <div className="order-summary-card__payment-method-row">
+                <dt>Forma de pagamento</dt>
+                <dd>
+                  <span>{PAYMENT_METHOD[order.payment_method] ?? 'Não informada'}</span>
+                  {canChangePaymentMethod && !editingPayment ? (
+                    <button
+                      type="button"
+                      className="order-summary-card__change-payment"
+                      onClick={() => {
+                        setSelectedPaymentMethod((order.payment_method as PaymentMethodOption) ?? 'PIX')
+                        setEditingPayment(true)
+                      }}
+                    >
+                      Alterar
+                    </button>
+                  ) : null}
+                </dd>
+              </div>
               <div><dt>Total</dt><dd>{formatCurrency(order.total_amount)}</dd></div>
             </dl>
+
+            {editingPayment ? (
+              <fieldset className="order-summary-card__payment-options">
+                <legend>Escolha a forma de pagamento</legend>
+                {PAYMENT_METHOD_OPTIONS.map(option => (
+                  <label
+                    key={option.value}
+                    htmlFor={`order-payment-method-${option.value}`}
+                    className={`order-summary-card__payment-option${selectedPaymentMethod === option.value ? ' is-selected' : ''}`}
+                  >
+                    <ZRadioButton
+                      inputId={`order-payment-method-${option.value}`}
+                      name="order-payment-method"
+                      value={option.value}
+                      checked={selectedPaymentMethod === option.value}
+                      onChange={() => setSelectedPaymentMethod(option.value)}
+                    />
+                    <span>{option.label}</span>
+                  </label>
+                ))}
+                <div className="order-summary-card__payment-actions">
+                  <ZButton
+                    label="Salvar"
+                    loading={isSavingPaymentMethod}
+                    disabled={isSavingPaymentMethod}
+                    onClick={() => void handleSavePaymentMethod()}
+                  />
+                  <ZButton
+                    label="Cancelar"
+                    text
+                    disabled={isSavingPaymentMethod}
+                    onClick={() => setEditingPayment(false)}
+                  />
+                </div>
+              </fieldset>
+            ) : null}
+
             {canPay ? <ZButton icon="pi pi-credit-card" label="Realizar pagamento" onClick={() => router.push(`/payment?id=${order.id}`)} severity="success" className="order-summary-card__button" /> : null}
           </section>
 

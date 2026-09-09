@@ -35,6 +35,7 @@ export default function CartComponent() {
 
   const [activeIndex, setActiveIndex] = useState(0)
   const contentRef = useRef<HTMLElement>(null)
+  const orderCompletedRef = useRef(false)
   const setCart = useCartStore(state => state.setCart)
   const cart = useCartStore(state => state.cart)
   const cartSteps = useCartStepsStore(state => state.cartSteps)
@@ -60,11 +61,14 @@ export default function CartComponent() {
     const order = newOrders[0]
     if (!order) return
 
+    orderCompletedRef.current = true
     sessionStorage.setItem(CREATED_ORDER_SESSION_KEY, String(order.id))
-    history.push(`/profile/order/${order.id}`)
+    history.push(`/payment?id=${order.id}`)
   }
 
   useEffect(() => {
+    if (orderCompletedRef.current) return
+
     const requestedStep = Number.parseInt(index ?? '0', 10)
     const safeStep = clampCheckoutStep(requestedStep, lastAllowedStep)
     setActiveIndex(safeStep)
