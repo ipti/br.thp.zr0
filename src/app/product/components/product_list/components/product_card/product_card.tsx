@@ -12,6 +12,8 @@ interface ProductCardProps {
 export const ProductCard = ({
     product
 }: ProductCardProps) => {
+    const outOfStock = typeof product.quantity === 'number' && product.quantity <= 0
+
     return (
         <article className="card">
             <div className="imageWrapper-container">
@@ -21,6 +23,11 @@ export const ProductCard = ({
                     aria-label={`Ver detalhes de ${product.name}`}
                 >
                     <div className="imageWrapper">
+                        {outOfStock && (
+                            <span className="out-of-stock-badge">
+                                Indisponível · só sob encomenda
+                            </span>
+                        )}
                         {product.product_image[0]?.img_url ? (
                             <img
                                 src={product.product_image[0].img_url}

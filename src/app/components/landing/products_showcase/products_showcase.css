@@ -72,10 +72,26 @@
 
 .landing-products-showcase__media {
   display: block;
+  position: relative;
   overflow: hidden;
   aspect-ratio: 1;
   border-radius: clamp(0.55rem, 1vw, 0.85rem);
   background: #e9ebe6;
+}
+
+.landing-products-showcase__badge {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  background: rgba(33, 33, 33, 0.85);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.3;
 }
 
 .landing-products-showcase__image,
