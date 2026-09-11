@@ -1,6 +1,6 @@
 import 'server-only'
 
-const DEFAULT_API_URL = 'https://zro-api.azurewebsites.net'
+const DEFAULT_API_URL = 'https://br-thp-zro-api.azurewebsites.net'
 const DEFAULT_SITE_URL = 'http://localhost:3000'
 
 function trimTrailingSlashes(value: string) {
