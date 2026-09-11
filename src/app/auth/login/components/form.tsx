@@ -6,15 +6,26 @@ import ZPassword from "@/components/password/password";
 import { logout } from "@/service/localstorage";
 import { primeFlex } from "@/utils/prime_flex";
 import { Form, Formik } from "formik";
+import { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { LoginController } from "../service/controller";
 import Logo from "@/components/logo/logo";
+import { ResendVerificationEmailRequest } from "../service/request";
+
+const isUnverifiedEmailError = (message: string) =>
+  message.trim().toLowerCase() === "unverified email";
 
 export default function FormLogin() {
   const prime = primeFlex();
   const [erros, setErros] = useState("");
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendFeedback, setResendFeedback] = useState<{
+    severity: "success" | "error";
+    text: string;
+  } | null>(null);
 
 
   const controllerLogin = LoginController(setErros);
@@ -30,9 +41,32 @@ export default function FormLogin() {
     email: Yup.string().required("Campo Obrigatório"),
   });
 
-    const handleReturn = () => {
+  const handleReturn = () => {
     setLoading(false);
-  }
+  };
+
+  const handleResendVerification = async () => {
+    if (!loginEmail || resendLoading) return;
+
+    setResendLoading(true);
+    setResendFeedback(null);
+    try {
+      await ResendVerificationEmailRequest(loginEmail);
+      setResendFeedback({
+        severity: "success",
+        text: "Enviamos um novo link. Verifique sua caixa de entrada e a pasta de spam.",
+      });
+    } catch (error: unknown) {
+      const message = isAxiosError<{ message?: string }>(error)
+        ? error.response?.data?.message ??
+          "Não foi possível reenviar o e-mail. Tente novamente mais tarde."
+        : "Não foi possível reenviar o e-mail. Tente novamente mais tarde.";
+
+      setResendFeedback({ severity: "error", text: message });
+    } finally {
+      setResendLoading(false);
+    }
+  };
 
   return (
     <div
@@ -41,8 +75,28 @@ export default function FormLogin() {
       <Logo />
 
       {erros && (
-        <div className={"flex row m-4" + prime.justify_center}>
-          <ZMessage severity="error" text={erros} />
+        <div className="login-error-block">
+          <ZMessage
+            severity="error"
+            text={isUnverifiedEmailError(erros) ? "Seu e-mail ainda não foi verificado." : erros}
+          />
+          {isUnverifiedEmailError(erros) && loginEmail ? (
+            <div className="login-verification-help">
+              <p>Não recebeu a mensagem de confirmação?</p>
+              <ZButton
+                type="button"
+                label="Reenviar e-mail de confirmação"
+                icon="pi pi-envelope"
+                outlined
+                loading={resendLoading}
+                disabled={resendLoading || resendFeedback?.severity === "success"}
+                onClick={() => void handleResendVerification()}
+              />
+              {resendFeedback ? (
+                <ZMessage severity={resendFeedback.severity} text={resendFeedback.text} />
+              ) : null}
+            </div>
+          ) : null}
         </div>
       )}
 
@@ -52,6 +106,8 @@ export default function FormLogin() {
           validationSchema={schema}
           onSubmit={(values) => {
             setLoading(true);
+            setLoginEmail(values.email.trim());
+            setResendFeedback(null);
             controllerLogin.LoginAction({
               email: values.email,
               password: values.password,
@@ -106,7 +162,11 @@ export default function FormLogin() {
                   </div>
                   <div className="p-2" />
                   <div >
-                    <ZButton style={{ width: "100%", justifyContent: "center" }} loading={loading}>
+                    <ZButton
+                      type="submit"
+                      style={{ width: "100%", justifyContent: "center" }}
+                      loading={loading}
+                    >
                       Entrar
                     </ZButton>
                   </div>
