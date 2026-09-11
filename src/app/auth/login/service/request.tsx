@@ -12,6 +12,10 @@ export const LoginRequest = async (
     )
 };
 
+export const ResendVerificationEmailRequest = async (email: string) => {
+  return await http.post('/aux-user/resend-verification-email', { email });
+};
+
 export const GetMyCartRequest = async () => {
   return await http.get("/cart/me/items");
 };
