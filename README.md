@@ -20,6 +20,15 @@ Essa separação evita publicar hostnames internos do Docker, reduz diferenças 
 CORS entre ambientes e permite promover a mesma imagem entre ambientes
 alterando apenas `API_INTERNAL_URL` em runtime.
 
+No App Service de produção, configure:
+
+```text
+API_INTERNAL_URL=https://br-thp-zro-api.azurewebsites.net
+```
+
+Essa variável tem prioridade sobre `API_URL`, `NEXT_PUBLIC_API_URL` e o fallback
+da aplicação.
+
 ## Desenvolvimento local
 
 Copie `.env.example` para `.env.local`, execute a API Nest em outra porta (o

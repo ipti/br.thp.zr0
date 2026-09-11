@@ -8,7 +8,7 @@ services:
       args:
         NEXT_PUBLIC_STRIPE_PUBLIC_KEY: ${NEXT_PUBLIC_STRIPE_PUBLIC_KEY:-}
     environment:
-      API_INTERNAL_URL: ${API_INTERNAL_URL:-https://zro-api.azurewebsites.net}
+      API_INTERNAL_URL: ${API_INTERNAL_URL:-https://br-thp-zro-api.azurewebsites.net}
       SITE_URL: ${SITE_URL:-http://localhost:3000}
       PORT: 3000
     ports:
