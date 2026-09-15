@@ -1,0 +1,65 @@
+/*
+ * Tokens exclusivos da página /about-us.
+ *
+ * A referência disponível é a composição achatada do PSD em 1920 × 3736 px.
+ * Os valores abaixo foram medidos nessa composição e devem permanecer neste
+ * escopo para não alterar o hero existente da landing page.
+ */
+.about-us {
+  --about-content-width: 1440px;
+  --about-page-gutter: clamp(1rem, 12.5vw, 15rem);
+  --about-section-space: clamp(4rem, 7.3vw, 8.75rem);
+  --about-grid-gap: clamp(1rem, 1.7vw, 2rem);
+
+  --about-hero-height: 678px;
+  --about-product-card-radius: 38px;
+  --about-featured-media-radius: 40px;
+  --about-closing-media-radius: 36px;
+  --about-button-radius: 999px;
+
+  --about-color-surface: #f8f8f8;
+  --about-color-header: #ffffff;
+  --about-color-text: #111111;
+  --about-color-accent: #00493d;
+  --about-color-sage: #87937d;
+  --about-color-sand: #d8cfb4;
+
+  color: var(--about-color-text);
+  background: var(--about-color-surface);
+  font-family: 'Hurme Geometric Sans 1', Arial, Helvetica, sans-serif;
+}
+
+.about-us__content {
+  width: min(
+    calc(100% - (2 * var(--about-page-gutter))),
+    var(--about-content-width)
+  );
+  margin-inline: auto;
+}
+
+.about-us :focus-visible {
+  outline: 3px solid var(--about-color-accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 1023px) {
+  .about-us {
+    --about-page-gutter: clamp(1.5rem, 5vw, 3rem);
+    --about-section-space: clamp(3.5rem, 8vw, 6rem);
+    --about-grid-gap: clamp(1rem, 3vw, 2rem);
+    --about-product-card-radius: 28px;
+    --about-featured-media-radius: 32px;
+    --about-closing-media-radius: 28px;
+  }
+}
+
+@media (max-width: 599px) {
+  .about-us {
+    --about-page-gutter: 1rem;
+    --about-section-space: 3.5rem;
+    --about-grid-gap: 1rem;
+    --about-product-card-radius: 20px;
+    --about-featured-media-radius: 24px;
+    --about-closing-media-radius: 24px;
+  }
+}

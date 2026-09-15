@@ -29,6 +29,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'daily',
       priority: 0.9,
     },
+    {
+      url: `${siteUrl}/about-us`,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
     ...products.map(product => ({
       url: `${siteUrl}/product/${encodeURIComponent(product.uid)}`,
       changeFrequency: 'weekly' as const,
