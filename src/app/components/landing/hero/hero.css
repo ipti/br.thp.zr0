@@ -126,7 +126,7 @@
 
   .landing-hero__title {
     max-width: 17ch;
-    font-size: clamp(0.95rem, 4.7vw, 1.25rem);
+    font-size: clamp(1.55rem, 4.7vw, 1.25rem);
     letter-spacing: -0.04em;
   }
 }
