@@ -55,7 +55,7 @@
   grid-column: 2;
   align-self: center;
   text-align: center;
-  transform: translate(-20%, 12%);
+  width: 110%;
 }
 
 .landing-hero__media {
@@ -91,7 +91,7 @@
   margin-inline: auto;
   color: #111;
   font-family: 'Hurme Geometric Sans 1', Arial, Helvetica, sans-serif;
-  font-size: clamp(1.02rem, 4.25vw, 5.1rem);
+  font-size: clamp(2.3rem, 4.25vw, 5.1rem);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.035em;
