@@ -1,5 +1,7 @@
 import Image from 'next/image'
 import heroTexture from '@/assets/img/home/hero/hero_texture.png'
+import heroChair from '@/assets/img/about_us/left.png'
+import heroPerson from '@/assets/img/about_us/right.png'
 import './about_hero.css'
 
 export default function AboutHero() {
@@ -15,30 +17,38 @@ export default function AboutHero() {
         className="about-hero__texture"
       />
 
-      <div className="about-us__content about-hero__grid">
-        <div
-          className="about-hero__media about-hero__media--chair"
-          role="img"
-          aria-label="Cadeira de design feita com plástico reciclado"
+      <div className="about-hero__media about-hero__media--chair">
+        <Image
+          src={heroChair}
+          alt="Cadeira de design feita com plástico reciclado"
+          priority
+          className="about-hero__media-img"
         />
+      </div>
 
+      <div className="about-us__content about-hero__grid">
         <div className="about-hero__text">
           <h1 id="about-hero-title" className="about-hero__title">
-            Lixo é uma invenção humana
+            <span>Lixo é uma</span>
+            <span>invenção humana</span>
           </h1>
           <p className="about-hero__subtitle">
-            Não transformamos apenas resíduos. Transformamos comunidades.
+            <span>Não transformamos apenas resíduos.</span>
+            <span>Transformamos comunidades.</span>
           </p>
           <p className="about-hero__description">
             A ZR0 transforma o que antes seria descarte em produtos duráveis e de design com valor
             agregado, conectando economia circular, inclusão produtiva e desenvolvimento local.
           </p>
         </div>
+      </div>
 
-        <div
-          className="about-hero__media about-hero__media--person"
-          role="img"
-          aria-label="Pessoa da comunidade parceira da ZR0"
+      <div className="about-hero__media about-hero__media--person">
+        <Image
+          src={heroPerson}
+          alt="Pessoa da comunidade parceira da ZR0"
+          priority
+          className="about-hero__media-img"
         />
       </div>
     </section>

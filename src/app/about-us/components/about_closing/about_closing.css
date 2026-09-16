@@ -1,51 +1,60 @@
 .about-closing {
   scroll-margin-top: var(--header-height);
-  padding-block: var(--about-section-space);
+  padding: clamp(6rem, 11.5vw, 13.75rem) 0 clamp(6rem, 10vw, 12rem);
 }
 
 .about-closing__inner {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
-  gap: var(--about-grid-gap);
+  gap: clamp(1.5rem, 2vw, 2.5rem);
 }
 
 .about-closing__content {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .about-closing__title {
   margin: 0;
-  color: var(--about-color-text);
-  font-size: clamp(1.5rem, 2.4vw, 2.25rem);
+  color: var(--about-color-accent);
+  max-width: 30rem;
+  font-family: inherit;
+  font-size: clamp(1.15rem, 1.45vw, 1.4rem);
   font-weight: 700;
   letter-spacing: -0.01em;
-  line-height: 1.25;
+  line-height: 1.1;
 }
 
 .about-closing__copy {
   margin: 0;
-  color: var(--about-color-text);
-  font-size: clamp(0.95rem, 1.1vw, 1.1rem);
-  line-height: 1.6;
+  color: var(--about-color-accent);
+  max-width: 26rem;
+  font-family: inherit;
+  font-size: clamp(0.9rem, 1vw, 1rem);
+  line-height: 1.2;
 }
 
 .about-closing__signature {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  margin-top: 0.5rem;
 }
 
 .about-closing__logo {
-  width: clamp(2.5rem, 3vw, 3.25rem);
+  width: clamp(9rem, 12.5vw, 12.5rem);
   height: auto;
+  margin-block: 0;
 }
 
 .about-closing__signature p {
   margin: 0;
   color: var(--about-color-accent);
+  font-family: inherit;
+  font-size: clamp(0.9rem, 1vw, 1rem);
   font-weight: 600;
 }
 
@@ -64,5 +73,11 @@
 @media (max-width: 1023px) {
   .about-closing__inner {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-closing__content {
+    transform: translateY(-1rem);
   }
 }

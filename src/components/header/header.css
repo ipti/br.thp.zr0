@@ -36,8 +36,8 @@
 
 .site-header__logo {
   display: grid;
-  width: clamp(5rem, 10.4vw, 12.5rem);
-  height: clamp(5rem, 10.8vw, 13rem);
+  width: clamp(2.75rem, 3.2vw, 3.75rem);
+  height: clamp(2.75rem, 3.4vw, 4rem);
   place-items: center;
   transition: opacity 160ms ease;
 }
@@ -56,8 +56,8 @@
 .site-header__action {
   position: relative;
   display: grid;
-  width: clamp(2.75rem, 3.4vw, 4rem);
-  height: clamp(2.75rem, 3.4vw, 4rem);
+  width: clamp(2.5rem, 2.2vw, 2.75rem);
+  height: clamp(2.5rem, 2.2vw, 2.75rem);
   padding: 0;
   color: inherit;
   background: transparent;
@@ -72,7 +72,7 @@
 }
 
 .site-header__action i {
-  font-size: clamp(1.35rem, 2vw, 2.25rem);
+  font-size: clamp(1.15rem, 1.3vw, 1.4rem);
 }
 
 .site-header__badge {
@@ -101,8 +101,8 @@
 
 @media (max-width: 1023px) {
   .site-header__logo {
-    width: 5.25rem;
-    height: 5.5rem;
+    width: 2.75rem;
+    height: 2.9rem;
   }
 }
 
@@ -112,8 +112,8 @@
   }
 
   .site-header__logo {
-    width: 4rem;
-    height: 4.25rem;
+    width: 2.5rem;
+    height: 2.65rem;
   }
 
   .site-header__side--right {
@@ -121,12 +121,12 @@
   }
 
   .site-header__action {
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 2.35rem;
+    height: 2.35rem;
   }
 
   .site-header__action i {
-    font-size: 1.35rem;
+    font-size: 1.1rem;
   }
 }
 

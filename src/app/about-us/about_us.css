@@ -8,25 +8,62 @@
 .about-us {
   --about-content-width: 1440px;
   --about-page-gutter: clamp(1rem, 12.5vw, 15rem);
-  --about-section-space: clamp(4rem, 7.3vw, 8.75rem);
-  --about-grid-gap: clamp(1rem, 1.7vw, 2rem);
+  --about-section-space: clamp(4rem, 6vw, 7.25rem);
+  --about-grid-gap: clamp(1rem, 1.5vw, 2rem);
 
-  --about-hero-height: 678px;
-  --about-product-card-radius: 38px;
-  --about-featured-media-radius: 40px;
-  --about-closing-media-radius: 36px;
+  --about-hero-height: clamp(30rem, 35.3125vw, 42.375rem);
+  --about-product-card-radius: clamp(1.25rem, 2vw, 2.375rem);
+  --about-featured-media-radius: clamp(1.5rem, 2.1vw, 2.5rem);
+  --about-closing-media-radius: clamp(1.25rem, 1.9vw, 2.25rem);
   --about-button-radius: 999px;
 
   --about-color-surface: #f8f8f8;
   --about-color-header: #ffffff;
-  --about-color-text: #111111;
-  --about-color-accent: #00493d;
-  --about-color-sage: #87937d;
-  --about-color-sand: #d8cfb4;
+  --about-color-text: #000000;
+  --about-color-accent: #00372e;
+  --about-color-sage: #8f9989;
+  --about-color-sand: #dfd9c3;
 
   color: var(--about-color-text);
   background: var(--about-color-surface);
   font-family: 'Hurme Geometric Sans 1', Arial, Helvetica, sans-serif;
+}
+
+.about-us .site-header__primary {
+  width: min(
+    calc(100% - (2 * var(--about-page-gutter))),
+    var(--about-content-width)
+  );
+}
+
+.about-us .header-social__link--disabled {
+  opacity: 1;
+}
+
+.about-us__body {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.about-us__decor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.about-us__decor-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+}
+
+.about-us__body > section {
+  position: relative;
+  z-index: 1;
 }
 
 .about-us__content {
@@ -51,6 +88,10 @@
     --about-featured-media-radius: 32px;
     --about-closing-media-radius: 28px;
   }
+
+  .about-us__decor-image {
+    opacity: 0.45;
+  }
 }
 
 @media (max-width: 599px) {
@@ -61,5 +102,9 @@
     --about-product-card-radius: 20px;
     --about-featured-media-radius: 24px;
     --about-closing-media-radius: 24px;
+  }
+
+  .about-us__decor-image {
+    opacity: 0.2;
   }
 }

@@ -15,9 +15,6 @@ export default function AboutProducts({ products }: AboutProductsProps) {
           <h2 id="about-products-title" className="about-products__title">
             Nossos produtos
           </h2>
-          <Link href="/product" className="about-products__view-all">
-            Ver todos <span aria-hidden="true">→</span>
-          </Link>
         </div>
 
         {products.length > 0 ? (
@@ -31,6 +28,10 @@ export default function AboutProducts({ products }: AboutProductsProps) {
         ) : (
           <p className="about-products__empty">Novos produtos estarão disponíveis em breve.</p>
         )}
+
+        <Link href="/product" className="about-products__view-all">
+          Ver todos <span aria-hidden="true">→</span>
+        </Link>
       </div>
     </section>
   )

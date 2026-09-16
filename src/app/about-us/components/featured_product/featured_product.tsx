@@ -89,6 +89,7 @@ export default function FeaturedProduct({ products }: FeaturedProductProps) {
               <ZButton
                 type="button"
                 label="Adicionar ao carrinho"
+                icon="pi pi-shopping-cart"
                 className="featured-product__add"
                 disabled={!canAddToCart}
                 onClick={handleAddToCart}
