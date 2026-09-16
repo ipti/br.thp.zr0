@@ -1,0 +1,116 @@
+.header-navigation {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--header-navigation-height);
+}
+
+.header-navigation__list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.25rem, 3vw, 3.5rem);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.header-navigation__item {
+  position: relative;
+}
+
+.header-navigation__trigger {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  color: #111111;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  font-size: clamp(0.78rem, 0.85vw, 0.95rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.header-navigation__trigger i {
+  font-size: 0.7em;
+  transition: transform 160ms ease;
+}
+
+.header-navigation__trigger[aria-expanded='true'] i {
+  transform: rotate(180deg);
+}
+
+.header-navigation__dropdown {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 50%;
+  min-width: max(13rem, 100%);
+  padding: 0.5rem;
+  margin: 0;
+  background: #ffffff;
+  border: 1px solid #dfdfdb;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.1);
+  list-style: none;
+  transform: translateX(-50%);
+}
+
+.header-navigation__dropdown[hidden] {
+  display: none;
+}
+
+.header-navigation__dropdown a {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.header-navigation__dropdown a:hover {
+  background: #f5f5f2;
+}
+
+@media (max-width: 599px) {
+  .header-navigation__list {
+    width: 100%;
+    gap: 0.25rem;
+    padding-inline: 0.5rem;
+  }
+
+  .header-navigation__item {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .header-navigation__trigger {
+    justify-content: center;
+    padding-inline: 0.25rem;
+    font-size: 0.7rem;
+  }
+
+  .header-navigation__dropdown {
+    position: fixed;
+    top: var(--header-height);
+    right: 1rem;
+    left: 1rem;
+    min-width: 0;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-navigation__trigger i {
+    transition: none;
+  }
+}

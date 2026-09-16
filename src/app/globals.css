@@ -60,7 +60,27 @@
   --home-max-width: 1200px;
   --home-gutter: clamp(1rem, 4vw, 5rem);
   --home-section-space: clamp(3.5rem, 4vw, 7rem);
-  --header-height: 75px; /* medido via getBoundingClientRect() em src/components/header/header.tsx, não deduzível só pelo CSS */
+  --header-content-width: 1440px;
+  --header-gutter: clamp(1rem, 7.8vw, 9.375rem);
+  --header-primary-height: clamp(4.5rem, 4.2vw, 5.5rem);
+  --header-navigation-height: clamp(2.75rem, 2.4vw, 3.25rem);
+  --header-height: calc(var(--header-primary-height) + var(--header-navigation-height));
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --header-gutter: clamp(1.5rem, 5vw, 3rem);
+    --header-primary-height: 4.25rem;
+    --header-navigation-height: 3rem;
+  }
+}
+
+@media (max-width: 599px) {
+  :root {
+    --header-gutter: 0.75rem;
+    --header-primary-height: 3.75rem;
+    --header-navigation-height: 2.75rem;
+  }
 }
 
 /* @media (prefers-color-scheme: dark) {

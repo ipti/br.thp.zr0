@@ -1,0 +1,111 @@
+.about-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: var(--about-hero-height);
+  display: flex;
+  align-items: center;
+}
+
+.about-hero__texture {
+  z-index: 0;
+  object-fit: cover;
+  object-position: center;
+}
+
+.about-hero__grid {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding-block: clamp(2.5rem, 4vw, 4.75rem);
+}
+
+.about-hero__text {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 42vw, 52rem);
+  text-align: center;
+}
+
+.about-hero__title {
+  margin: 0 0 clamp(1.5rem, 3.75vw, 4.5rem);
+  color: var(--about-color-text);
+  font-family: inherit;
+  font-size: clamp(2.25rem, 4.1vw, 4.9rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.about-hero__title span,
+.about-hero__subtitle span {
+  display: block;
+}
+
+.about-hero__subtitle {
+  margin: 0 0 clamp(0.9rem, 1.97vw, 2.36rem);
+  color: var(--about-color-text);
+  font-family: inherit;
+  font-size: clamp(1.15rem, 2.15vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.about-hero__description {
+  margin: 0 auto;
+  color: var(--about-color-text);
+  font-family: inherit;
+  font-size: clamp(1rem, 1.58vw, 1.9rem);
+  line-height: 1.15;
+  font-weight: 500;
+}
+
+.about-hero__media {
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+  line-height: 0;
+}
+
+.about-hero__media-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.about-hero__media--chair {
+  left: 0;
+  width: min(33.333vw, 640px);
+}
+
+.about-hero__media--person {
+  right: 0;
+  width: min(27.5vw, 528px);
+}
+
+@media (max-width: 1023px) {
+  .about-hero__media {
+    display: none;
+  }
+}
+
+@media (max-width: 599px) {
+  .about-hero {
+    min-height: 0;
+  }
+
+  .about-hero__grid {
+    padding-block: var(--about-section-space);
+  }
+
+  .about-hero__title span,
+  .about-hero__subtitle span {
+    display: inline;
+  }
+
+  .about-hero__title span + span::before,
+  .about-hero__subtitle span + span::before {
+    content: ' ';
+  }
+}
