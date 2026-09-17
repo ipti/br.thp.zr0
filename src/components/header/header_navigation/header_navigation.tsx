@@ -11,7 +11,10 @@ const menus = [
   {
     id: 'shop' as const,
     label: 'Compre agora',
-    items: [{ label: 'Todos os produtos', href: '/product' }],
+    items: [
+      { label: 'Vitrine', href: '/product' },
+      { label: 'Todos os produtos', href: '/product/all' },
+    ],
   },
   {
     id: 'project' as const,

@@ -124,7 +124,7 @@ export default function CartList({
               <i className="pi pi-shopping-cart" aria-hidden="true" />
               <h3>Seu carrinho está vazio.</h3>
               <p>Explore nossos produtos disponíveis para pronta entrega.</p>
-              <Link href="/product" className="cart-secondary-action">Ver produtos</Link>
+              <Link href="/product/all" className="cart-secondary-action">Ver produtos</Link>
             </div>
           ) : (
             <div className="flex flex-column gap-3">

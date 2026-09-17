@@ -138,7 +138,7 @@ export default function ProductsShowcase({
             </p>
           )}
 
-          <Link href="/product" className="landing-products-showcase__view-all">
+          <Link href="/product/all" className="landing-products-showcase__view-all">
             Ver todos <span aria-hidden="true">→</span>
           </Link>
         </div>

@@ -50,7 +50,7 @@ export function ProductFilters({
       }
       params.delete('page')
       startTransition(() => {
-        router.replace(`/product?${params.toString()}`)
+        router.replace(`/product/all?${params.toString()}`)
       })
     }, 300)
 
@@ -66,7 +66,7 @@ export function ProductFilters({
     }
     params.delete('page')
     startTransition(() => {
-      router.replace(`/product?${params.toString()}`)
+      router.replace(`/product/all?${params.toString()}`)
     })
   }
 
@@ -78,7 +78,7 @@ export function ProductFilters({
       params.delete('sort')
     }
     startTransition(() => {
-      router.replace(`/product?${params.toString()}`)
+      router.replace(`/product/all?${params.toString()}`)
     })
   }
 

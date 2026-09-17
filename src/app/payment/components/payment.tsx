@@ -108,7 +108,7 @@ export default function PaymentComponent() {
           <div><strong>Pagamento confirmado</strong><p>Seu pedido já está pago.</p></div>
           <div className="payment-state-actions">
             <Link href={`/profile/order/${order.id}`}>Ver pedido</Link>
-            <Link href="/product">Continuar comprando</Link>
+            <Link href="/product/all">Continuar comprando</Link>
           </div>
         </div>
       )}

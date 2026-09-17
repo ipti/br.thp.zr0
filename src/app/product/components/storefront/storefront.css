@@ -1,0 +1,59 @@
+/* Tokens locais da storefront — product-store-psd
+ * Não modifica tokens globais de globals.css.
+ * Nomenclatura: --store-* */
+
+:root {
+  /* Cores — amostradas do psd-preview.jpg (1920×4864 px, RGB) */
+
+  /* Fundo e superfícies */
+  --store-bg:             #F0EDEA; /* off-white quente — fundo geral da página */
+  --store-surface:        #FFFFFF; /* branco puro — cards, thumbnails selecionados */
+
+  /* Texto */
+  --store-text-primary:   #1C1C1A; /* quase-preto — títulos e labels em uppercase */
+  --store-text-secondary: #4A4A46; /* cinza escuro — corpo de texto, parágrafos */
+  --store-text-muted:     #686860; /* cinza médio — captions, preço secundário (4.82:1 vs bg, passa WCAG AA) */
+
+  /* Verde CTA (botão "Adicionar ao Carrinho") */
+  --store-green:          #00322A; /* verde profundo amostrado do CTA no PSD */
+  --store-green-hover:    #00251F; /* verde mais escuro — hover/active */
+  --store-green-text:     #FFFFFF; /* texto sobre fundo verde */
+
+  /* Botão outline ("Mais Detalhes") */
+  --store-outline-border: #1C1C1A; /* borda igual ao texto primário */
+  --store-outline-bg:     transparent;
+  --store-outline-text:   #1C1C1A;
+
+  /* Elementos decorativos */
+  --store-sage:           #8FAA87; /* sálvia — blobs orgânicos verdes */
+  --store-sand:           #C8B99A; /* areia — blobs orgânicos bege/dourado */
+
+  /* Bordas e divisores */
+  --store-border:         #1C1C1A; /* borda forte — thumbnail selecionado, outline btn */
+  --store-border-light:   #D8D4CE; /* borda suave — separadores, thumbnails inativos */
+
+  /* Tipografia */
+  --store-font-heading:   'Hurme Geometric Sans 1', sans-serif; /* títulos e labels uppercase */
+  --store-font-body:      'Poppins Regular', sans-serif;        /* corpo, preços, botões */
+
+  /* Tamanhos de fonte */
+  --store-fs-hero:        clamp(2rem, 3.75vw, 4.5rem); /* headline hero — max 72px cabe em 2 linhas no container de 1040px */
+  --store-fs-h2:          clamp(1.125rem, 2.5vw, 1.875rem); /* subtítulos de seção */
+  --store-fs-price:       clamp(1.5rem, 3vw, 2.25rem);      /* preço em destaque */
+  --store-fs-body:        1rem;                               /* corpo padrão */
+  --store-fs-caption:     0.75rem;                            /* caption, label de produto */
+  --store-fs-btn:         0.875rem;                           /* texto dos botões */
+
+  /* Layout */
+  --store-max-width:      1200px;
+  --store-gutter:         clamp(1rem, 4vw, 5rem);
+  --store-section-gap:    clamp(3rem, 5vw, 6rem);
+
+  /* Componentes */
+  --store-radius-card:    12px;
+  --store-radius-btn:     6px;
+  --store-radius-thumb:   8px;
+  --store-thumb-size:     120px;
+  --store-thumb-gap:      0.5rem;
+  --store-img-hero-ratio: 56.25%; /* 16:9 para a imagem principal do produto */
+}

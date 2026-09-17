@@ -30,7 +30,7 @@ export default function Products({
     if (categoryId) params.set('categoryId', categoryId)
     if (sort) params.set('sort', sort)
     params.set('page', String(targetPage))
-    return `/product?${params.toString()}`
+    return `/product/all?${params.toString()}`
   }
 
   return (
@@ -59,7 +59,7 @@ export default function Products({
           <p className="text-gray-500 text-xl mb-4">
             Nenhum produto encontrado{q ? ` para "${q}"` : ''}.
           </p>
-          <Link href="/product" className="text-blue-600 hover:text-blue-800 underline">
+          <Link href="/product/all" className="text-blue-600 hover:text-blue-800 underline">
             Limpar filtros
           </Link>
         </div>

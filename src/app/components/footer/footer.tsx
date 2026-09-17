@@ -29,10 +29,10 @@ export default function Footer() {
   ]
 
   const productLinks: ILinks[] = [
-    { name: 'Sofás', href: '/product?category=sofas' },
-    { name: 'Poltronas', href: '/product?category=poltronas' },
-    { name: 'Mesas', href: '/product?category=mesas' },
-    { name: 'Estantes', href: '/product?category=estantes' }
+    { name: 'Sofás', href: '/product/all?category=sofas' },
+    { name: 'Poltronas', href: '/product/all?category=poltronas' },
+    { name: 'Mesas', href: '/product/all?category=mesas' },
+    { name: 'Estantes', href: '/product/all?category=estantes' }
   ]
 
   return (
