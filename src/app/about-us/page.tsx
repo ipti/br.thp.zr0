@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Header from '@/components/header/header'
 import pingos from '@/assets/img/home/pingos.svg'
 import { getProducts } from '../middleware/producs_list'
-import AboutClosing from './components/about_closing/about_closing'
+import ClosingSection from '@/components/closing_section/closing_section'
 import AboutHero from './components/about_hero/about_hero'
 import AboutProducts from './components/about_products/about_products'
 import FeaturedProduct from './components/featured_product/featured_product'
@@ -76,7 +76,7 @@ export default async function AboutUsPage() {
 
           <AboutProducts products={featuredProducts} />
           <FeaturedProduct products={featuredProducts} />
-          <AboutClosing />
+          <ClosingSection id="sustentability" />
         </div>
       </main>
       <Footer />

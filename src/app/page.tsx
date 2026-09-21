@@ -2,7 +2,7 @@ import Header from '@/components/header/header'
 import About from './components/about/about'
 import Footer from './components/footer/footer'
 import Impact from './components/impact/impact'
-import ClosingStatement from './components/landing/closing_statement/closing_statement'
+import ClosingSection from '@/components/closing_section/closing_section'
 import Hero from './components/landing/hero/hero'
 import HowItWorks from './components/landing/how_it_works/how_it_works'
 import Manifesto from './components/landing/manifesto/manifesto'
@@ -32,7 +32,7 @@ export default async function Home() {
           <HowItWorks />
           <Presence />
           <ProductsShowcase products={product} />
-          <ClosingStatement />
+          <ClosingSection />
         </>
       ) : (
         <>
