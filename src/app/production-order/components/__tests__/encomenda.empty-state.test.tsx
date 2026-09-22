@@ -42,7 +42,7 @@ describe('Jornada de Encomenda — produto sem capacidade de produção', () => 
       )
     )
 
-    renderWithProviders(<ProductionOrderSteps product={PRODUCT} />)
+    renderWithProviders(<ProductionOrderSteps product={PRODUCT} paymentEnabled whatsappNumber="" />)
 
     const input = screen.getByRole('spinbutton')
     await userEvent.clear(input)

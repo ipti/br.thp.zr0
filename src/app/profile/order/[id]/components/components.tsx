@@ -10,7 +10,13 @@ import ZSkeleton from "@/components/skeleton/skeleton";
 import { CREATED_ORDER_SESSION_KEY } from "../../constants";
 import "./components.css";
 
-export function OrderOneComponents() {
+export function OrderOneComponents({
+  paymentEnabled,
+  whatsappNumber
+}: {
+  paymentEnabled: boolean
+  whatsappNumber: string
+}) {
     const params = useParams(); // retorna { id: "123" }
     const id = params.id;
     const [orderCreated, setOrderCreated] = useState(false)
@@ -40,7 +46,9 @@ export function OrderOneComponents() {
            {orderCreated && order && ['PENDING', 'FAILED'].includes(order.payment_status) ? (
             <ZMessage
               severity="success"
-              text="Pedido criado com sucesso! Falta uma etapa: realize o pagamento para confirmar sua compra."
+              text={paymentEnabled
+                ? "Pedido criado com sucesso! Falta uma etapa: realize o pagamento para confirmar sua compra."
+                : "Pedido registrado com sucesso! Continue a conversa no WhatsApp para combinar entrega e pagamento."}
               className="order-created-message"
             />
            ) : null}
@@ -61,7 +69,7 @@ export function OrderOneComponents() {
               <ZButton label="Tentar novamente" icon="pi pi-refresh" outlined onClick={() => void refetch()} />
             </div>
            ) : order ? (
-            <OrderCard order={order} />
+            <OrderCard order={order} paymentEnabled={paymentEnabled} whatsappNumber={whatsappNumber} />
            ) : (
             <div className="order-detail-state" role="status">
               <span className="order-detail-state__icon"><i className="pi pi-search" aria-hidden="true" /></span>

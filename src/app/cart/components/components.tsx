@@ -27,7 +27,13 @@ type ApiCartItem = {
   }
 }
 
-export default function CartComponent() {
+export default function CartComponent({
+  paymentEnabled,
+  whatsappNumber,
+}: {
+  paymentEnabled: boolean
+  whatsappNumber: string
+}) {
   const history = useRouter()
 
   const searchParams = useSearchParams()
@@ -63,7 +69,7 @@ export default function CartComponent() {
 
     orderCompletedRef.current = true
     sessionStorage.setItem(CREATED_ORDER_SESSION_KEY, String(order.id))
-    history.push(`/payment?id=${order.id}`)
+    history.push(paymentEnabled ? `/payment?id=${order.id}` : `/profile/order/${order.id}`)
   }
 
   useEffect(() => {
@@ -152,6 +158,8 @@ export default function CartComponent() {
           <Finish
             handleActiveIndex={handleActiveIndex}
             handleSetOrders={handleSetOrders}
+            paymentEnabled={paymentEnabled}
+            whatsappNumber={whatsappNumber}
           />
         )}
       </section>

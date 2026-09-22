@@ -13,8 +13,12 @@ import './production_order.css'
 
 export default function ProductionOrderSteps({
   product,
+  paymentEnabled,
+  whatsappNumber,
 }: {
   product: ProductOne | null
+  paymentEnabled: boolean
+  whatsappNumber: string
 }) {
   const [activeIndex, setActiveIndex] = useState(0)
 
@@ -70,6 +74,8 @@ export default function ProductionOrderSteps({
             <Confirmation
               product={product}
               handleActiveIndex={handleActiveIndex}
+              paymentEnabled={paymentEnabled}
+              whatsappNumber={whatsappNumber}
             />
           )}
         </div>

@@ -98,6 +98,7 @@
 .order-payment-badge--info { background: #e7f0fa; color: #24527c; }
 .order-payment-badge--danger { background: #fde5e5; color: #8d2929; }
 .order-payment-badge--neutral { background: #ececec; color: #4a4a4a; }
+.order-payment-badge--whatsapp { background: #dcf8e8; color: #0c5c3b; }
 
 .order-detail__hero-summary {
   display: flex;
@@ -130,6 +131,64 @@
 .order-detail__hero-actions .p-button.p-button-outlined {
   border-color: rgba(255, 255, 255, 0.65);
   color: #fff;
+}
+
+.order-detail__whatsapp-button.p-button {
+  background: #25d366;
+  border-color: #25d366;
+  color: #063d24;
+  font-weight: 750;
+}
+
+.order-detail__whatsapp-button.p-button:not(:disabled):hover {
+  background: #1ebe59;
+  border-color: #1ebe59;
+}
+
+.order-detail__whatsapp-callout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+  border: 1px solid #b7ecd0;
+  border-radius: 1rem;
+  background: #eafcf1;
+  color: #0c5c3b;
+}
+
+.order-detail__whatsapp-callout-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: #25d366;
+  color: #fff;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.order-detail__whatsapp-callout > div {
+  flex: 1;
+  min-width: 14rem;
+}
+
+.order-detail__whatsapp-callout strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 1.05rem;
+}
+
+.order-detail__whatsapp-callout p {
+  margin: 0;
+  color: #206b48;
+}
+
+.order-detail__whatsapp-callout .order-detail__whatsapp-button {
+  margin-left: auto;
 }
 
 .order-detail__progress-card,
@@ -355,6 +414,7 @@
 .order-summary-card--info { border-top: 4px solid #4e83b4; }
 .order-summary-card--danger { border-top: 4px solid #c95b5b; }
 .order-summary-card--neutral { border-top: 4px solid #858585; }
+.order-summary-card--whatsapp { border-top: 4px solid #25d366; }
 
 .order-summary-card__heading {
   display: flex;
@@ -489,6 +549,8 @@
   .order-detail__hero-summary { min-width: 0; align-items: flex-start; text-align: left; }
   .order-detail__hero-actions { justify-content: flex-start; }
   .order-detail__hero-actions > * { width: 100%; }
+  .order-detail__whatsapp-callout { flex-direction: column; align-items: flex-start; }
+  .order-detail__whatsapp-callout .order-detail__whatsapp-button { margin-left: 0; width: 100%; }
   .order-progress { display: grid; gap: 0; }
   .order-progress__step { min-height: 4.7rem; align-items: flex-start; flex-direction: row; gap: 0.85rem; text-align: left; }
   .order-progress__step:not(:last-child)::after { top: 2.5rem; left: 1.25rem; width: 3px; height: calc(100% - 2.1rem); }
