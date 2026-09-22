@@ -127,7 +127,7 @@ describe('acessibilidade do checkout', () => {
 
   it('mantém um único landmark principal externo e anuncia a etapa atual', async () => {
     useCartStore.getState().setCart([])
-    const { container } = renderWithProviders(<CartComponent />)
+    const { container } = renderWithProviders(<CartComponent paymentEnabled whatsappNumber="" />)
 
     const stageHeading = await screen.findByRole('heading', { name: 'Seu carrinho' })
     expect(container.querySelectorAll('main')).toHaveLength(0)
@@ -141,7 +141,7 @@ describe('acessibilidade do checkout', () => {
 
   it('expõe pagamento como opções visíveis, campos nomeados e ações de edição', async () => {
     const { container } = renderWithProviders(
-      <Finish handleActiveIndex={jest.fn()} handleSetOrders={jest.fn()} />
+      <Finish handleActiveIndex={jest.fn()} handleSetOrders={jest.fn()} paymentEnabled whatsappNumber="" />
     )
 
     expect(screen.getByRole('heading', { name: 'Revise e confirme' })).toBeInTheDocument()
@@ -157,7 +157,7 @@ describe('acessibilidade do checkout', () => {
 
   it('bloqueia envio duplicado do pedido na interface', async () => {
     renderWithProviders(
-      <Finish handleActiveIndex={jest.fn()} handleSetOrders={jest.fn()} />
+      <Finish handleActiveIndex={jest.fn()} handleSetOrders={jest.fn()} paymentEnabled whatsappNumber="" />
     )
 
     const finishButton = screen.getByRole('button', { name: 'Finalizar pedido' })
@@ -165,10 +165,38 @@ describe('acessibilidade do checkout', () => {
     expect(mockCreateOrder).toHaveBeenCalledTimes(1)
   })
 
+  it('com paymentEnabled=false, abre o WhatsApp com o resumo do pedido e não cria pedido no sistema', async () => {
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
+
+    renderWithProviders(
+      <Finish
+        handleActiveIndex={jest.fn()}
+        handleSetOrders={jest.fn()}
+        paymentEnabled={false}
+        whatsappNumber="5511999999999"
+      />
+    )
+
+    const button = screen.getByRole('button', { name: 'Finalizar pelo WhatsApp' })
+    await userEvent.click(button)
+
+    expect(mockCreateOrder).not.toHaveBeenCalled()
+    expect(openSpy).toHaveBeenCalledTimes(1)
+
+    const [url] = openSpy.mock.calls[0]
+    expect(url).toContain('https://wa.me/5511999999999?text=')
+
+    const message = decodeURIComponent(String(url).split('?text=')[1])
+    expect(message).toContain('Cadeira (x2)')
+    expect(message).toContain('Entrega: Rua Teste, 100 - Centro, São Paulo/SP - CEP 01234-567')
+
+    openSpy.mockRestore()
+  })
+
   it('redireciona a pronta entrega para o pagamento do pedido criado', async () => {
     localStorage.setItem('token-zr0', 'test-token')
     mockSearchParams = new URLSearchParams('index=3')
-    renderWithProviders(<CartComponent />)
+    renderWithProviders(<CartComponent paymentEnabled whatsappNumber="" />)
 
     await screen.findByRole('heading', { name: 'Revise e confirme' })
     await userEvent.click(screen.getByRole('button', { name: 'Finalizar pedido' }))
@@ -185,7 +213,7 @@ describe('acessibilidade do checkout', () => {
   it('não volta para o carrinho quando o pedido esvazia o carrinho antes do redirecionamento', async () => {
     localStorage.setItem('token-zr0', 'test-token')
     mockSearchParams = new URLSearchParams('index=3')
-    renderWithProviders(<CartComponent />)
+    renderWithProviders(<CartComponent paymentEnabled whatsappNumber="" />)
 
     await screen.findByRole('heading', { name: 'Revise e confirme' })
     await userEvent.click(screen.getByRole('button', { name: 'Finalizar pedido' }))

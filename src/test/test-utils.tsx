@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useCartStore } from '@/service/store/cart_store'
 import { initialCartSteps, useCartStepsStore } from '@/app/cart/zustand/zustand'
 import { useProductionOrderStore } from '@/app/production-order/zustand/zustand'
+import { ToastProvider } from '@/components/toast/context'
 
 function AllProviders({ children }: { children: ReactNode }) {
   const queryClient = new QueryClient({
@@ -11,7 +12,9 @@ function AllProviders({ children }: { children: ReactNode }) {
   })
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <ToastProvider>{children}</ToastProvider>
+    </QueryClientProvider>
   )
 }
 

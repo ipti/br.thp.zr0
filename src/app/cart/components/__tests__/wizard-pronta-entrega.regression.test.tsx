@@ -19,7 +19,7 @@ describe('Carrinho de Pronta Entrega — regressão', () => {
   })
 
   it('exibe "Seu carrinho está vazio." quando não há itens selecionados', async () => {
-    renderWithProviders(<CartComponent />)
+    renderWithProviders(<CartComponent paymentEnabled whatsappNumber="" />)
 
     expect(await screen.findByText('Seu carrinho está vazio.')).toBeInTheDocument()
   })
@@ -38,7 +38,7 @@ describe('Carrinho de Pronta Entrega — regressão', () => {
       product_selected: ['chair-uid-escola'],
     } as never)
 
-    renderWithProviders(<CartComponent />)
+    renderWithProviders(<CartComponent paymentEnabled whatsappNumber="" />)
 
     expect(await screen.findByText('Cadeira Escolar')).toBeInTheDocument()
     expect(screen.queryByText('Seu carrinho está vazio.')).not.toBeInTheDocument()
@@ -55,7 +55,7 @@ describe('Carrinho de Pronta Entrega — regressão', () => {
       },
     ])
 
-    renderWithProviders(<CartComponent />)
+    renderWithProviders(<CartComponent paymentEnabled whatsappNumber="" />)
 
     expect(
       await screen.findByRole('link', { name: /encomendar este produto separadamente/i })

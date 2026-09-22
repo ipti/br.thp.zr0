@@ -46,6 +46,7 @@ async function fillQuantityAndSubmit(quantity: number) {
 describe('Jornada de Encomenda — cenário motivador da escola', () => {
   beforeEach(() => {
     resetAllStores()
+    sessionStorage.clear()
     document.cookie = 'access_token=test-token; path=/'
     mockPush.mockClear()
   })
@@ -53,7 +54,7 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
   it.each([30, 50])(
     'completa quantidade -> simulação (modo custo) -> confirmação para %d unidades',
     async quantity => {
-      renderWithProviders(<ProductionOrderSteps product={PRODUCT} />)
+      renderWithProviders(<ProductionOrderSteps product={PRODUCT} paymentEnabled whatsappNumber="" />)
 
       await fillQuantityAndSubmit(quantity)
 
@@ -75,7 +76,7 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
   )
 
   it('completa quantidade -> simulação (modo prazo, particionado entre OT A e OT B) -> confirmação', async () => {
-    renderWithProviders(<ProductionOrderSteps product={PRODUCT} />)
+    renderWithProviders(<ProductionOrderSteps product={PRODUCT} paymentEnabled whatsappNumber="" />)
 
     await fillQuantityAndSubmit(30)
 
@@ -93,7 +94,7 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
   })
 
   it('confirma o pedido de ponta a ponta (reserve + create) e redireciona para /payment', async () => {
-    renderWithProviders(<ProductionOrderSteps product={PRODUCT} />)
+    renderWithProviders(<ProductionOrderSteps product={PRODUCT} paymentEnabled whatsappNumber="" />)
 
     await fillQuantityAndSubmit(30)
     await userEvent.click(await screen.findByText('Menor custo'))
@@ -114,5 +115,44 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
       expect(mockPush).toHaveBeenCalledWith('/payment?id=101')
     })
     expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('101')
+  })
+
+  it('com paymentEnabled=false, abre o WhatsApp com o resumo da encomenda e não cria pedido nem navega para /payment', async () => {
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
+
+    renderWithProviders(
+      <ProductionOrderSteps
+        product={PRODUCT}
+        paymentEnabled={false}
+        whatsappNumber="5511999999999"
+      />
+    )
+
+    await fillQuantityAndSubmit(30)
+    await userEvent.click(await screen.findByText('Menor custo'))
+    await screen.findByText('OT A')
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Continuar' })).toBeEnabled()
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Continuar' }))
+
+    const addressCard = await screen.findByText(/Rua das Flores/)
+    await userEvent.click(addressCard)
+
+    const button = screen.getByRole('button', { name: 'Confirmar pelo WhatsApp' })
+    await userEvent.click(button)
+
+    expect(openSpy).toHaveBeenCalledTimes(1)
+    const [url] = openSpy.mock.calls[0]
+    expect(url).toContain('https://wa.me/5511999999999?text=')
+
+    const message = decodeURIComponent(String(url).split('?text=')[1])
+    expect(message).toContain('Cadeira Escolar — 30 unidades')
+    expect(message).toContain('Plano: Menor custo')
+
+    expect(mockPush).not.toHaveBeenCalled()
+    expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBeNull()
+
+    openSpy.mockRestore()
   })
 })

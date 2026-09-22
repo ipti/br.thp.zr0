@@ -27,7 +27,13 @@ type ApiCartItem = {
   }
 }
 
-export default function CartComponent() {
+export default function CartComponent({
+  paymentEnabled,
+  whatsappNumber,
+}: {
+  paymentEnabled: boolean
+  whatsappNumber: string
+}) {
   const history = useRouter()
 
   const searchParams = useSearchParams()
@@ -152,6 +158,8 @@ export default function CartComponent() {
           <Finish
             handleActiveIndex={handleActiveIndex}
             handleSetOrders={handleSetOrders}
+            paymentEnabled={paymentEnabled}
+            whatsappNumber={whatsappNumber}
           />
         )}
       </section>

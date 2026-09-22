@@ -5,6 +5,8 @@ import { ZButton } from '@/components/button/button'
 import ZDivider from '@/components/divider/divider'
 import ZInputText from '@/components/input/input'
 import ZSkeleton from '@/components/skeleton/skeleton'
+import { useToast } from '@/components/toast/hook/useToast'
+import { buildCartWhatsAppMessage, openWhatsApp } from '@/lib/whatsapp'
 import { useFetchUserToken } from '@/service/global_request/query'
 import { UserGlobal } from '@/service/global_request/type'
 import { useCartStore } from '@/service/store/cart_store'
@@ -33,11 +35,16 @@ type Feedback = { type: 'success' | 'error'; message: string }
 
 export default function Finish({
   handleActiveIndex,
-  handleSetOrders
+  handleSetOrders,
+  paymentEnabled,
+  whatsappNumber
 }: {
   handleActiveIndex: (i: number) => void
   handleSetOrders: (orders: { id: number; uid: string }[]) => void
+  paymentEnabled: boolean
+  whatsappNumber: string
 }) {
+  const { showToast } = useToast()
   const [isLoadingFinish, setIsLoadingFinish] = useState(false)
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false)
   const [couponCode, setCouponCode] = useState('')
@@ -136,6 +143,32 @@ export default function Finish({
         requestAnimationFrame(() => validationSummaryRef.current?.focus())
       }
     )
+  }
+
+  const handleWhatsAppCheckout = () => {
+    if (submissionLockRef.current || isLoadingReview) return
+    setCreateError(null)
+
+    if (validationErrors.length > 0 || !address) {
+      focusValidationSummary()
+      return
+    }
+
+    const message = buildCartWhatsAppMessage({
+      items: selectedItems.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price
+      })),
+      subtotal,
+      shippingTotal,
+      total: orderTotal - couponDiscount,
+      addressSummary: `${address.address}, ${address.number} - ${address.neighborhood}, ${address.city.name}/${address.state.acronym} - CEP ${address.cep}`,
+      paymentMethodLabel: paymentOptions.find(option => option.value === paymentMethod)?.label
+    })
+
+    openWhatsApp(whatsappNumber, message)
+    showToast('Pedido pronto! Finalize a conversa no WhatsApp.', 'success', 4000)
   }
 
   const handleCouponChange = (value: string) => {
@@ -332,14 +365,17 @@ export default function Finish({
             </div>
 
             <p className="checkout-confirmation-note ">
-              Ao finalizar, você confirma que revisou os produtos, o endereço, a entrega e a forma de pagamento.
+              {paymentEnabled
+                ? 'Ao finalizar, você confirma que revisou os produtos, o endereço, a entrega e a forma de pagamento.'
+                : 'Você será redirecionado para o WhatsApp para confirmar o pedido com nossa equipe.'}
             </p>
             <ZButton
-              label="Finalizar pedido"
+              label={paymentEnabled ? 'Finalizar pedido' : 'Finalizar pelo WhatsApp'}
+              icon={paymentEnabled ? undefined : 'pi pi-send'}
               style={{ width: '100%', marginTop: '1rem' }}
               loading={isLoadingFinish}
               disabled={isLoadingReview || isLoadingFinish}
-              onClick={handleCreateOrder}
+              onClick={paymentEnabled ? handleCreateOrder : handleWhatsAppCheckout}
             />
           </div>
         </aside>

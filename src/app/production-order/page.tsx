@@ -1,5 +1,6 @@
 import { getProductByUid } from '@/app/product/service/server'
 import type { Metadata } from 'next'
+import { getPaymentConfig } from '@/lib/payment_config'
 import ProductionOrderSteps from './components/components'
 
 export const dynamic = 'force-dynamic'
@@ -17,6 +18,13 @@ export default async function ProductionOrderPage({
 }: ProductionOrderPageProps) {
   const { productId } = await searchParams
   const product = productId ? await getProductByUid(productId) : null
+  const { paymentEnabled, whatsappNumber } = getPaymentConfig()
 
-  return <ProductionOrderSteps product={product} />
+  return (
+    <ProductionOrderSteps
+      product={product}
+      paymentEnabled={paymentEnabled}
+      whatsappNumber={whatsappNumber}
+    />
+  )
 }

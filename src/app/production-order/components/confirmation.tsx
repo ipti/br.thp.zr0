@@ -12,6 +12,8 @@ import { ZSaleTypeBadge } from '@/components/badge/sale_type_badge'
 import { ZButton } from '@/components/button/button'
 import ZRadioButton from '@/components/radio_button/radio_button'
 import ZSkeleton from '@/components/skeleton/skeleton'
+import { useToast } from '@/components/toast/hook/useToast'
+import { buildEncomendaWhatsAppMessage, openWhatsApp } from '@/lib/whatsapp'
 import { useFetchUserToken } from '@/service/global_request/query'
 import { UserGlobal } from '@/service/global_request/type'
 import Image from 'next/image'
@@ -60,12 +62,17 @@ const onlyDigits = (value?: string) => value?.replace(/\D/g, '') ?? ''
 export default function Confirmation({
   product,
   handleActiveIndex,
+  paymentEnabled,
+  whatsappNumber,
 }: {
   product: ProductOne | null
   handleActiveIndex: (i: number) => void
+  paymentEnabled: boolean
+  whatsappNumber: string
 }) {
   const { ReserveProductionOrderAction, CreateProductionOrderAction } =
     ProductionOrderController()
+  const { showToast } = useToast()
   const router = useRouter()
   const productionOrder = useProductionOrderStore(state => state.productionOrder)
   const getSelectedPlan = useProductionOrderStore(state => state.getSelectedPlan)
@@ -230,6 +237,32 @@ export default function Confirmation({
       setLoading,
       handleSubmissionError,
     )
+  }
+
+  const handleWhatsAppConfirm = () => {
+    if (submissionLockRef.current || isLoadingReview) return
+
+    setSubmitAttempted(true)
+    setCreateError(null)
+    if (validationErrors.length || !selectedAddress) {
+      focusValidationSummary()
+      return
+    }
+
+    const message = buildEncomendaWhatsAppMessage({
+      productName: product?.name ?? 'Produto',
+      quantity: desiredQuantity,
+      planLabel: SIMULATION_MODE_LABEL[productionOrder.simulationMode!],
+      maxDeliveryAt: plan.maxDeliveryAt,
+      productSubtotal,
+      freightTotal: plan.totalCost,
+      estimatedTotal,
+      addressSummary: `${selectedAddress.address}, ${selectedAddress.number} - ${selectedAddress.neighborhood}, CEP ${selectedAddress.cep}`,
+      paymentMethodLabel: PAYMENT_OPTIONS.find(option => option.value === paymentMethod)?.label
+    })
+
+    openWhatsApp(whatsappNumber, message)
+    showToast('Encomenda pronta! Finalize a conversa no WhatsApp.', 'success', 4000)
   }
 
   return (
@@ -460,15 +493,16 @@ export default function Confirmation({
               </fieldset>
 
               <p className="confirmation-note">
-                Ao confirmar, reservaremos por alguns minutos a capacidade das
-                oficinas antes de criar o pedido.
+                {paymentEnabled
+                  ? 'Ao confirmar, reservaremos por alguns minutos a capacidade das oficinas antes de criar o pedido.'
+                  : 'Você será redirecionado para o WhatsApp para confirmar a encomenda com nossa equipe.'}
               </p>
               <ZButton
-                label="Confirmar encomenda"
-                icon="pi pi-check"
+                label={paymentEnabled ? 'Confirmar encomenda' : 'Confirmar pelo WhatsApp'}
+                icon={paymentEnabled ? 'pi pi-check' : 'pi pi-send'}
                 loading={loading}
                 disabled={isLoadingReview || loading}
-                onClick={handleConfirm}
+                onClick={paymentEnabled ? handleConfirm : handleWhatsAppConfirm}
                 className="confirmation-submit"
               />
               <small className="confirmation-security-note">
