@@ -5,8 +5,9 @@ import {
 } from '../whatsapp'
 
 describe('buildCartWhatsAppMessage', () => {
-  it('lista itens, subtotal, frete e total', () => {
+  it('inclui a referência do pedido, itens, subtotal, frete e total', () => {
     const message = buildCartWhatsAppMessage({
+      orderReference: 'ZR-42',
       items: [
         { name: 'Cadeira Artesanal', quantity: 2, price: 250 },
         { name: 'Mesa de Centro', quantity: 1, price: 500 },
@@ -16,6 +17,7 @@ describe('buildCartWhatsAppMessage', () => {
       total: 1045,
     })
 
+    expect(message).toContain('Pedido #ZR-42')
     expect(message).toContain('Cadeira Artesanal (x2)')
     expect(message).toContain('Mesa de Centro (x1)')
     expect(message).toMatch(/Subtotal: R\$\s*1\.000,00/)
@@ -25,6 +27,7 @@ describe('buildCartWhatsAppMessage', () => {
 
   it('inclui endereço e método de pagamento quando fornecidos', () => {
     const message = buildCartWhatsAppMessage({
+      orderReference: 'ZR-1',
       items: [{ name: 'Cadeira', quantity: 1, price: 250 }],
       subtotal: 250,
       shippingTotal: 0,
@@ -39,6 +42,7 @@ describe('buildCartWhatsAppMessage', () => {
 
   it('omite endereço e pagamento quando não fornecidos', () => {
     const message = buildCartWhatsAppMessage({
+      orderReference: 'ZR-1',
       items: [{ name: 'Cadeira', quantity: 1, price: 250 }],
       subtotal: 250,
       shippingTotal: 0,
@@ -49,21 +53,23 @@ describe('buildCartWhatsAppMessage', () => {
     expect(message).not.toContain('Pagamento preferido:')
   })
 
-  it('termina com o pedido de confirmação', () => {
+  it('termina pedindo contato para combinar entrega e pagamento', () => {
     const message = buildCartWhatsAppMessage({
+      orderReference: 'ZR-1',
       items: [{ name: 'Cadeira', quantity: 1, price: 250 }],
       subtotal: 250,
       shippingTotal: 0,
       total: 250,
     })
 
-    expect(message.trim().endsWith('Aguardo confirmação!')).toBe(true)
+    expect(message.trim().endsWith('Aguardo contato para combinar entrega e pagamento!')).toBe(true)
   })
 })
 
 describe('buildEncomendaWhatsAppMessage', () => {
-  it('inclui produto, quantidade, plano e datas formatadas em pt-BR', () => {
+  it('inclui a referência do pedido, produto, quantidade, plano e datas formatadas em pt-BR', () => {
     const message = buildEncomendaWhatsAppMessage({
+      orderReference: 'ZR-99',
       productName: 'Cadeira Artesanal',
       quantity: 10,
       planLabel: 'Menor prazo',
@@ -73,6 +79,7 @@ describe('buildEncomendaWhatsAppMessage', () => {
       estimatedTotal: 2800,
     })
 
+    expect(message).toContain('Pedido #ZR-99')
     expect(message).toContain('Cadeira Artesanal — 10 unidades')
     expect(message).toContain('Plano: Menor prazo')
     expect(message).toMatch(/Entrega prevista: \d{2}\/\d{2}\/2026/)
@@ -81,6 +88,7 @@ describe('buildEncomendaWhatsAppMessage', () => {
 
   it('usa singular "unidade" para quantidade 1', () => {
     const message = buildEncomendaWhatsAppMessage({
+      orderReference: 'ZR-1',
       productName: 'Mesa',
       quantity: 1,
       planLabel: 'Menor custo',
@@ -96,6 +104,7 @@ describe('buildEncomendaWhatsAppMessage', () => {
 
   it('inclui endereço e pagamento quando fornecidos', () => {
     const message = buildEncomendaWhatsAppMessage({
+      orderReference: 'ZR-1',
       productName: 'Cadeira',
       quantity: 5,
       planLabel: 'Menor custo',

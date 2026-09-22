@@ -165,13 +165,14 @@ describe('acessibilidade do checkout', () => {
     expect(mockCreateOrder).toHaveBeenCalledTimes(1)
   })
 
-  it('com paymentEnabled=false, abre o WhatsApp com o resumo do pedido e não cria pedido no sistema', async () => {
+  it('com paymentEnabled=false, cria o pedido normalmente e também abre o WhatsApp com o resumo', async () => {
     const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
+    const handleSetOrders = jest.fn()
 
     renderWithProviders(
       <Finish
         handleActiveIndex={jest.fn()}
-        handleSetOrders={jest.fn()}
+        handleSetOrders={handleSetOrders}
         paymentEnabled={false}
         whatsappNumber="5511999999999"
       />
@@ -180,15 +181,23 @@ describe('acessibilidade do checkout', () => {
     const button = screen.getByRole('button', { name: 'Finalizar pelo WhatsApp' })
     await userEvent.click(button)
 
-    expect(mockCreateOrder).not.toHaveBeenCalled()
-    expect(openSpy).toHaveBeenCalledTimes(1)
+    expect(mockCreateOrder).toHaveBeenCalledTimes(1)
 
+    const successAction = mockCreateOrder.mock.calls[0][2] as (
+      orders: { id: number; uid: string }[]
+    ) => void
+    act(() => successAction([{ id: 34, uid: 'ZR-34' }]))
+
+    expect(openSpy).toHaveBeenCalledTimes(1)
     const [url] = openSpy.mock.calls[0]
     expect(url).toContain('https://wa.me/5511999999999?text=')
 
     const message = decodeURIComponent(String(url).split('?text=')[1])
+    expect(message).toContain('Pedido #ZR-34')
     expect(message).toContain('Cadeira (x2)')
     expect(message).toContain('Entrega: Rua Teste, 100 - Centro, São Paulo/SP - CEP 01234-567')
+
+    expect(handleSetOrders).toHaveBeenCalledWith([{ id: 34, uid: 'ZR-34' }])
 
     openSpy.mockRestore()
   })
@@ -208,6 +217,27 @@ describe('acessibilidade do checkout', () => {
 
     expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('34')
     expect(mockPush).toHaveBeenCalledWith('/payment?id=34')
+  })
+
+  it('com paymentEnabled=false, redireciona o pedido criado para o acompanhamento em vez do pagamento', async () => {
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
+    localStorage.setItem('token-zr0', 'test-token')
+    mockSearchParams = new URLSearchParams('index=3')
+    renderWithProviders(<CartComponent paymentEnabled={false} whatsappNumber="5511999999999" />)
+
+    await screen.findByRole('heading', { name: 'Revise e confirme' })
+    await userEvent.click(screen.getByRole('button', { name: 'Finalizar pelo WhatsApp' }))
+
+    const successAction = mockCreateOrder.mock.calls[0][2] as (
+      orders: { id: number; uid: string }[]
+    ) => void
+    act(() => successAction([{ id: 34, uid: 'ZR-34' }]))
+
+    expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('34')
+    expect(mockPush).toHaveBeenCalledWith('/profile/order/34')
+    expect(mockPush).not.toHaveBeenCalledWith(expect.stringContaining('/payment'))
+
+    openSpy.mockRestore()
   })
 
   it('não volta para o carrinho quando o pedido esvazia o carrinho antes do redirecionamento', async () => {

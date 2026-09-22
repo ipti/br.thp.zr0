@@ -6,6 +6,7 @@ import { ZButton } from '@/components/button/button'
 import ZConfirmDialog from '@/components/confirm_dialog/confirm_dialog'
 import ZRadioButton from '@/components/radio_button/radio_button'
 import { ZSaleTypeBadge } from '@/components/badge/sale_type_badge'
+import { buildOrderFollowUpWhatsAppMessage, buildWhatsAppLink } from '@/lib/whatsapp'
 import type { OrderOneType, OrderService } from '../../../service/types'
 import { OrderController } from '../../../service/controller'
 import { OrderReviews } from './order_reviews'
@@ -21,6 +22,8 @@ const PAYMENT_METHOD_OPTIONS: Array<{ value: PaymentMethodOption; label: string 
 
 interface OrderProps {
   order: OrderOneType
+  paymentEnabled: boolean
+  whatsappNumber: string
 }
 
 type StepState = 'completed' | 'current' | 'pending'
@@ -41,6 +44,15 @@ const PAYMENT_STATUS: Record<string, { label: string; description: string; icon:
   PAID: { label: 'Pagamento confirmado', description: 'O pagamento deste pedido foi aprovado.', icon: 'pi pi-check-circle', tone: 'success' },
   FAILED: { label: 'Pagamento não concluído', description: 'Faça uma nova tentativa para concluir o pedido.', icon: 'pi pi-exclamation-circle', tone: 'danger' },
   REFUNDED: { label: 'Pagamento reembolsado', description: 'O valor deste pedido foi devolvido.', icon: 'pi pi-replay', tone: 'neutral' }
+}
+
+// Estado exibido no lugar de "Pagamento pendente" quando PAYMENT_ENABLED=false —
+// aqui o próximo passo do cliente é falar com a equipe no WhatsApp, não pagar.
+const WHATSAPP_CONTACT_STATUS = {
+  label: 'Aguardando contato',
+  description: 'Fale com nossa equipe no WhatsApp para combinar entrega e pagamento.',
+  icon: 'pi pi-whatsapp',
+  tone: 'whatsapp'
 }
 
 const PAYMENT_METHOD: Record<string, string> = {
@@ -96,14 +108,20 @@ function getStepState(step: number, currentStep: number): StepState {
   return 'pending'
 }
 
-function OrderProgress({ order, status }: { order: OrderOneType; status: string }) {
+function OrderProgress({ order, status, paymentEnabled }: { order: OrderOneType; status: string; paymentEnabled: boolean }) {
   const isEncomenda = order.sale_type === 'ENCOMENDA'
   const paymentComplete = ['PAID', 'REFUNDED'].includes(order.payment_status)
+  const awaitingContact = !paymentEnabled && !paymentComplete
   const orderProgress = STATUS_PROGRESS[status] ?? 0
   const currentStep = !paymentComplete ? 1 : isEncomenda ? Math.max(2, orderProgress) : Math.max(2, orderProgress - 1)
   const steps = [
     { label: 'Pedido realizado', description: formatDate(order.createdAt), icon: 'pi pi-shopping-bag', state: 'completed' as StepState },
-    { label: paymentComplete ? 'Pagamento confirmado' : 'Aguardando pagamento', description: PAYMENT_METHOD[order.payment_method] ?? undefined, icon: 'pi pi-credit-card', state: getStepState(1, currentStep) },
+    {
+      label: paymentComplete ? 'Pagamento confirmado' : awaitingContact ? 'Aguardando contato' : 'Aguardando pagamento',
+      description: awaitingContact ? 'Via WhatsApp' : PAYMENT_METHOD[order.payment_method] ?? undefined,
+      icon: awaitingContact ? 'pi pi-whatsapp' : 'pi pi-credit-card',
+      state: getStepState(1, currentStep)
+    },
     ...(isEncomenda
       ? [{ label: status === 'IN_PRODUCTION' ? 'Em produção' : 'Produção', description: formatDate(order.order_services[0]?.estimated_ready_at) ?? undefined, icon: 'pi pi-cog', state: getStepState(2, currentStep) }]
       : []),
@@ -192,7 +210,7 @@ function ShipmentCard({ service, index }: { service: OrderService; index: number
   )
 }
 
-const OrderCard: React.FC<OrderProps> = ({ order }) => {
+const OrderCard: React.FC<OrderProps> = ({ order, paymentEnabled, whatsappNumber }) => {
   const [cancelDialogVisible, setCancelDialogVisible] = useState(false)
   const [editingPayment, setEditingPayment] = useState(false)
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodOption>(
@@ -203,9 +221,12 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
   const controllerOrder = OrderController()
   const currentStatus = useMemo(() => getCurrentStatus(order.order_services ?? []), [order.order_services])
   const status = ORDER_STATUS[currentStatus] ?? ORDER_STATUS.PENDING
-  const payment = PAYMENT_STATUS[order.payment_status] ?? PAYMENT_STATUS.PENDING
   const blockedStatuses = ['SOLITED_CANCELLATION', 'CANCELLED']
-  const canPay = ['PENDING', 'FAILED'].includes(order.payment_status) && !order.order_services.some(service => blockedStatuses.includes(service.status))
+  const paymentActionable = ['PENDING', 'FAILED'].includes(order.payment_status) && !order.order_services.some(service => blockedStatuses.includes(service.status))
+  const canPay = paymentEnabled && paymentActionable
+  const needsWhatsAppContact = !paymentEnabled && paymentActionable
+  const payment = needsWhatsAppContact ? WHATSAPP_CONTACT_STATUS : PAYMENT_STATUS[order.payment_status] ?? PAYMENT_STATUS.PENDING
+  const whatsappLink = buildWhatsAppLink(whatsappNumber, buildOrderFollowUpWhatsAppMessage(order.uid))
   const canCancel = order.order_services.length > 0 && order.order_services.every(service => ['PENDING', 'CONFIRMED', 'IN_PRODUCTION'].includes(service.status))
   const canChangePaymentMethod = canPay
 
@@ -247,14 +268,38 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
           <strong>{formatCurrency(order.total_amount)}</strong>
           <div className="order-detail__hero-actions">
             {canPay ? <ZButton icon="pi pi-credit-card" label="Pagar agora" onClick={() => router.push(`/payment?id=${order.id}`)} severity="success" /> : null}
+            {needsWhatsAppContact ? (
+              <ZButton
+                icon="pi pi-whatsapp"
+                label="Falar no WhatsApp"
+                onClick={() => window.open(whatsappLink, '_blank', 'noopener,noreferrer')}
+                className="order-detail__whatsapp-button"
+              />
+            ) : null}
             {canCancel ? <ZButton icon="pi pi-undo" label="Solicitar cancelamento" onClick={() => setCancelDialogVisible(true)} outlined severity="danger" /> : null}
           </div>
         </div>
       </header>
 
+      {needsWhatsAppContact ? (
+        <div className="order-detail__whatsapp-callout" role="status">
+          <span className="order-detail__whatsapp-callout-icon" aria-hidden="true"><i className="pi pi-whatsapp" /></span>
+          <div>
+            <strong>Para continuar, fale com a gente no WhatsApp</strong>
+            <p>Seu pedido foi registrado, mas para combinar a entrega e o pagamento você precisa entrar em contato com nossa equipe.</p>
+          </div>
+          <ZButton
+            icon="pi pi-whatsapp"
+            label="Abrir WhatsApp"
+            onClick={() => window.open(whatsappLink, '_blank', 'noopener,noreferrer')}
+            className="order-detail__whatsapp-button"
+          />
+        </div>
+      ) : null}
+
       <section className="order-detail__progress-card" aria-labelledby="order-progress-title">
         <div className="order-detail__section-heading"><span>Acompanhamento</span><h2 id="order-progress-title">Status do pedido</h2></div>
-        <OrderProgress order={order} status={currentStatus} />
+        <OrderProgress order={order} status={currentStatus} paymentEnabled={paymentEnabled} />
       </section>
 
       <div className="order-detail__layout">
@@ -270,7 +315,7 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
             </div>
             <dl className="order-summary-card__list">
               <div className="order-summary-card__payment-method-row">
-                <dt>Forma de pagamento</dt>
+                <dt>{needsWhatsAppContact ? 'Forma de pagamento preferida' : 'Forma de pagamento'}</dt>
                 <dd>
                   <span>{PAYMENT_METHOD[order.payment_method] ?? 'Não informada'}</span>
                   {canChangePaymentMethod && !editingPayment ? (
@@ -327,6 +372,14 @@ const OrderCard: React.FC<OrderProps> = ({ order }) => {
             ) : null}
 
             {canPay ? <ZButton icon="pi pi-credit-card" label="Realizar pagamento" onClick={() => router.push(`/payment?id=${order.id}`)} severity="success" className="order-summary-card__button" /> : null}
+            {needsWhatsAppContact ? (
+              <ZButton
+                icon="pi pi-whatsapp"
+                label="Falar no WhatsApp"
+                onClick={() => window.open(whatsappLink, '_blank', 'noopener,noreferrer')}
+                className="order-summary-card__button order-detail__whatsapp-button"
+              />
+            ) : null}
           </section>
 
           <section className="order-summary-card">

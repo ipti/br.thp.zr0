@@ -8,6 +8,7 @@ export type WhatsAppOrderItem = {
 }
 
 export type WhatsAppCartOrder = {
+  orderReference: string
   items: WhatsAppOrderItem[]
   subtotal: number
   shippingTotal: number
@@ -17,6 +18,7 @@ export type WhatsAppCartOrder = {
 }
 
 export type WhatsAppEncomendaOrder = {
+  orderReference: string
   productName: string
   quantity: number
   planLabel: string
@@ -34,7 +36,9 @@ function formatCurrency(value: number): string {
 
 export function buildCartWhatsAppMessage(order: WhatsAppCartOrder): string {
   const lines = [
-    'Olá! Gostaria de fazer um pedido:',
+    'Olá! Acabei de finalizar um pedido no site:',
+    '',
+    `Pedido #${order.orderReference}`,
     '',
     ...order.items.map(
       item => `• ${item.name} (x${item.quantity}) — ${formatCurrency(item.price)} cada`
@@ -53,7 +57,7 @@ export function buildCartWhatsAppMessage(order: WhatsAppCartOrder): string {
     lines.push(`Pagamento preferido: ${order.paymentMethodLabel}`)
   }
 
-  lines.push('', 'Aguardo confirmação!')
+  lines.push('', 'Aguardo contato para combinar entrega e pagamento!')
 
   return lines.join('\n')
 }
@@ -63,7 +67,9 @@ export function buildEncomendaWhatsAppMessage(order: WhatsAppEncomendaOrder): st
   const unitLabel = order.quantity === 1 ? 'unidade' : 'unidades'
 
   const lines = [
-    'Olá! Gostaria de fazer uma encomenda:',
+    'Olá! Acabei de finalizar uma encomenda no site:',
+    '',
+    `Pedido #${order.orderReference}`,
     '',
     `• ${order.productName} — ${order.quantity} ${unitLabel}`,
     `  Plano: ${order.planLabel}`,
@@ -82,9 +88,15 @@ export function buildEncomendaWhatsAppMessage(order: WhatsAppEncomendaOrder): st
     lines.push(`Pagamento preferido: ${order.paymentMethodLabel}`)
   }
 
-  lines.push('', 'Aguardo confirmação!')
+  lines.push('', 'Aguardo contato para combinar entrega e pagamento!')
 
   return lines.join('\n')
+}
+
+// Usada na tela de acompanhamento do pedido (/profile/order/[id]) quando o
+// cliente ainda não entrou em contato — link "Falar no WhatsApp".
+export function buildOrderFollowUpWhatsAppMessage(orderReference: string): string {
+  return `Olá! Meu pedido #${orderReference} está aguardando contato. Podem me ajudar a continuar?`
 }
 
 export function buildWhatsAppLink(phoneNumber: string, message: string): string {

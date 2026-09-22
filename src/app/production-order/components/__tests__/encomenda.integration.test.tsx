@@ -117,7 +117,7 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('101')
   })
 
-  it('com paymentEnabled=false, abre o WhatsApp com o resumo da encomenda e não cria pedido nem navega para /payment', async () => {
+  it('com paymentEnabled=false, cria o pedido, abre o WhatsApp com o resumo e navega para o acompanhamento do pedido', async () => {
     const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
 
     renderWithProviders(
@@ -147,11 +147,14 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     expect(url).toContain('https://wa.me/5511999999999?text=')
 
     const message = decodeURIComponent(String(url).split('?text=')[1])
+    expect(message).toContain('Pedido #ZR-202609-ENCOMENDA01')
     expect(message).toContain('Cadeira Escolar — 30 unidades')
     expect(message).toContain('Plano: Menor custo')
 
-    expect(mockPush).not.toHaveBeenCalled()
-    expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBeNull()
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith('/profile/order/101')
+    })
+    expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('101')
 
     openSpy.mockRestore()
   })
