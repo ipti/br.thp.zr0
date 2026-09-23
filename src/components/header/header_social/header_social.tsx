@@ -1,11 +1,16 @@
-import { Facebook, Instagram } from 'lucide-react'
+import { Instagram } from 'lucide-react'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
 import './header_social.css'
+
+const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER
 
 const socialLinks = [
   {
-    label: 'Facebook',
-    href: process.env.NEXT_PUBLIC_FACEBOOK_URL,
-    icon: Facebook,
+    label: 'WhatsApp',
+    href: whatsappNumber
+      ? buildWhatsAppLink(whatsappNumber, 'Olá! Gostaria de saber mais sobre os produtos da ZR0.')
+      : undefined,
+    iconClassName: 'pi pi-whatsapp',
   },
   {
     label: 'Instagram',
@@ -16,8 +21,8 @@ const socialLinks = [
 
 export default function HeaderSocial() {
   return (
-    <div className="header-social" aria-label="Redes sociais">
-      {socialLinks.map(({ label, href, icon: Icon }) =>
+    <div className="header-social" aria-label="Contato e redes sociais">
+      {socialLinks.map(({ label, href, icon: Icon, iconClassName }) =>
         href ? (
           <a
             key={label}
@@ -25,9 +30,9 @@ export default function HeaderSocial() {
             href={href}
             target="_blank"
             rel="noreferrer"
-            aria-label={`Abrir ${label} da ZR0`}
+            aria-label={label === 'WhatsApp' ? 'Falar com a ZR0 no WhatsApp' : `Abrir ${label} da ZR0`}
           >
-            <Icon aria-hidden="true" />
+            {iconClassName ? <i className={iconClassName} aria-hidden="true" /> : <Icon aria-hidden="true" />}
           </a>
         ) : (
           <span
@@ -36,7 +41,7 @@ export default function HeaderSocial() {
             title={`${label} indisponível`}
             aria-hidden="true"
           >
-            <Icon />
+            {iconClassName ? <i className={iconClassName} /> : <Icon />}
           </span>
         )
       )}

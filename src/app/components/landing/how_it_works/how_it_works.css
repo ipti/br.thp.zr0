@@ -47,7 +47,13 @@
   padding: clamp(1.25rem, 2.5vw, 2rem) clamp(1rem, 2vw, 1.5rem);
   border: 1px solid rgba(16, 89, 79, 0.08);
   border-radius: clamp(0.85rem, 1.5vw, 1.25rem);
-  background: #f3f3f0;
+  background-color: #f3f3f0;
+  background-image:
+    linear-gradient(rgba(243, 243, 240, 0.72), rgba(243, 243, 240, 0.72)),
+    url('../../../../assets/img/home/hero/hero_texture.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   text-align: center;
 }
 

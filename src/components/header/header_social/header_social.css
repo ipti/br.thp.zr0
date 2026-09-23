@@ -6,12 +6,11 @@
 
 .header-social__link {
   display: grid;
-  width: clamp(2.75rem, 3.4vw, 4rem);
-  height: clamp(2.75rem, 3.4vw, 4rem);
+  width: clamp(2.1rem, 2.5vw, 2.5rem);
+  height: clamp(2.1rem, 2.5vw, 2.5rem);
   color: #111111;
-  border-radius: 0.5rem;
   place-items: center;
-  transition: opacity 160ms ease;
+  transition: opacity 160ms ease, width 220ms ease, height 220ms ease;
 }
 
 .header-social__link:hover {
@@ -19,9 +18,15 @@
 }
 
 .header-social__link svg {
-  width: clamp(1.3rem, 1.8vw, 2.1rem);
-  height: clamp(1.3rem, 1.8vw, 2.1rem);
+  width: clamp(1.5rem, 1.8vw, 1.9rem);
+  height: clamp(1.5rem, 1.8vw, 1.9rem);
   stroke-width: 2;
+  transition: width 220ms ease, height 220ms ease;
+}
+
+.header-social__link i {
+  font-size: clamp(1.3rem, 1.6vw, 1.7rem);
+  transition: font-size 220ms ease;
 }
 
 .header-social__link--disabled {
@@ -40,19 +45,26 @@
   }
 
   .header-social__link svg {
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  .header-social__link i {
+    font-size: 1.4rem;
   }
 }
 
 @media (max-width: 374px) {
-  .header-social__link:nth-child(1) {
+  /* Em telas muito estreitas, esconde o Instagram e mantém o WhatsApp
+   * (contato direto) visível. */
+  .header-social__link:nth-child(2) {
     display: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .header-social__link {
+  .header-social__link,
+  .header-social__link svg {
     transition: none;
   }
 }

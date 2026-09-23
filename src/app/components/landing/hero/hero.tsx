@@ -8,20 +8,20 @@ export default function Hero() {
   return (
     <section className="landing-hero" aria-labelledby="landing-hero-title">
       <div className="landing-hero__blobs" aria-hidden="true">
-        <svg
+        {/* <svg
           className="landing-hero__blob landing-hero__blob--green"
           viewBox="0 0 200 160"
           focusable="false"
         >
           <path d="M40,20 C90,-10 160,10 175,60 C190,110 140,140 90,135 C40,130 -10,100 5,60 C15,35 25,30 40,20 Z" />
-        </svg>
-        <svg
+        </svg> */}
+        {/* <svg
           className="landing-hero__blob landing-hero__blob--tan"
           viewBox="0 0 200 160"
           focusable="false"
         >
           <path d="M40,20 C90,-10 160,10 175,60 C190,110 140,140 90,135 C40,130 -10,100 5,60 C15,35 25,30 40,20 Z" />
-        </svg>
+        </svg> */}
       </div>
 
       <div className="landing-hero__grid">
