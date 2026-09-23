@@ -14,7 +14,7 @@ import LoginModal from './login/login_modal'
 import MenuUser from './menu_user/menu_user'
 import './header.css'
 
-const SCROLL_SHRINK_THRESHOLD = 24
+const SCROLL_EXPAND_THRESHOLD = 16
 
 export default function Header() {
   const [modalLogin, setModalLogin] = useState(false)
@@ -30,6 +30,10 @@ export default function Header() {
 
   useEffect(() => {
     let ticking = false
+    const header = document.querySelector<HTMLElement>('.site-header')
+    // Ao encolher, o header reduz a altura da página. Limites separados
+    // impedem que essa mudança dispare a expansão logo em seguida.
+    const shrinkThreshold = header?.offsetHeight ?? 160
 
     const getScrollTop = () =>
       Math.max(
@@ -39,7 +43,12 @@ export default function Header() {
       )
 
     const updateScrolled = () => {
-      setIsScrolled(getScrollTop() > SCROLL_SHRINK_THRESHOLD)
+      const scrollTop = getScrollTop()
+      setIsScrolled(current =>
+        current
+          ? scrollTop > SCROLL_EXPAND_THRESHOLD
+          : scrollTop >= shrinkThreshold
+      )
       ticking = false
     }
 

@@ -8,6 +8,8 @@ import { ProductOne } from '@/app/seller/product/one/service/type'
 import ProductionOrderSteps from '../components'
 import { SCHOOL_PRODUCT_UID } from '@/test/fixtures/compra-por-encomenda'
 import { CREATED_ORDER_SESSION_KEY } from '@/app/profile/order/constants'
+import { server } from '@/test/msw/server'
+import { http, HttpResponse } from 'msw'
 
 const mockPush = jest.fn()
 jest.mock('next/navigation', () => ({
@@ -118,7 +120,14 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
   })
 
   it('com paymentEnabled=false, cria o pedido, abre o WhatsApp com o resumo e navega para o acompanhamento do pedido', async () => {
-    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
+    const replace = jest.fn()
+    const popup = {
+      opener: window,
+      closed: false,
+      location: { replace },
+      close: jest.fn(),
+    } as unknown as Window
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => popup)
 
     renderWithProviders(
       <ProductionOrderSteps
@@ -143,7 +152,10 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     await userEvent.click(button)
 
     expect(openSpy).toHaveBeenCalledTimes(1)
-    const [url] = openSpy.mock.calls[0]
+    expect(openSpy).toHaveBeenCalledWith('about:blank', '_blank')
+    expect(popup.opener).toBeNull()
+    expect(replace).toHaveBeenCalledTimes(1)
+    const [url] = replace.mock.calls[0]
     expect(url).toContain('https://wa.me/5511999999999?text=')
 
     const message = decodeURIComponent(String(url).split('?text=')[1])
@@ -156,6 +168,41 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     })
     expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('101')
 
+    openSpy.mockRestore()
+  })
+
+  it('fecha a aba reservada se a encomenda não for salva', async () => {
+    server.use(
+      http.post('/api/production-order', () =>
+        HttpResponse.json({ message: 'Falha ao salvar' }, { status: 500 })
+      )
+    )
+    const popup = {
+      opener: window,
+      closed: false,
+      location: { replace: jest.fn() },
+      close: jest.fn(),
+    } as unknown as Window
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => popup)
+
+    renderWithProviders(
+      <ProductionOrderSteps product={PRODUCT} paymentEnabled={false} whatsappNumber="5511999999999" />
+    )
+    await fillQuantityAndSubmit(30)
+    await userEvent.click(await screen.findByText('Menor custo'))
+    await screen.findByText('OT A')
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Continuar' })).toBeEnabled()
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Continuar' }))
+    await userEvent.click(await screen.findByText(/Rua das Flores/))
+    await userEvent.click(screen.getByRole('button', { name: 'Confirmar pelo WhatsApp' }))
+
+    expect(await screen.findByText('Falha ao salvar')).toBeInTheDocument()
+    expect(openSpy).toHaveBeenCalledTimes(1)
+    expect(popup.close).toHaveBeenCalledTimes(1)
+    expect(popup.location.replace).not.toHaveBeenCalled()
+    expect(mockPush).not.toHaveBeenCalled()
     openSpy.mockRestore()
   })
 })
