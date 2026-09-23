@@ -14,15 +14,47 @@ import LoginModal from './login/login_modal'
 import MenuUser from './menu_user/menu_user'
 import './header.css'
 
+const SCROLL_SHRINK_THRESHOLD = 24
+
 export default function Header() {
   const [modalLogin, setModalLogin] = useState(false)
   const [menuUser, setMenuUser] = useState(false)
   const [hasToken, setHasToken] = useState(false)
   const [hydrated, setHydrated] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
     setHasToken(Boolean(Cookies.get('access_token')))
     setHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    let ticking = false
+
+    const getScrollTop = () =>
+      Math.max(
+        document.documentElement.scrollTop,
+        document.body.scrollTop,
+        window.scrollY
+      )
+
+    const updateScrolled = () => {
+      setIsScrolled(getScrollTop() > SCROLL_SHRINK_THRESHOLD)
+      ticking = false
+    }
+
+    const handleScroll = () => {
+      if (ticking) return
+      ticking = true
+      window.requestAnimationFrame(updateScrolled)
+    }
+
+    updateScrolled()
+    // capture: true — captura o scroll independente de qual elemento rola
+    // (window ou um container interno com overflow próprio); scroll não
+    // borbulha, então sem capture o listener no document nunca dispararia.
+    document.addEventListener('scroll', handleScroll, { passive: true, capture: true })
+    return () => document.removeEventListener('scroll', handleScroll, { capture: true })
   }, [])
 
   const { data: user } = useFetchUserToken(hasToken)
@@ -33,7 +65,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="site-header">
+      <header className={`site-header${isScrolled ? ' site-header--scrolled' : ''}`}>
         <div className="site-header__primary">
           <div className="site-header__side site-header__side--left">
             <HeaderSocial />
