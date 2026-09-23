@@ -166,7 +166,14 @@ describe('acessibilidade do checkout', () => {
   })
 
   it('com paymentEnabled=false, cria o pedido normalmente e também abre o WhatsApp com o resumo', async () => {
-    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
+    const replace = jest.fn()
+    const popup = {
+      opener: window,
+      closed: false,
+      location: { replace },
+      close: jest.fn(),
+    } as unknown as Window
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => popup)
     const handleSetOrders = jest.fn()
 
     renderWithProviders(
@@ -182,6 +189,8 @@ describe('acessibilidade do checkout', () => {
     await userEvent.click(button)
 
     expect(mockCreateOrder).toHaveBeenCalledTimes(1)
+    expect(openSpy).toHaveBeenCalledWith('about:blank', '_blank')
+    expect(replace).not.toHaveBeenCalled()
 
     const successAction = mockCreateOrder.mock.calls[0][2] as (
       orders: { id: number; uid: string }[]
@@ -189,7 +198,9 @@ describe('acessibilidade do checkout', () => {
     act(() => successAction([{ id: 34, uid: 'ZR-34' }]))
 
     expect(openSpy).toHaveBeenCalledTimes(1)
-    const [url] = openSpy.mock.calls[0]
+    expect(popup.opener).toBeNull()
+    expect(replace).toHaveBeenCalledTimes(1)
+    const [url] = replace.mock.calls[0]
     expect(url).toContain('https://wa.me/5511999999999?text=')
 
     const message = decodeURIComponent(String(url).split('?text=')[1])
@@ -199,6 +210,32 @@ describe('acessibilidade do checkout', () => {
 
     expect(handleSetOrders).toHaveBeenCalledWith([{ id: 34, uid: 'ZR-34' }])
 
+    openSpy.mockRestore()
+  })
+
+  it('fecha a aba reservada se o pedido de pronta entrega falhar', async () => {
+    const popup = {
+      opener: window,
+      closed: false,
+      location: { replace: jest.fn() },
+      close: jest.fn(),
+    } as unknown as Window
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => popup)
+
+    renderWithProviders(
+      <Finish
+        handleActiveIndex={jest.fn()}
+        handleSetOrders={jest.fn()}
+        paymentEnabled={false}
+        whatsappNumber="5511999999999"
+      />
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Finalizar pelo WhatsApp' }))
+    const errorAction = mockCreateOrder.mock.calls[0][3] as (message: string) => void
+    act(() => errorAction('Falha ao salvar'))
+
+    expect(popup.close).toHaveBeenCalledTimes(1)
+    expect(popup.location.replace).not.toHaveBeenCalled()
     openSpy.mockRestore()
   })
 
