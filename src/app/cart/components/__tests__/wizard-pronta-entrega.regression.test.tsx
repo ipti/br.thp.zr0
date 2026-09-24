@@ -22,6 +22,7 @@ describe('Carrinho de Pronta Entrega — regressão', () => {
     renderWithProviders(<CartComponent paymentEnabled whatsappNumber="" />)
 
     expect(await screen.findByText('Seu carrinho está vazio.')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Meus pedidos' })).toHaveAttribute('href', '/profile/order')
   })
 
   it('exibe os itens do carrinho e calcula o total dos itens selecionados', async () => {

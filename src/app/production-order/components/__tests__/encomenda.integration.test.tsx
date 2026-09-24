@@ -95,7 +95,7 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     expect(screen.getByText('Menor prazo')).toBeInTheDocument()
   })
 
-  it('confirma o pedido de ponta a ponta (reserve + create) e redireciona para /payment', async () => {
+  it('confirma o pedido de ponta a ponta (reserve + create) e redireciona para os detalhes', async () => {
     renderWithProviders(<ProductionOrderSteps product={PRODUCT} paymentEnabled whatsappNumber="" />)
 
     await fillQuantityAndSubmit(30)
@@ -114,7 +114,7 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     )
 
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith('/payment?id=101')
+      expect(mockPush).toHaveBeenCalledWith('/profile/order/101')
     })
     expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('101')
   })

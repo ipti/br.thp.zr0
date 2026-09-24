@@ -251,7 +251,7 @@ export default function Confirmation({
 
             sessionStorage.setItem(CREATED_ORDER_SESSION_KEY, String(order.id))
             reset()
-            router.push(paymentEnabled ? `/payment?id=${order.id}` : `/profile/order/${order.id}`)
+            router.push(`/profile/order/${order.id}`)
           },
           setLoading,
           handleSubmissionError,
@@ -491,8 +491,8 @@ export default function Confirmation({
 
               <p className="confirmation-note">
                 {paymentEnabled
-                  ? 'Ao confirmar, reservaremos por alguns minutos a capacidade das oficinas antes de criar o pedido.'
-                  : 'Ao confirmar, sua encomenda é registrada e você será redirecionado para o WhatsApp para combinar entrega e pagamento com nossa equipe.'}
+                  ? 'Ao confirmar, reservaremos por alguns minutos a capacidade das oficinas. Depois, você verá os detalhes do pedido e poderá realizar o pagamento.'
+                  : 'Ao confirmar, sua encomenda é registrada, os detalhes do pedido são exibidos e o WhatsApp abre em outra aba para combinar entrega e pagamento.'}
               </p>
               <ZButton
                 label={paymentEnabled ? 'Confirmar encomenda' : 'Confirmar pelo WhatsApp'}

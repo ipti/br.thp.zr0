@@ -225,6 +225,7 @@ const OrderCard: React.FC<OrderProps> = ({ order, paymentEnabled, whatsappNumber
   const paymentActionable = ['PENDING', 'FAILED'].includes(order.payment_status) && !order.order_services.some(service => blockedStatuses.includes(service.status))
   const canPay = paymentEnabled && paymentActionable
   const needsWhatsAppContact = !paymentEnabled && paymentActionable
+  const canContactWhatsApp = Boolean(whatsappNumber.replace(/\D/g, ''))
   const payment = needsWhatsAppContact ? WHATSAPP_CONTACT_STATUS : PAYMENT_STATUS[order.payment_status] ?? PAYMENT_STATUS.PENDING
   const whatsappLink = buildWhatsAppLink(whatsappNumber, buildOrderFollowUpWhatsAppMessage(order.uid))
   const canCancel = order.order_services.length > 0 && order.order_services.every(service => ['PENDING', 'CONFIRMED', 'IN_PRODUCTION'].includes(service.status))
@@ -268,7 +269,7 @@ const OrderCard: React.FC<OrderProps> = ({ order, paymentEnabled, whatsappNumber
           <strong>{formatCurrency(order.total_amount)}</strong>
           <div className="order-detail__hero-actions">
             {canPay ? <ZButton icon="pi pi-credit-card" label="Pagar agora" onClick={() => router.push(`/payment?id=${order.id}`)} severity="success" /> : null}
-            {needsWhatsAppContact ? (
+            {canContactWhatsApp ? (
               <ZButton
                 icon="pi pi-whatsapp"
                 label="Falar no WhatsApp"
@@ -281,12 +282,14 @@ const OrderCard: React.FC<OrderProps> = ({ order, paymentEnabled, whatsappNumber
         </div>
       </header>
 
-      {needsWhatsAppContact ? (
+      {canContactWhatsApp && paymentActionable ? (
         <div className="order-detail__whatsapp-callout" role="status">
           <span className="order-detail__whatsapp-callout-icon" aria-hidden="true"><i className="pi pi-whatsapp" /></span>
           <div>
-            <strong>Para continuar, fale com a gente no WhatsApp</strong>
-            <p>Seu pedido foi registrado, mas para combinar a entrega e o pagamento você precisa entrar em contato com nossa equipe.</p>
+            <strong>{needsWhatsAppContact ? 'Para continuar, fale com a gente no WhatsApp' : 'Precisa de ajuda com este pedido? Fale com a gente no WhatsApp'}</strong>
+            <p>{needsWhatsAppContact
+              ? 'Seu pedido foi registrado. Entre em contato com nossa equipe para combinar a entrega e o pagamento.'
+              : 'Confira os detalhes abaixo. Você também pode falar com nossa equipe sobre este pedido.'}</p>
           </div>
           <ZButton
             icon="pi pi-whatsapp"
@@ -372,7 +375,7 @@ const OrderCard: React.FC<OrderProps> = ({ order, paymentEnabled, whatsappNumber
             ) : null}
 
             {canPay ? <ZButton icon="pi pi-credit-card" label="Realizar pagamento" onClick={() => router.push(`/payment?id=${order.id}`)} severity="success" className="order-summary-card__button" /> : null}
-            {needsWhatsAppContact ? (
+            {canContactWhatsApp ? (
               <ZButton
                 icon="pi pi-whatsapp"
                 label="Falar no WhatsApp"
