@@ -36,15 +36,18 @@
   margin-bottom: 5rem;
 }
 
-.product-gallery {
+.product-detail-gallery {
   display: flex;
-  flex-direction: row;
+  flex-flow: row nowrap;
   gap: 1rem;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
-.product-gallery img {
-  width: 64px;
-  height: 64px;
+.product-detail-gallery img {
+  display: block;
+  width: 112px;
+  height: 112px;
   border-radius: 0.75rem;
   object-fit: cover;
   cursor: pointer;
@@ -52,14 +55,15 @@
   transition: 0.2s;
 }
 
-.product-gallery button {
+.product-detail-gallery button {
   appearance: none;
   background: transparent;
   border: 0;
   padding: 0;
+  flex: none;
 }
 
-.product-gallery img:hover {
+.product-detail-gallery img:hover {
   opacity: 1;
 }
 

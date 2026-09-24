@@ -46,7 +46,7 @@ export default function ProductOneComponent({
               ) : null}
             </div>
             <div className="p-2" />
-            <div className="product-gallery">
+            <div className="product-detail-gallery">
               {product.product_image.slice(0, 3).map((image, index) => (
                 <button
                   type="button"
