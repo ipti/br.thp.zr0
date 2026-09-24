@@ -14,7 +14,9 @@ import LoginModal from './login/login_modal'
 import MenuUser from './menu_user/menu_user'
 import './header.css'
 
+const SCROLL_SHRINK_THRESHOLD = 48
 const SCROLL_EXPAND_THRESHOLD = 16
+const HEADER_RESIZE_SETTLE_MS = 320
 
 export default function Header() {
   const [modalLogin, setModalLogin] = useState(false)
@@ -29,41 +31,110 @@ export default function Header() {
   }, [])
 
   useEffect(() => {
-    let ticking = false
+    let frameId: number | null = null
+    let compact = false
+    let ignoreScrollExpansionUntil = 0
+    let touchStartY = 0
     const header = document.querySelector<HTMLElement>('.site-header')
-    // Ao encolher, o header reduz a altura da página. Limites separados
-    // impedem que essa mudança dispare a expansão logo em seguida.
-    const shrinkThreshold = header?.offsetHeight ?? 160
 
     const getScrollTop = () =>
       Math.max(
         document.documentElement.scrollTop,
         document.body.scrollTop,
-        window.scrollY
+        window.scrollY,
+        document.querySelector<HTMLElement>('main')?.scrollTop ?? 0
       )
+
+    const setCompact = (next: boolean) => {
+      if (compact === next) return
+      compact = next
+      // A mudança de altura pode zerar o scroll de páginas curtas.
+      if (next) ignoreScrollExpansionUntil = performance.now() + HEADER_RESIZE_SETTLE_MS
+      setIsScrolled(next)
+    }
 
     const updateScrolled = () => {
       const scrollTop = getScrollTop()
-      setIsScrolled(current =>
-        current
-          ? scrollTop > SCROLL_EXPAND_THRESHOLD
-          : scrollTop >= shrinkThreshold
-      )
-      ticking = false
+      if (!compact && scrollTop >= SCROLL_SHRINK_THRESHOLD) {
+        setCompact(true)
+      } else if (
+        compact &&
+        scrollTop <= SCROLL_EXPAND_THRESHOLD &&
+        performance.now() >= ignoreScrollExpansionUntil
+      ) {
+        setCompact(false)
+      }
+      frameId = null
     }
 
-    const handleScroll = () => {
-      if (ticking) return
-      ticking = true
-      window.requestAnimationFrame(updateScrolled)
+    const handleScroll = (event: Event) => {
+      const target = event.target
+      if (
+        target !== window &&
+        target !== document &&
+        target !== document.documentElement &&
+        target !== document.body &&
+        target !== document.querySelector('main')
+      ) return
+      if (frameId !== null) return
+      frameId = window.requestAnimationFrame(updateScrolled)
+    }
+
+    const isPageInteraction = (target: EventTarget | null) => {
+      if (!(target instanceof Node) || header?.contains(target)) return false
+      const main = document.querySelector('main')
+      return !main || main.contains(target) || target === document || target === document.body
+    }
+
+    // Se o conteúdo passou a caber após encolher, o gesto para cima ainda reabre o header.
+    const handleWheel = (event: WheelEvent) => {
+      if (
+        compact && event.deltaY < 0 &&
+        getScrollTop() <= SCROLL_EXPAND_THRESHOLD &&
+        isPageInteraction(event.target)
+      ) setCompact(false)
+    }
+
+    const handleTouchStart = (event: TouchEvent) => {
+      touchStartY = event.touches[0]?.clientY ?? 0
+    }
+
+    const handleTouchMove = (event: TouchEvent) => {
+      if (
+        compact &&
+        (event.touches[0]?.clientY ?? 0) > touchStartY + 8 &&
+        getScrollTop() <= SCROLL_EXPAND_THRESHOLD &&
+        isPageInteraction(event.target)
+      ) setCompact(false)
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const target = event.target
+      if (
+        !compact || getScrollTop() > SCROLL_EXPAND_THRESHOLD ||
+        !isPageInteraction(target) ||
+        (target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)))
+      ) return
+      if (['ArrowUp', 'PageUp', 'Home'].includes(event.key) || (event.key === ' ' && event.shiftKey)) {
+        setCompact(false)
+      }
     }
 
     updateScrolled()
-    // capture: true — captura o scroll independente de qual elemento rola
-    // (window ou um container interno com overflow próprio); scroll não
-    // borbulha, então sem capture o listener no document nunca dispararia.
+    // capture recebe o scroll do main em carrinho, perfil e pagamento.
     document.addEventListener('scroll', handleScroll, { passive: true, capture: true })
-    return () => document.removeEventListener('scroll', handleScroll, { capture: true })
+    document.addEventListener('wheel', handleWheel, { passive: true, capture: true })
+    document.addEventListener('touchstart', handleTouchStart, { passive: true })
+    document.addEventListener('touchmove', handleTouchMove, { passive: true })
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('scroll', handleScroll, { capture: true })
+      document.removeEventListener('wheel', handleWheel, { capture: true })
+      document.removeEventListener('touchstart', handleTouchStart)
+      document.removeEventListener('touchmove', handleTouchMove)
+      document.removeEventListener('keydown', handleKeyDown)
+      if (frameId !== null) window.cancelAnimationFrame(frameId)
+    }
   }, [])
 
   const { data: user } = useFetchUserToken(hasToken)

@@ -368,8 +368,8 @@ export default function Finish({
 
             <p className="checkout-confirmation-note ">
               {paymentEnabled
-                ? 'Ao finalizar, você confirma que revisou os produtos, o endereço, a entrega e a forma de pagamento.'
-                : 'Ao finalizar, seu pedido é registrado e você será redirecionado para o WhatsApp para combinar entrega e pagamento com nossa equipe.'}
+                ? 'Ao finalizar, seu pedido é registrado e você verá todos os detalhes antes de realizar o pagamento.'
+                : 'Ao finalizar, seu pedido é registrado, os detalhes são exibidos e o WhatsApp abre em outra aba para combinar entrega e pagamento.'}
             </p>
             <ZButton
               label={paymentEnabled ? 'Finalizar pedido' : 'Finalizar pelo WhatsApp'}

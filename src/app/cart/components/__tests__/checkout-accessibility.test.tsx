@@ -239,7 +239,7 @@ describe('acessibilidade do checkout', () => {
     openSpy.mockRestore()
   })
 
-  it('redireciona a pronta entrega para o pagamento do pedido criado', async () => {
+  it('redireciona a pronta entrega para os detalhes do pedido criado', async () => {
     localStorage.setItem('token-zr0', 'test-token')
     mockSearchParams = new URLSearchParams('index=3')
     renderWithProviders(<CartComponent paymentEnabled whatsappNumber="" />)
@@ -253,7 +253,7 @@ describe('acessibilidade do checkout', () => {
     act(() => successAction([{ id: 34, uid: 'ZR-34' }]))
 
     expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('34')
-    expect(mockPush).toHaveBeenCalledWith('/payment?id=34')
+    expect(mockPush).toHaveBeenCalledWith('/profile/order/34')
   })
 
   it('com paymentEnabled=false, redireciona o pedido criado para o acompanhamento em vez do pagamento', async () => {
@@ -290,13 +290,13 @@ describe('acessibilidade do checkout', () => {
     ) => void
 
     // Reproduz a ordem real do controller: o item comprado sai do carrinho
-    // antes do callback de sucesso navegar para o pagamento.
+    // antes do callback de sucesso navegar para os detalhes do pedido.
     act(() => {
       useCartStore.getState().removeItem('chair')
       successAction([{ id: 34, uid: 'ZR-34' }])
     })
 
-    expect(mockPush).toHaveBeenCalledWith('/payment?id=34')
+    expect(mockPush).toHaveBeenCalledWith('/profile/order/34')
     expect(mockReplace).not.toHaveBeenCalledWith('/cart?index=0')
   })
 

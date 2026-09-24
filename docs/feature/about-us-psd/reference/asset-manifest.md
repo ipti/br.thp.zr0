@@ -51,9 +51,9 @@ As cores aproximadas devem ser refinadas caso o arquivo de identidade ou as cama
 
 ## Tipografia
 
-O desenho usa uma sans-serif geométrica. `HurmeGeometricSans1.otf`, já versionada e registrada como `Hurme Geometric Sans 1`, é a candidata visual mais próxima disponível. O runtime não permite confirmar a família gravada nas camadas do PSD; portanto a correspondência permanece aproximada.
+Os dados das camadas de texto do PSD identificam `DIN-Medium` no título e no subtítulo do hero, e `DIN-Regular` no parágrafo. Esses arquivos não estão versionados nem instalados no ambiente. A página usa `HurmeGeometricSans1.otf` como aproximação visual, então a tipografia do hero ainda não corresponde exatamente ao design.
 
-O arquivo local expõe um único peso declarado como 400. Antes de simular pesos fortes pelo navegador, conferir se o PSD usa outro arquivo da família. Poppins e Inter permanecem disponíveis para elementos do sistema, mas não foram escolhidas como fonte principal desta página.
+O arquivo Hurme local expõe apenas o peso 400; os pesos maiores solicitados no CSS são simulados pelo navegador. Para reproduzir o PSD, obter os arquivos DIN licenciados e registrar os pesos Medium e Regular como fontes da página.
 
 ## Inventário conferido
 
@@ -97,6 +97,6 @@ Na TASK-02, medir o elemento renderizado em desktop, tablet e mobile e atualizar
 ## Pendências para as próximas tasks
 
 1. Obter os dois exports do hero nas camadas originais do PSD.
-2. Confirmar a família e os pesos tipográficos do documento original.
+2. Obter os arquivos `DIN-Medium` e `DIN-Regular` usados no hero para reproduzir a tipografia original.
 3. Refinar verde, sálvia e bege a partir dos estilos/camadas originais, se disponíveis.
 4. Validar o tratamento cromático de `pingos.svg` sem afetar a landing.

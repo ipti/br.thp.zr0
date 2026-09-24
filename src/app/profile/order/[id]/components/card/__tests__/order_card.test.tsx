@@ -1,4 +1,5 @@
 import { screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { renderWithProviders } from '@/test/test-utils'
 import OrderCard from '../card'
 import type { OrderOneType } from '@/app/profile/order/service/types'
@@ -146,5 +147,22 @@ describe('OrderCard — modo pagamento online (paymentEnabled=true)', () => {
     expect(screen.getAllByText('Pagamento pendente').length).toBeGreaterThan(0)
     expect(screen.getAllByRole('button', { name: 'Pagar agora' }).length).toBeGreaterThan(0)
     expect(screen.queryByText('Para continuar, fale com a gente no WhatsApp')).toBeNull()
+  })
+
+  it('oferece pagamento e contato pelo WhatsApp no pedido pendente', async () => {
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
+    renderWithProviders(
+      <OrderCard order={makeOrder()} paymentEnabled whatsappNumber="5511999999999" />
+    )
+
+    expect(screen.getByRole('button', { name: 'Pagar agora' })).toBeInTheDocument()
+    expect(screen.getByText('Precisa de ajuda com este pedido? Fale com a gente no WhatsApp')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Abrir WhatsApp' }))
+    expect(openSpy).toHaveBeenCalledWith(
+      expect.stringContaining('https://wa.me/5511999999999?text='),
+      '_blank',
+      'noopener,noreferrer'
+    )
+    openSpy.mockRestore()
   })
 })
