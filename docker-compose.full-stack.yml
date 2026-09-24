@@ -56,12 +56,12 @@ services:
       target: production
       args:
         NEXT_PUBLIC_STRIPE_PUBLIC_KEY: ${NEXT_PUBLIC_STRIPE_PUBLIC_KEY:-}
-        NEXT_PUBLIC_WHATSAPP_NUMBER: ${NEXT_PUBLIC_WHATSAPP_NUMBER:-}
-        NEXT_PUBLIC_INSTAGRAM_URL: ${NEXT_PUBLIC_INSTAGRAM_URL:-}
     environment:
       API_INTERNAL_URL: http://api:3000
       SITE_URL: ${SITE_URL:-http://localhost:3000}
       PORT: 3000
+      WHATSAPP_NUMBER: ${WHATSAPP_NUMBER:-}
+      INSTAGRAM_URL: ${INSTAGRAM_URL:-}
     ports:
       - '${APP_PORT:-3000}:3000'
     depends_on:
