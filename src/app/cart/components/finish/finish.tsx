@@ -6,7 +6,7 @@ import ZDivider from '@/components/divider/divider'
 import ZInputText from '@/components/input/input'
 import ZSkeleton from '@/components/skeleton/skeleton'
 import { useToast } from '@/components/toast/hook/useToast'
-import { buildCartWhatsAppMessage, openWhatsApp, prepareWhatsAppWindow } from '@/lib/whatsapp'
+import { buildCartWhatsAppMessage, buildOrderFollowUpWhatsAppMessage, openWhatsApp, prepareWhatsAppWindow } from '@/lib/whatsapp'
 import { useFetchUserToken } from '@/service/global_request/query'
 import { UserGlobal } from '@/service/global_request/type'
 import { useCartStore } from '@/service/store/cart_store'
@@ -56,6 +56,7 @@ export default function Finish({
   const submissionLockRef = useRef(false)
   const whatsappWindowRef = useRef<Window | null>(null)
   const validationSummaryRef = useRef<HTMLDivElement>(null)
+  const hasWhatsAppNumber = Boolean(whatsappNumber.replace(/\D/g, ''))
 
   const controllerCart = CartController()
   const cart = useCartStore(state => state.cart)
@@ -103,7 +104,7 @@ export default function Finish({
     }
 
     submissionLockRef.current = true
-    if (!paymentEnabled) whatsappWindowRef.current = prepareWhatsAppWindow()
+    if (hasWhatsAppNumber) whatsappWindowRef.current = prepareWhatsAppWindow()
     setIsLoadingFinish(true)
     controllerCart.CreateOrder(
       {
@@ -138,22 +139,24 @@ export default function Finish({
         setIsLoadingFinish(false)
       },
       orders => {
-        if (!paymentEnabled) {
+        if (hasWhatsAppNumber) {
           const order = orders[0]
           if (order && address) {
-            const message = buildCartWhatsAppMessage({
-              orderReference: order.uid,
-              items: selectedItems.map(item => ({
-                name: item.name,
-                quantity: item.quantity,
-                price: item.price
-              })),
-              subtotal,
-              shippingTotal,
-              total: orderTotal - couponDiscount,
-              addressSummary: `${address.address}, ${address.number} - ${address.neighborhood}, ${address.city.name}/${address.state.acronym} - CEP ${address.cep}`,
-              paymentMethodLabel: paymentOptions.find(option => option.value === paymentMethod)?.label
-            })
+            const message = paymentEnabled
+              ? buildOrderFollowUpWhatsAppMessage(order.uid)
+              : buildCartWhatsAppMessage({
+                  orderReference: order.uid,
+                  items: selectedItems.map(item => ({
+                    name: item.name,
+                    quantity: item.quantity,
+                    price: item.price
+                  })),
+                  subtotal,
+                  shippingTotal,
+                  total: orderTotal - couponDiscount,
+                  addressSummary: `${address.address}, ${address.number} - ${address.neighborhood}, ${address.city.name}/${address.state.acronym} - CEP ${address.cep}`,
+                  paymentMethodLabel: paymentOptions.find(option => option.value === paymentMethod)?.label
+                })
             openWhatsApp(whatsappNumber, message, whatsappWindowRef.current)
             whatsappWindowRef.current = null
             showToast('Pedido registrado! Continue a conversa no WhatsApp.', 'success', 4000)
@@ -368,7 +371,7 @@ export default function Finish({
 
             <p className="checkout-confirmation-note ">
               {paymentEnabled
-                ? 'Ao finalizar, seu pedido é registrado e você verá todos os detalhes antes de realizar o pagamento.'
+                ? `Ao finalizar, seu pedido é registrado e você verá todos os detalhes antes de realizar o pagamento.${hasWhatsAppNumber ? ' O WhatsApp também abrirá em outra aba.' : ''}`
                 : 'Ao finalizar, seu pedido é registrado, os detalhes são exibidos e o WhatsApp abre em outra aba para combinar entrega e pagamento.'}
             </p>
             <ZButton

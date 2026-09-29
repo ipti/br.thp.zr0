@@ -13,7 +13,7 @@ import { ZButton } from '@/components/button/button'
 import ZRadioButton from '@/components/radio_button/radio_button'
 import ZSkeleton from '@/components/skeleton/skeleton'
 import { useToast } from '@/components/toast/hook/useToast'
-import { buildEncomendaWhatsAppMessage, openWhatsApp, prepareWhatsAppWindow } from '@/lib/whatsapp'
+import { buildEncomendaWhatsAppMessage, buildOrderFollowUpWhatsAppMessage, openWhatsApp, prepareWhatsAppWindow } from '@/lib/whatsapp'
 import { useFetchUserToken } from '@/service/global_request/query'
 import { UserGlobal } from '@/service/global_request/type'
 import Image from 'next/image'
@@ -91,6 +91,7 @@ export default function Confirmation({
   const submissionLockRef = useRef(false)
   const whatsappWindowRef = useRef<Window | null>(null)
   const validationSummaryRef = useRef<HTMLDivElement>(null)
+  const hasWhatsAppNumber = Boolean(onlyDigits(whatsappNumber))
   const plan = getSelectedPlan()
 
   useEffect(() => {
@@ -182,7 +183,7 @@ export default function Confirmation({
     }
 
     submissionLockRef.current = true
-    if (!paymentEnabled) whatsappWindowRef.current = prepareWhatsAppWindow()
+    if (hasWhatsAppNumber) whatsappWindowRef.current = prepareWhatsAppWindow()
     setLoading(true)
     const shipments = plan.shipments.map(shipment => ({
       workshopId: shipment.workshopId,
@@ -231,19 +232,21 @@ export default function Confirmation({
               return
             }
 
-            if (!paymentEnabled) {
-              const message = buildEncomendaWhatsAppMessage({
-                orderReference: order.uid,
-                productName: product?.name ?? 'Produto',
-                quantity: desiredQuantity,
-                planLabel: SIMULATION_MODE_LABEL[productionOrder.simulationMode!],
-                maxDeliveryAt: plan.maxDeliveryAt,
-                productSubtotal,
-                freightTotal: plan.totalCost,
-                estimatedTotal,
-                addressSummary: `${selectedAddress.address}, ${selectedAddress.number} - ${selectedAddress.neighborhood}, CEP ${selectedAddress.cep}`,
-                paymentMethodLabel: PAYMENT_OPTIONS.find(option => option.value === paymentMethod)?.label
-              })
+            if (hasWhatsAppNumber) {
+              const message = paymentEnabled
+                ? buildOrderFollowUpWhatsAppMessage(order.uid)
+                : buildEncomendaWhatsAppMessage({
+                    orderReference: order.uid,
+                    productName: product?.name ?? 'Produto',
+                    quantity: desiredQuantity,
+                    planLabel: SIMULATION_MODE_LABEL[productionOrder.simulationMode!],
+                    maxDeliveryAt: plan.maxDeliveryAt,
+                    productSubtotal,
+                    freightTotal: plan.totalCost,
+                    estimatedTotal,
+                    addressSummary: `${selectedAddress.address}, ${selectedAddress.number} - ${selectedAddress.neighborhood}, CEP ${selectedAddress.cep}`,
+                    paymentMethodLabel: PAYMENT_OPTIONS.find(option => option.value === paymentMethod)?.label
+                  })
               openWhatsApp(whatsappNumber, message, whatsappWindowRef.current)
               whatsappWindowRef.current = null
               showToast('Encomenda registrada! Continue a conversa no WhatsApp.', 'success', 4000)
@@ -491,7 +494,7 @@ export default function Confirmation({
 
               <p className="confirmation-note">
                 {paymentEnabled
-                  ? 'Ao confirmar, reservaremos por alguns minutos a capacidade das oficinas. Depois, você verá os detalhes do pedido e poderá realizar o pagamento.'
+                  ? `Ao confirmar, reservaremos por alguns minutos a capacidade das oficinas. Depois, você verá os detalhes do pedido e poderá realizar o pagamento.${hasWhatsAppNumber ? ' O WhatsApp também abrirá em outra aba.' : ''}`
                   : 'Ao confirmar, sua encomenda é registrada, os detalhes do pedido são exibidos e o WhatsApp abre em outra aba para combinar entrega e pagamento.'}
               </p>
               <ZButton

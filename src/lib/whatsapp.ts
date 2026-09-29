@@ -93,10 +93,9 @@ export function buildEncomendaWhatsAppMessage(order: WhatsAppEncomendaOrder): st
   return lines.join('\n')
 }
 
-// Usada na tela de acompanhamento do pedido (/profile/order/[id]) quando o
-// cliente ainda não entrou em contato — link "Falar no WhatsApp".
+// Mensagem curta para iniciar contato sobre um pedido já registrado.
 export function buildOrderFollowUpWhatsAppMessage(orderReference: string): string {
-  return `Olá! Meu pedido #${orderReference} está aguardando contato. Podem me ajudar a continuar?`
+  return `Olá! Acabei de fazer o pedido #${orderReference} e gostaria de falar com a equipe sobre ele.`
 }
 
 export function buildWhatsAppLink(phoneNumber: string, message: string): string {

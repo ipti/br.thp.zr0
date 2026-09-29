@@ -95,8 +95,16 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     expect(screen.getByText('Menor prazo')).toBeInTheDocument()
   })
 
-  it('confirma o pedido de ponta a ponta (reserve + create) e redireciona para os detalhes', async () => {
-    renderWithProviders(<ProductionOrderSteps product={PRODUCT} paymentEnabled whatsappNumber="" />)
+  it('confirma a encomenda, abre o WhatsApp e redireciona para os detalhes', async () => {
+    const replace = jest.fn()
+    const popup = {
+      opener: window,
+      closed: false,
+      location: { replace },
+      close: jest.fn(),
+    } as unknown as Window
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => popup)
+    renderWithProviders(<ProductionOrderSteps product={PRODUCT} paymentEnabled whatsappNumber="5511999999999" />)
 
     await fillQuantityAndSubmit(30)
     await userEvent.click(await screen.findByText('Menor custo'))
@@ -116,7 +124,10 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith('/profile/order/101')
     })
+    expect(openSpy).toHaveBeenCalledWith('about:blank', '_blank')
+    expect(replace).toHaveBeenCalledWith(expect.stringContaining('https://wa.me/5511999999999?text='))
     expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('101')
+    openSpy.mockRestore()
   })
 
   it('com paymentEnabled=false, cria o pedido, abre o WhatsApp com o resumo e navega para o acompanhamento do pedido', async () => {
