@@ -239,13 +239,23 @@ describe('acessibilidade do checkout', () => {
     openSpy.mockRestore()
   })
 
-  it('redireciona a pronta entrega para os detalhes do pedido criado', async () => {
+  it('abre o WhatsApp e redireciona a pronta entrega para os detalhes do pedido criado', async () => {
+    const replace = jest.fn()
+    const popup = {
+      opener: window,
+      closed: false,
+      location: { replace },
+      close: jest.fn(),
+    } as unknown as Window
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => popup)
     localStorage.setItem('token-zr0', 'test-token')
     mockSearchParams = new URLSearchParams('index=3')
-    renderWithProviders(<CartComponent paymentEnabled whatsappNumber="" />)
+    renderWithProviders(<CartComponent paymentEnabled whatsappNumber="5511999999999" />)
 
     await screen.findByRole('heading', { name: 'Revise e confirme' })
     await userEvent.click(screen.getByRole('button', { name: 'Finalizar pedido' }))
+    expect(openSpy).toHaveBeenCalledWith('about:blank', '_blank')
+    expect(replace).not.toHaveBeenCalled()
 
     const successAction = mockCreateOrder.mock.calls[0][2] as (
       orders: { id: number; uid: string }[]
@@ -253,7 +263,10 @@ describe('acessibilidade do checkout', () => {
     act(() => successAction([{ id: 34, uid: 'ZR-34' }]))
 
     expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('34')
+    expect(replace).toHaveBeenCalledWith(expect.stringContaining('https://wa.me/5511999999999?text='))
+    expect(decodeURIComponent(String(replace.mock.calls[0][0]).split('?text=')[1])).toContain('pedido #ZR-34')
     expect(mockPush).toHaveBeenCalledWith('/profile/order/34')
+    openSpy.mockRestore()
   })
 
   it('com paymentEnabled=false, redireciona o pedido criado para o acompanhamento em vez do pagamento', async () => {

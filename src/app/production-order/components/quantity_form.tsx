@@ -155,6 +155,7 @@ export default function QuantityForm({
                   decrementButtonIcon="pi pi-minus"
                   className="quantity-number-input"
                   invalid={!!(errors.quantity && touched.quantity)}
+                  
                 />
                 {errors.quantity && touched.quantity ? (
                   <div className="quantity-field-error">{errors.quantity}</div>
