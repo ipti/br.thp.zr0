@@ -25,9 +25,17 @@ export default function LoginModal({onHide, visible}:{visible: boolean, onHide()
       });
     
     return(
-        <ZDialog visible={visible} modal dismissableMask  onHide={onHide} content={(hide) => {
+        <ZDialog visible={visible} modal dismissableMask className="login-dialog" onHide={onHide} content={({ hide }) => {
         return(
             <div className="login_modal" >
+                 <button
+                      type="button"
+                      className="login_modal__close"
+                      onClick={hide}
+                      aria-label="Fechar"
+                    >
+                      <i className="pi pi-times" aria-hidden="true" />
+                    </button>
                  <div
                       className={prime.flex + prime.column + prime.justify_center + "h-full w-full"}
                     >
@@ -105,17 +113,17 @@ export default function LoginModal({onHide, visible}:{visible: boolean, onHide()
                           }}
                         </Formik>
                       </div>
-                      <p className="p-3" />
+                      <div className="p-3" />
                       <div className={prime.flex + prime.row + prime.justify_center + "forget-password"}>
                         <a href="/auth/recovery-password">Esqueceu sua senha?</a>
                       </div>
-                      <p className="p-4" />
+                      <div className="p-4" />
                       <div className={prime.flex + prime.row + prime.justify_center + "text-sign"}>
                         <p>Você já tem uma conta? </p>
                         <div className="p-1" />
                         <a href="/auth/sign-up">Criar conta</a>
                       </div>
-                      <p className="p-2" />
+                      <div className="p-2" />
                     </div>
             </div>
         )

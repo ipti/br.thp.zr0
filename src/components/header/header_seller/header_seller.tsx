@@ -48,34 +48,44 @@ export default function HeaderSeller() {
   return (
     <div className="w-full h-5rem flex flex-row justify-content-between">
       <div className="flex flex-row">
-        <div onClick={toggleVisibility} className="flex flex-column justify-content-center cursor-pointer button-menu">
-         <Image alt="" src={menu_in} height={24} style={{ transform: !isVisible ? '' : 'rotate(180deg)', margin: 12 }}/> 
-        </div>
+        <button
+          type="button"
+          onClick={toggleVisibility}
+          className="flex flex-column justify-content-center cursor-pointer button-menu border-none"
+          aria-label={isVisible ? 'Fechar menu' : 'Abrir menu'}
+          aria-expanded={isVisible}
+        >
+         <Image alt="" src={menu_in} height={24} style={{ transform: !isVisible ? '' : 'rotate(180deg)', margin: 12 }}/>
+        </button>
         <div className="h-full flex flex-column justify-content-center">
-          <div
-            className="flex flex-row w-auto align-content-center cursor-pointer"
+          <button
+            type="button"
+            className="flex flex-row w-auto align-content-center cursor-pointer border-none bg-transparent p-0"
             onClick={() => {
               navigate.back();
             }}
           >
             <i className="pi pi-angle-left ml-2" style={{ fontSize: "1.5rem" }}></i>
-            {/* <div className="p-1" /> */}
             <div className="flex flex-column justify-content-center">
               <h4>Voltar</h4>
             </div>
-          </div>
+          </button>
         </div>
       </div>
       <div className="flex flex-row align-items-center justify-content-center mr-3">
         <ZDropdown style={{ display: isDesktop ? "flex" : "none" }} value={transformationWorkshop} onChange={(e) => { idTw(e.target.value); setTransformationWorkshop(e.target.value); window.location.reload() }} options={transformationWorkshopRequest} optionLabel="transformation_workshop.name" optionValue="transformation_workshop.id" className="w-14rem" />
-        <div className="flex flex-row gap-2 ml-2 cursor-pointer" onClick={() => { logout(); window.location.reload() }}>
+        <button
+          type="button"
+          className="flex flex-row gap-2 ml-2 cursor-pointer border-none bg-transparent p-0"
+          onClick={() => { logout(); window.location.reload() }}
+        >
           <div className="flex flex-column justify-content-center">
             <i className="pi pi-sign-out"></i>
           </div>
           <div className="flex flex-column justify-content-center">
             <h3>Sair</h3>
           </div>
-        </div>
+        </button>
       </div>
     </div>
   );
