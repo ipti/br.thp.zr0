@@ -34,11 +34,17 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
         <ul className="related-products__grid" role="list">
           {products.map((product) => {
             const imageUrl = product.product_image?.[0]?.img_url
+            const outOfStock = (product.quantity ?? 0) <= 0
 
             return (
               <li key={product.uid} className="related-products__item">
                 <Link href={`/product/${product.uid}`} className="related-products__card">
                   <div className="related-products__media">
+                    {outOfStock && (
+                      <span className="related-products__badge">
+                        Indisponível · só sob encomenda
+                      </span>
+                    )}
                     {imageUrl ? (
                       <Image
                         src={imageUrl}

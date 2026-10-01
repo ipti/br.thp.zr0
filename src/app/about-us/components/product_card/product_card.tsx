@@ -23,7 +23,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         ) : (
           <span className="about-product-card__image-placeholder" aria-hidden="true" />
         )}
-        {outOfStock && <span className="about-product-card__badge">Indisponível</span>}
+        {outOfStock && (
+          <span className="about-product-card__badge">Indisponível · só sob encomenda</span>
+        )}
       </span>
 
       <span className="about-product-card__row">
