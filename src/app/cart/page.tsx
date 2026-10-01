@@ -1,6 +1,8 @@
 import CartComponent from "./components/components";
 import { getPaymentConfig } from '@/lib/payment_config'
 
+export const dynamic = 'force-dynamic'
+
 export default function CartPage() {
     const { paymentEnabled, whatsappNumber } = getPaymentConfig()
     return (

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import heroTexture from '@/assets/img/home/hero/hero_texture.png'
 import heroChair from '@/assets/img/about_us/left.png'
-import heroPerson from '@/assets/img/about_us/right.png'
+import heroPerson from '@/assets/img/about_us/hero_person_scene.png'
 import './about_hero.css'
 
 export default function AboutHero() {
@@ -46,7 +46,7 @@ export default function AboutHero() {
       <div className="about-hero__media about-hero__media--person">
         <Image
           src={heroPerson}
-          alt="Pessoa da comunidade parceira da ZR0"
+          alt="Mulher sentada em uma cadeira de plástico reciclado segurando uma xícara"
           priority
           className="about-hero__media-img"
         />

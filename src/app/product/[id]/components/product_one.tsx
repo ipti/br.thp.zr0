@@ -4,7 +4,7 @@ import { DetailsProduct } from '@/app/components/product/details_product/details
 import { ProductReviews } from '@/app/product/components/product_reviews'
 import { ProductOne } from '@/app/seller/product/one/service/type'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './product_one.css'
 
 export default function ProductOneComponent({
@@ -15,6 +15,13 @@ export default function ProductOneComponent({
   const [imageIndex, setImageIndex] = useState(0)
   const selectedImage =
     product.product_image[imageIndex] ?? product.product_image[0]
+
+  // O layout de /product é compartilhado entre a listagem e o detalhe, então
+  // o App Router às vezes não reseta o scroll ao navegar entre eles (fica na
+  // posição da página anterior). Força o topo sempre que o produto muda.
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [product.uid])
 
   return (
     <div className={'container'}>
@@ -39,7 +46,7 @@ export default function ProductOneComponent({
               ) : null}
             </div>
             <div className="p-2" />
-            <div className="product-gallery">
+            <div className="product-detail-gallery">
               {product.product_image.slice(0, 3).map((image, index) => (
                 <button
                   type="button"

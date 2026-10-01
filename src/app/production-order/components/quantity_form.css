@@ -142,11 +142,11 @@
 .quantity-zip-input {
   width: 100%;
   min-height: 48px;
-  margin: 0 16px;
 }
 
 .quantity-number-input .p-button {
   width: 48px;
+  margin: 0 0.5rem;
   background: #202020;
   border-color: #202020;
 }

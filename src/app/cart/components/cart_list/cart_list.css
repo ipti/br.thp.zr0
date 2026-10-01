@@ -145,6 +145,13 @@
   color: #5f6672;
 }
 
+.cart-empty-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
 .cart-secondary-action {
   display: inline-flex;
   align-items: center;

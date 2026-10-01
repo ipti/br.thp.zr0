@@ -1,4 +1,9 @@
 .site-header {
+  --header-action-size: clamp(2.75rem, 2.9vw, 3.25rem);
+  --header-glyph-size: clamp(1.65rem, 2.1vw, 1.9rem);
+  --header-action-gap: clamp(0.25rem, 1.2vw, 1.25rem);
+  /* Alinha a tinta dos ícones ao centro visível do arquivo do logotipo. */
+  --header-actions-offset-y: -0.5px;
   position: sticky;
   top: 0;
   z-index: 40;
@@ -8,10 +13,13 @@
   background: #ffffff;
   border-bottom: 1px solid #eeeeec;
   font-family: 'Hurme Geometric Sans 1', Arial, Helvetica, sans-serif;
-  transition: height 220ms ease, box-shadow 220ms ease;
+  transition: height 260ms ease-in-out, box-shadow 260ms ease-in-out;
 }
 
 .site-header--scrolled {
+  --header-action-size: clamp(2.1rem, 1.9vw, 2.35rem);
+  --header-glyph-size: clamp(1.15rem, 1.3vw, 1.4rem);
+  --header-actions-offset-y: 0.75px;
   --header-primary-height: clamp(3.1rem, 2.8vw, 3.6rem);
   --header-navigation-height: clamp(2rem, 1.7vw, 2.25rem);
   height: calc(var(--header-primary-height) + var(--header-navigation-height));
@@ -25,13 +33,16 @@
   width: min(calc(100% - (2 * var(--header-gutter))), var(--header-content-width));
   height: var(--header-primary-height);
   margin-inline: auto;
-  transition: height 220ms ease;
+  transition: height 260ms ease-in-out;
 }
 
 .site-header__side {
   display: flex;
   align-items: center;
+  height: 100%;
   min-width: 0;
+  transform: translateY(var(--header-actions-offset-y));
+  transition: transform 260ms ease-in-out;
 }
 
 .site-header__side--left {
@@ -40,7 +51,7 @@
 
 .site-header__side--right {
   justify-content: flex-end;
-  gap: clamp(0.25rem, 1.2vw, 1.25rem);
+  gap: var(--header-action-gap);
 }
 
 .site-header__logo {
@@ -48,7 +59,7 @@
   width: clamp(9rem, 11vw, 12rem);
   height: clamp(9rem, 8.2vw, 8.75rem);
   place-items: center;
-  transition: opacity 160ms ease, width 220ms ease, height 220ms ease;
+  transition: opacity 160ms ease, width 260ms ease-in-out, height 260ms ease-in-out;
 }
 
 .site-header--scrolled .site-header__logo {
@@ -72,20 +83,15 @@
 .site-header__action {
   position: relative;
   display: grid;
-  width: clamp(2.75rem, 2.9vw, 3.25rem);
-  height: clamp(2.75rem, 2.9vw, 3.25rem);
+  width: var(--header-action-size);
+  height: var(--header-action-size);
   padding: 0;
   color: inherit;
   background: transparent;
   border: 0;
   place-items: center;
   cursor: pointer;
-  transition: opacity 160ms ease, width 220ms ease, height 220ms ease;
-}
-
-.site-header--scrolled .site-header__action {
-  width: clamp(2.1rem, 1.9vw, 2.35rem);
-  height: clamp(2.1rem, 1.9vw, 2.35rem);
+  transition: opacity 160ms ease, width 260ms ease-in-out, height 260ms ease-in-out;
 }
 
 .site-header__action:hover {
@@ -93,11 +99,8 @@
 }
 
 .site-header__action i {
-  font-size: clamp(1.9rem, 2.7vw, 2.5rem);
-}
-
-.site-header--scrolled .site-header__action i {
-  font-size: clamp(1.15rem, 1.3vw, 1.4rem);
+  font-size: var(--header-glyph-size);
+  transition: font-size 260ms ease-in-out;
 }
 
 .site-header__badge {
@@ -124,23 +127,8 @@
   outline-offset: 3px;
 }
 
-/* Encolhimento no scroll — afeta também header_navigation e header_social,
- * que vivem em arquivos próprios mas compartilham CSS global (sem módulos). */
 .site-header--scrolled .header-navigation {
   height: var(--header-navigation-height);
-  transition: height 220ms ease;
-}
-
-.site-header--scrolled .header-social__link {
-  width: clamp(2.1rem, 2.4vw, 2.5rem);
-  height: clamp(2.1rem, 2.4vw, 2.5rem);
-  transition: width 220ms ease, height 220ms ease;
-}
-
-.site-header--scrolled .header-social__link svg {
-  width: clamp(1.1rem, 1.4vw, 1.5rem);
-  height: clamp(1.1rem, 1.4vw, 1.5rem);
-  transition: width 220ms ease, height 220ms ease;
 }
 
 @media (max-width: 1023px) {
@@ -151,6 +139,10 @@
 }
 
 @media (max-width: 599px) {
+  .site-header {
+    --header-action-gap: 0;
+  }
+
   .site-header__primary {
     grid-template-columns: 1fr auto 1fr;
   }
@@ -160,28 +152,18 @@
     height: 4.25rem;
   }
 
-  .site-header__side--right {
-    gap: 0;
-  }
-
-  .site-header__action {
-    width: 2.75rem;
-    height: 2.75rem;
-  }
-
-  .site-header__action i {
-    font-size: 1.9rem;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .site-header,
   .site-header__primary,
+  .site-header__side,
   .site-header__logo,
   .site-header__action,
+  .site-header__action i,
   .site-header--scrolled .header-navigation,
-  .site-header--scrolled .header-social__link,
-  .site-header--scrolled .header-social__link svg {
+  .header-social__link,
+  .header-social__link i {
     transition: none;
   }
 }

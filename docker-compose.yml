@@ -11,6 +11,9 @@ services:
       API_INTERNAL_URL: ${API_INTERNAL_URL:-https://br-thp-zro-api.azurewebsites.net}
       SITE_URL: ${SITE_URL:-http://localhost:3000}
       PORT: 3000
+      PAYMENT_ENABLED: ${PAYMENT_ENABLED:-true}
+      WHATSAPP_NUMBER: ${WHATSAPP_NUMBER:-}
+      INSTAGRAM_URL: ${INSTAGRAM_URL:-}
     ports:
       - "${APP_PORT:-3000}:3000"
     restart: unless-stopped

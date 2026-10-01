@@ -13,7 +13,7 @@ import { ZButton } from '@/components/button/button'
 import ZRadioButton from '@/components/radio_button/radio_button'
 import ZSkeleton from '@/components/skeleton/skeleton'
 import { useToast } from '@/components/toast/hook/useToast'
-import { buildEncomendaWhatsAppMessage, openWhatsApp } from '@/lib/whatsapp'
+import { buildEncomendaWhatsAppMessage, buildOrderFollowUpWhatsAppMessage, openWhatsApp, prepareWhatsAppWindow } from '@/lib/whatsapp'
 import { useFetchUserToken } from '@/service/global_request/query'
 import { UserGlobal } from '@/service/global_request/type'
 import Image from 'next/image'
@@ -89,7 +89,9 @@ export default function Confirmation({
   const [submitAttempted, setSubmitAttempted] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
   const submissionLockRef = useRef(false)
+  const whatsappWindowRef = useRef<Window | null>(null)
   const validationSummaryRef = useRef<HTMLDivElement>(null)
+  const hasWhatsAppNumber = Boolean(onlyDigits(whatsappNumber))
   const plan = getSelectedPlan()
 
   useEffect(() => {
@@ -162,6 +164,8 @@ export default function Confirmation({
   }
 
   const handleSubmissionError = (message: string) => {
+    whatsappWindowRef.current?.close()
+    whatsappWindowRef.current = null
     submissionLockRef.current = false
     setLoading(false)
     setCreateError(message)
@@ -179,6 +183,7 @@ export default function Confirmation({
     }
 
     submissionLockRef.current = true
+    if (hasWhatsAppNumber) whatsappWindowRef.current = prepareWhatsAppWindow()
     setLoading(true)
     const shipments = plan.shipments.map(shipment => ({
       workshopId: shipment.workshopId,
@@ -227,26 +232,29 @@ export default function Confirmation({
               return
             }
 
-            if (!paymentEnabled) {
-              const message = buildEncomendaWhatsAppMessage({
-                orderReference: order.uid,
-                productName: product?.name ?? 'Produto',
-                quantity: desiredQuantity,
-                planLabel: SIMULATION_MODE_LABEL[productionOrder.simulationMode!],
-                maxDeliveryAt: plan.maxDeliveryAt,
-                productSubtotal,
-                freightTotal: plan.totalCost,
-                estimatedTotal,
-                addressSummary: `${selectedAddress.address}, ${selectedAddress.number} - ${selectedAddress.neighborhood}, CEP ${selectedAddress.cep}`,
-                paymentMethodLabel: PAYMENT_OPTIONS.find(option => option.value === paymentMethod)?.label
-              })
-              openWhatsApp(whatsappNumber, message)
+            if (hasWhatsAppNumber) {
+              const message = paymentEnabled
+                ? buildOrderFollowUpWhatsAppMessage(order.uid)
+                : buildEncomendaWhatsAppMessage({
+                    orderReference: order.uid,
+                    productName: product?.name ?? 'Produto',
+                    quantity: desiredQuantity,
+                    planLabel: SIMULATION_MODE_LABEL[productionOrder.simulationMode!],
+                    maxDeliveryAt: plan.maxDeliveryAt,
+                    productSubtotal,
+                    freightTotal: plan.totalCost,
+                    estimatedTotal,
+                    addressSummary: `${selectedAddress.address}, ${selectedAddress.number} - ${selectedAddress.neighborhood}, CEP ${selectedAddress.cep}`,
+                    paymentMethodLabel: PAYMENT_OPTIONS.find(option => option.value === paymentMethod)?.label
+                  })
+              openWhatsApp(whatsappNumber, message, whatsappWindowRef.current)
+              whatsappWindowRef.current = null
               showToast('Encomenda registrada! Continue a conversa no WhatsApp.', 'success', 4000)
             }
 
             sessionStorage.setItem(CREATED_ORDER_SESSION_KEY, String(order.id))
             reset()
-            router.push(paymentEnabled ? `/payment?id=${order.id}` : `/profile/order/${order.id}`)
+            router.push(`/profile/order/${order.id}`)
           },
           setLoading,
           handleSubmissionError,
@@ -486,8 +494,8 @@ export default function Confirmation({
 
               <p className="confirmation-note">
                 {paymentEnabled
-                  ? 'Ao confirmar, reservaremos por alguns minutos a capacidade das oficinas antes de criar o pedido.'
-                  : 'Ao confirmar, sua encomenda é registrada e você será redirecionado para o WhatsApp para combinar entrega e pagamento com nossa equipe.'}
+                  ? `Ao confirmar, reservaremos por alguns minutos a capacidade das oficinas. Depois, você verá os detalhes do pedido e poderá realizar o pagamento.${hasWhatsAppNumber ? ' O WhatsApp também abrirá em outra aba.' : ''}`
+                  : 'Ao confirmar, sua encomenda é registrada, os detalhes do pedido são exibidos e o WhatsApp abre em outra aba para combinar entrega e pagamento.'}
               </p>
               <ZButton
                 label={paymentEnabled ? 'Confirmar encomenda' : 'Confirmar pelo WhatsApp'}

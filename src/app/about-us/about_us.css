@@ -64,6 +64,7 @@
 .about-us__body > section {
   position: relative;
   z-index: 1;
+  margin-top: var(--about-section-space);
 }
 
 .about-us__content {
