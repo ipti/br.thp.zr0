@@ -95,15 +95,8 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     expect(screen.getByText('Menor prazo')).toBeInTheDocument()
   })
 
-  it('confirma a encomenda, abre o WhatsApp e redireciona para os detalhes', async () => {
-    const replace = jest.fn()
-    const popup = {
-      opener: window,
-      closed: false,
-      location: { replace },
-      close: jest.fn(),
-    } as unknown as Window
-    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => popup)
+  it('confirma a encomenda e só abre o WhatsApp depois de redirecionar para os detalhes', async () => {
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
     renderWithProviders(<ProductionOrderSteps product={PRODUCT} paymentEnabled whatsappNumber="5511999999999" />)
 
     await fillQuantityAndSubmit(30)
@@ -117,6 +110,10 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     const addressCard = await screen.findByText(/Rua das Flores/)
     await userEvent.click(addressCard)
 
+    // Não deve abrir nenhuma aba antes do endpoint responder — essa era a
+    // janela em branco reportada como "parecendo quebrado".
+    expect(openSpy).not.toHaveBeenCalled()
+
     await userEvent.click(
       screen.getByRole('button', { name: 'Confirmar encomenda' })
     )
@@ -124,21 +121,17 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith('/profile/order/101')
     })
-    expect(openSpy).toHaveBeenCalledWith('about:blank', '_blank')
-    expect(replace).toHaveBeenCalledWith(expect.stringContaining('https://wa.me/5511999999999?text='))
+    expect(openSpy).toHaveBeenCalledWith(
+      expect.stringContaining('https://wa.me/5511999999999?text='),
+      '_blank',
+      'noopener,noreferrer'
+    )
     expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('101')
     openSpy.mockRestore()
   })
 
   it('com paymentEnabled=false, cria o pedido, abre o WhatsApp com o resumo e navega para o acompanhamento do pedido', async () => {
-    const replace = jest.fn()
-    const popup = {
-      opener: window,
-      closed: false,
-      location: { replace },
-      close: jest.fn(),
-    } as unknown as Window
-    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => popup)
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
 
     renderWithProviders(
       <ProductionOrderSteps
@@ -162,11 +155,15 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     const button = screen.getByRole('button', { name: 'Confirmar pelo WhatsApp' })
     await userEvent.click(button)
 
-    expect(openSpy).toHaveBeenCalledTimes(1)
-    expect(openSpy).toHaveBeenCalledWith('about:blank', '_blank')
-    expect(popup.opener).toBeNull()
-    expect(replace).toHaveBeenCalledTimes(1)
-    const [url] = replace.mock.calls[0]
+    // Como a chamada é feita via HTTP real (mockado pelo MSW, não um stub
+    // manual), por essa altura a cadeia reserve -> create -> sucesso já pode
+    // ter sido concluída dentro do próprio `await userEvent.click` — por
+    // isso a verificação relevante é o estado final, não um "ainda não foi
+    // chamado" logo após o clique.
+    await waitFor(() => {
+      expect(openSpy).toHaveBeenCalledTimes(1)
+    })
+    const [url] = openSpy.mock.calls[0]
     expect(url).toContain('https://wa.me/5511999999999?text=')
 
     const message = decodeURIComponent(String(url).split('?text=')[1])
@@ -182,19 +179,13 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     openSpy.mockRestore()
   })
 
-  it('fecha a aba reservada se a encomenda não for salva', async () => {
+  it('não abre o WhatsApp se a encomenda não for salva', async () => {
     server.use(
       http.post('/api/production-order', () =>
         HttpResponse.json({ message: 'Falha ao salvar' }, { status: 500 })
       )
     )
-    const popup = {
-      opener: window,
-      closed: false,
-      location: { replace: jest.fn() },
-      close: jest.fn(),
-    } as unknown as Window
-    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => popup)
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
 
     renderWithProviders(
       <ProductionOrderSteps product={PRODUCT} paymentEnabled={false} whatsappNumber="5511999999999" />
@@ -210,9 +201,7 @@ describe('Jornada de Encomenda — cenário motivador da escola', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Confirmar pelo WhatsApp' }))
 
     expect(await screen.findByText('Falha ao salvar')).toBeInTheDocument()
-    expect(openSpy).toHaveBeenCalledTimes(1)
-    expect(popup.close).toHaveBeenCalledTimes(1)
-    expect(popup.location.replace).not.toHaveBeenCalled()
+    expect(openSpy).not.toHaveBeenCalled()
     expect(mockPush).not.toHaveBeenCalled()
     openSpy.mockRestore()
   })

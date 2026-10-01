@@ -103,23 +103,10 @@ export function buildWhatsAppLink(phoneNumber: string, message: string): string 
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`
 }
 
-// A aba precisa ser criada durante o clique: após as chamadas de gravação,
-// navegadores podem bloquear window.open por falta de ativação do usuário.
-export function prepareWhatsAppWindow(): Window | null {
-  const popup = window.open('about:blank', '_blank')
-  if (popup) popup.opener = null
-  return popup
-}
-
-export function openWhatsApp(phoneNumber: string, message: string, popup?: Window | null): void {
+// Só deve ser chamada depois que o pedido é criado com sucesso — abrir a aba
+// antes disso (ex.: um "about:blank" preenchido só depois) deixa uma janela
+// em branco visível durante a chamada da API, parecendo quebrado.
+export function openWhatsApp(phoneNumber: string, message: string): void {
   const url = buildWhatsAppLink(phoneNumber, message)
-  if (popup && !popup.closed) {
-    try {
-      popup.location.replace(url)
-      return
-    } catch {
-      popup.close()
-    }
-  }
   window.open(url, '_blank', 'noopener,noreferrer')
 }

@@ -31,7 +31,10 @@
 
 .detailGrid {
   display: grid;
-  grid-template-columns: 1fr;
+  /* minmax(0, 1fr), não só 1fr: um item de grid herda min-width:auto por
+   * padrão, então sem o minmax ele usa o conteúdo intrínseco (a galeria de
+   * miniaturas abaixo) como piso mínimo e estoura a largura da tela. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 2rem;
   margin-bottom: 5rem;
 }
@@ -40,6 +43,7 @@
   display: flex;
   flex-flow: row nowrap;
   gap: 1rem;
+  min-width: 0;
   max-width: 100%;
   overflow-x: auto;
 }
@@ -69,7 +73,7 @@
 
 @media (min-width: 1024px) {
   .detailGrid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 4rem;
   }
 }
