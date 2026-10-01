@@ -22,8 +22,52 @@
     }
 }
 
+.item_slider:focus-visible {
+    outline: 2px solid var(--primary-color, #00493d);
+    outline-offset: 2px;
+}
+
 .label {
     font-weight: bold;
     text-align: center;
     font-size: 12px;
+}
+
+.slider_backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+/* Em telas estreitas o menu vira um drawer sobreposto (off-canvas) em vez de
+ * disputar espaço em linha com o conteúdo — era isso que espremia a página
+ * e forçava rolagem horizontal no mobile. */
+@media (max-width: 768px) {
+    .container_slider,
+    .container_slider_expanded {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        width: min(80vw, 20rem);
+        height: 100vh;
+        overflow-y: auto;
+        transition: transform 220ms ease;
+    }
+
+    .container_slider {
+        transform: translateX(-100%);
+    }
+
+    .container_slider_expanded {
+        transform: translateX(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .container_slider,
+    .container_slider_expanded {
+        transition: none;
+    }
 }

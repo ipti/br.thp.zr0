@@ -4,7 +4,14 @@ import SlideBar from "@/components/slider_bar/slider_bar";
 import { useSlideBar } from "./slide_bar_context";
 
 export function ConditionalSlideBar({ itens }: { itens: Menu[] }) {
-  const { isVisible } = useSlideBar();
+  const { isVisible, isMobile, setVisibility } = useSlideBar();
 
-  return <SlideBar itens={itens} isOpen={isVisible} />;
+  return (
+    <SlideBar
+      itens={itens}
+      isOpen={isVisible}
+      isMobile={isMobile}
+      onClose={() => setVisibility(false)}
+    />
+  );
 }
