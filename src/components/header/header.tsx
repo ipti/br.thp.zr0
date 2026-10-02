@@ -206,6 +206,10 @@ export default function Header() {
 
         <HeaderNavigation />
       </header>
+      <div
+        className={`site-header-spacer${isScrolled ? ' site-header-spacer--scrolled' : ''}`}
+        aria-hidden="true"
+      />
 
       <LoginModal visible={modalLogin} onHide={() => setModalLogin(false)} />
     </>
