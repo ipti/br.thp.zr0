@@ -4,8 +4,10 @@
   --header-action-gap: clamp(0.25rem, 1.2vw, 1.25rem);
   /* Alinha a tinta dos ícones ao centro visível do arquivo do logotipo. */
   --header-actions-offset-y: -0.5px;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 40;
   width: 100%;
   height: var(--header-height);
@@ -24,6 +26,21 @@
   --header-navigation-height: clamp(2rem, 1.7vw, 2.25rem);
   height: calc(var(--header-primary-height) + var(--header-navigation-height));
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* O header é fixed (não sticky) para não depender do container de scroll de
+   cada página (algumas rolam a janela, outras rolam um `main` próprio). Esse
+   spacer reserva, no fluxo normal, o espaço que o header ocupa fora dele. */
+.site-header-spacer {
+  flex-shrink: 0;
+  height: var(--header-height);
+  transition: height 260ms ease-in-out;
+}
+
+.site-header-spacer--scrolled {
+  --header-primary-height: clamp(3.1rem, 2.8vw, 3.6rem);
+  --header-navigation-height: clamp(2rem, 1.7vw, 2.25rem);
+  height: calc(var(--header-primary-height) + var(--header-navigation-height));
 }
 
 .site-header__primary {
@@ -162,6 +179,7 @@
   .site-header__action,
   .site-header__action i,
   .site-header--scrolled .header-navigation,
+  .site-header-spacer,
   .header-social__link,
   .header-social__link i {
     transition: none;
