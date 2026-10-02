@@ -6,7 +6,7 @@ import ZDivider from '@/components/divider/divider'
 import ZInputText from '@/components/input/input'
 import ZSkeleton from '@/components/skeleton/skeleton'
 import { useToast } from '@/components/toast/hook/useToast'
-import { buildCartWhatsAppMessage, buildOrderFollowUpWhatsAppMessage, openWhatsApp, prepareWhatsAppWindow } from '@/lib/whatsapp'
+import { buildCartWhatsAppMessage, buildOrderFollowUpWhatsAppMessage, openWhatsApp } from '@/lib/whatsapp'
 import { useFetchUserToken } from '@/service/global_request/query'
 import { UserGlobal } from '@/service/global_request/type'
 import { useCartStore } from '@/service/store/cart_store'
@@ -54,7 +54,6 @@ export default function Finish({
   const [createError, setCreateError] = useState<string | null>(null)
   const [paymentMethod, setPaymentMethod] = useState<CheckoutPaymentMethod>('PIX')
   const submissionLockRef = useRef(false)
-  const whatsappWindowRef = useRef<Window | null>(null)
   const validationSummaryRef = useRef<HTMLDivElement>(null)
   const hasWhatsAppNumber = Boolean(whatsappNumber.replace(/\D/g, ''))
 
@@ -104,7 +103,6 @@ export default function Finish({
     }
 
     submissionLockRef.current = true
-    if (hasWhatsAppNumber) whatsappWindowRef.current = prepareWhatsAppWindow()
     setIsLoadingFinish(true)
     controllerCart.CreateOrder(
       {
@@ -157,19 +155,13 @@ export default function Finish({
                   addressSummary: `${address.address}, ${address.number} - ${address.neighborhood}, ${address.city.name}/${address.state.acronym} - CEP ${address.cep}`,
                   paymentMethodLabel: paymentOptions.find(option => option.value === paymentMethod)?.label
                 })
-            openWhatsApp(whatsappNumber, message, whatsappWindowRef.current)
-            whatsappWindowRef.current = null
+            openWhatsApp(whatsappNumber, message)
             showToast('Pedido registrado! Continue a conversa no WhatsApp.', 'success', 4000)
-          } else {
-            whatsappWindowRef.current?.close()
-            whatsappWindowRef.current = null
           }
         }
         handleSetOrders(orders)
       },
       message => {
-        whatsappWindowRef.current?.close()
-        whatsappWindowRef.current = null
         setCreateError(message)
         requestAnimationFrame(() => validationSummaryRef.current?.focus())
       }

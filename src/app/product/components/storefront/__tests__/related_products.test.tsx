@@ -60,4 +60,18 @@ describe('RelatedProducts', () => {
     render(<RelatedProducts products={[makeProduct({ price: 1299 })]} />)
     expect(screen.getByText(/R\$\s*1\.299/)).toBeInTheDocument()
   })
+
+  it('exibe o selo de indisponível/sob encomenda quando o produto está sem estoque (mesmo padrão da home)', () => {
+    const product = makeProduct({ uid: 'd', name: 'Mesa Alta', quantity: 0 })
+    render(<RelatedProducts products={[product]} />)
+
+    expect(screen.getByText('Indisponível · só sob encomenda')).toBeInTheDocument()
+  })
+
+  it('não exibe o selo quando o produto tem estoque', () => {
+    const product = makeProduct({ uid: 'e', name: 'Cadeira', quantity: 5 })
+    render(<RelatedProducts products={[product]} />)
+
+    expect(screen.queryByText('Indisponível · só sob encomenda')).toBeNull()
+  })
 })

@@ -165,15 +165,8 @@ describe('acessibilidade do checkout', () => {
     expect(mockCreateOrder).toHaveBeenCalledTimes(1)
   })
 
-  it('com paymentEnabled=false, cria o pedido normalmente e também abre o WhatsApp com o resumo', async () => {
-    const replace = jest.fn()
-    const popup = {
-      opener: window,
-      closed: false,
-      location: { replace },
-      close: jest.fn(),
-    } as unknown as Window
-    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => popup)
+  it('com paymentEnabled=false, cria o pedido normalmente e só abre o WhatsApp depois que o pedido é criado', async () => {
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
     const handleSetOrders = jest.fn()
 
     renderWithProviders(
@@ -189,8 +182,9 @@ describe('acessibilidade do checkout', () => {
     await userEvent.click(button)
 
     expect(mockCreateOrder).toHaveBeenCalledTimes(1)
-    expect(openSpy).toHaveBeenCalledWith('about:blank', '_blank')
-    expect(replace).not.toHaveBeenCalled()
+    // Não deve abrir nenhuma aba antes do endpoint responder — essa era a
+    // janela em branco reportada como "parecendo quebrado".
+    expect(openSpy).not.toHaveBeenCalled()
 
     const successAction = mockCreateOrder.mock.calls[0][2] as (
       orders: { id: number; uid: string }[]
@@ -198,9 +192,7 @@ describe('acessibilidade do checkout', () => {
     act(() => successAction([{ id: 34, uid: 'ZR-34' }]))
 
     expect(openSpy).toHaveBeenCalledTimes(1)
-    expect(popup.opener).toBeNull()
-    expect(replace).toHaveBeenCalledTimes(1)
-    const [url] = replace.mock.calls[0]
+    const [url] = openSpy.mock.calls[0]
     expect(url).toContain('https://wa.me/5511999999999?text=')
 
     const message = decodeURIComponent(String(url).split('?text=')[1])
@@ -213,14 +205,8 @@ describe('acessibilidade do checkout', () => {
     openSpy.mockRestore()
   })
 
-  it('fecha a aba reservada se o pedido de pronta entrega falhar', async () => {
-    const popup = {
-      opener: window,
-      closed: false,
-      location: { replace: jest.fn() },
-      close: jest.fn(),
-    } as unknown as Window
-    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => popup)
+  it('não abre o WhatsApp se o pedido de pronta entrega falhar', async () => {
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
 
     renderWithProviders(
       <Finish
@@ -234,28 +220,19 @@ describe('acessibilidade do checkout', () => {
     const errorAction = mockCreateOrder.mock.calls[0][3] as (message: string) => void
     act(() => errorAction('Falha ao salvar'))
 
-    expect(popup.close).toHaveBeenCalledTimes(1)
-    expect(popup.location.replace).not.toHaveBeenCalled()
+    expect(openSpy).not.toHaveBeenCalled()
     openSpy.mockRestore()
   })
 
   it('abre o WhatsApp e redireciona a pronta entrega para os detalhes do pedido criado', async () => {
-    const replace = jest.fn()
-    const popup = {
-      opener: window,
-      closed: false,
-      location: { replace },
-      close: jest.fn(),
-    } as unknown as Window
-    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => popup)
+    const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
     localStorage.setItem('token-zr0', 'test-token')
     mockSearchParams = new URLSearchParams('index=3')
     renderWithProviders(<CartComponent paymentEnabled whatsappNumber="5511999999999" />)
 
     await screen.findByRole('heading', { name: 'Revise e confirme' })
     await userEvent.click(screen.getByRole('button', { name: 'Finalizar pedido' }))
-    expect(openSpy).toHaveBeenCalledWith('about:blank', '_blank')
-    expect(replace).not.toHaveBeenCalled()
+    expect(openSpy).not.toHaveBeenCalled()
 
     const successAction = mockCreateOrder.mock.calls[0][2] as (
       orders: { id: number; uid: string }[]
@@ -263,8 +240,13 @@ describe('acessibilidade do checkout', () => {
     act(() => successAction([{ id: 34, uid: 'ZR-34' }]))
 
     expect(sessionStorage.getItem(CREATED_ORDER_SESSION_KEY)).toBe('34')
-    expect(replace).toHaveBeenCalledWith(expect.stringContaining('https://wa.me/5511999999999?text='))
-    expect(decodeURIComponent(String(replace.mock.calls[0][0]).split('?text=')[1])).toContain('pedido #ZR-34')
+    expect(openSpy).toHaveBeenCalledWith(
+      expect.stringContaining('https://wa.me/5511999999999?text='),
+      '_blank',
+      'noopener,noreferrer'
+    )
+    const [url] = openSpy.mock.calls[0]
+    expect(decodeURIComponent(String(url).split('?text=')[1])).toContain('pedido #ZR-34')
     expect(mockPush).toHaveBeenCalledWith('/profile/order/34')
     openSpy.mockRestore()
   })
