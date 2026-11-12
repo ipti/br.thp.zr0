@@ -134,7 +134,10 @@ html,
 body {
   max-width: 100vw;
   height: 100%;
-  overflow-x: hidden;
+  /* `hidden` também transforma o body em um container vertical (`overflow-y:
+     auto`). Como o header é fixed, o wheel sobre ele deixa de alcançar esse
+     container. `clip` mantém o corte horizontal sem sequestrar o scroll. */
+  overflow-x: clip;
   font-family: 'Poppins Regular', serif;
 }
 
